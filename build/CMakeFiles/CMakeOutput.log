@@ -1,0 +1,424 @@
+The target system is: Linux -  - i686
+The host system is: Linux - 5.15.0-69-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/3.16.3/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/3.16.3/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_4f9b8/fast && /usr/bin/make -f CMakeFiles/cmTC_4f9b8.dir/build.make CMakeFiles/cmTC_4f9b8.dir/build
+make[1]: Entering directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4f9b8.dir/testCCompiler.c.o
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc    -o CMakeFiles/cmTC_4f9b8.dir/testCCompiler.c.o   -c /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_4f9b8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4f9b8.dir/link.txt --verbose=1
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc      -rdynamic CMakeFiles/cmTC_4f9b8.dir/testCCompiler.c.o  -o cmTC_4f9b8 
+make[1]: Leaving directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_a72e8/fast && /usr/bin/make -f CMakeFiles/cmTC_a72e8.dir/build.make CMakeFiles/cmTC_a72e8.dir/build
+make[1]: Entering directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc   -v -o CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c
+Using built-in specs.
+COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc
+Target: i686-unknown-linux-gnu
+Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c,c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long
+Thread model: posix
+gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=i686'
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/cc1 -quiet -v -iprefix /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/ -isysroot /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=i686 -auxbase-strip CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o -version -o /tmp/ccq88evg.s
+GNU C11 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version 0.15
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include"
+ignoring nonexistent directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/include"
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed"
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include
+End of search list.
+GNU C11 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version 0.15
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: b0346c880b28c5889d69c343b5dfd545
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=i686'
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/as -v --32 -o CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o /tmp/ccq88evg.s
+GNU assembler version 2.31.1 (i686-unknown-linux-gnu) using BFD version (crosstool-NG 1.23.0.586-0a5107d) 2.31.1
+COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/
+LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=i686'
+Linking C executable cmTC_a72e8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a72e8.dir/link.txt --verbose=1
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc     -v -rdynamic CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o  -o cmTC_a72e8 
+Using built-in specs.
+COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc
+COLLECT_LTO_WRAPPER=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper
+Target: i686-unknown-linux-gnu
+Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c,c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long
+Thread model: posix
+gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) 
+COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/
+LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_a72e8' '-mtune=generic' '-march=i686'
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/collect2 -plugin /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/liblto_plugin.so -plugin-opt=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccce5TdJ.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot --eh-frame-hdr -m elf_i386 -export-dynamic -dynamic-linker /lib/ld-linux.so.2 -o cmTC_a72e8 /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crt1.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crti.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtbegin.o -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0 -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtend.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_a72e8' '-mtune=generic' '-march=i686'
+make[1]: Leaving directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include]
+  end of search list found
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include]
+  implicit include dirs: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(i686-unknown-linux-gnu-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_a72e8/fast && /usr/bin/make -f CMakeFiles/cmTC_a72e8.dir/build.make CMakeFiles/cmTC_a72e8.dir/build]
+  ignore line: [make[1]: Entering directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc   -v -o CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc]
+  ignore line: [Target: i686-unknown-linux-gnu]
+  ignore line: [Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl -Bstatic -lstdc++ -Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=i686']
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/cc1 -quiet -v -iprefix /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/ -isysroot /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=i686 -auxbase-strip CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o -version -o /tmp/ccq88evg.s]
+  ignore line: [GNU C11 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.1  MPC version 1.1.0  isl version 0.15]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include"]
+  ignore line: [ignoring nonexistent directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/include"]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed"]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C11 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.1  MPC version 1.1.0  isl version 0.15]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: b0346c880b28c5889d69c343b5dfd545]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=i686']
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/as -v --32 -o CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o /tmp/ccq88evg.s]
+  ignore line: [GNU assembler version 2.31.1 (i686-unknown-linux-gnu) using BFD version (crosstool-NG 1.23.0.586-0a5107d) 2.31.1]
+  ignore line: [COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/]
+  ignore line: [LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=i686']
+  ignore line: [Linking C executable cmTC_a72e8]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a72e8.dir/link.txt --verbose=1]
+  ignore line: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc     -v -rdynamic CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o  -o cmTC_a72e8 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper]
+  ignore line: [Target: i686-unknown-linux-gnu]
+  ignore line: [Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl -Bstatic -lstdc++ -Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) ]
+  ignore line: [COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/]
+  ignore line: [LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_a72e8' '-mtune=generic' '-march=i686']
+  link line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/collect2 -plugin /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/liblto_plugin.so -plugin-opt=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccce5TdJ.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot --eh-frame-hdr -m elf_i386 -export-dynamic -dynamic-linker /lib/ld-linux.so.2 -o cmTC_a72e8 /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crt1.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crti.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtbegin.o -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0 -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtend.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crtn.o]
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccce5TdJ.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--sysroot=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_i386] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-linux.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_a72e8] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crt1.o] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crti.o] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtbegin.o] ==> ignore
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib]
+    arg [CMakeFiles/cmTC_a72e8.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtend.o] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crtn.o] ==> ignore
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/lib]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/lib]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/lib;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/lib;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/lib]
+  implicit fwks: []
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_7ce4d/fast && /usr/bin/make -f CMakeFiles/cmTC_7ce4d.dir/build.make CMakeFiles/cmTC_7ce4d.dir/build
+make[1]: Entering directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_7ce4d.dir/testCXXCompiler.cxx.o
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++     -o CMakeFiles/cmTC_7ce4d.dir/testCXXCompiler.cxx.o -c /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_7ce4d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ce4d.dir/link.txt --verbose=1
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++       -rdynamic CMakeFiles/cmTC_7ce4d.dir/testCXXCompiler.cxx.o  -o cmTC_7ce4d 
+make[1]: Leaving directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_ca1fe/fast && /usr/bin/make -f CMakeFiles/cmTC_ca1fe.dir/build.make CMakeFiles/cmTC_ca1fe.dir/build
+make[1]: Entering directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++    -v -o CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp
+Using built-in specs.
+COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++
+Target: i686-unknown-linux-gnu
+Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c,c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long
+Thread model: posix
+gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=i686'
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/cc1plus -quiet -v -iprefix /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/ -isysroot /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot -D_GNU_SOURCE /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=i686 -auxbase-strip CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccY2nKre.s
+GNU C++14 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version 0.15
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0"
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu"
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/backward"
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include"
+ignoring nonexistent directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/include"
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed"
+ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/backward
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include
+End of search list.
+GNU C++14 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version 0.15
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 92d3f595be179da5a0a5cd5ed54e3eed
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=i686'
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/as -v --32 -o CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccY2nKre.s
+GNU assembler version 2.31.1 (i686-unknown-linux-gnu) using BFD version (crosstool-NG 1.23.0.586-0a5107d) 2.31.1
+COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/
+LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=i686'
+Linking CXX executable cmTC_ca1fe
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca1fe.dir/link.txt --verbose=1
+/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++      -v -rdynamic CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_ca1fe 
+Using built-in specs.
+COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++
+COLLECT_LTO_WRAPPER=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper
+Target: i686-unknown-linux-gnu
+Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c,c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long
+Thread model: posix
+gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) 
+COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/
+LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ca1fe' '-shared-libgcc' '-mtune=generic' '-march=i686'
+ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/collect2 -plugin /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/liblto_plugin.so -plugin-opt=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc2bZiOF.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot --eh-frame-hdr -m elf_i386 -export-dynamic -dynamic-linker /lib/ld-linux.so.2 -o cmTC_ca1fe /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crt1.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crti.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtbegin.o -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0 -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtend.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ca1fe' '-shared-libgcc' '-mtune=generic' '-march=i686'
+make[1]: Leaving directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/backward]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include]
+    add: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include]
+  end of search list found
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/backward] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/backward]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include]
+  collapse include dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include]
+  implicit include dirs: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/backward;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(i686-unknown-linux-gnu-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_ca1fe/fast && /usr/bin/make -f CMakeFiles/cmTC_ca1fe.dir/build.make CMakeFiles/cmTC_ca1fe.dir/build]
+  ignore line: [make[1]: Entering directory '/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++    -v -o CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++]
+  ignore line: [Target: i686-unknown-linux-gnu]
+  ignore line: [Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl -Bstatic -lstdc++ -Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=i686']
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/cc1plus -quiet -v -iprefix /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/ -isysroot /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot -D_GNU_SOURCE /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=i686 -auxbase-strip CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccY2nKre.s]
+  ignore line: [GNU C++14 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.1  MPC version 1.1.0  isl version 0.15]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0"]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu"]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/backward"]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include"]
+  ignore line: [ignoring nonexistent directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/include"]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed"]
+  ignore line: [ignoring duplicate directory "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/../../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/i686-unknown-linux-gnu]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include/c++/6.5.0/backward]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/include]
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C++14 (crosstool-NG 1.23.0.586-0a5107d) version 6.5.0 (i686-unknown-linux-gnu)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.1  MPC version 1.1.0  isl version 0.15]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 92d3f595be179da5a0a5cd5ed54e3eed]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=i686']
+  ignore line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/as -v --32 -o CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccY2nKre.s]
+  ignore line: [GNU assembler version 2.31.1 (i686-unknown-linux-gnu) using BFD version (crosstool-NG 1.23.0.586-0a5107d) 2.31.1]
+  ignore line: [COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/]
+  ignore line: [LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=i686']
+  ignore line: [Linking CXX executable cmTC_ca1fe]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca1fe.dir/link.txt --verbose=1]
+  ignore line: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++      -v -rdynamic CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_ca1fe ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++]
+  ignore line: [COLLECT_LTO_WRAPPER=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper]
+  ignore line: [Target: i686-unknown-linux-gnu]
+  ignore line: [Configured with: /home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/src/gcc/configure --build=x86_64-build_pc-linux-gnu --host=x86_64-build_pc-linux-gnu --target=i686-unknown-linux-gnu --prefix=/home/oliver/x-tools/i686-unknown-linux-gnu --with-sysroot=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-languages=c c++ --with-arch=i686 --with-pkgversion='crosstool-NG 1.23.0.586-0a5107d' --enable-__cxa_atexit --disable-libmudflap --disable-libgomp --disable-libssp --disable-libquadmath --disable-libquadmath-support --disable-libsanitizer --enable-libmpx --with-gmp=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpfr=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-mpc=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --with-isl=/home/oliver/workspace/build_gcc6.5/.build/i686-unknown-linux-gnu/buildtools --enable-lto --with-host-libstdcxx='-static-libgcc -Wl -Bstatic -lstdc++ -Bdynamic -lm' --enable-threads=posix --enable-target-optspace --disable-plugin --disable-nls --disable-multilib --with-local-prefix=/home/oliver/x-tools/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot --enable-long-long]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 6.5.0 (crosstool-NG 1.23.0.586-0a5107d) ]
+  ignore line: [COMPILER_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/bin/]
+  ignore line: [LIBRARY_PATH=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib/:/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ca1fe' '-shared-libgcc' '-mtune=generic' '-march=i686']
+  link line: [ /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/collect2 -plugin /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/liblto_plugin.so -plugin-opt=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc2bZiOF.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot --eh-frame-hdr -m elf_i386 -export-dynamic -dynamic-linker /lib/ld-linux.so.2 -o cmTC_ca1fe /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crt1.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crti.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtbegin.o -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0 -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib -L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtend.o /home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crtn.o]
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../libexec/gcc/i686-unknown-linux-gnu/6.5.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cc2bZiOF.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [--sysroot=/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_i386] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-linux.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_ca1fe] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crt1.o] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crti.o] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtbegin.o] ==> ignore
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib]
+    arg [-L/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib] ==> dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib]
+    arg [CMakeFiles/cmTC_ca1fe.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/crtend.o] ==> ignore
+    arg [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib/crtn.o] ==> ignore
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../lib/gcc/i686-unknown-linux-gnu/6.5.0/../../../../i686-unknown-linux-gnu/lib] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/lib]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/lib] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/lib]
+  collapse library dir [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/bin/../i686-unknown-linux-gnu/sysroot/usr/lib] ==> [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/lib]
+  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+  implicit dirs: [/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/lib/gcc;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/lib;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/lib;/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/lib]
+  implicit fwks: []
+
+
