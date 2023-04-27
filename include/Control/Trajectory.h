@@ -27,7 +27,7 @@ public:
 
 	int isReady(int NumJoint){return m_isReady[NumJoint];};
 	void SetPolynomial5th(int NumJoint, float startPos, float FinalPos, float InitTime, float Duration);
-	void SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, float InitTime, float Duration, float *q_, int traj_changed);
+	void SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, float InitTime, float Duration, float *q_);
 	void SetPolynomial5th_t(int NumJoint, state *act, float FinalPos, float InitTime, float Duration, float *q_);
 
 	void SetPolynomial5th(int NumJoint, float startPos, float FinalPos, float InitTime, float Duration, float *q_);

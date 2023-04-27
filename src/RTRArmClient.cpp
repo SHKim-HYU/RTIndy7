@@ -62,7 +62,7 @@ double gt=0;
 float float_gt=0;
 
 int InitFlag[NUM_AXIS] = {0,};
-int TrajFlag_j[NUM_AXIS] = {0,};
+int TrajFlag_j[NUM_AXIS] = {1,1,1,1,1,1};
 int TrajFlag_t[NUM_AXIS] = {0,};
 
 
@@ -113,7 +113,6 @@ float ZMP_Y[2]={0,};
 RT_TASK RTRArm_task;
 RT_TASK print_task;
 RT_TASK plot_task;
-RT_TASK TCP_task;
 
 // For RT thread management
 static int run = 1;
@@ -125,6 +124,7 @@ long ethercat_time=0, worst_time=0;
 unsigned int histdata[hist_step+1];
 unsigned int interval_size=350;
 
+float ActualPos_zero[NUM_AXIS] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
 float ActualPos_Rad[NUM_AXIS] = {0.0,};
 float ActualVel_Rad[NUM_AXIS] = {0.0,};
 float ActualAcc_Rad[NUM_AXIS] = {0.0,};
@@ -156,7 +156,7 @@ int limit_flag=0;
 //Joint
 int NUM_MOTION=1;
 int Motion=0;
-float TargetTrajPos_Rad[NUM_AXIS]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};/////////////////////////must change/////////////////////////////////
+float TargetTrajPos_Rad[NUM_AXIS]={1.5709, 0.0, 0.0, 1.5709, 0.0, 0.0};/////////////////////////must change/////////////////////////////////
 //float TargetTrajPos_Rad[NUM_AXIS]={0.0, -1.57, 0.0, 1.57, 0.0};
 float traj_time = 3;
 int traj_changed = 0;
@@ -191,16 +191,6 @@ int open_state;
 int hand_flag = 0;
 int finger_state[6]={0,};
 
-//For TCP-Server
-int current_Thread=0;
-float received_Data[NUM_JOINT*3];
-int flag_TCP=0;
-int flag_ctrl=2;
-int ctrl_buf=-1;
-int TCP_buf=0;
-int TCP_Limit_cnt = 0;
-
-
 // Signal handler for CTRL+C
 void signal_handler(int signum);
 
@@ -225,154 +215,84 @@ void saveLogData()
 */
 }
 
-class Session : public TCPServerConnection
-{
-public:
-	enum {
-		SIZE_HEADER = 52,
-		SIZE_COMMAND = 4,
-		SIZE_HEADER_COMMAND = 56,
-		SIZE_DATA_MAX = 200,
-		SIZE_DATA_ASCII_MAX = 32
-	};
-	Session(const StreamSocket &socket) :TCPServerConnection(socket) {
-		//cout << "Session Object Construct" << endl;
-	}
-	virtual ~Session() {
-		//cout << "Session Object Destruct" << endl;
-	}
-	union Data
-	{
-		unsigned char byte[SIZE_DATA_MAX];
-		float float6dArr[12];
-	};
-	Data data_rev;
-	Data data;
-
-	virtual void run()
-	{
-		unsigned char readBuff[1024];
-		unsigned char writeBuff[1024];
-
-		try
-		{
-			int recvSize = 0;
-			do
-			{
-				memcpy(writeBuff, data.byte, SIZE_DATA_MAX);
-
-				Timestamp now;
-				recvSize = socket().receiveBytes(readBuff, 1024);
-
-				memcpy(data_rev.byte, readBuff, SIZE_DATA_MAX);
-				//Received
-				received_Data[0] = data_rev.float6dArr[0];   // Motion
-				received_Data[1] = data_rev.float6dArr[1];   // desired_01
-				received_Data[2] = data_rev.float6dArr[2];   // desired_02
-				received_Data[3] = data_rev.float6dArr[3];   // desired_03
-				received_Data[4] = data_rev.float6dArr[4];   // desired_04
-				received_Data[5] = data_rev.float6dArr[5];   // desired_05
-				received_Data[6] = data_rev.float6dArr[6];   // desired_06
-				received_Data[7] = data_rev.float6dArr[7];   // null
-				if(flag_TCP==0)
-					flag_TCP=1;
-
-				
-				else if(limit_flag == 1 && TCP_Limit_cnt == 0)
-				{
-					data.float6dArr[0] = 102.0;
-					data.float6dArr[1] = 1.0;
-					data.float6dArr[2] = 0.0;
-					data.float6dArr[3] = 0.0;
-					data.float6dArr[4] = 0.0;
-					data.float6dArr[5] = 0.0;
-					data.float6dArr[6] = 0.0;
-					data.float6dArr[7] = 0.0;
-					TCP_Limit_cnt=1;
-				}
-				else
-				{
-					data.float6dArr[0] = 0.0;
-					data.float6dArr[1] = 0.0;
-					data.float6dArr[2] = 0.0;
-					data.float6dArr[3] = 0.0;
-					data.float6dArr[4] = 0.0;
-					data.float6dArr[5] = 0.0;
-					data.float6dArr[6] = 0.0;
-					data.float6dArr[7] = 0.0;
-				}
-
-				memcpy(writeBuff, data.byte, SIZE_DATA_MAX);
-				socket().sendBytes(writeBuff, 1024);
-
-			} while (recvSize > 0);
-			//cout << "Client Disconnected." << endl;
-		}
-		catch (Poco::Exception& exc)
-		{
-			//cout << "Session: " << exc.displayText() << endl;
-		}
-
-	}
-};
-
-class SessionFactory :public TCPServerConnectionFactory
-{
-public:
-	SessionFactory() {}
-	virtual ~SessionFactory() {}
-
-	virtual TCPServerConnection* createConnection(const StreamSocket &socket)
-	{
-		return new Session(socket);
-	}
-};
-
 /****************************************************************************/
 void EncToRad()
 {
-
-		for(int i=1; i<=NUM_AXIS; i++)
-		{
-			if(old_flag[i-1]==0){
-				ActualPos_Old[i-1]=ActualPos[i-1];
-				old_flag[i-1]=1;
-			}
-			else if(old_flag[i-1]==1){
-
-				ActualVel[i-1]=(2*0.01-0.001)/(2*0.01+0.001)*ActualVel_Old[i-1]+2/(2*0.01+0.001)*(ActualPos[i-1]-ActualPos_Old[i-1]);
-
-				switch(i)
-				{
-				case 0:
-				case 1:
-					ActualPos_Rad[i-1]=(float)ActualPos[i-1]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-					ActualVel_Rad[i-1]=(float)ActualVel[i-1]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
-					break;
-				case 2:
-					ActualPos_Rad[i-1]=(float)ActualPos[i-1]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
-					ActualVel_Rad[i-1]=(float)ActualVel[i-1]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
-					break;
-				case 3:
-				case 4:
-				case 5:
-					ActualPos_Rad[i-1]=(float)ActualPos[i-1]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-					ActualVel_Rad[i-1]=(float)ActualVel[i-1]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
-					break;
-				}
-				
-
-				//for Kinematics & Dynamics
-				info.act.q[i-1]=ActualPos_Rad[i-1];
-				info.act.q_dot[i-1]=ActualVel_Rad[i-1];
-
-				//buffer for calculate velocity
-				ActualPos_Old[i-1]=ActualPos[i-1];
-				ActualVel_Old[i-1]=ActualVel[i-1];
-			}
+	
+	for(int i=0; i<NUM_AXIS; i++)
+	{
+		if(old_flag[i]==0){
+			ActualPos_Old[i]=ActualPos[i];
+			old_flag[i]=1;
 		}
-		info.act.j_q=Map<VectorXf>(info.act.q,NUM_AXIS);
-		info.act.j_q_d=Map<VectorXf>(info.act.q_dot,NUM_AXIS);
+		else if(old_flag[i]==1){
+
+			ActualVel[i]=(2*0.01-0.001)/(2*0.01+0.001)*ActualVel_Old[i]+2/(2*0.01+0.001)*(ActualPos[i]-ActualPos_Old[i]);
+
+			switch(i)
+			{
+			case 0:
+			case 1:
+				ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
+				ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
+				break;
+			case 2:
+				ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
+				ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
+				break;
+			case 3:
+			case 4:
+			case 5:
+				ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+				ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+				break;
+			}
+			
+
+			//for Kinematics & Dynamics
+			info.act.q[i]=ActualPos_Rad[i];
+			info.act.q_dot[i]=ActualVel_Rad[i];
+
+			//buffer for calculate velocity
+			ActualPos_Old[i]=ActualPos[i];
+			ActualVel_Old[i]=ActualVel[i];
+		}
+	}
+	info.act.j_q=Map<VectorXf>(info.act.q,NUM_AXIS);
+	info.act.j_q_d=Map<VectorXf>(info.act.q_dot,NUM_AXIS);
+
+	// for(int i=0; i<NUM_AXIS; i++)
+	// {
+	// 	switch(i)
+	// 	{
+	// 	case 0:
+	// 	case 1:
+	// 		ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
+	// 		ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
+	// 		break;
+	// 	case 2:
+	// 		ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
+	// 		ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
+	// 		break;
+	// 	case 3:
+	// 	case 4:
+	// 	case 5:
+	// 		ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+	// 		ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+	// 		break;
+	// 	}
+		
+	// 	//for Kinematics & Dynamics
+	// 	info.act.q[i]=ActualPos_Rad[i];
+	// 	info.act.q_dot[i]=ActualVel_Rad[i];
+
+	// 	//buffer for calculate velocity
+	// 	ActualPos_Old[i]=ActualPos[i];
+	// 	ActualVel_Old[i]=ActualVel[i];
+
+	// }
+	// info.act.j_q=Map<VectorXf>(info.act.q,NUM_AXIS);
+	// info.act.j_q_d=Map<VectorXf>(info.act.q_dot,NUM_AXIS);
 }
 
 void Robot_Limit()
@@ -440,12 +360,11 @@ void Robot_Limit()
 		{
 			traq_d[i]=0;
 			traq_dd[i]=0;
-			flag_ctrl=-1;
 			limit_flag=1;
 		}
 	}
 }
-int isElmoInit(void)
+int isDriveInit(void)
 {
 	int elmo_count = 0;
 	for(int i=0; i<NUM_AXIS; ++i)
@@ -486,254 +405,6 @@ int compute()
 	return 0;
 }
 
-void TCP_Command()
-{
-	if(flag_TCP==1)
-	{
-		switch((int)received_Data[0])
-		{
-		// 1) Joint Space
-		case 101: // Homing
-
-			break;
-		case 102: // Reset (when occured limit)
-			for(int i = 0; i<ROBOT_DOF;i++)
-				TrajFlag_j[i] = 0;
-			limit_flag=0;
-			TCP_Limit_cnt = 0;
-			flag_ctrl=-1;
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 103: // Rest-Position
-			if(TrajFlag_j[0] == 0 && limit_flag == 0)
-			{
-				TargetTrajPos_Rad[0]=0.0;
-				TargetTrajPos_Rad[1]=0.0;
-				TargetTrajPos_Rad[2]=0.0;
-				TargetTrajPos_Rad[3]=0.0;
-				TargetTrajPos_Rad[4]=0.0;
-				TargetTrajPos_Rad[5]=0.0;
-				traj_time=2.0;
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_j[i]=1;
-				}
-				flag_ctrl=0;
-			}
-			else if(TCP_buf!=(int)received_Data[0] && limit_flag == 0)// if(TargetTrajPos_Rad[0]!=0.0 || TargetTrajPos_Rad[1]!=0.0 || TargetTrajPos_Rad[2]!=0.0 || TargetTrajPos_Rad[3]!=0.0 || TargetTrajPos_Rad[4]!=0.0 || TargetTrajPos_Rad[5]!=0.0)
-			{
-				TargetTrajPos_Rad[0]=0.0;
-				TargetTrajPos_Rad[1]=0.0;
-				TargetTrajPos_Rad[2]=0.0;
-				TargetTrajPos_Rad[3]=0.0;
-				TargetTrajPos_Rad[4]=0.0;
-				TargetTrajPos_Rad[5]=0.0;
-				traj_time=2.0;
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_j[i]=1;
-				}
-				flag_ctrl=0;
-				traj_changed = 1;
-			}
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 104: // Home-Position
-			if(TrajFlag_j[0] == 0 && limit_flag == 0)
-			{
-				TargetTrajPos_Rad[0]=0.0;
-				TargetTrajPos_Rad[1]=0.0;
-				TargetTrajPos_Rad[2]=0.0;
-				TargetTrajPos_Rad[3]=-1.5709;
-				TargetTrajPos_Rad[4]=0.0;
-				TargetTrajPos_Rad[5]=0.0;
-				traj_time=2.0;
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_j[i]=1;
-				}
-				flag_ctrl=0;
-			}
-			else if(TCP_buf!=(int)received_Data[0] && limit_flag == 0)// if(TargetTrajPos_Rad[0]!=0.0 || TargetTrajPos_Rad[1]!=0.0 || TargetTrajPos_Rad[2]!=0.0 || TargetTrajPos_Rad[3]!=-1.5709 || TargetTrajPos_Rad[4]!=0.0 || TargetTrajPos_Rad[5]!=0.0)
-			{
-				TargetTrajPos_Rad[0]=0.0;
-				TargetTrajPos_Rad[1]=0.0;
-				TargetTrajPos_Rad[2]=0.0;
-				TargetTrajPos_Rad[3]=-1.5709;
-				TargetTrajPos_Rad[4]=0.0;
-				TargetTrajPos_Rad[5]=0.0;
-				traj_time=2.0;
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_j[i]=1;
-				}
-				flag_ctrl=0;
-				traj_changed = 1;
-			}
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 105: // Job-Position
-			if(TrajFlag_j[0] == 0 && limit_flag == 0)
-			{
-				TargetTrajPos_Rad[0]=-0.634884;
-				TargetTrajPos_Rad[1]=-0.43264;
-				TargetTrajPos_Rad[2]=1.273272;
-				TargetTrajPos_Rad[3]=-1.69791;
-				TargetTrajPos_Rad[4]=0.74784;
-				TargetTrajPos_Rad[5]=0.74;
-				traj_time=2.0;
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_j[i]=1;
-				}
-				flag_ctrl=0;
-			}
-			else if(TCP_buf!=(int)received_Data[0] && limit_flag == 0)// if(TargetTrajPos_Rad[0]!=-0.634884 || TargetTrajPos_Rad[1]!=-0.43264 || TargetTrajPos_Rad[2]!=1.273272 || TargetTrajPos_Rad[3]!=-1.69791 || TargetTrajPos_Rad[4]!=0.74784 || TargetTrajPos_Rad[5]!=0.74)
-			{
-				TargetTrajPos_Rad[0]=-0.634884;
-				TargetTrajPos_Rad[1]=-0.43264;
-				TargetTrajPos_Rad[2]=1.273272;
-				TargetTrajPos_Rad[3]=-1.69791;
-				TargetTrajPos_Rad[4]=0.74784;
-				TargetTrajPos_Rad[5]=0.74;
-				traj_time=2.0;
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_j[i]=1;
-				}
-				flag_ctrl=0;
-				traj_changed = 1;
-			}
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 106: // Joint desired(fifth-order polynomial)
-			if(TrajFlag_j[0] == 0 && limit_flag == 0)
-			{
-				TargetTrajPos_Rad[0]=received_Data[1];
-				TargetTrajPos_Rad[1]=received_Data[2];
-				TargetTrajPos_Rad[2]=received_Data[3];
-				TargetTrajPos_Rad[3]=received_Data[4];
-				TargetTrajPos_Rad[4]=received_Data[5];
-				TargetTrajPos_Rad[5]=received_Data[6];
-				if(received_Data[7]<1.0)
-					traj_time=1.0;
-				else
-					traj_time=received_Data[7];
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_j[i]=1;
-				}
-				flag_ctrl=0;
-			}
-			else if(TargetTrajPos_Rad[0]!=received_Data[1] || TargetTrajPos_Rad[1]!=received_Data[2] || TargetTrajPos_Rad[2]!=received_Data[3] || TargetTrajPos_Rad[3]!=received_Data[4] || TargetTrajPos_Rad[4]!=received_Data[5] || TargetTrajPos_Rad[5]!=received_Data[6])
-			{
-				if(limit_flag == 0)
-				{
-					TargetTrajPos_Rad[0]=received_Data[1];
-					TargetTrajPos_Rad[1]=received_Data[2];
-					TargetTrajPos_Rad[2]=received_Data[3];
-					TargetTrajPos_Rad[3]=received_Data[4];
-					TargetTrajPos_Rad[4]=received_Data[5];
-					TargetTrajPos_Rad[5]=received_Data[6];
-					if(received_Data[7]<1.0)
-						traj_time=1.0;
-					else
-						traj_time=received_Data[7];
-					for(int i=0;i<NUM_AXIS;i++)
-					{
-						TrajFlag_j[i]=1;
-					}
-					flag_ctrl=0;
-					traj_changed = 1;
-				}
-			}
-			TCP_buf=(int)received_Data[0];
-			break;
-		// 2) Task Space
-/*		case 201:
-			xd[0]=info.act.x[0];
-			xd[1]=info.act.x[1];
-			xd[2]=info.act.x[2];
-			xd[0] += 0.10000;
-			flag_ctrl=1;
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 202:
-			xd[0]=info.act.x[0];
-			xd[1]=info.act.x[1];
-			xd[2]=info.act.x[2];
-			xd[0] -= 0.10000;
-			flag_ctrl=1;
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 203:
-			xd[0]=info.act.x[0];
-			xd[1]=info.act.x[1];
-			xd[2]=info.act.x[2];
-			xd[1] += 0.10000;
-			flag_ctrl=1;
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 204:
-			xd[0]=info.act.x[0];
-			xd[1]=info.act.x[1];
-			xd[2]=info.act.x[2];
-			xd[1] -= 0.10000;
-			flag_ctrl=1;
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 205:
-			xd[0]=info.act.x[0];
-			xd[1]=info.act.x[1];
-			xd[2]=info.act.x[2];
-			xd[2] += 0.10000;
-			flag_ctrl=1;
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 206:
-			xd[0]=info.act.x[0];
-			xd[1]=info.act.x[1];
-			xd[2]=info.act.x[2];
-			xd[2] -= 0.10000;
-			flag_ctrl=1;
-			TCP_buf=(int)received_Data[0];
-			break;*/
-		case 201:
-			xd[0]=received_Data[1];
-			xd[1]=received_Data[2];
-			xd[2]=received_Data[3];
-			flag_ctrl=1;
-			TCP_buf=(int)received_Data[0];
-/*			if(TrajFlag_t[0] == 0)
-			{
-				TargetTrajPos_Meter[0]=received_Data[1];
-				TargetTrajPos_Meter[1]=received_Data[2];
-				TargetTrajPos_Meter[2]=received_Data[3];
-
-				if(received_Data[4]<1.5)
-					traj_time=3.0;
-				else
-					traj_time=received_Data[4];
-				for(int i=0;i<NUM_AXIS;i++)
-				{
-					TrajFlag_t[i]=1;
-				}
-				flag_ctrl=1;
-			}
-			TCP_buf=(int)received_Data[0];*/
-			break;
-		// 3) SNU Hand
-		case 301:
-			TCP_buf=(int)received_Data[0];
-			break;
-		case 302:
-			TCP_buf=(int)received_Data[0];
-			break;
-		default:
-			break;
-		}
-	}
-}
 
 // RTRArm_task
 void RTRArm_run(void *arg)
@@ -775,8 +446,8 @@ void RTRArm_run(void *arg)
 				StatusWord[k] = 			ecat_nrmk_drive[k].status_word_;
 				ModeOfOperationDisplay[k] = ecat_nrmk_drive[k].mode_of_operation_display_;
 				ControlWord[k] = 			ecat_nrmk_drive[k].control_word_;
-				ActualPos[k] = 				ecat_nrmk_drive[k].position_;
-				//ActualVel[k] = 				ecat_nrmk_drive[k].velocity_;
+				ActualPos[k] = 				ecat_nrmk_drive[k].position_-ActualPos_zero[k];
+				ActualVel[k] = 				ecat_nrmk_drive[k].velocity_;
 				ActualTor[k] = 				ecat_nrmk_drive[k].torque_;
 
 			}
@@ -787,55 +458,34 @@ void RTRArm_run(void *arg)
 			cManipulator->pKin->HTransMatrix(info.act.q);
 			cManipulator->pDyn->Prepare_Dynamics(info.act.q, info.act.q_dot);
 
-			TCP_Command();
-
 			compute();
 			Robot_Limit();
 			//cManipulator->pDyn->Prepare_Dynamics(traq, traq_d);
 
-			switch(flag_ctrl)
+			for(int i=0;i<NUM_AXIS;i++)
 			{
-			case -1: // Gravity Compensator
-				Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
-				break;
-			case 0: // Joint Space
-				for(int i=0;i<NUM_AXIS;i++)
+				if(TrajFlag_j[i]==2)
 				{
-					if(TrajFlag_j[i]==2)
-					{
-						traj5th_joint->Polynomial5th(i, float_gt, TrajFlag_j+i, q_);
-						traq[i]=q_[0];
-						traq_d[i]=q_[1];
-						traq_dd[i]=q_[2];
-						if(TrajFlag_j[0]==0)
-							flag_TCP=0;
-					}
-					else if(TrajFlag_j[i]==1)
-					{
-						info.act.dq[i]=traq[i];
-						info.act.dq_dot[i]=traq_d[i];
-						info.act.dq_ddot[i]=traq_dd[i];
-						traj5th_joint->SetPolynomial5th_j(i, &info.act, TargetTrajPos_Rad[i], float_gt, traj_time, q_, traj_changed);
-						traq[i]=q_[0];
-						traq_d[i]=q_[1];
-						traq_dd[i]=q_[2];
-						TrajFlag_j[i]=2;
-						traj_changed = 0;
-					}
+					traj5th_joint->Polynomial5th(i, float_gt, TrajFlag_j+i, q_);
+					traq[i]=q_[0];
+					traq_d[i]=q_[1];
+					traq_dd[i]=q_[2];
 				}
-				Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
-				break;
-			case 1: // Task Space
-				if(ctrl_buf!=1)
-					task_time=0;
-				else
-					task_time=1;
-				Control->VSD(info.act.q, info.act.q_dot, xd, TargetToq, float_gt, task_time);
-				break;
-			default:
-				break;
+				else if(TrajFlag_j[i]==1)
+				{
+					traj5th_joint->SetPolynomial5th_j(i, &info.act, TargetTrajPos_Rad[i], float_gt, traj_time, q_);
+					traq[i]=q_[0];
+					traq_d[i]=q_[1];
+					traq_dd[i]=q_[2];
+					info.act.dq[i]=traq[i];
+					info.act.dq_dot[i]=traq_d[i];
+					info.act.dq_ddot[i]=traq_dd[i];
+
+					TrajFlag_j[i]=2;
+				}
 			}
-			ctrl_buf=flag_ctrl;
+			Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
+
 			//Gravity Controller
 			//Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
 
@@ -884,14 +534,14 @@ void RTRArm_run(void *arg)
 			for(int j=0; j<NUM_AXIS; ++j)
 			{
 				TargetTor[j] = roundf(TargetToq[j]);
-				//ecat_nrmk_drive[j].writeTorque(TargetTor[j]);
+				ecat_nrmk_drive[j].writeTorque(TargetTor[j]);
 
 			}
-			//ecat_nrmk_drive[0].writeTorque(TargetTor[0]);
-			//ecat_nrmk_drive[1].writeTorque(TargetTor[1]);
-			//ecat_nrmk_drive[2].writeTorque(TargetTor[2]);
-			//ecat_nrmk_drive[3].writeTorque(TargetTor[3]);
-			//ecat_nrmk_drive[4].writeTorque(TargetTor[4]);
+			// ecat_nrmk_drive[0].writeTorque(TargetTor[0]);
+			// ecat_nrmk_drive[1].writeTorque(TargetTor[1]);
+			// ecat_nrmk_drive[2].writeTorque(TargetTor[2]);
+			// ecat_nrmk_drive[3].writeTorque(TargetTor[3]);
+			// ecat_nrmk_drive[5].writeTorque(TargetTor[5]);
 
 		}
 
@@ -919,7 +569,7 @@ void RTRArm_run(void *arg)
 		ethercat_time = (long) now - previous;
 
 
-		if ( isElmoInit() == 1 && (runcount > WAKEUP_TIME*(NSEC_PER_SEC/cycle_ns)))
+		if ( isDriveInit() == 1 && (runcount > WAKEUP_TIME*(NSEC_PER_SEC/cycle_ns)))
 		{
 			system_ready=1;	//all drives have been done
 
@@ -966,7 +616,7 @@ void print_run(void *arg)
 			itime+=step;
 			previous=now;
 			rt_printf("Time=%0.3fs \tFlag : %d\n", float_gt,flag);
-			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d, current_thread=%d\n", ethercat_time/1000, worst_time, fault_count,current_Thread);
+			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
 
 			cout<<"Manipulability   : "<<cManipulator->pKin->Manipulability(l_jaco)<<endl;
 			cout<<"Condition Number : "<<cManipulator->pKin->Condition_Number(l_jaco)<<endl;
@@ -985,9 +635,7 @@ void print_run(void *arg)
 				rt_printf("Traj : %d,\n",               TrajFlag_j[j]);
 			}
 			rt_printf("\n");
-			//rt_printf("%d\n",flag_ctrl);
 			rt_printf("%d\n",open_state);
-			rt_printf("%lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf\n",received_Data[0],received_Data[1],received_Data[2],received_Data[3],received_Data[4],received_Data[5],received_Data[6],received_Data[7]);
 			rt_printf("xd : %f, yd : %f, zd: %f\n",xd[0],xd[1],xd[2]);
 			//rt_printf("xddot : %f, yddot : %f, zddot: %f\n",vive_vel[0],vive_vel[1],vive_vel[2]);
 			//std::cout<<l_jaco<<endl;
@@ -1051,32 +699,12 @@ void plot_run(void *arg)
 	}
 }
 
-
-void TCP_run(void *arg)
-{
-	ServerSocket sock(SERVER_PORT);
-	TCPServer server(new SessionFactory(), sock);
-	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);	//cycle: 50us
-	cout << "Simple TCP Server Application." << endl;
-	cout << "maxConcurrentConnections: " << server.maxConcurrentConnections() << endl;
-
-	server.start();
-	while (true)
-	{
-		current_Thread = server.currentConnections();
-		rt_task_wait_period(NULL);
-
-	}
-}
-
-
 /****************************************************************************/
 void signal_handler(int signum = 0)
 {
 	rt_task_delete(&plot_task);
 	rt_task_delete(&RTRArm_task);
 	rt_task_delete(&print_task);
-	rt_task_delete(&TCP_task);
     printf("\nServo drives Stopped!\n");
 
     ecatmaster.deactivate();
@@ -1160,9 +788,6 @@ int main(int argc, char **argv)
 	// plotting: data socket comm
 	rt_task_create(&plot_task, "plotting", 0, 80, 0);
 	rt_task_start(&plot_task, &plot_run, NULL);
-
-	rt_task_create(&TCP_task, "TCP", 0, 85, 0);
-	rt_task_start(&TCP_task, &TCP_run, NULL);
 
 	// Must pause here
 	pause();

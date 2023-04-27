@@ -70,7 +70,7 @@ void Trajectory::SetPolynomial5th_t(int NumJoint, state *act, float FinalPos, fl
 
 }
 
-void Trajectory::SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, float InitTime, float Duration,float *q_, int traj_changed)
+void Trajectory::SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, float InitTime, float Duration,float *q_)
 {
 	TrajDuration[NumJoint] = Duration;
 	TrajInitTime[NumJoint] = InitTime;
@@ -80,28 +80,16 @@ void Trajectory::SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, fl
 			 1, powf(TrajDuration[NumJoint],1), 	powf(TrajDuration[NumJoint],2), 	powf(TrajDuration[NumJoint],3), 	powf(TrajDuration[NumJoint],4), 	powf(TrajDuration[NumJoint],5),
 			 0, 1, 									2*powf(TrajDuration[NumJoint],1), 	3*powf(TrajDuration[NumJoint],2), 	4*powf(TrajDuration[NumJoint],3), 	5*powf(TrajDuration[NumJoint],4),
 			 0, 0, 									2, 									6*powf(TrajDuration[NumJoint],1), 	12*powf(TrajDuration[NumJoint],2),	20*powf(TrajDuration[NumJoint],3);
-	if(traj_changed)
-	{
-		StateVec[NumJoint] << act->dq[NumJoint],
-							act->dq_dot[NumJoint],
-							act->dq_ddot[NumJoint],
-							//0,
-							//0,
-							FinalPos,
-							0,
-							0;
-	}
-	else
-	{
-		StateVec[NumJoint] << act->q[NumJoint],
-							act->q_dot[NumJoint],
-							act->q_ddot[NumJoint],
-							//0,
-							//0,
-							FinalPos,
-							0,
-							0;
-	}
+
+	StateVec[NumJoint] << act->q[NumJoint],
+						act->q_dot[NumJoint],
+						act->q_ddot[NumJoint],
+						//0,
+						//0,
+						FinalPos,
+						0,
+						0;
+
 	q_[0]=StateVec[NumJoint](0);
 	q_[1]=StateVec[NumJoint](1);
 	q_[2]=StateVec[NumJoint](2);

@@ -197,22 +197,28 @@ void Controller::PD_Gravity(float * q, float * q_dot, float *dq_, float *dq_dot,
 			toq[i] = G(i);*/
         //For Simulation
         if(i==0)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*GEAR_RATIO_121)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_500)/(float)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
+            //toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*GEAR_RATIO_121)*1000*1.66;
         	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
 		else if(i==1)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*GEAR_RATIO_121)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_500)/(float)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*GEAR_RATIO_121)*1000*1.66;
         	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
         else if(i==2)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*GEAR_RATIO_121)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_200)/(float)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*GEAR_RATIO_121)*1000*1.66;
         	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
         else if(i==3)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*GEAR_RATIO_101)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_100)/(float)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*GEAR_RATIO_101)*1000*1.66;
         	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
         else if(i==4)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_100)/(float)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
         	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
         else if(i==5)
-        	toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_100)/(float)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
+        	// toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
 			//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
         else
             return;
