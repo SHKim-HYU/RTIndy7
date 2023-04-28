@@ -23,7 +23,7 @@ namespace HYUMotionKinematics {
     }
 
 // LEFT //
-    void PoEKinematics::UpdateKinematicInfo(Vector3f _w, Vector3f _p, Vector3f _l, int _link_num) {
+    void PoEKinematics::UpdateKinematicInfo(Vector3d _w, Vector3d _p, Vector3d _l, int _link_num) {
         M[0] << 1, 0, 0, 163e-3,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
@@ -45,7 +45,7 @@ namespace HYUMotionKinematics {
     }
 
 // RIGHT //
-    void PoEKinematics::UpdateKinematicInfo_R(Vector3f _w, Vector3f _p, Vector3f _l, int _link_num) //_l : length of link
+    void PoEKinematics::UpdateKinematicInfo_R(Vector3d _w, Vector3d _p, Vector3d _l, int _link_num) //_l : length of link
     {
         M[0].setIdentity();
         v_se3[0].setZero();
@@ -77,11 +77,11 @@ namespace HYUMotionKinematics {
         isInfoUpdated = 1;
     }
 
-    Vector3f PoEKinematics::GetV(Vector3f _w, Vector3f _p) {
+    Vector3d PoEKinematics::GetV(Vector3d _w, Vector3d _p) {
         return (-SkewMatrix(_w)) * _p;    //MR p.139
     }
 
-    SE3 PoEKinematics::GetM(Vector3f _link) {
+    SE3 PoEKinematics::GetM(Vector3d _link) {
         SE3 res;
         res.setIdentity();
         //EE
@@ -93,7 +93,7 @@ namespace HYUMotionKinematics {
         return res;
     }
 
-    se3 PoEKinematics::GetTwist(Vector3f _w, Vector3f _v) {
+    se3 PoEKinematics::GetTwist(Vector3d _w, Vector3d _v) {
         twist;
 
         twist.head(3) = _w;
@@ -102,13 +102,13 @@ namespace HYUMotionKinematics {
         return twist;
     }
 
-    void PoEKinematics::HTransMatrix(float q[]) {
+    void PoEKinematics::HTransMatrix(double q[]) {
 
         for (int end = 1; end <= ROBOT_DOF; ++end) {
             Exp_S[end] = SE3Matrix(v_se3[end], q[end - 1]);
 
         }
-        q_=Map<VectorXf>(q,ROBOT_DOF);
+        q_=Map<VectorXd>(q,ROBOT_DOF);
         /*
         T[0][1] = M[0]*Exp_S[0]*M[1];
         T[0][2] = M[0]*Exp_S[0]*Exp_S[1]*M[2];
@@ -170,7 +170,7 @@ namespace HYUMotionKinematics {
         _AnalyticJacobian.setZero();
 
         //Angular Portion
-        Matrix3f r, A;
+        Matrix3d r, A;
         A.setIdentity();
         r=MatrixLog3(RotMat);
         A = A - (1 - cos(r.norm())) / pow(r.norm(), 2) * r + (r.norm() - sin(r.norm())) / pow(r.norm(), 3) * r * r;
@@ -184,7 +184,7 @@ namespace HYUMotionKinematics {
 
     LinJaco PoEKinematics::LinearJacobian(void) {
         linjacobian.setZero();
-/*    Matrix<float,4,4> tmp;
+/*    Matrix<double,4,4> tmp;
     tmp.setZero();
     tmp=_BaseT*T[0][ROBOT_DOF]*_EndT;
     linjacobian=tmp.block<3,3>(0,0)*BodyJacobian().block<3,ROBOT_DOF>(3,0);*/
@@ -224,9 +224,9 @@ namespace HYUMotionKinematics {
         return PJ;
     }
 
-/*    Matrix<float, 6, 3> PoEKinematics::Pinv(Matrix<float, 3, 6> _j) {
-        Matrix<float, 6, 3> PJ;
-        Matrix<float, 3, 6> J;
+/*    Matrix<double, 6, 3> PoEKinematics::Pinv(Matrix<double, 3, 6> _j) {
+        Matrix<double, 6, 3> PJ;
+        Matrix<double, 3, 6> J;
         J << _j;
         int m = 0, n = 0;
         m = J.rows();
@@ -246,8 +246,8 @@ namespace HYUMotionKinematics {
     }
 */
     PinvLJaco PoEKinematics::Pinv(LinJaco _j) {
-        Matrix<float, ROBOT_DOF, 3> PJ;
-        Matrix<float, 3, ROBOT_DOF> J;
+        Matrix<double, ROBOT_DOF, 3> PJ;
+        Matrix<double, 3, ROBOT_DOF> J;
         J << _j;
         int m = 0, n = 0;
         m = J.rows();
@@ -267,11 +267,11 @@ namespace HYUMotionKinematics {
     }
 
     PinvLJaco PoEKinematics::DPI(LinJaco _j) {
-        Matrix<float, ROBOT_DOF, 3> PJ;
-        Matrix<float, 3, ROBOT_DOF> J;
+        Matrix<double, ROBOT_DOF, 3> PJ;
+        Matrix<double, 3, ROBOT_DOF> J;
         J << _j;
         JacobiSVD<MatrixXf> svd(J, ComputeThinU | ComputeThinV);
-        float p;
+        double p;
         int m = 0, n = 0;
         m = J.rows();
         n = J.cols();
@@ -308,11 +308,11 @@ namespace HYUMotionKinematics {
     }
 
     InvJaco PoEKinematics::DPI(Jaco _j) {
-        Matrix<float, ROBOT_DOF, 6> PJ;
-        Matrix<float, 6, ROBOT_DOF> J;
+        Matrix<double, ROBOT_DOF, 6> PJ;
+        Matrix<double, 6, ROBOT_DOF> J;
         J << _j;
         JacobiSVD<MatrixXf> svd(J, ComputeThinU | ComputeThinV);
-        float p;
+        double p;
         int m = 0, n = 0;
         m = J.rows();
         n = J.cols();
@@ -348,8 +348,8 @@ namespace HYUMotionKinematics {
         return PJ;
     }
 
-    Vector3f PoEKinematics::ForwardKinematics(void) {
-        //Matrix<float,4,4> _tmp;
+    Vector3d PoEKinematics::ForwardKinematics(void) {
+        //Matrix<double,4,4> _tmp;
         //_tmp.setZero();
 
         if (isInfoUpdated)
@@ -360,8 +360,8 @@ namespace HYUMotionKinematics {
         return T[0][ROBOT_DOF].block<3, 1>(0, 3);
     }
 
-    Vector3f PoEKinematics::GetEulerAngle(void) {
-        Vector3f rpy;
+    Vector3d PoEKinematics::GetEulerAngle(void) {
+        Vector3d rpy;
 
 /*        rpy(0) = 180/3.141592*atan2(RotMat(2, 1), RotMat(2, 2));
         rpy(1) = -180/3.141592*asin(RotMat(2, 0));
@@ -375,10 +375,10 @@ namespace HYUMotionKinematics {
             return rpy;
     }
 
-    Vector4f PoEKinematics::GetQuaternion(void){
-        //Vector4f quat;  //{w,x,y,z}
-        float tr=RotMat.trace();
-        float S;
+    Vector4d PoEKinematics::GetQuaternion(void){
+        //Vector4d quat;  //{w,x,y,z}
+        double tr=RotMat.trace();
+        double S;
         if(tr>0)
         {
             quat(0)=sqrt(abs(1+tr))/2;
@@ -413,7 +413,7 @@ namespace HYUMotionKinematics {
         return quat;
 
     }
-    Matrix3f PoEKinematics::Rot(void) {
+    Matrix3d PoEKinematics::Rot(void) {
         if (isInfoUpdated)
             return T[0][ROBOT_DOF].block<3, 3>(0, 0);
     }
@@ -423,18 +423,18 @@ namespace HYUMotionKinematics {
             return T[_i][_j];
     }
 
-    float PoEKinematics::Manipulability(LinJaco _J)
+    double PoEKinematics::Manipulability(LinJaco _J)
     {
         w=sqrt((_J*_J.transpose()).determinant());
         return w;
     }
-    float PoEKinematics::Manipulability(Jaco _J)
+    double PoEKinematics::Manipulability(Jaco _J)
     {
         w=sqrt((_J*_J.transpose()).determinant());
         return w;
     }
 
-    float PoEKinematics::Condition_Number(LinJaco _J)
+    double PoEKinematics::Condition_Number(LinJaco _J)
     {
         JacobiSVD<MatrixXf> svd(_J, ComputeThinU|ComputeThinV);
         k=svd.singularValues()(0)/svd.singularValues()(2);

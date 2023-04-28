@@ -94,14 +94,14 @@ Controller::Controller(robot *pManipulator, int JointNum)
     t_flag=0;
 }
 
-void Controller::SetPIDGain(float _Kp, float _Kd, float _Ki, int _JointNum){
+void Controller::SetPIDGain(double _Kp, double _Kd, double _Ki, int _JointNum){
     Kp(_JointNum) = _Kp;
     Kd(_JointNum) = _Kd;
     Ki(_JointNum) = _Ki;
     return;
 }
 
-void Controller::PDController_gravity(float *q, float *q_dot, float *dq, float *dq_dot, float *toq, Jointf &g_mat)
+void Controller::PDController_gravity(double *q, double *q_dot, double *dq, double *dq_dot, double *toq, Jointf &g_mat)
 {
 	//Real
 	Kp << 118.7931,		119.5279,	59.764,		160.2564,		19.1946, 1;
@@ -121,26 +121,26 @@ void Controller::PDController_gravity(float *q, float *q_dot, float *dq, float *
 		e_dev(i) = dq_dot[i] - q_dot[i];
 
 /*		if(i==0)
-			toq[i] = (g_mat(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+			toq[i] = (g_mat(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
 		else if(i==1)
-			toq[i] = (g_mat(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+			toq[i] = (g_mat(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
 		else if(i==2)
-			toq[i] = (g_mat(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+			toq[i] = (g_mat(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
 		else if(i==3)
-			toq[i] = (g_mat(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+			toq[i] = (g_mat(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
 		else if(i==4)
-			toq[i] = (g_mat(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+			toq[i] = (g_mat(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
 */
 		if(i==0)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
 		else if(i==1)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
 		else if(i==2)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
 		else if(i==3)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
 		else if(i==4)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+g_mat(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
 
 		//For Simulation
 /*		if(i==0)
@@ -165,7 +165,7 @@ void Controller::PDController_gravity(float *q, float *q_dot, float *dq, float *
 
 }
 
-void Controller::PD_Gravity(float * q, float * q_dot, float *dq_, float *dq_dot, float * toq)
+void Controller::PD_Gravity(double * q, double * q_dot, double *dq_, double *dq_dot, double * toq)
 {
     //Kp << 40,        40,	    30,      35,      15;
 	//Kp << 118.7931,		119.5279,	59.764,		160.2564,		19.1946;
@@ -173,8 +173,8 @@ void Controller::PD_Gravity(float * q, float * q_dot, float *dq_, float *dq_dot,
     //Kd << 0.23,	    0.23,   0.18,    0.16,   0.12;
     //Kd << 0.03375482 * Kp(0), 0.034499895*Kp(1), 0.0345007*Kp(2), 0.015999985*Kp(3), 0.03599971*Kp(4);
 
-	Kp << 28.7931,		32.5279,	18.764,		23.2564,		14.1946,	14.1946;//5.1946;
-    Kd << 0.00575482 * Kp(0), 0.005499895*Kp(1), 0.0045007*Kp(2), 0.004599985*Kp(3), 0.00459971*Kp(4), 0.00459971*Kp(5);
+	Kp << 300,	300,  150,	150,  75, 50;
+    Kd << 15,   15,   7.5,  7.5,  5,  3;
 
     G.resize(ROBOT_DOF,1);
     G=pManipulator->pDyn->G_Matrix();
@@ -197,36 +197,36 @@ void Controller::PD_Gravity(float * q, float * q_dot, float *dq_, float *dq_dot,
 			toq[i] = G(i);*/
         //For Simulation
         if(i==0)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_500)/(float)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
-            //toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*GEAR_RATIO_121)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
+            //toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*GEAR_RATIO_121)*1000*1.66;
+        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
 		else if(i==1)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_500)/(float)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*GEAR_RATIO_121)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*GEAR_RATIO_121)*1000*1.66;
+        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
         else if(i==2)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_200)/(float)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*GEAR_RATIO_121)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_200)/(double)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*GEAR_RATIO_121)*1000*1.66;
+        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
         else if(i==3)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_100)/(float)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*GEAR_RATIO_101)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*GEAR_RATIO_101)*1000*1.66;
+        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
         else if(i==4)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_100)/(float)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
+            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
+        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
         else if(i==5)
-            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(float)(TORQUE_ADC_100)/(float)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        	// toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
-			//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
+            toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
+        	// toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
+			//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
         else
             return;
     }
 
 }
 
-void Controller::Gravity(float * q, float * q_dot, float * toq)
+void Controller::Gravity(double * q, double * q_dot, double * toq)
 {
     G.resize(ROBOT_DOF,1);
     G=pManipulator->pDyn->G_Matrix();
@@ -235,23 +235,23 @@ void Controller::Gravity(float * q, float * q_dot, float * toq)
 
         //For Simulation
 		if(i==0)
-			toq[i] = G(i)/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+			toq[i] = G(i)/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
 		else if(i==1)
-			toq[i] = G(i)/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+			toq[i] = G(i)/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
 		else if(i==2)
-			toq[i] = G(i)/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+			toq[i] = G(i)/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
 		else if(i==3)
-			toq[i] = G(i)/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+			toq[i] = G(i)/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
 		else if(i==4)
-			toq[i] = G(i)/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+			toq[i] = G(i)/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
 		else if(i==5)
-			toq[i] = G(i)/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
+			toq[i] = G(i)/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
 		else
             return;
     }
 }
 
-    void Controller::Inverse_Dynamics_Control(float *q_, float *q_dot, float *dq_, float *dq_dot, float *dq_ddot, float * toq)
+    void Controller::Inverse_Dynamics_Control(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq)
     {
         //Kp << 118.7931,		119.5279,	59.764,		160.2564,		39.1946;
         //Ki={860.8196,		866.1442,	4.1716,		427.5721,	135.3359};
@@ -270,12 +270,12 @@ void Controller::Gravity(float * q, float * q_dot, float * toq)
         C.resize(ROBOT_DOF,ROBOT_DOF);
         C=pManipulator->pDyn->C_Matrix();
 
-        q = Map<VectorXf>(q_, this->m_Jnum);
-        qdot = Map<VectorXf>(q_dot, this->m_Jnum);
+        q = Map<VectorXd>(q_, this->m_Jnum);
+        qdot = Map<VectorXd>(q_dot, this->m_Jnum);
 
-        dq = Map<VectorXf>(dq_, this->m_Jnum);
-        dqdot = Map<VectorXf>(dq_dot, this->m_Jnum);
-        dqddot = Map<VectorXf>(dq_ddot, this->m_Jnum);
+        dq = Map<VectorXd>(dq_, this->m_Jnum);
+        dqdot = Map<VectorXd>(dq_dot, this->m_Jnum);
+        dqddot = Map<VectorXd>(dq_ddot, this->m_Jnum);
         //dq=dq_;
         //dqdot=dq_dot;
         //dqddot=dq_ddot;
@@ -296,22 +296,22 @@ void Controller::Gravity(float * q, float * q_dot, float * toq)
         for(int i=0; i<m_Jnum; ++i)
         {
             if(i==0)
-                toq[i] = u(i)/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+                toq[i] = u(i)/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
             else if(i==1)
-                toq[i] = u(i)/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+                toq[i] = u(i)/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
             else if(i==2)
-                toq[i] = u(i)/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+                toq[i] = u(i)/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
             else if(i==3)
-                toq[i] = u(i)/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+                toq[i] = u(i)/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
             else if(i==4)
-                toq[i] = u(i)/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+                toq[i] = u(i)/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
             else if(i==5)
-				toq[i] = u(i)/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
+				toq[i] = u(i)/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
             else
             	return;
         }
     }
-    void Controller::ComputedTorque(float *q_, float *q_dot, float *dq_, float *dq_dot, float *dq_ddot, float * toq)
+    void Controller::ComputedTorque(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq)
     {
         Kp << 20,        23,	    10,      15,      5,	5;
         Kd << 0.03375482 * Kp(0), 0.034499895*Kp(1), 0.0345007*Kp(2), 0.015999985*Kp(3), 0.03599971*Kp(4), 0.03599971*Kp(5);
@@ -320,12 +320,12 @@ void Controller::Gravity(float * q, float * q_dot, float * toq)
         M=pManipulator->pDyn->M_Matrix();
         //C=pManipulator->pDyn->C_Matrix();
 
-        q = Map<VectorXf>(q_, this->m_Jnum);
-        qdot = Map<VectorXf>(q_dot, this->m_Jnum);
+        q = Map<VectorXd>(q_, this->m_Jnum);
+        qdot = Map<VectorXd>(q_dot, this->m_Jnum);
 
-        dq = Map<VectorXf>(dq_, this->m_Jnum);
-        dqdot = Map<VectorXf>(dq_dot, this->m_Jnum);
-        dqddot = Map<VectorXf>(dq_ddot, this->m_Jnum);
+        dq = Map<VectorXd>(dq_, this->m_Jnum);
+        dqdot = Map<VectorXd>(dq_dot, this->m_Jnum);
+        dqddot = Map<VectorXd>(dq_ddot, this->m_Jnum);
         //dq=dq_;
         //dqdot=dq_dot;
         //dqddot=dq_ddot;
@@ -344,35 +344,35 @@ void Controller::Gravity(float * q, float * q_dot, float * toq)
         for(int i=0; i<m_Jnum; ++i)
         {
             if(i==0)
-                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
             else if(i==1)
-                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
             else if(i==2)
-                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
             else if(i==3)
-                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
             else if(i==4)
-                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
             else if(i==5)
-                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
+                toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
             else
             	return;
         }
     }
 
-    void Controller::VSD(float *_q, float *_qdot, Vector3f &xd, float *toq, float gt, int flag)
+    void Controller::VSD(double *_q, double *_qdot, Vector3d &xd, double *toq, double gt, int flag)
     {
-        float tmp_M=0;
-        float alpha=8.0, kt=0;
+        double tmp_M=0;
+        double alpha=8.0, kt=0;
 
 
         mvZeta0_=0.1; mvZeta1_=1.0; mvK_=250; mvKsi_=0.1;
         mvC0_.resize(this->m_Jnum);
         M.resize(this->m_Jnum,this->m_Jnum);
         q.resize(this->m_Jnum);
-        q=Map<VectorXf>(_q,this->m_Jnum);
+        q=Map<VectorXd>(_q,this->m_Jnum);
         qdot.resize(this->m_Jnum);
-        qdot=Map<VectorXf>(_qdot,this->m_Jnum);
+        qdot=Map<VectorXd>(_qdot,this->m_Jnum);
         dq.resize(this->m_Jnum);
         dq<<0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
         eTask.resize(this->m_Jnum);
@@ -406,29 +406,29 @@ void Controller::Gravity(float * q, float * q_dot, float * toq)
         {
 
             if(i==0){
-                toq[i] = u0(i)/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
-                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+                toq[i] = u0(i)/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
             }
             else if(i==1){
 
-                toq[i] = u0(i)/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
-            	//toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+                toq[i] = u0(i)/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+            	//toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
             }
             else if(i==2){
-                toq[i] = u0(i)/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
-                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+                toq[i] = u0(i)/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
             }
             else if(i==3){
-                toq[i] = u0(i)/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
-                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+                toq[i] = u0(i)/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
             }
             else if(i==4){
-                toq[i] = u0(i)/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
-                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+                toq[i] = u0(i)/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+                //toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
             }
             else if(i==5){
-            	toq[i] = u0(i)/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
-            	//toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+            	toq[i] = u0(i)/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
+            	//toq[i] = (u0(i)+FrictionCompensation(qdot(i),i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
             }
             else
                 return;
@@ -437,7 +437,7 @@ void Controller::Gravity(float * q, float * q_dot, float * toq)
 
     }
 
-void Controller::PDController(Jointf &q, Jointf &q_dot, float *dq, float *dq_dot, float *toq)
+void Controller::PDController(Jointf &q, Jointf &q_dot, double *dq, double *dq_dot, double *toq)
 {
 	Kp << 118.7931,		119.5279,	59.764,		160.2564,		19.1946,	19.1946;
 	//Ki={860.8196,		866.1442,	4.1716,		427.5721,	135.3359};
@@ -453,17 +453,17 @@ void Controller::PDController(Jointf &q, Jointf &q_dot, float *dq, float *dq_dot
 	//	e_int.at(i) = e.at(i)+e_old.at(i);
 	//	e_old.at(i)=e.at(i);
 		if(i==0)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
 		else if(i==1)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
 		else if(i==2)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
 		else if(i==3)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
 		else if(i==4)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
 		else if(i==5)
-			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000;
+			toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000;
 		else
 		/*	int_flag++;
 			if(int_flag>10000000){
@@ -472,15 +472,15 @@ void Controller::PDController(Jointf &q, Jointf &q_dot, float *dq, float *dq_dot
 			}*/
 			return;
 	/*	if(i==0)
-			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
+			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
 		else if(i==1)
-			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
+			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
 		else if(i==2)
-			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
+			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
 		else if(i==3)
-			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
+			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
 		else if(i==4)
-			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
+			toq[i] = (Kp.at(i)*e.at(i) + Kd.at(i)*e_dev.at(i) + Ki.at(i)*e_int.at(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
 		else
 		/*	int_flag++;
 			if(int_flag>10000000){
@@ -493,12 +493,12 @@ void Controller::PDController(Jointf &q, Jointf &q_dot, float *dq, float *dq_dot
 
 }
 /*
-void Controller::Impedance(float *_q_dot, Matrix<float, 6, 1> & _x,Matrix<float, 6, 1> & _x_dot, Matrix<float, 6, 1> & _dx, Matrix<float, 6, 1> & _dx_dot, Matrix<float, 6, 1> & _dx_ddot, float * toq)
+void Controller::Impedance(double *_q_dot, Matrix<double, 6, 1> & _x,Matrix<double, 6, 1> & _x_dot, Matrix<double, 6, 1> & _dx, Matrix<double, 6, 1> & _dx_dot, Matrix<double, 6, 1> & _dx_ddot, double * toq)
 {
     M=pManipulator->pDyn->M_Matrix();
     C=pManipulator->pDyn->C_Matrix();
     G=pManipulator->pDyn->G_Matrix();
-    qdot = Map<VectorXf>(_q_dot, this->m_Jnum);
+    qdot = Map<VectorXd>(_q_dot, this->m_Jnum);
 
     _a_jaco.resize(6,ROBOT_DOF);
     _a_jaco=pManipulator->pKin->AnalyticJacobian();
@@ -507,7 +507,7 @@ void Controller::Impedance(float *_q_dot, Matrix<float, 6, 1> & _x,Matrix<float,
     _jaco_dot.resize(6,ROBOT_DOF);
     _jaco_dot=pManipulator->pKin->Jacobian_dot();
 
-    Matrix<float,6,6> Md,Kd,Bd;
+    Matrix<double,6,6> Md,Kd,Bd;
     Md = _pinv_jaco.transpose()*M*_pinv_jaco;
     Kd=100*Kd.setIdentity();
     Bd=0.7*Bd.setIdentity();
@@ -539,7 +539,7 @@ void Controller::Impedance(float *_q_dot, Matrix<float, 6, 1> & _x,Matrix<float,
     }
 }*/
     /*
-void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, float *dq, float *dq_dot, float *dq_ddot, float *toq, Matrixf &m_mat, Jointf &g_mat)
+void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointf &g_mat)
 {
 	Damp << 0.5, 0.5, 0.5, 0.5, 0.5;
 	Stiff << 8.0,8.0,8.0,8.0,8.0;
@@ -562,30 +562,30 @@ void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, float *dq, 
 
 		if(i==0){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
 		}
 		else if(i==1){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
 		}
 		else if(i==2){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
 		}
 		else if(i==3){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
 		}
 		else if(i==4){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
 		}
 		else
 
 			return;
 	}
 }
-void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, float *dq, float *dq_dot, float *dq_ddot, float *toq, Matrixf &m_mat, Jointf &g_mat, Matrixf &c_mat)
+void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointf &g_mat, Matrixf &c_mat)
 {
 //	Damp << 3.0, 3.0, 1.4, 2.8, 1.4;
 //	Stiff << 40.0,40.0,20.0,40.0,20.0;
@@ -610,23 +610,23 @@ void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, float *dq, 
 
 		if(i==0){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
 		}
 		else if(i==1){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
 		}
 		else if(i==2){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
 		}
 		else if(i==3){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
 		}
 		else if(i==4){
 
-			toq[i] = u(i)/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
+			toq[i] = u(i)/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
 		}
 		else
 
@@ -635,7 +635,7 @@ void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, float *dq, 
 }*/
 
 /*
-void Controller::Impedance(float *q, float *q_dot, float *q_ddot, float *dq, float *dq_dot, float *dq_ddot, float *toq, Matrix6f &m_mat, Matrix6f &c_mat, Jointf &g_mat)
+void Controller::Impedance(double *q, double *q_dot, double *q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrix6d &m_mat, Matrix6d &c_mat, Jointf &g_mat)
 {
 	Kp << 118.7931,		119.5279,	59.764,		160.2564,		19.1946;
 	//Ki={860.8196,		866.1442,	4.1716,		427.5721,	135.3359};
@@ -653,23 +653,23 @@ void Controller::Impedance(float *q, float *q_dot, float *q_ddot, float *dq, flo
 
 		if(i==0){
 			u0=q_ddot[i] + m_mat(i).inverse()*(Damp.at(i)*e_dev.at(i)+Stiff.at(i)*e.at(i));
-			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
+			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000;
 		}
 		else if(i==1){
 			u0=q_ddot[i] + m_mat(i).inverse()*(Damp.at(i)*e_dev.at(i)+Stiff.at(i)*e.at(i));
-			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
+			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000;
 		}
 		else if(i==2){
 			u0=q_ddot[i] + m_mat(i).inverse()*(Damp.at(i)*e_dev.at(i)+Stiff.at(i)*e.at(i));
-			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
+			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000;
 		}
 		else if(i==3){
 			u0=q_ddot[i] + m_mat(i).inverse()*(Damp.at(i)*e_dev.at(i)+Stiff.at(i)*e.at(i));
-			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
+			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000;
 		}
 		else if(i==4){
 			u0=q_ddot[i] + m_mat(i).inverse()*(Damp.at(i)*e_dev.at(i)+Stiff.at(i)*e.at(i));
-			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
+			toq[i] = (m_mat(i)*u0 + c_mat(i)*q_dot + g_mat(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000;
 		}
 		else
 		/*	int_flag++;
@@ -682,9 +682,9 @@ void Controller::Impedance(float *q, float *q_dot, float *q_ddot, float *dq, flo
 }*/
 
 
-void Controller::TorqueOutput(float *p_toq , int maxtoq, int *p_dir)
+void Controller::TorqueOutput(double *p_toq , int maxtoq, int *p_dir)
 {
-    float toq_tmp=0;
+    double toq_tmp=0;
 	for(int i=0; i<m_Jnum; ++i)
 	{
 		toq_tmp = p_toq[i];
@@ -704,11 +704,11 @@ void Controller::TorqueOutput(float *p_toq , int maxtoq, int *p_dir)
 	return;
 }
 
-void Controller::CLIKController(float * _q, float * _qdot, float * _dq, float * _dqdot, const Eigen::VectorXf * _dx, const Eigen::VectorXf * _dxdot, const Eigen::VectorXf & _dqdotNull, float * p_Toq, float & _dt)
+void Controller::CLIKController(double * _q, double * _qdot, double * _dq, double * _dqdot, const Eigen::VectorXd * _dx, const Eigen::VectorXd * _dxdot, const Eigen::VectorXd & _dqdotNull, double * p_Toq, double & _dt)
 {
     G=pManipulator->pDyn->G_Matrix();
-    q = Map<VectorXf>(_q, this->m_Jnum);
-    qdot = Map<VectorXf>(_qdot, this->m_Jnum);
+    q = Map<VectorXd>(_q, this->m_Jnum);
+    qdot = Map<VectorXd>(_qdot, this->m_Jnum);
 
     LinearJacobian=pManipulator->pKin->LinearJacobian();
 
@@ -718,12 +718,12 @@ void Controller::CLIKController(float * _q, float * _qdot, float * _dq, float * 
 
 }
 
-void Controller::CLIKController_2nd(float *_q, float *_qdot, Matrix<float,6,1>& dq, Matrix<float,6,1>& dq_dot, Matrix<float,6,1>& dq_ddot)
+void Controller::CLIKController_2nd(double *_q, double *_qdot, Matrix<double,6,1>& dq, Matrix<double,6,1>& dq_dot, Matrix<double,6,1>& dq_ddot)
 {
 
 }
 
-void Controller::FrictionIdentify(float *_q, float *_qdot, float *dq_, float *dq_dot, float *dq_ddot, float *toq, float _gt)
+void Controller::FrictionIdentify(double *_q, double *_qdot, double *dq_, double *dq_dot, double *dq_ddot, double *toq, double _gt)
 {
 	Kp << 15.7931,		18.5279,	3.764,		3.2564,		2.1946,		2.1946;
     Kd << 0.00575482 * Kp(0), 0.005499895*Kp(1), 0.0045007*Kp(2), 0.004599985*Kp(3), 0.00459971*Kp(4), 0.00459971*Kp(5);
@@ -732,7 +732,7 @@ void Controller::FrictionIdentify(float *_q, float *_qdot, float *dq_, float *dq
     G.resize(ROBOT_DOF,1);
     G=pManipulator->pDyn->G_Matrix();
 	Jointf u;
-	float T, w, Mag;
+	double T, w, Mag;
 	int joint;
 
 	dq<<0.0 , 0.0, 0.0, 0.0, 0.0, 0.0;
@@ -804,41 +804,41 @@ void Controller::FrictionIdentify(float *_q, float *_qdot, float *dq_, float *dq
 		for(int i=0;i<m_Jnum;i++)
 		{
 			if(i==0){
-				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
-				//toq[i] = (u(i))/(float)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
+				//toq[i] = (u(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
 			}
 			else if(i==1){
-				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
-				//toq[i] = (u(i))/(float)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
+				//toq[i] = (u(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
 			}
 			else if(i==2){
-				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
-				//toq[i] = (u(i))/(float)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
+				//toq[i] = (u(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
 			}
 			else if(i==3){
-				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
-				//toq[i] = (u(i))/(float)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
+				//toq[i] = (u(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
 			}
 			else if(i==4){
-				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
-				//toq[i] = (u(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+				//toq[i] = (u(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
 			}
 			else if(i==5){
-				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(float)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
-				//toq[i] = (u(i))/(float)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
+				toq[i] = (u(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
+				//toq[i] = (u(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
 			}
 			else
 				return;
 		}
 
-		Map<VectorXf>(dq_,this->m_Jnum)=dq;
-		Map<VectorXf>(dq_dot,this->m_Jnum)=dqdot;
+		Map<VectorXd>(dq_,this->m_Jnum)=dq;
+		Map<VectorXd>(dq_dot,this->m_Jnum)=dqdot;
 	}
 }
 
-float Controller::FrictionCompensation(float _qdot, int _JointNum)
+double Controller::FrictionCompensation(double _qdot, int _JointNum)
 {
-	float res;
+	double res;
 	res=f_a[_JointNum]*(tanh(f_b[_JointNum]*_qdot)-tanh(f_c[_JointNum]*_qdot))+f_d[_JointNum]*tanh(f_e[_JointNum]*_qdot)+f_f[_JointNum]*_qdot;
 	return res;
 }

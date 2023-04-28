@@ -133,29 +133,29 @@ void robot::motor_update_R(MOTOR_INFO *motor)
 	//motor->gear_ratio[5] = HARMONIC_100;
 }
 
-void robot::ENCtoRAD_R(int *enc, Jointf& q)   //may not use..
+void robot::ENCtoRAD_R(int *enc, Jointd& q)   //may not use..
 {
 	for(int i=1; i<=ROBOT_DOF; ++i)
 	{
 		switch(i)
 		{
 		case 1:
-			q(i-1) = -(float)(enc[i-1]/(4*ENC_1000))*2*M_PI/(float)HARMONIC_100;
+			q(i-1) = -(double)(enc[i-1]/(4*ENC_1000))*2*M_PI/(double)HARMONIC_100;
 			break;
 		case 2:
-			q(i-1) = -(float)(enc[i-1]/(4*ENC_1000))*2*M_PI/(float)HARMONIC_100 - M_PI/2;
+			q(i-1) = -(double)(enc[i-1]/(4*ENC_1000))*2*M_PI/(double)HARMONIC_100 - M_PI/2;
 			break;
 		case 3:
-			q(i-1) = -(float)(enc[i-1]/(4*ENC_1000))*2*M_PI/(float)HARMONIC_100;
+			q(i-1) = -(double)(enc[i-1]/(4*ENC_1000))*2*M_PI/(double)HARMONIC_100;
 			break;
 		case 4:
-			q(i-1) = (float)(enc[i-1]/(4*ENC_1000))*2*M_PI/(float)HARMONIC_100;
+			q(i-1) = (double)(enc[i-1]/(4*ENC_1000))*2*M_PI/(double)HARMONIC_100;
 			break;
 		case 5:
-			q(i-1) = -(float)(enc[i-1]/(4*ENC_512))*2*M_PI/(float)HARMONIC_100;
+			q(i-1) = -(double)(enc[i-1]/(4*ENC_512))*2*M_PI/(double)HARMONIC_100;
 			break;
 //		case 6:
-//			q(i-1) = (float)(enc[i-1]/(4*ENC_1024))*2*M_PI/(float)HARMONIC_100;
+//			q(i-1) = (double)(enc[i-1]/(4*ENC_1024))*2*M_PI/(double)HARMONIC_100;
 //			break;
 		default:
 			q(i-1) = (enc[i-1]/(4*ENC_1000))*2*M_PI/HARMONIC_100;
@@ -164,7 +164,7 @@ void robot::ENCtoRAD_R(int *enc, Jointf& q)   //may not use..
 	}
 }
 
-void robot::ENCtoRAD_R(int *enc, Jointf& q, Jointf& q_dot, float s_time)
+void robot::ENCtoRAD_R(int *enc, Jointd& q, Jointd& q_dot, double s_time)
 {
 	q_p = q;
 	for(int i=1; i<=ROBOT_DOF; ++i)
@@ -172,32 +172,32 @@ void robot::ENCtoRAD_R(int *enc, Jointf& q, Jointf& q_dot, float s_time)
 		switch(i)
 		{
 		case 1:
-			q(i-1) = -(float)enc[i-1]*2.0*M_PI/((float)4.0*ENC_1000*(float)HARMONIC_120);
+			q(i-1) = -(double)enc[i-1]*2.0*M_PI/((double)4.0*ENC_1000*(double)HARMONIC_120);
 			break;
 		case 2:
-			q(i-1) = -(float)enc[i-1]*2.0*M_PI/((float)4.0*ENC_1000*(float)HARMONIC_120) - M_PI/2;
+			q(i-1) = -(double)enc[i-1]*2.0*M_PI/((double)4.0*ENC_1000*(double)HARMONIC_120) - M_PI/2;
 			break;
 		case 3:
-			q(i-1) = -(float)enc[i-1]*2.0*M_PI/((float)4.0*ENC_1000*(float)HARMONIC_100);
+			q(i-1) = -(double)enc[i-1]*2.0*M_PI/((double)4.0*ENC_1000*(double)HARMONIC_100);
 			break;
 		case 4:
-			q(i-1) = (float)enc[i-1]*2.0*M_PI/((float)4.0*ENC_1000*(float)HARMONIC_100);
+			q(i-1) = (double)enc[i-1]*2.0*M_PI/((double)4.0*ENC_1000*(double)HARMONIC_100);
 			break;
 		case 5:
-			q(i-1) = (float)enc[i-1]*2.0*M_PI/((float)4.0*ENC_512*(float)HARMONIC_50);
+			q(i-1) = (double)enc[i-1]*2.0*M_PI/((double)4.0*ENC_512*(double)HARMONIC_50);
 			break;
 		case 6:
-			q(i-1) = (float)enc[i-1]*2.0*M_PI/((float)4.0*ENC_1024*(float)HARMONIC_100);
+			q(i-1) = (double)enc[i-1]*2.0*M_PI/((double)4.0*ENC_1024*(double)HARMONIC_100);
 			break;
 		default:
-			q(i-1) = (float)(enc[i-1]/(4*ENC_1000))*2*M_PI/HARMONIC_100;
+			q(i-1) = (double)(enc[i-1]/(4*ENC_1000))*2*M_PI/HARMONIC_100;
 			break;
 		}
 	}
 	q_dot = (q - q_p)/s_time;
 }
 
-void robot::ELMO_OUTPUT_R(MOTOR_INFO *motor, Jointf& torque, short *output)
+void robot::ELMO_OUTPUT_R(MOTOR_INFO *motor, Jointd& torque, short *output)
 {
 	for(int i=0; i<ROBOT_DOF; ++i)
 	{
@@ -205,43 +205,43 @@ void robot::ELMO_OUTPUT_R(MOTOR_INFO *motor, Jointf& torque, short *output)
 		{
 		case 1:
 			if(abs(torque(i)/HARMONIC_120) <= motor->rate_current[i]*motor->toq_const[i]*1.2)
-				output[i] = -roundf(((torque(i)/HARMONIC_120)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
+				output[i] = -round(((torque(i)/HARMONIC_120)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
 			else
 				output[i] = -sign(torque(i))*MAX_CURRENT_ELMO;
 			break;
 		case 2:
 			if(abs(torque(i)/HARMONIC_120) <= motor->rate_current[i]*motor->toq_const[i]*1.2)
-				output[i] = -roundf(((torque(i)/HARMONIC_120)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
+				output[i] = -round(((torque(i)/HARMONIC_120)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
 			else
 				output[i] = -sign(torque(i))*MAX_CURRENT_ELMO;
 			break;
 		case 3:
 			if(abs(torque(i)/HARMONIC_100) <= motor->rate_current[i]*motor->toq_const[i]*1.2)
-				output[i] = -roundf(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
+				output[i] = -round(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
 			else
 				output[i] = -sign(torque(i))*MAX_CURRENT_ELMO;
 			break;
 		case 4:
 			if(abs(torque(i)/HARMONIC_100) <= motor->rate_current[i]*motor->toq_const[i]*1.2)
-				output[i] = roundf(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
+				output[i] = round(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
 			else
 				output[i] = sign(torque(i))*MAX_CURRENT_ELMO;
 			break;
 		case 5:
 			if(abs(torque(i)/HARMONIC_50) <= motor->rate_current[i]*motor->toq_const[i]*1.2)
-				output[i] = roundf(((torque(i)/HARMONIC_50)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
+				output[i] = round(((torque(i)/HARMONIC_50)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
 			else
 				output[i] = sign(torque(i))*MAX_CURRENT_ELMO;
 			break;
 		case 6:
 			if(abs(torque(i)/HARMONIC_100) <= motor->rate_current[i]*motor->toq_const[i]*1.2)
-				output[i] = roundf(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
+				output[i] = round(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000*(100.0/EFFICIENCY));
 			else
 				output[i] = sign(torque(i))*MAX_CURRENT_ELMO;
 			break;
 		default:
 			if(abs(torque(i)/HARMONIC_100) <= motor->rate_current[i]*motor->toq_const[i]*1.2)
-				output[i] = roundf(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000);
+				output[i] = round(((torque(i)/HARMONIC_100)/motor->toq_const[i])/motor->rate_current[i]*1000);
 			else
 				output[i] = sign(torque(i))*MAX_CURRENT_ELMO;
 			break;

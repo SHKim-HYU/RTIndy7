@@ -20,13 +20,14 @@
 
 hyuEcat::Master ecatmaster;
 
-hyuEcat::EcatRobotus ecat_robotusft[NUM_FT];
+hyuEcat::EcatNRMK_Indy_Tool ecat_nrmk_indy_tool[NUM_FT];
 hyuEcat::EcatNRMK_Drive ecat_nrmk_drive[NUM_AXIS];
 hyuCtrl::Trajectory *traj5th_joint; //make an instance each of a joint
 hyuCtrl::Trajectory *traj5th_task;
 JointInfo info;
 robot *cManipulator;
 HYUControl::Controller *Control;
+ROBOT *_robotNom;
 
 
 
@@ -59,7 +60,7 @@ int isFirstRun = 0;
 
 // Global time (beginning from zero)
 double gt=0;
-float float_gt=0;
+double double_gt=0;
 
 int InitFlag[NUM_AXIS] = {0,};
 int TrajFlag_j[NUM_AXIS] = {1,1,1,1,1,1};
@@ -94,16 +95,37 @@ INT32	VelocityOffset[NUM_AXIS] = {0,};
 INT16	TorqueOffset[NUM_AXIS] = {0,};
 UINT32	DigitalOutput[NUM_AXIS] = {0,};
 
-float DF=50.0;
-float DT=2000.0;
-float Tx[NUM_FT]={0.0};
-float Ty[NUM_FT]={0.0};
-float Tz[NUM_FT]={0.0};
-float Fx[NUM_FT]={0.0};
-float Fy[NUM_FT]={0.0};
-float Fz[NUM_FT]={0.0};
-float ZMP_X[2]={0,};
-float ZMP_Y[2]={0,};
+
+INT8   iLed              = 0;       // write
+INT8   iGripper          = 0; 		// write
+INT32  FT_configparam    = 0; 		// write
+INT8   LED_mode          = 0; 		// write (max torque (max current) = 1000)
+INT8   LED_G             = 0; 		// write (use enum ModeOfOperation for convenience)
+INT8   LED_R             = 0;       // write (use enum ModeOfOperation for convenience)
+INT8   LED_B             = 0;       // write (use enum ModeOfOperation for convenience)
+
+INT8   iStatus           = 0;       // read
+INT32  iButton           = 0; 		// read
+INT16  FT_Raw_Fx         = 0;       // read
+INT16  FT_Raw_Fy         = 0;       // read
+INT16  FT_Raw_Fz         = 0;       // read
+INT16  FT_Raw_Tx         = 0;       // read
+INT16  FT_Raw_Ty         = 0;       // read
+INT16  FT_Raw_Tz         = 0; 		// read
+INT8   FT_OverloadStatus = 0; 		// read
+INT8   FT_ErrorFlag      = 0;       // read
+
+
+double DF=50.0;
+double DT=2000.0;
+double Tx[NUM_FT]={0.0};
+double Ty[NUM_FT]={0.0};
+double Tz[NUM_FT]={0.0};
+double Fx[NUM_FT]={0.0};
+double Fy[NUM_FT]={0.0};
+double Fz[NUM_FT]={0.0};
+double ZMP_X[2]={0,};
+double ZMP_Y[2]={0,};
 
 
 //////////////////////////
@@ -124,30 +146,30 @@ long ethercat_time=0, worst_time=0;
 unsigned int histdata[hist_step+1];
 unsigned int interval_size=350;
 
-float ActualPos_zero[NUM_AXIS] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
-float ActualPos_Rad[NUM_AXIS] = {0.0,};
-float ActualVel_Rad[NUM_AXIS] = {0.0,};
-float ActualAcc_Rad[NUM_AXIS] = {0.0,};
-float TargetPos_Rad[NUM_AXIS] = {0.0,};
-float TargetVel_Rad[NUM_AXIS] = {0.0,};
-float TargetAcc_Rad[NUM_AXIS] = {0.0,};
-float TargetToq[NUM_AXIS] = {0.0,};
+double ActualPos_zero[NUM_AXIS] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
+double ActualPos_Rad[NUM_AXIS] = {0.0,};
+double ActualVel_Rad[NUM_AXIS] = {0.0,};
+double ActualAcc_Rad[NUM_AXIS] = {0.0,};
+double TargetPos_Rad[NUM_AXIS] = {0.0,};
+double TargetVel_Rad[NUM_AXIS] = {0.0,};
+double TargetAcc_Rad[NUM_AXIS] = {0.0,};
+double TargetToq[NUM_AXIS] = {0.0,};
 INT32   MotorDir[NUM_AXIS] = {1,1,1,1,1,1};
 int   old_flag[NUM_AXIS]={0,};
 int   acc_flag[NUM_AXIS]={0,};
-Jointf gmat;
-Matrixf mmat;
-Matrixf cmat;
-Matrix6n6nf adv;
+Jointd gmat;
+Matrixd mmat;
+Matrixd cmat;
+Matrix6n6nd adv;
 
 Jaco b_jaco;
 InvJaco b_inv;
 LinJaco l_jaco, l_jaco_dot;
 PinvLJaco DPI_l_jaco;
 se3 wrench_test;
-Jointf torq;
-Vector3f EulerAng;
-float time_buf;
+Jointd torq;
+Vector3d EulerAng;
+double time_buf;
 int time_flag=0;
 int limit_flag=0;
 
@@ -155,27 +177,27 @@ int limit_flag=0;
 //For Trajectory management
 //Joint
 int NUM_MOTION=1;
-int Motion=0;
-float TargetTrajPos_Rad[NUM_AXIS]={1.5709, 0.0, 0.0, 1.5709, 0.0, 0.0};/////////////////////////must change/////////////////////////////////
-//float TargetTrajPos_Rad[NUM_AXIS]={0.0, -1.57, 0.0, 1.57, 0.0};
-float traj_time = 3;
+int Motion=1;
+double TargetTrajPos_Rad[NUM_AXIS]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};/////////////////////////must change/////////////////////////////////
+//double TargetTrajPos_Rad[NUM_AXIS]={0.0, -1.57, 0.0, 1.57, 0.0};
+double traj_time = 3;
 int traj_changed = 0;
 //Task
-float TargetTrajPos_Meter[NUM_AXIS]={0,0,};
-Vector3f xd, xd_dot, xd_ddot;
-Vector3f x_buf;
-Vector3f vive_pos;
-Vector3f vive_vel;
-Vector3f vive_buf;
+double TargetTrajPos_Meter[NUM_AXIS]={0,0,};
+Vector3d xd, xd_dot, xd_ddot;
+Vector3d x_buf;
+Vector3d vive_pos;
+Vector3d vive_vel;
+Vector3d vive_buf;
 int vive_flag=0;
-float K_tracking_ = 1;
+double K_tracking_ = 1;
 int task_time=0;
 
-Matrix<float,NUM_AXIS,1> qd,qd_dot,qd_ddot ,qd_old, qd_dot_old;
-float q_[3]={0.0,};
-float traq[NUM_AXIS]={0.0, 0.0, 0.0, -1.5709, 0.0, 0.0};
-float traq_d[NUM_AXIS]={0.0,};
-float traq_dd[NUM_AXIS]={0.0,};
+Matrix<double,NUM_AXIS,1> qd,qd_dot,qd_ddot ,qd_old, qd_dot_old;
+double q_[3]={0.0,};
+double traq[NUM_AXIS]={0.0, 0.0, 0.0, -1.5709, 0.0, 0.0};
+double traq_d[NUM_AXIS]={0.0,};
+double traq_dd[NUM_AXIS]={0.0,};
 int cnt=0;
 int flag=0;
 int q_flag=0;
@@ -233,18 +255,18 @@ void EncToRad()
 			{
 			case 0:
 			case 1:
-				ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-				ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
+				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
+				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
 				break;
 			case 2:
-				ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
-				ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
+				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
+				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
 				break;
 			case 3:
 			case 4:
 			case 5:
-				ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-				ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
 				break;
 			}
 			
@@ -258,8 +280,8 @@ void EncToRad()
 			ActualVel_Old[i]=ActualVel[i];
 		}
 	}
-	info.act.j_q=Map<VectorXf>(info.act.q,NUM_AXIS);
-	info.act.j_q_d=Map<VectorXf>(info.act.q_dot,NUM_AXIS);
+	info.act.j_q=Map<VectorXd>(info.act.q,NUM_AXIS);
+	info.act.j_q_d=Map<VectorXd>(info.act.q_dot,NUM_AXIS);
 
 	// for(int i=0; i<NUM_AXIS; i++)
 	// {
@@ -267,18 +289,18 @@ void EncToRad()
 	// 	{
 	// 	case 0:
 	// 	case 1:
-	// 		ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-	// 		ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
+	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
+	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
 	// 		break;
 	// 	case 2:
-	// 		ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
-	// 		ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
+	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
+	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
 	// 		break;
 	// 	case 3:
 	// 	case 4:
 	// 	case 5:
-	// 		ActualPos_Rad[i]=(float)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-	// 		ActualVel_Rad[i]=(float)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
 	// 		break;
 	// 	}
 		
@@ -291,8 +313,8 @@ void EncToRad()
 	// 	ActualVel_Old[i]=ActualVel[i];
 
 	// }
-	// info.act.j_q=Map<VectorXf>(info.act.q,NUM_AXIS);
-	// info.act.j_q_d=Map<VectorXf>(info.act.q_dot,NUM_AXIS);
+	// info.act.j_q=Map<VectorXd>(info.act.q,NUM_AXIS);
+	// info.act.j_q_d=Map<VectorXd>(info.act.q_dot,NUM_AXIS);
 }
 
 void Robot_Limit()
@@ -414,6 +436,9 @@ void RTRArm_run(void *arg)
 	RTIME p1 = 0;
 	RTIME p3 = 0;
 
+	JointVec tauGrav, q_nom, qdot_nom;
+	tauGrav.Zero(); q_nom.Zero(); qdot_nom.Zero();
+
 	cManipulator->robot_update_R(); //update robot
 	//ecatmaster.SyncEcatMaster(rt_timer_read());
 	/* Arguments: &task (NULL=self),
@@ -452,28 +477,88 @@ void RTRArm_run(void *arg)
 
 			}
 
-			//ReadFT(0);
+			// read FT
+			iStatus = ecat_nrmk_indy_tool[0].iStatus_;
+			iButton = ecat_nrmk_indy_tool[0].iButton_;
+			FT_Raw_Fx = ecat_nrmk_indy_tool[0].FT_Raw_Fx_;
+			FT_Raw_Fy = ecat_nrmk_indy_tool[0].FT_Raw_Fy_;
+			FT_Raw_Fz = ecat_nrmk_indy_tool[0].FT_Raw_Fz_;
+			FT_Raw_Tx = ecat_nrmk_indy_tool[0].FT_Raw_Tx_;
+			FT_Raw_Ty = ecat_nrmk_indy_tool[0].FT_Raw_Ty_;
+			FT_Raw_Tz = ecat_nrmk_indy_tool[0].FT_Raw_Tz_;
+			FT_OverloadStatus = ecat_nrmk_indy_tool[0].FT_OverloadStatus_;
+			FT_ErrorFlag = ecat_nrmk_indy_tool[0].FT_ErrorFlag_;
+
+
 			EncToRad();
 			cManipulator->pKin->Unflag_isInfoupdate();
 			cManipulator->pKin->HTransMatrix(info.act.q);
 			cManipulator->pDyn->Prepare_Dynamics(info.act.q, info.act.q_dot);
 
+			_robotNom.idyn_gravity(LieGroup::Vector3D(0,0,-GRAV_ACC));
+
 			compute();
 			Robot_Limit();
 			//cManipulator->pDyn->Prepare_Dynamics(traq, traq_d);
+
+			/////////////Trajectory for Joint Space//////////////
+            if(Motion==1 &&TrajFlag_j[0]==0)
+            {
+                TargetTrajPos_Rad[0]=1.5709; TargetTrajPos_Rad[1]=-0.7071; TargetTrajPos_Rad[2]= 0.7071; 
+                TargetTrajPos_Rad[3]=1.57; TargetTrajPos_Rad[4]=1.5709; TargetTrajPos_Rad[5]=1.5709;
+                Motion=1;
+                traj_time = 5;
+                for(int i=0;i<NUM_AXIS;i++)
+                {
+                    TrajFlag_j[i]=1;
+                }
+            }
+            else if(Motion==2 &&TrajFlag_j[0]==0)
+            {
+                TargetTrajPos_Rad[0]=0.0; TargetTrajPos_Rad[1]=0.0; TargetTrajPos_Rad[2]= 0.0; 
+                TargetTrajPos_Rad[3]=0.0; TargetTrajPos_Rad[4]=0.0; TargetTrajPos_Rad[5]=0.0;
+                Motion++;
+                traj_time = 5;
+                for(int i=0;i<NUM_AXIS;i++)
+                {
+                    TrajFlag_j[i]=1;
+                }
+            }
+            else if(Motion==3 &&TrajFlag_j[0]==0)
+            {
+                TargetTrajPos_Rad[0]=-1.5709; TargetTrajPos_Rad[1]=0.7071; TargetTrajPos_Rad[2]= -0.7071; 
+                TargetTrajPos_Rad[3]=-1.57; TargetTrajPos_Rad[4]=-1.5709; TargetTrajPos_Rad[5]=-1.5709;
+                Motion++;
+                traj_time = 5;
+                for(int i=0;i<NUM_AXIS;i++)
+                {
+                    TrajFlag_j[i]=1;
+                }
+            }
+            else if(Motion==4 &&TrajFlag_j[0]==0)
+            {
+                TargetTrajPos_Rad[0]=0.0; TargetTrajPos_Rad[1]=0.0; TargetTrajPos_Rad[2]= 0.0; 
+                TargetTrajPos_Rad[3]=0.0; TargetTrajPos_Rad[4]=0.0; TargetTrajPos_Rad[5]=0.0;
+                Motion=1;
+                traj_time = 5;
+                for(int i=0;i<NUM_AXIS;i++)
+                {
+                    TrajFlag_j[i]=1;
+                }
+            }
 
 			for(int i=0;i<NUM_AXIS;i++)
 			{
 				if(TrajFlag_j[i]==2)
 				{
-					traj5th_joint->Polynomial5th(i, float_gt, TrajFlag_j+i, q_);
+					traj5th_joint->Polynomial5th(i, double_gt, TrajFlag_j+i, q_);
 					traq[i]=q_[0];
 					traq_d[i]=q_[1];
 					traq_dd[i]=q_[2];
 				}
 				else if(TrajFlag_j[i]==1)
 				{
-					traj5th_joint->SetPolynomial5th_j(i, &info.act, TargetTrajPos_Rad[i], float_gt, traj_time, q_);
+					traj5th_joint->SetPolynomial5th_j(i, &info.act, TargetTrajPos_Rad[i], double_gt, traj_time, q_);
 					traq[i]=q_[0];
 					traq_d[i]=q_[1];
 					traq_dd[i]=q_[2];
@@ -511,11 +596,11 @@ void RTRArm_run(void *arg)
 			//Control->VSD(info.act.q, info.act.q_dot, xd, TargetToq);
 
 			//Friction Identification
-			//Control->FrictionIdentify(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq, float_gt);
+			//Control->FrictionIdentify(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq, double_gt);
 //			}
 
 			//else if(flag==1)
-				//Control->FrictionIdentify(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq, float_gt);
+				//Control->FrictionIdentify(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq, double_gt);
 				//Control->VSD(info.act.q, info.act.q_dot, xd, TargetToq);
 				//Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
 				//Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
@@ -528,12 +613,12 @@ void RTRArm_run(void *arg)
 			Control->TorqueOutput(TargetToq, 1000, MotorDir);
 
 
-
+			tauGrav = _robotNom->tau();
 
 			//write the motor data
 			for(int j=0; j<NUM_AXIS; ++j)
 			{
-				TargetTor[j] = roundf(TargetToq[j]);
+				TargetTor[j] = round(TargetToq[j]);
 				ecat_nrmk_drive[j].writeTorque(TargetTor[j]);
 
 			}
@@ -555,7 +640,7 @@ void RTRArm_run(void *arg)
 		}
 		else
 		{
-			float_gt = 0;
+			double_gt = 0;
 			worst_time = 0;
 			ethercat_time = 0;
 		}
@@ -565,7 +650,7 @@ void RTRArm_run(void *arg)
 		p1 = p3;
 		p3 = rt_timer_read();
 		now = rt_timer_read();
-		float_gt += ((float)(long)(p3 - p1))*1e-9;
+		double_gt += ((double)(long)(p3 - p1))*1e-9;
 		ethercat_time = (long) now - previous;
 
 
@@ -615,7 +700,7 @@ void print_run(void *arg)
 			step=(unsigned long)(now - previous) / 1000000;
 			itime+=step;
 			previous=now;
-			rt_printf("Time=%0.3fs \tFlag : %d\n", float_gt,flag);
+			rt_printf("Time=%0.3fs \tFlag : %d\n", double_gt,flag);
 			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
 
 			cout<<"Manipulability   : "<<cManipulator->pKin->Manipulability(l_jaco)<<endl;
@@ -635,7 +720,7 @@ void print_run(void *arg)
 				rt_printf("Traj : %d,\n",               TrajFlag_j[j]);
 			}
 			rt_printf("\n");
-			rt_printf("%d\n",open_state);
+			rt_printf("Fx : %f, Fy : %f, Fz: %f, Tx : %f, Ty: %f, Tz : %f\n",FT_Raw_Fx,FT_Raw_Fy,FT_Raw_Fz,FT_Raw_Tx,FT_Raw_Ty,FT_Raw_Tz);
 			rt_printf("xd : %f, yd : %f, zd: %f\n",xd[0],xd[1],xd[2]);
 			//rt_printf("xddot : %f, yddot : %f, zddot: %f\n",vive_vel[0],vive_vel[1],vive_vel[2]);
 			//std::cout<<l_jaco<<endl;
@@ -742,6 +827,8 @@ int main(int argc, char **argv)
 	cycle_ns = 1000000; // nanosecond -> 1kHz
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
+
+	_robotNom = new ROBOT(USERNAME, EMAIL, SERIAL);
 	cManipulator = new robot;
 	Control = new HYUControl::Controller(cManipulator,ROBOT_DOF);
 	traj5th_joint =  new hyuCtrl::Trajectory();
@@ -753,7 +840,7 @@ int main(int argc, char **argv)
 		ecat_nrmk_drive[j].mode_of_operation_ = ecat_nrmk_drive[j].MODE_CYCLIC_SYNC_TORQUE;
 	}
 	for(int i=0; i<NUM_FT; ++i)
-		ecatmaster.addSlave(0, i+NUM_AXIS+1, &ecat_robotusft[i]);
+		ecatmaster.addSlave(0, i+NUM_AXIS+1, &ecat_nrmk_indy_tool[i]);
 
 
 

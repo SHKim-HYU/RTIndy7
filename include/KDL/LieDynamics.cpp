@@ -24,16 +24,16 @@ Liedynamics::~Liedynamics()
 {
 }
 
-void Liedynamics::UpdateDynamicInfo(Matrix3f inertia, float mass, int link_num)
+void Liedynamics::UpdateDynamicInfo(Matrix3d inertia, double mass, int link_num)
 {
 	GIner[link_num] = GeneralizedInertia(inertia, mass);
 }
 
 
 
-Matrix6f Liedynamics::GeneralizedInertia(Matrix3f inertia, float mass) //MR P.288
+Matrix6d Liedynamics::GeneralizedInertia(Matrix3d inertia, double mass) //MR P.288
 {
-	Matrix6f G_iner;
+	Matrix6d G_iner;
 	G_iner.setZero();
 	G_iner.block<3, 3>(0, 0) = inertia;
 	G_iner.block<3, 3>(3, 3) = mass*i;
@@ -41,9 +41,9 @@ Matrix6f Liedynamics::GeneralizedInertia(Matrix3f inertia, float mass) //MR P.28
 }
 
 
-Matrix6n6nf Liedynamics::Inertia_Link(void)
+Matrix6n6nd Liedynamics::Inertia_Link(void)
 {
-	Matrix6n6nf iner_link = Matrix6n6nf::Zero();
+	Matrix6n6nd iner_link = Matrix6n6nd::Zero();
 	for (int i = 0; i < ROBOT_DOF; ++i)
 	{
 		iner_link.block<6, 6>(6 * i, 6 * i) = GIner[i+1];
@@ -51,9 +51,9 @@ Matrix6n6nf Liedynamics::Inertia_Link(void)
 	return iner_link;
 }
 
-Matrix6n6nf Liedynamics::Gamma_Link(void)
+Matrix6n6nd Liedynamics::Gamma_Link(void)
 {
-	Matrix6n6nf res = Matrix6n6nf::Zero();
+	Matrix6n6nd res = Matrix6n6nd::Zero();
 	for (int i = 1; i < ROBOT_DOF; ++i)
 	{
 		res.block<6, 6>(6 * i, 6 * (i - 1)) = LieOperator::AdjointMatrix(LieOperator::inverse_SE3(pCoM->GetTMat(i,i+1)));
@@ -61,9 +61,9 @@ Matrix6n6nf Liedynamics::Gamma_Link(void)
 	return res;
 }
 
-Matrix6n6nf Liedynamics::L_link(void)
+Matrix6n6nd Liedynamics::L_link(void)
 {
-	Matrix6n6nf res = Matrix6n6nf::Identity();
+	Matrix6n6nd res = Matrix6n6nd::Identity();
 
 	for (int i = 1; i < ROBOT_DOF; ++i)
 	{
@@ -77,9 +77,9 @@ Matrix6n6nf Liedynamics::L_link(void)
 	return res;
 }
 
-Matrix6nnf Liedynamics::A_Link(void)
+Matrix6nnd Liedynamics::A_Link(void)
 {
-	Matrix6nnf res = Matrix6nnf::Zero();
+	Matrix6nnd res = Matrix6nnd::Zero();
 
 	for (int i = 0; i < ROBOT_DOF; ++i)
 	{
@@ -88,9 +88,9 @@ Matrix6nnf Liedynamics::A_Link(void)
 	return res;
 }
 
-Matrix6n6nf Liedynamics::ad_Aqdot_Link(float qdot[])
+Matrix6n6nd Liedynamics::ad_Aqdot_Link(double qdot[])
 {
-	Matrix6n6nf res = Matrix6n6nf::Zero();
+	Matrix6n6nd res = Matrix6n6nd::Zero();
 	for (int i = 0; i < ROBOT_DOF; ++i)
 	{
 		res.block<6, 6>(6 * i, 6 * i) = LieOperator::adjointMatrix(pCoM->A[i+1]*qdot[i]);
@@ -98,11 +98,11 @@ Matrix6n6nf Liedynamics::ad_Aqdot_Link(float qdot[])
 	return res;
 }
 
-Matrix6n6nf Liedynamics::ad_V_Link(float qdot[])
+Matrix6n6nd Liedynamics::ad_V_Link(double qdot[])
 {
-	Matrix6n6nf res;
+	Matrix6n6nd res;
 	res.setZero();
-//	Matrix<float,ROBOT_DOF,1> q_dot;
+//	Matrix<double,ROBOT_DOF,1> q_dot;
 
 	q_d = Map<Jointd>(qdot,ROBOT_DOF);
 
@@ -116,10 +116,10 @@ Matrix6n6nf Liedynamics::ad_V_Link(float qdot[])
 	return res;
 }
 
-Vector6nf Liedynamics::Vdot_base(int axis)
+Vector6nd Liedynamics::Vdot_base(int axis)
 {
-	Vector6nf res = Vector6nf::Zero();
-	Vector6f res1 = Vector6f::Zero(); //twist of base
+	Vector6nd res = Vector6nd::Zero();
+	Vector6d res1 = Vector6d::Zero(); //twist of base
 
 
 	switch (axis)
@@ -142,7 +142,7 @@ Vector6nf Liedynamics::Vdot_base(int axis)
 	return res;
 }
 
-void Liedynamics::Prepare_Dynamics(float q[], float qdot[])
+void Liedynamics::Prepare_Dynamics(double q[], double qdot[])
 {
 	if(isFirstRun == 0)
 	{

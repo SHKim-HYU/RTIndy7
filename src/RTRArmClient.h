@@ -8,6 +8,11 @@
 #ifndef RTRARMCLIENT_H_
 #define RTRARMCLIENT_H_
 
+/***** License Information *****/
+#define USERNAME "NeuromekaDev"
+#define EMAIL "dev@neuromeka.com"
+#define SERIAL "nrmk13766"
+/******************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +42,7 @@
 #include "EcatDataSocket/EcatDataSocket.h"
 #include "EcatDataSocket/EcatControlSocket.h"
 
-#include "EcatSystem/Ecat_Robotus.h"
+#include "EcatSystem/Ecat_NRMK_Indy_Tool.h"
 #include "EcatSystem/Ecat_Master.h"
 #include "EcatSystem/Ecat_Elmo.h"
 #include "Control/Trajectory.h"
@@ -47,6 +52,9 @@
 #include "KDL/PropertyDefinition.h"
 #include "NRMKsercan_tp.h"
 #include "NRMKhw_tp.h"
+
+#include <NRMKFramework/Components/AbstractJointController.h>
+#include <NRMKFramework/Components/AbstractRobot6D.h>
 
 // TCP-Server Communication
 //#include "TCP/RTTCP.h"
@@ -87,6 +95,11 @@ typedef uint16_t UINT16;
 typedef uint8_t UINT8;
 typedef int8_t INT8;
 
+typedef AbstractJointController<AbstractRobot6D> AbstractController;
+typedef AbstractRobot6D ROBOT;
+typedef typename ROBOT::JointVec JointVec;
+typedef typename ROBOT::JointMat JointMat;
+
 typedef struct JOINT_INFO{
 
 	int Position;
@@ -97,8 +110,8 @@ typedef struct JOINT_INFO{
 
 	int statusword[NUM_AXIS];
 
-	float* TargetTrajPos_Rad[NUM_AXIS];
-	float TargetTrajTime[NUM_AXIS];
+	double* TargetTrajPos_Rad[NUM_AXIS];
+	double TargetTrajTime[NUM_AXIS];
 
 	STATE act;
 	STATE des;

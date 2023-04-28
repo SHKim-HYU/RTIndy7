@@ -26,26 +26,26 @@ public:
 	bool isReady(){return m_isReady;};
 
 	int isReady(int NumJoint){return m_isReady[NumJoint];};
-	void SetPolynomial5th(int NumJoint, float startPos, float FinalPos, float InitTime, float Duration);
-	void SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, float InitTime, float Duration, float *q_);
-	void SetPolynomial5th_t(int NumJoint, state *act, float FinalPos, float InitTime, float Duration, float *q_);
+	void SetPolynomial5th(int NumJoint, double startPos, double FinalPos, double InitTime, double Duration);
+	void SetPolynomial5th_j(int NumJoint, state *act, double FinalPos, double InitTime, double Duration, double *q_);
+	void SetPolynomial5th_t(int NumJoint, state *act, double FinalPos, double InitTime, double Duration, double *q_);
 
-	void SetPolynomial5th(int NumJoint, float startPos, float FinalPos, float InitTime, float Duration, float *q_);
+	void SetPolynomial5th(int NumJoint, double startPos, double FinalPos, double InitTime, double Duration, double *q_);
 
-    float Polynomial5th(int NumJoint, float CurrentTime, int *Flag);
-    float Polynomial5th(int NumJoint, float CurrentTime, int *Flag, float *q_);
+    double Polynomial5th(int NumJoint, double CurrentTime, int *Flag);
+    double Polynomial5th(int NumJoint, double CurrentTime, int *Flag, double *q_);
 
 
 private:
 	int m_isReady[6];
 
-	Eigen::Matrix<float, 6, 6> m_cof;
+	Eigen::Matrix<double, 6, 6> m_cof;
 
-    float TrajDuration[10];
-    float TrajTime[10];
-    float TrajInitTime[10];
-	Eigen::Matrix<float, 6, 1> StateVec[10], Coefficient[10];
-    float dq, dq_dot, dq_ddot;
+    double TrajDuration[10];
+    double TrajTime[10];
+    double TrajInitTime[10];
+	Eigen::Matrix<double, 6, 1> StateVec[10], Coefficient[10];
+    double dq, dq_dot, dq_ddot;
 };
 
 } /* namespace HYUDA */

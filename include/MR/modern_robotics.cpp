@@ -17,11 +17,11 @@ namespace mr {
 	 * Inputs: value to be checked as a double
 	 * Returns: Boolean of true-ignore or false-can't ignore
 	 */
-       Eigen::MatrixXd w_p_to_Slist(const Eigen::Vector3f *w, const Eigen::Vector3f *p,int dof){
+       Eigen::MatrixXd w_p_to_Slist(const Eigen::Vector3d *w, const Eigen::Vector3d *p,int dof){
 		// Minchang Sung
 		Eigen::MatrixXd Slist = Eigen::MatrixXd::Zero(6,6);
 		for(int i = 0;i<dof;i++){
-			Eigen::Vector3f temp = -w[i].cross(p[i]);
+			Eigen::Vector3d temp = -w[i].cross(p[i]);
 			Eigen::VectorXd S(6);
 			S <<w[i](0),w[i](1),w[i](2),temp(0),temp(1),temp(2);
 			Slist.col(i)=S;
@@ -29,12 +29,12 @@ namespace mr {
 		}
 		return Slist;
 	}
-	std::vector<Eigen::MatrixXd> getGlist(const Eigen::Matrix3f *inertia, float *mass,int dof  ){
+	std::vector<Eigen::MatrixXd> getGlist(const Eigen::Matrix3d *inertia, double *mass,int dof  ){
 		std::vector<Eigen::MatrixXd> Glist;
 		for(int i = 0;i<dof;i++){
 			Eigen::MatrixXd G(6,6);
 			G = Eigen::MatrixXd::Identity(6,6);
-			Eigen::Matrix3f inertia_;			
+			Eigen::Matrix3d inertia_;			
 			inertia_ = inertia[i];
 			for(int j=0;j<3;j++){
 				for(int k=0;k<3;k++){
@@ -49,14 +49,14 @@ namespace mr {
 		}
 		return Glist;
 	}
-	std::vector<Eigen::MatrixXd> getMlist(const Eigen::Vector3f *L,const Eigen::Vector3f *CoM,int dof) {
+	std::vector<Eigen::MatrixXd> getMlist(const Eigen::Vector3d *L,const Eigen::Vector3d *CoM,int dof) {
 		// Minchang Sung
 		std::vector<Eigen::MatrixXd> Mlist;
 		std::vector<Eigen::MatrixXd> Mlist_;
 		Mlist.push_back(Eigen::MatrixXd::Identity(4,4));
 		for(int i = 0;i<dof-1;i++){
 			Eigen::MatrixXd M_0x(4,4);
-			Eigen::Vector3f temp = CoM[i];
+			Eigen::Vector3d temp = CoM[i];
 			M_0x<< 1,0,0,temp(0),
 				0,1,0,temp(1),
 				0,0,1,temp(2),
@@ -65,7 +65,7 @@ namespace mr {
 		}
 		Eigen::MatrixXd M_0x(4,4);
 		M_0x =Eigen::MatrixXd::Identity(4,4);
-		Eigen::Vector3f temp = L[5];
+		Eigen::Vector3d temp = L[5];
 		M_0x<< 1,0,0,L[5](0),
 			0,1,0,L[5](1),
 			0,0,1,L[5](2),
@@ -79,13 +79,13 @@ namespace mr {
 		
 		return Mlist_;
 	}
-		std::vector<Eigen::MatrixXd> getCoM_Mlist(const Eigen::Vector3f *CoM,int dof) {
+		std::vector<Eigen::MatrixXd> getCoM_Mlist(const Eigen::Vector3d *CoM,int dof) {
 		// Minchang Sung
 		std::vector<Eigen::MatrixXd> Mlist;
 		std::vector<Eigen::MatrixXd> Mlist_;
 		for(int i = 0;i<dof+1;i++){
 			Eigen::MatrixXd M_0x(4,4);
-			Eigen::Vector3f temp = CoM[i];
+			Eigen::Vector3d temp = CoM[i];
 			M_0x<< 1,0,0,temp(0),
 				0,1,0,temp(1),
 				0,0,1,temp(2),
@@ -102,12 +102,12 @@ namespace mr {
 		
 		return Mlist_;
 	}
-	std::vector<Eigen::MatrixXd> getHTranslist(const Eigen::Vector3f *p,const Eigen::MatrixXd& M, const Eigen::MatrixXd& Slist, const Eigen::VectorXd& thetaList) {
+	std::vector<Eigen::MatrixXd> getHTranslist(const Eigen::Vector3d *p,const Eigen::MatrixXd& M, const Eigen::MatrixXd& Slist, const Eigen::VectorXd& thetaList) {
 		// Minchang Sung
 		std::vector<Eigen::MatrixXd> HTranslist;
 		std::vector<Eigen::MatrixXd> Mlist;	
 		int dof = thetaList.size();
-		Eigen::Vector3f L[dof];
+		Eigen::Vector3d L[dof];
 		L[dof-1] << M(0,3),M(1,3),M(2,3);
 
 		Mlist = getMlist(L,p,dof);

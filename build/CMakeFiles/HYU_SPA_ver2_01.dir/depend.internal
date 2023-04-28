@@ -1668,7 +1668,7 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/EcatSystem/Ecat_Elmo.h
  ../include/EcatSystem/Ecat_Master.h
  ../include/EcatSystem/Ecat_NRMK_Drive.h
- ../include/EcatSystem/Ecat_Robotus.h
+ ../include/EcatSystem/Ecat_NRMK_Indy_Tool.h
  ../include/EcatSystem/Ecat_Slave.h
  ../include/EcatSystem/PDOConfig.h
  ../include/KDL/LieDynamics.h
@@ -1676,6 +1676,9 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/KDL/PoEKinematics.h
  ../include/KDL/PropertyDefinition.h
  ../include/KDL/SerialRobot.h
+ ../include/NRMKSDK/NRMKFramework/NRMKFramework/Components/AbstractComponent.h
+ ../include/NRMKSDK/NRMKFramework/NRMKFramework/Components/AbstractJointController.h
+ ../include/NRMKSDK/NRMKFramework/NRMKFramework/Components/AbstractRobot6D.h
  ../include/NRMKSDK/Poco/Poco/AbstractDelegate.h
  ../include/NRMKSDK/Poco/Poco/AbstractEvent.h
  ../include/NRMKSDK/Poco/Poco/ActiveMethod.h
@@ -1689,6 +1692,8 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/Poco/Poco/BasicEvent.h
  ../include/NRMKSDK/Poco/Poco/Buffer.h
  ../include/NRMKSDK/Poco/Poco/Bugcheck.h
+ ../include/NRMKSDK/Poco/Poco/ClassLibrary.h
+ ../include/NRMKSDK/Poco/Poco/ClassLoader.h
  ../include/NRMKSDK/Poco/Poco/Config.h
  ../include/NRMKSDK/Poco/Poco/DefaultStrategy.h
  ../include/NRMKSDK/Poco/Poco/Delegate.h
@@ -1702,6 +1707,8 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/Poco/Poco/Format.h
  ../include/NRMKSDK/Poco/Poco/Foundation.h
  ../include/NRMKSDK/Poco/Poco/FunctionDelegate.h
+ ../include/NRMKSDK/Poco/Poco/Manifest.h
+ ../include/NRMKSDK/Poco/Poco/MetaObject.h
  ../include/NRMKSDK/Poco/Poco/MetaProgramming.h
  ../include/NRMKSDK/Poco/Poco/Mutex.h
  ../include/NRMKSDK/Poco/Poco/Mutex_POSIX.h
@@ -1733,6 +1740,12 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/Poco/Poco/RefCountedObject.h
  ../include/NRMKSDK/Poco/Poco/Runnable.h
  ../include/NRMKSDK/Poco/Poco/ScopedLock.h
+ ../include/NRMKSDK/Poco/Poco/SharedLibrary.h
+ ../include/NRMKSDK/Poco/Poco/SharedLibrary_HPUX.h
+ ../include/NRMKSDK/Poco/Poco/SharedLibrary_UNIX.h
+ ../include/NRMKSDK/Poco/Poco/SharedLibrary_VX.h
+ ../include/NRMKSDK/Poco/Poco/SharedLibrary_WIN32.h
+ ../include/NRMKSDK/Poco/Poco/SharedLibrary_WIN32U.h
  ../include/NRMKSDK/Poco/Poco/SharedPtr.h
  ../include/NRMKSDK/Poco/Poco/SignalHandler.h
  ../include/NRMKSDK/Poco/Poco/SingletonHolder.h
@@ -1746,16 +1759,50 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/Poco/Poco/Timestamp.h
  ../include/NRMKSDK/Poco/Poco/Types.h
  ../include/NRMKSDK/Poco/Poco/UnWindows.h
+ ../include/NRMKSDK/core/AMBS/Body.h
+ ../include/NRMKSDK/core/AMBS/Inertia.h
+ ../include/NRMKSDK/core/AMBS/Joint.h
+ ../include/NRMKSDK/core/AMBS/Subsys.h
+ ../include/NRMKSDK/core/Controller/Controller.h
+ ../include/NRMKSDK/core/Controller/PositionController.h
+ ../include/NRMKSDK/core/Controller/RotationController.h
+ ../include/NRMKSDK/core/Framework/CompositeHTransformTask.h
+ ../include/NRMKSDK/core/Indy/Indy6D.h
+ ../include/NRMKSDK/core/Indy/IndyBase.h
+ ../include/NRMKSDK/core/Interpolator/Interpolator.h
+ ../include/NRMKSDK/core/Interpolator/InterpolatorConstants.h
+ ../include/NRMKSDK/core/Interpolator/MultipointAlgorithm.h
+ ../include/NRMKSDK/core/Interpolator/PolynomialAlgorithm.h
+ ../include/NRMKSDK/core/Interpolator/RotationInterpolator.h
+ ../include/NRMKSDK/core/Kinematics/DisplacementKinematics.h
+ ../include/NRMKSDK/core/Kinematics/Kinematics.h
+ ../include/NRMKSDK/core/Kinematics/RotationKinematics.h
+ ../include/NRMKSDK/core/LieGroup/Displacement.h
+ ../include/NRMKSDK/core/LieGroup/HTransform.h
+ ../include/NRMKSDK/core/LieGroup/LieGroup.h
+ ../include/NRMKSDK/core/LieGroup/Rotation.h
+ ../include/NRMKSDK/core/LieGroup/Twist.h
+ ../include/NRMKSDK/core/LieGroup/Vector3D.h
+ ../include/NRMKSDK/core/LieGroup/Wrench.h
+ ../include/NRMKSDK/core/NRMKCommon.h
  ../include/NRMKSDK/eigen/Eigen/Cholesky
  ../include/NRMKSDK/eigen/Eigen/Core
  ../include/NRMKSDK/eigen/Eigen/Dense
+ ../include/NRMKSDK/eigen/Eigen/Eigen
  ../include/NRMKSDK/eigen/Eigen/Eigenvalues
  ../include/NRMKSDK/eigen/Eigen/Geometry
  ../include/NRMKSDK/eigen/Eigen/Householder
+ ../include/NRMKSDK/eigen/Eigen/IterativeLinearSolvers
  ../include/NRMKSDK/eigen/Eigen/Jacobi
  ../include/NRMKSDK/eigen/Eigen/LU
+ ../include/NRMKSDK/eigen/Eigen/OrderingMethods
  ../include/NRMKSDK/eigen/Eigen/QR
  ../include/NRMKSDK/eigen/Eigen/SVD
+ ../include/NRMKSDK/eigen/Eigen/Sparse
+ ../include/NRMKSDK/eigen/Eigen/SparseCholesky
+ ../include/NRMKSDK/eigen/Eigen/SparseCore
+ ../include/NRMKSDK/eigen/Eigen/SparseLU
+ ../include/NRMKSDK/eigen/Eigen/SparseQR
  ../include/NRMKSDK/eigen/Eigen/src/Cholesky/LDLT.h
  ../include/NRMKSDK/eigen/Eigen/src/Cholesky/LLT.h
  ../include/NRMKSDK/eigen/Eigen/src/Cholesky/LLT_LAPACKE.h
@@ -1887,6 +1934,7 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/eigen/Eigen/src/Core/util/Macros.h
  ../include/NRMKSDK/eigen/Eigen/src/Core/util/Memory.h
  ../include/NRMKSDK/eigen/Eigen/src/Core/util/Meta.h
+ ../include/NRMKSDK/eigen/Eigen/src/Core/util/NonMPL2.h
  ../include/NRMKSDK/eigen/Eigen/src/Core/util/ReenableStupidWarnings.h
  ../include/NRMKSDK/eigen/Eigen/src/Core/util/StaticAssert.h
  ../include/NRMKSDK/eigen/Eigen/src/Core/util/XprHelper.h
@@ -1922,6 +1970,14 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/eigen/Eigen/src/Householder/BlockHouseholder.h
  ../include/NRMKSDK/eigen/Eigen/src/Householder/Householder.h
  ../include/NRMKSDK/eigen/Eigen/src/Householder/HouseholderSequence.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/LeastSquareConjugateGradient.h
+ ../include/NRMKSDK/eigen/Eigen/src/IterativeLinearSolvers/SolveWithGuess.h
  ../include/NRMKSDK/eigen/Eigen/src/Jacobi/Jacobi.h
  ../include/NRMKSDK/eigen/Eigen/src/LU/Determinant.h
  ../include/NRMKSDK/eigen/Eigen/src/LU/FullPivLU.h
@@ -1929,6 +1985,9 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/eigen/Eigen/src/LU/PartialPivLU.h
  ../include/NRMKSDK/eigen/Eigen/src/LU/PartialPivLU_LAPACKE.h
  ../include/NRMKSDK/eigen/Eigen/src/LU/arch/Inverse_SSE.h
+ ../include/NRMKSDK/eigen/Eigen/src/OrderingMethods/Amd.h
+ ../include/NRMKSDK/eigen/Eigen/src/OrderingMethods/Eigen_Colamd.h
+ ../include/NRMKSDK/eigen/Eigen/src/OrderingMethods/Ordering.h
  ../include/NRMKSDK/eigen/Eigen/src/QR/ColPivHouseholderQR.h
  ../include/NRMKSDK/eigen/Eigen/src/QR/ColPivHouseholderQR_LAPACKE.h
  ../include/NRMKSDK/eigen/Eigen/src/QR/CompleteOrthogonalDecomposition.h
@@ -1940,6 +1999,56 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/eigen/Eigen/src/SVD/JacobiSVD_LAPACKE.h
  ../include/NRMKSDK/eigen/Eigen/src/SVD/SVDBase.h
  ../include/NRMKSDK/eigen/Eigen/src/SVD/UpperBidiagonalization.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCholesky/SimplicialCholesky.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCholesky/SimplicialCholesky_impl.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/AmbiVector.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/CompressedStorage.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/MappedSparseMatrix.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseAssign.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseBlock.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseColEtree.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseCompressedBase.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseCwiseBinaryOp.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseCwiseUnaryOp.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseDenseProduct.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseDiagonalProduct.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseDot.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseFuzzy.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseMap.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseMatrix.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseMatrixBase.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparsePermutation.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseProduct.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseRedux.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseRef.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseSelfAdjointView.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseSolverBase.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseSparseProductWithPruning.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseTranspose.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseTriangularView.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseUtil.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseVector.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/SparseView.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseCore/TriangularSolver.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLUImpl.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_Memory.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_Structs.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_Utils.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_column_bmod.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_column_dfs.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_gemm_kernel.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_heap_relax_snode.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_kernel_bmod.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_panel_bmod.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_panel_dfs.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_pivotL.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_pruneL.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseLU/SparseLU_relax_snode.h
+ ../include/NRMKSDK/eigen/Eigen/src/SparseQR/SparseQR.h
  ../include/NRMKSDK/eigen/Eigen/src/misc/Image.h
  ../include/NRMKSDK/eigen/Eigen/src/misc/Kernel.h
  ../include/NRMKSDK/eigen/Eigen/src/misc/RealSvd2x2.h
@@ -1954,12 +2063,19 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o
  ../include/NRMKSDK/eigen/Eigen/src/plugins/MatrixCwiseBinaryOps.h
  ../include/NRMKSDK/eigen/Eigen/src/plugins/MatrixCwiseUnaryOps.h
  ../include/NRMKSDK/ethercat/ecrt.h
+ ../include/NRMKSDK/helper/DefineConstant.h
  ../include/NRMKSDK/helper/NRMKDataSocket.h
  ../include/NRMKSDK/helper/NRMKHelper.h
  ../include/NRMKSDK/helper/NRMKSocketBase.h
  ../include/NRMKSDK/helper/SocketComm.h
+ ../include/NRMKSDK/helper/TrajectoryDataList.h
  ../include/NRMKSDK/helper/hw/NRMKhw_tp.h
  ../include/NRMKSDK/helper/hw/NRMKsercan_tp.h
+ ../include/NRMKSDK/json/json/allocator.h
+ ../include/NRMKSDK/json/json/config.h
+ ../include/NRMKSDK/json/json/forwards.h
+ ../include/NRMKSDK/json/json/value.h
+ ../include/NRMKSDK/json/json/version.h
  ../include/NRMKSDK/xenomai/asm-generic/features.h
  ../include/NRMKSDK/xenomai/asm-generic/syscall.h
  ../include/NRMKSDK/xenomai/asm-x86/atomic.h

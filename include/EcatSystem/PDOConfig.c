@@ -97,6 +97,7 @@ ec_pdo_entry_info_t NRMK_IO_Module_pdo_entries[] = {
     {0x7100, 0x12, 8}, /* RS485_Tx_D7 */
     {0x7100, 0x13, 8}, /* RS485_Tx_D8 */
     {0x7100, 0x14, 8}, /* RS485_Tx_D9 */
+
     {0x6100, 0x01, 8}, /* StatusCode */
     {0x6100, 0x02, 8}, /* DI_5V */
     {0x6100, 0x03, 8}, /* DI1 */
@@ -145,6 +146,7 @@ ec_pdo_entry_info_t NRMK_Drive_pdo_entries[] = {
     {0x60ff, 0x00, 32}, /* target_velocity */
     {0x6071, 0x00, 16}, /* target_torque */
     {0x6060, 0x00, 8}, /* modes_of_operation */
+
     {0x6041, 0x00, 16}, /* statusword */
     {0x6064, 0x00, 32}, /* position_actual_value */
     {0x606c, 0x00, 32}, /* velocity_actual_value */
@@ -170,11 +172,12 @@ ec_sync_info_t NRMK_Drive_syncs[] = {
 ec_pdo_entry_info_t NRMK_Indy_Tool_pdo_entries[] = {
     {0x7000, 0x01, 8}, /* iLed */
     {0x7000, 0x02, 8}, /* iGripper */
-    {0x7000, 0x03, 32}, /* FT_ConfigParam */
+    {0x7000, 0x03, 32},/* FT_ConfigParam */
     {0x7000, 0x04, 8}, /* LED_Mode */
     {0x7000, 0x05, 8}, /* LED_G */
     {0x7000, 0x06, 8}, /* LED_R */
     {0x7000, 0x07, 8}, /* LED_B */
+
     {0x6000, 0x01, 8}, /* iStatus */
     {0x6000, 0x02, 8}, /* iButton */
     {0x6000, 0x03, 16}, /* FT_Raw_Fx */

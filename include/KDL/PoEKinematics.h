@@ -17,11 +17,11 @@
 
 using namespace Eigen;
 
-typedef Matrix<float, ROBOT_DOF, 1> Jointd;
-typedef Matrix<float, 6, ROBOT_DOF> Jaco;
-typedef Matrix<float,ROBOT_DOF,6> InvJaco;
-typedef Matrix<float,3,ROBOT_DOF> LinJaco;
-typedef Matrix<float,ROBOT_DOF,3>  PinvLJaco;
+typedef Matrix<double, ROBOT_DOF, 1> Jointd;
+typedef Matrix<double, 6, ROBOT_DOF> Jaco;
+typedef Matrix<double,ROBOT_DOF,6> InvJaco;
+typedef Matrix<double,3,ROBOT_DOF> LinJaco;
+typedef Matrix<double,ROBOT_DOF,3>  PinvLJaco;
 
 
 namespace HYUMotionKinematics {
@@ -34,36 +34,36 @@ public:
 	virtual ~PoEKinematics();
 
 public:
-	void UpdateKinematicInfo(Vector3f _w, Vector3f _p, Vector3f _l, int _link_num);
-	void UpdateKinematicInfo_R(Vector3f _w, Vector3f _p, Vector3f _l, int _link_num);
-	Vector3f GetV(Vector3f _w, Vector3f _p);
-	SE3 GetM(Vector3f _link);
-	se3 GetTwist(Vector3f _w, Vector3f _v);
-	void HTransMatrix(float q[]);
+	void UpdateKinematicInfo(Vector3d _w, Vector3d _p, Vector3d _l, int _link_num);
+	void UpdateKinematicInfo_R(Vector3d _w, Vector3d _p, Vector3d _l, int _link_num);
+	Vector3d GetV(Vector3d _w, Vector3d _p);
+	SE3 GetM(Vector3d _link);
+	se3 GetTwist(Vector3d _w, Vector3d _v);
+	void HTransMatrix(double q[]);
 	se3 Twistout(int i);
 
 	Jaco SpaceJacobian(void);
 	Jaco BodyJacobian(void);
 	Jaco AnalyticJacobian();
-	//Matrix<float, 3, ROBOT_DOF> AnalyticJacobian(void);
+	//Matrix<double, 3, ROBOT_DOF> AnalyticJacobian(void);
     LinJaco LinearJacobian(void);
 
 	InvJaco Pinv(Jaco _j);
-//	Matrix<float,6,3> Pinv(Matrix<float,3,6> _j);
+//	Matrix<double,6,3> Pinv(Matrix<double,3,6> _j);
 	PinvLJaco Pinv(LinJaco _j);
 	PinvLJaco DPI(LinJaco _j);
 	InvJaco DPI(Jaco _j);
 
-	Vector3f ForwardKinematics(void);
-	Vector3f GetEulerAngle(void);
-	Vector4f GetQuaternion(void);
-	Matrix3f Rot(void);
+	Vector3d ForwardKinematics(void);
+	Vector3d GetEulerAngle(void);
+	Vector4d GetQuaternion(void);
+	Matrix3d Rot(void);
 	SE3 GetTMat(int _i, int _j);
-	float Manipulability(LinJaco _J);
-	float Manipulability(Jaco _J);
-	float Condition_Number(LinJaco _J);
+	double Manipulability(LinJaco _J);
+	double Manipulability(Jaco _J);
+	double Condition_Number(LinJaco _J);
 	LinJaco Jacobian_l_dot();
-//	Vector4f InverseKinematics(Matrix4f _td, )
+//	Vector4d InverseKinematics(Matrix4d _td, )
 	void Unflag_isInfoupdate();
 
 
@@ -79,13 +79,13 @@ private:
 	PinvLJaco PinvLinJaco;
 	LinJaco _LinJaco_dot;
 
-	Matrix<float,4,4> _BaseT;
-	Matrix<float,4,4> _EndT;
+	Matrix<double,4,4> _BaseT;
+	Matrix<double,4,4> _EndT;
     se3 twist;
-    float w, k;
-    Vector4f quat;
+    double w, k;
+    Vector4d quat;
 
-    VectorXf q_;
+    VectorXd q_;
 
 
 
@@ -95,7 +95,7 @@ protected:
 	SE3 M[ROBOT_DOF+1];
 	SE3 _M[ROBOT_DOF+1][ROBOT_DOF+1];
 	SE3 Exp_S[ROBOT_DOF+1];
-	Matrix3f RotMat;
+	Matrix3d RotMat;
 
 
 	se3 v_se3[ROBOT_DOF+1];

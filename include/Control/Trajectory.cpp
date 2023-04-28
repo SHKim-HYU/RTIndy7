@@ -19,7 +19,7 @@ Trajectory::~Trajectory() {
 
 }
 
-void Trajectory::SetPolynomial5th(int NumJoint, float startPos, float FinalPos, float InitTime, float Duration)
+void Trajectory::SetPolynomial5th(int NumJoint, double startPos, double FinalPos, double InitTime, double Duration)
 {
 	TrajDuration[NumJoint] = Duration;
 	TrajInitTime[NumJoint] = InitTime;
@@ -27,9 +27,9 @@ void Trajectory::SetPolynomial5th(int NumJoint, float startPos, float FinalPos, 
 	m_cof << 1, 0, 	0, 		0, 				0, 					0,
 			 0, 1, 	0, 		0, 				0, 					0,
 			 0, 0, 	2, 		0, 				0, 					0,
-			 1, powf(TrajDuration[NumJoint],1), 	powf(TrajDuration[NumJoint],2), 	powf(TrajDuration[NumJoint],3), 	powf(TrajDuration[NumJoint],4), 	powf(TrajDuration[NumJoint],5),
-			 0, 1, 									2*powf(TrajDuration[NumJoint],1), 	3*powf(TrajDuration[NumJoint],2), 	4*powf(TrajDuration[NumJoint],3), 	5*powf(TrajDuration[NumJoint],4),
-			 0, 0, 									2, 									6*powf(TrajDuration[NumJoint],1), 	12*powf(TrajDuration[NumJoint],2),	20*powf(TrajDuration[NumJoint],3);
+			 1, pow(TrajDuration[NumJoint],1), 	pow(TrajDuration[NumJoint],2), 	pow(TrajDuration[NumJoint],3), 	pow(TrajDuration[NumJoint],4), 	pow(TrajDuration[NumJoint],5),
+			 0, 1, 									2*pow(TrajDuration[NumJoint],1), 	3*pow(TrajDuration[NumJoint],2), 	4*pow(TrajDuration[NumJoint],3), 	5*pow(TrajDuration[NumJoint],4),
+			 0, 0, 									2, 									6*pow(TrajDuration[NumJoint],1), 	12*pow(TrajDuration[NumJoint],2),	20*pow(TrajDuration[NumJoint],3);
 
 	StateVec[NumJoint] << startPos,
 						0,
@@ -43,16 +43,16 @@ void Trajectory::SetPolynomial5th(int NumJoint, float startPos, float FinalPos, 
 
 }
 
-void Trajectory::SetPolynomial5th_t(int NumJoint, state *act, float FinalPos, float InitTime, float Duration,float *q_)
+void Trajectory::SetPolynomial5th_t(int NumJoint, state *act, double FinalPos, double InitTime, double Duration,double *q_)
 {
 	TrajDuration[NumJoint] = Duration;
 	TrajInitTime[NumJoint] = InitTime;
 	m_cof << 1, 0, 	0, 		0, 				0, 					0,
 			 0, 1, 	0, 		0, 				0, 					0,
 			 0, 0, 	2, 		0, 				0, 					0,
-			 1, powf(TrajDuration[NumJoint],1), 	powf(TrajDuration[NumJoint],2), 	powf(TrajDuration[NumJoint],3), 	powf(TrajDuration[NumJoint],4), 	powf(TrajDuration[NumJoint],5),
-			 0, 1, 									2*powf(TrajDuration[NumJoint],1), 	3*powf(TrajDuration[NumJoint],2), 	4*powf(TrajDuration[NumJoint],3), 	5*powf(TrajDuration[NumJoint],4),
-			 0, 0, 									2, 									6*powf(TrajDuration[NumJoint],1), 	12*powf(TrajDuration[NumJoint],2),	20*powf(TrajDuration[NumJoint],3);
+			 1, pow(TrajDuration[NumJoint],1), 	pow(TrajDuration[NumJoint],2), 	pow(TrajDuration[NumJoint],3), 	pow(TrajDuration[NumJoint],4), 	pow(TrajDuration[NumJoint],5),
+			 0, 1, 									2*pow(TrajDuration[NumJoint],1), 	3*pow(TrajDuration[NumJoint],2), 	4*pow(TrajDuration[NumJoint],3), 	5*pow(TrajDuration[NumJoint],4),
+			 0, 0, 									2, 									6*pow(TrajDuration[NumJoint],1), 	12*pow(TrajDuration[NumJoint],2),	20*pow(TrajDuration[NumJoint],3);
 
 	StateVec[NumJoint] << act->x[NumJoint],
 			//act->j_q_d(NumJoint),
@@ -70,16 +70,16 @@ void Trajectory::SetPolynomial5th_t(int NumJoint, state *act, float FinalPos, fl
 
 }
 
-void Trajectory::SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, float InitTime, float Duration,float *q_)
+void Trajectory::SetPolynomial5th_j(int NumJoint, state *act, double FinalPos, double InitTime, double Duration,double *q_)
 {
 	TrajDuration[NumJoint] = Duration;
 	TrajInitTime[NumJoint] = InitTime;
 	m_cof << 1, 0, 	0, 		0, 				0, 					0,
 			 0, 1, 	0, 		0, 				0, 					0,
 			 0, 0, 	2, 		0, 				0, 					0,
-			 1, powf(TrajDuration[NumJoint],1), 	powf(TrajDuration[NumJoint],2), 	powf(TrajDuration[NumJoint],3), 	powf(TrajDuration[NumJoint],4), 	powf(TrajDuration[NumJoint],5),
-			 0, 1, 									2*powf(TrajDuration[NumJoint],1), 	3*powf(TrajDuration[NumJoint],2), 	4*powf(TrajDuration[NumJoint],3), 	5*powf(TrajDuration[NumJoint],4),
-			 0, 0, 									2, 									6*powf(TrajDuration[NumJoint],1), 	12*powf(TrajDuration[NumJoint],2),	20*powf(TrajDuration[NumJoint],3);
+			 1, pow(TrajDuration[NumJoint],1), 	pow(TrajDuration[NumJoint],2), 	pow(TrajDuration[NumJoint],3), 	pow(TrajDuration[NumJoint],4), 	pow(TrajDuration[NumJoint],5),
+			 0, 1, 									2*pow(TrajDuration[NumJoint],1), 	3*pow(TrajDuration[NumJoint],2), 	4*pow(TrajDuration[NumJoint],3), 	5*pow(TrajDuration[NumJoint],4),
+			 0, 0, 									2, 									6*pow(TrajDuration[NumJoint],1), 	12*pow(TrajDuration[NumJoint],2),	20*pow(TrajDuration[NumJoint],3);
 
 	StateVec[NumJoint] << act->q[NumJoint],
 						act->q_dot[NumJoint],
@@ -98,7 +98,7 @@ void Trajectory::SetPolynomial5th_j(int NumJoint, state *act, float FinalPos, fl
 
 }
 
-float Trajectory::Polynomial5th(int NumJoint, float CurrentTime, int *Flag)
+double Trajectory::Polynomial5th(int NumJoint, double CurrentTime, int *Flag)
 {
 	if((CurrentTime - TrajInitTime[NumJoint]) >= (TrajDuration[NumJoint]))
 	{
@@ -121,11 +121,11 @@ float Trajectory::Polynomial5th(int NumJoint, float CurrentTime, int *Flag)
 		TrajTime[NumJoint] = CurrentTime - TrajInitTime[NumJoint];
 		for(int i=0; i<6; ++i)
 		{
-			dq += powf(TrajTime[NumJoint], i)*Coefficient[NumJoint](i);
+			dq += pow(TrajTime[NumJoint], i)*Coefficient[NumJoint](i);
 			if(i>=1)
-				dq_dot += (i)*powf(TrajTime[NumJoint], i-1)*Coefficient[NumJoint](i);
+				dq_dot += (i)*pow(TrajTime[NumJoint], i-1)*Coefficient[NumJoint](i);
 			if(i>=2)
-				dq_ddot += i*(i-1)*powf(TrajTime[NumJoint], i-2)*Coefficient[NumJoint](i);
+				dq_ddot += i*(i-1)*pow(TrajTime[NumJoint], i-2)*Coefficient[NumJoint](i);
 		}
 		return dq;
 
@@ -136,7 +136,7 @@ float Trajectory::Polynomial5th(int NumJoint, float CurrentTime, int *Flag)
 	}
 
 }
-float Trajectory::Polynomial5th(int NumJoint, float CurrentTime, int *Flag, float *q_)
+double Trajectory::Polynomial5th(int NumJoint, double CurrentTime, int *Flag, double *q_)
 {
 	if((CurrentTime - TrajInitTime[NumJoint]) >= (TrajDuration[NumJoint]))
 	{
@@ -161,11 +161,11 @@ float Trajectory::Polynomial5th(int NumJoint, float CurrentTime, int *Flag, floa
 		TrajTime[NumJoint] = CurrentTime - TrajInitTime[NumJoint];
 		for(int i=0; i<6; ++i)
 		{
-			dq += powf(TrajTime[NumJoint], i)*Coefficient[NumJoint](i);
+			dq += pow(TrajTime[NumJoint], i)*Coefficient[NumJoint](i);
 			if(i>=1)
-				dq_dot += (i)*powf(TrajTime[NumJoint], i-1)*Coefficient[NumJoint](i);
+				dq_dot += (i)*pow(TrajTime[NumJoint], i-1)*Coefficient[NumJoint](i);
 			if(i>=2)
-				dq_ddot += i*(i-1)*powf(TrajTime[NumJoint], i-2)*Coefficient[NumJoint](i);
+				dq_ddot += i*(i-1)*pow(TrajTime[NumJoint], i-2)*Coefficient[NumJoint](i);
 		}
 
 		q_[0]=dq;
@@ -182,7 +182,7 @@ float Trajectory::Polynomial5th(int NumJoint, float CurrentTime, int *Flag, floa
 }
 
 
-void Trajectory::SetPolynomial5th(int NumJoint, float startPos, float FinalPos, float InitTime, float Duration, float *q_)
+void Trajectory::SetPolynomial5th(int NumJoint, double startPos, double FinalPos, double InitTime, double Duration, double *q_)
 {
     TrajDuration[NumJoint] = Duration;
     TrajInitTime[NumJoint] = InitTime;
@@ -190,9 +190,9 @@ void Trajectory::SetPolynomial5th(int NumJoint, float startPos, float FinalPos, 
     m_cof << 1.0, 0.0, 	0.0, 		0.0, 				0.0, 					0.0,
             0.0, 1.0, 	0.0, 		0.0, 				0.0, 					0.0,
             0.0, 0.0, 	2.0, 		0.0, 				0.0, 					0.0,
-            1.0, powf(TrajDuration[NumJoint],1.0), 	powf(TrajDuration[NumJoint],2.0), 	powf(TrajDuration[NumJoint],3.0), 	powf(TrajDuration[NumJoint],4.0), 	powf(TrajDuration[NumJoint],5.0),
-            0.0, 1.0, 									2.0*powf(TrajDuration[NumJoint],1.0), 	3.0*powf(TrajDuration[NumJoint],2.0), 	4.0*powf(TrajDuration[NumJoint],3.0), 	5.0*powf(TrajDuration[NumJoint],4.0),
-            0.0, 0.0, 									2.0, 									6.0*powf(TrajDuration[NumJoint],1.0), 	12.0*powf(TrajDuration[NumJoint],2.0),	20.0*powf(TrajDuration[NumJoint],3.0);
+            1.0, pow(TrajDuration[NumJoint],1.0), 	pow(TrajDuration[NumJoint],2.0), 	pow(TrajDuration[NumJoint],3.0), 	pow(TrajDuration[NumJoint],4.0), 	pow(TrajDuration[NumJoint],5.0),
+            0.0, 1.0, 									2.0*pow(TrajDuration[NumJoint],1.0), 	3.0*pow(TrajDuration[NumJoint],2.0), 	4.0*pow(TrajDuration[NumJoint],3.0), 	5.0*pow(TrajDuration[NumJoint],4.0),
+            0.0, 0.0, 									2.0, 									6.0*pow(TrajDuration[NumJoint],1.0), 	12.0*pow(TrajDuration[NumJoint],2.0),	20.0*pow(TrajDuration[NumJoint],3.0);
 
     StateVec[NumJoint] << startPos,
             //act->j_q_d(NumJoint),

@@ -41,76 +41,76 @@ public:
 
 	//void ClearError(void);
 
-	void SetPIDGain(float _Kp, float _Kd, float _Ki, int _JointNum);
-	void PDController_gravity(float *q, float *q_dot, float *dq, float *dq_dot, float *toq, Jointf &g_mat);
-	void PD_Gravity(float * q, float * q_dot, float *dq_, float *dq_dot, float * toq);
-	void Gravity(float * q, float * q_dot, float * toq);
-	void PDController(Jointf &q, Jointf &q_dot, float *dq, float *dq_dot, float *toq);
-//  void Impedance(float *_q_dot, Matrix<float, 6, 1> & _x,Matrix<float, 6, 1> & _x_dot, Matrix<float, 6, 1> & _dx, Matrix<float, 6, 1> & _dx_dot, Matrix<float, 6, 1> & _dx_ddot, float * toq);
-//	void Impedance(float *q, float *q_dot, float *q_ddot, float *dq, float *dq_dot, float *dq_ddot, float *toq, Matrixf &m_mat, Matrixf &c_mat, Jointf &g_mat);
-	//void Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, float *dq, float *dq_dot, float *dq_ddot, float *toq, Matrixf &m_mat, Jointf &g_mat);
-	//void Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, float *dq, float *dq_dot, float *dq_ddot, float *toq, Matrixf &m_mat, Jointf &g_mat, Matrixf &c_mat);
-	void Inverse_Dynamics_Control(float *q_, float *q_dot, float *dq_, float *dq_dot, float *dq_ddot, float * toq);
-    void ComputedTorque(float *q_, float *q_dot, float *dq_, float *dq_dot, float *dq_ddot, float * toq);
-    void VSD(float *_q, float *_qdot, Vector3f &xd, float *toq, float gt, int flag);
-    void CLIKController( float *_q, float *_qdot, float *_dq, float *_dqdot, const VectorXf *_dx, const VectorXf *_dxdot, const VectorXf &_dqdotNull, float *p_Toq, float &_dt );
-    void CLIKController_2nd(float *_q, float *_qdot, Matrix<float,6,1>& dq, Matrix<float,6,1>& dq_dot, Matrix<float,6,1>& dq_ddot);
+	void SetPIDGain(double _Kp, double _Kd, double _Ki, int _JointNum);
+	void PDController_gravity(double *q, double *q_dot, double *dq, double *dq_dot, double *toq, Jointd &g_mat);
+	void PD_Gravity(double * q, double * q_dot, double *dq_, double *dq_dot, double * toq);
+	void Gravity(double * q, double * q_dot, double * toq);
+	void PDController(Jointd &q, Jointd &q_dot, double *dq, double *dq_dot, double *toq);
+//  void Impedance(double *_q_dot, Matrix<double, 6, 1> & _x,Matrix<double, 6, 1> & _x_dot, Matrix<double, 6, 1> & _dx, Matrix<double, 6, 1> & _dx_dot, Matrix<double, 6, 1> & _dx_ddot, double * toq);
+//	void Impedance(double *q, double *q_dot, double *q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Matrixf &c_mat, Jointd &g_mat);
+	//void Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointd &g_mat);
+	//void Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointd &g_mat, Matrixf &c_mat);
+	void Inverse_Dynamics_Control(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq);
+    void ComputedTorque(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq);
+    void VSD(double *_q, double *_qdot, Vector3d &xd, double *toq, double gt, int flag);
+    void CLIKController( double *_q, double *_qdot, double *_dq, double *_dqdot, const VectorXd *_dx, const VectorXd *_dxdot, const VectorXd &_dqdotNull, double *p_Toq, double &_dt );
+    void CLIKController_2nd(double *_q, double *_qdot, Matrix<double,6,1>& dq, Matrix<double,6,1>& dq_dot, Matrix<double,6,1>& dq_ddot);
 
-    void FrictionIdentify(float *_q, float *_qdot, float *dq_, float *dq_dot, float *dq_ddot, float *toq, float _gt);
-    float FrictionCompensation(float _qdot, int _JointNum);
-	void TorqueOutput(float *p_toq, int maxtoq, int *p_dir);
-	//void TorqueOutput(float *p_toq , int maxtoq);
-	Jointf return_u0(void);
+    void FrictionIdentify(double *_q, double *_qdot, double *dq_, double *dq_dot, double *dq_ddot, double *toq, double _gt);
+    double FrictionCompensation(double _qdot, int _JointNum);
+	void TorqueOutput(double *p_toq, int maxtoq, int *p_dir);
+	//void TorqueOutput(double *p_toq , int maxtoq);
+	Jointd return_u0(void);
 
 	//void IKAccel(state *des, state *act);
 
 	int int_flag=0;
     robot *pManipulator;
 private:
-	Matrix<float,ROBOT_DOF,1> Kp;
-	Matrix<float,ROBOT_DOF,1> Kd;
-	Matrix<float,ROBOT_DOF,1> Ki;
+	Matrix<double,ROBOT_DOF,1> Kp;
+	Matrix<double,ROBOT_DOF,1> Kd;
+	Matrix<double,ROBOT_DOF,1> Ki;
 
-	Matrix<float,ROBOT_DOF,1> Damp;
-	Matrix<float,ROBOT_DOF,1> Stiff;
+	Matrix<double,ROBOT_DOF,1> Damp;
+	Matrix<double,ROBOT_DOF,1> Stiff;
 
-	Matrix<float,ROBOT_DOF,1> e;
-	Matrix<float,ROBOT_DOF,1> e_dev;
-	Matrix<float,ROBOT_DOF,1> e_int;
-	Matrix<float,ROBOT_DOF,1> e_old;
+	Matrix<double,ROBOT_DOF,1> e;
+	Matrix<double,ROBOT_DOF,1> e_dev;
+	Matrix<double,ROBOT_DOF,1> e_int;
+	Matrix<double,ROBOT_DOF,1> e_old;
 
-	VectorXf q, qdot, dq, dqdot, dqddot;
-	Vector3f x, x_dot, xd_buff;
-    VectorXf eTask, edotTask;
-    MatrixXf edotTmp;
+	VectorXd q, qdot, dq, dqdot, dqddot;
+	Vector3d x, x_dot, xd_buff;
+    VectorXd eTask, edotTask;
+    MatrixXd edotTmp;
 
-    VectorXf ToqOut;
-    VectorXf KpTask, KdTask;
-    VectorXf KiTask;
-    MatrixXf G,Gx,M,C;
-    MatrixXf _a_jaco, _pinv_jaco,_jaco_dot;
+    VectorXd ToqOut;
+    VectorXd KpTask, KdTask;
+    VectorXd KiTask;
+    MatrixXd G,Gx,M,C;
+    MatrixXd _a_jaco, _pinv_jaco,_jaco_dot;
 
     LinJaco l_Jaco, l_Jaco_dot;
     PinvLJaco DPI_l_jaco;
 
-    MatrixXf LinearJacobian;
+    MatrixXd LinearJacobian;
 
-    VectorXf mvC0_;
-    float mvK_, mvKsi_, mvZeta0_, mvZeta1_;
-    VectorXf mK_;
+    VectorXd mvC0_;
+    double mvK_, mvKsi_, mvZeta0_, mvZeta1_;
+    VectorXd mK_;
 
-    Jointf u0;
-    VectorXf ax;
+    Jointd u0;
+    VectorXd ax;
 	int m_Jnum;
 	int q_flag;
 	int t_flag;
-	float init_time, init_time_vsd;
+	double init_time, init_time_vsd;
 
 
-    Matrix<float,ROBOT_DOF,1> f_a, f_b, f_c, f_d, f_e, f_f;
+    Matrix<double,ROBOT_DOF,1> f_a, f_b, f_c, f_d, f_e, f_f;
 
 
-    float m_KpBase, m_KdBase, m_KiBase;
+    double m_KpBase, m_KdBase, m_KiBase;
 
 };
 
