@@ -17,7 +17,7 @@ LieOperator::~LieOperator() {
 
 }
 
-bool LieOperator::NearZero(double near){
+bool LieOperator::NearZero(double near){ 
 		if (near < 0.000001)
 			return true;
 		else
@@ -111,7 +111,7 @@ SE3 LieOperator::SE3Matrix(se3 _Twist, double _q)
 Matrix3d LieOperator::MatrixLog3(Matrix3d & R)
 {
     double acosinput = (R.trace() - 1) / 2.0;
-    MatrixXf m_ret;
+    MatrixXd m_ret;
     m_ret.resize(3,3);
     m_ret.setZero();
     if (acosinput >= 1)

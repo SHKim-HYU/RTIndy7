@@ -214,7 +214,7 @@ namespace HYUMotionKinematics {
         }
 
         //QR-Decomposition
-/*	CompleteOrthogonalDecomposition<MatrixXf> cod(J);
+/*	CompleteOrthogonalDecomposition<MatrixXd> cod(J);
 	cod.setThreshold(1e-5);
 	PJ = cod.pseudoInverse();*/
 
@@ -270,13 +270,13 @@ namespace HYUMotionKinematics {
         Matrix<double, ROBOT_DOF, 3> PJ;
         Matrix<double, 3, ROBOT_DOF> J;
         J << _j;
-        JacobiSVD<MatrixXf> svd(J, ComputeThinU | ComputeThinV);
+        JacobiSVD<MatrixXd> svd(J, ComputeThinU | ComputeThinV);
         double p;
         int m = 0, n = 0;
         m = J.rows();
         n = J.cols();
 
-        MatrixXf damp;
+        MatrixXd damp;
         damp.resize(3, 3);
         damp.setIdentity();
         Manipulability(_j);
@@ -311,13 +311,13 @@ namespace HYUMotionKinematics {
         Matrix<double, ROBOT_DOF, 6> PJ;
         Matrix<double, 6, ROBOT_DOF> J;
         J << _j;
-        JacobiSVD<MatrixXf> svd(J, ComputeThinU | ComputeThinV);
+        JacobiSVD<MatrixXd> svd(J, ComputeThinU | ComputeThinV);
         double p;
         int m = 0, n = 0;
         m = J.rows();
         n = J.cols();
 
-        MatrixXf damp;
+        MatrixXd damp;
         damp.resize(6, 6);
         damp.setIdentity();
         Manipulability(_j);
@@ -436,7 +436,7 @@ namespace HYUMotionKinematics {
 
     double PoEKinematics::Condition_Number(LinJaco _J)
     {
-        JacobiSVD<MatrixXf> svd(_J, ComputeThinU|ComputeThinV);
+        JacobiSVD<MatrixXd> svd(_J, ComputeThinU|ComputeThinV);
         k=svd.singularValues()(0)/svd.singularValues()(2);
         return k;
     }

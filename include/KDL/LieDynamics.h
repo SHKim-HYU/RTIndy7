@@ -100,7 +100,7 @@ public:
 	Jointd G_verify;
 	Jointd q_d;
 
-    void Mdot_Matrix( MatrixXf &_Mdot );
+    void Mdot_Matrix( Matrixd &_Mdot );
 
 	Matrix6nnd noz;
 	Matrix6n6nd nos;

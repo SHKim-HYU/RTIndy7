@@ -1,90 +1,26 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "C"
-  "CXX"
-  )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_C
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/EcatSystem/PDOConfig.c" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatSystem/PDOConfig.c.o"
-  )
-set(CMAKE_C_COMPILER_ID "GNU")
-
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_C
-  "__ROBOT_6DOF__"
-  "__XENO__"
   )
 
-# The include file search paths:
-set(CMAKE_C_TARGET_INCLUDE_PATH
-  "../include/NRMKSDK/xenomai"
-  "../include/NRMKSDK/ethercat"
-  "../include/NRMKSDK/core"
-  "../include/NRMKSDK/helper"
-  "../include/NRMKSDK/helper/hw"
-  "../include/NRMKSDK/helper/hw/nrmk_ecat"
-  "../include/NRMKSDK/eigen"
-  "../include/NRMKSDK/Poco"
-  "../include/NRMKSDK/json"
-  "../include/NRMKSDK/modbus"
-  "../include/NRMKSDK/qpOASES"
-  "../include/NRMKSDK/cryptopp"
-  "../include/NRMKSDK/NRMKFramework"
-  "../include/NRMKSDK/ModernRobotics"
-  "../include/KDL"
-  "../include/CAN"
-  "../include/EcatSystem"
-  "../include/Control"
-  "../include/MR"
-  "../include"
-  "../include/EcatDataSocket"
-  "../"
-  )
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/CAN/RoboLimb.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/CAN/RoboLimb.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/Control/Controller.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/Control/Controller.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/Control/Trajectory.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/Control/Trajectory.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/EcatDataSocket/EcatDataSocket.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/EcatSystem/Ecat_Master.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatSystem/Ecat_Master.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/KDL/LieDynamics.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/LieDynamics.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/KDL/LieOperator.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/LieOperator.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/KDL/PoEKinematics.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/PoEKinematics.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/KDL/SerialRobot.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/SerialRobot.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/include/MR/modern_robotics.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/include/MR/modern_robotics.cpp.o"
-  "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/src/RTRArmClient.cpp" "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "GNU")
-
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_CXX
-  "__ROBOT_6DOF__"
-  "__XENO__"
-  )
-
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../include/NRMKSDK/xenomai"
-  "../include/NRMKSDK/ethercat"
-  "../include/NRMKSDK/core"
-  "../include/NRMKSDK/helper"
-  "../include/NRMKSDK/helper/hw"
-  "../include/NRMKSDK/helper/hw/nrmk_ecat"
-  "../include/NRMKSDK/eigen"
-  "../include/NRMKSDK/Poco"
-  "../include/NRMKSDK/json"
-  "../include/NRMKSDK/modbus"
-  "../include/NRMKSDK/qpOASES"
-  "../include/NRMKSDK/cryptopp"
-  "../include/NRMKSDK/NRMKFramework"
-  "../include/NRMKSDK/ModernRobotics"
-  "../include/KDL"
-  "../include/CAN"
-  "../include/EcatSystem"
-  "../include/Control"
-  "../include/MR"
-  "../include"
-  "../include/EcatDataSocket"
-  "../"
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/sung/workspace/RTIndy7/include/EcatSystem/PDOConfig.c" "CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatSystem/PDOConfig.c.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatSystem/PDOConfig.c.o.d"
+  "/home/sung/workspace/RTIndy7/include/CAN/RoboLimb.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/CAN/RoboLimb.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/CAN/RoboLimb.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/Control/Controller.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/Control/Controller.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/Control/Controller.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/Control/Trajectory.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/Control/Trajectory.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/Control/Trajectory.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/EcatDataSocket/EcatDataSocket.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/EcatSystem/Ecat_Master.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatSystem/Ecat_Master.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/EcatSystem/Ecat_Master.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/KDL/LieDynamics.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/LieDynamics.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/LieDynamics.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/KDL/LieOperator.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/LieOperator.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/LieOperator.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/KDL/PoEKinematics.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/PoEKinematics.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/PoEKinematics.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/KDL/SerialRobot.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/SerialRobot.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/SerialRobot.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/include/MR/modern_robotics.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/MR/modern_robotics.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/MR/modern_robotics.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/src/JointControl.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/src/JointControl.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/src/JointControl.cpp.o.d"
+  "/home/sung/workspace/RTIndy7/src/RTRArmClient.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o.d"
   )
 
 # Targets to which this target links.

@@ -1,8 +1,8 @@
-# Install script for directory: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01
+# Install script for directory: /home/sung/workspace/RTIndy7
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/bin")
+  set(CMAKE_INSTALL_PREFIX "/home/sung/workspace/RTIndy7/bin")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -37,6 +37,11 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "true")
 endif()
 
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-objdump")
+endif()
+
 if(CMAKE_INSTALL_COMPONENT)
   set(CMAKE_INSTALL_MANIFEST "install_manifest_${CMAKE_INSTALL_COMPONENT}.txt")
 else()
@@ -45,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/sung/workspace/RTIndy7/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

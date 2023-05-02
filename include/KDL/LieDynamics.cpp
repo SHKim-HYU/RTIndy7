@@ -159,18 +159,18 @@ void Liedynamics::Prepare_Dynamics(double q[], double qdot[])
 	LA_mat = L_mat*A_mat;
 }
 
-Matrixf Liedynamics::M_Matrix(void)
+Matrixd Liedynamics::M_Matrix(void)
 {
     M_verify=LA_mat.transpose()*Iner_mat*LA_mat;
 	return M_verify;
 }
 
-Matrixf Liedynamics::C_Matrix(void)
+Matrixd Liedynamics::C_Matrix(void)
 {
 	C_verify = -LA_mat.transpose()*(Iner_mat*L_mat*ad_Aqd*Gamma_mat + ad_V.transpose() * Iner_mat)*LA_mat;
 	return C_verify;
 }
-Matrixf Liedynamics::C_out(void)
+Matrixd Liedynamics::C_out(void)
 {
     return C_verify;
 }
@@ -179,7 +179,7 @@ Jointd Liedynamics::G_Matrix(void)
 	G_verify = LA_mat.transpose()*Iner_mat*L_mat*Vdot_base(_RotZ);
 	return G_verify;
 }
-void Liedynamics::Mdot_Matrix( MatrixXf &_Mdot )
+void Liedynamics::Mdot_Matrix( Matrixd &_Mdot )
 {
     _Mdot.resize(ROBOT_DOF, ROBOT_DOF);
     _Mdot.setZero();

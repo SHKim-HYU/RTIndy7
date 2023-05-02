@@ -141,6 +141,7 @@ file(GLOB_RECURSE EcatSystem include/EcatSystem/Ecat_Master.cpp include/EcatSyst
 file(GLOB_RECURSE Control include/Control/*.h include/Control/*.cpp include/Control/*.c)
 file(GLOB_RECURSE EcatDataSocket include/EcatDataSocket/EcatDataSocket.cpp include/EcatDataSocket/EcatDataSocket.h include/EcatDataSocket/EcatControlSocket.h) 
 file(GLOB_RECURSE CAN include/CAN/*.h include/CAN/*.cpp include/CAN/*.c)
+file(GLOB_RECURSE JTControl src/JointControl.cpp src/JointControl.h )
 file(GLOB_RECURSE SOURCES "src/RTRArmClient.cpp")
 
 
@@ -149,7 +150,7 @@ file(GLOB_RECURSE SOURCES "src/RTRArmClient.cpp")
 # Executable                                                #
 #############################################################
 set(EXE ${PROJECT_NAME})
-add_executable(${EXE} ${SOURCES} ${PDO} ${MR} ${EcatDataSocket} ${KDL} ${Control} ${EcatSystem} ${CAN})
+add_executable(${EXE} ${SOURCES} ${PDO} ${MR} ${EcatDataSocket} ${KDL} ${Control} ${EcatSystem} ${CAN} ${JTControl})
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX  "")
 
 #############################################################

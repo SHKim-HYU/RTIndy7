@@ -18,6 +18,8 @@
 
 #define NUM_FT	 	1
 
+#include "JointControl.h"
+
 hyuEcat::Master ecatmaster;
 
 hyuEcat::EcatNRMK_Indy_Tool ecat_nrmk_indy_tool[NUM_FT];
@@ -27,9 +29,8 @@ hyuCtrl::Trajectory *traj5th_task;
 JointInfo info;
 robot *cManipulator;
 HYUControl::Controller *Control;
-ROBOT *_robotNom;
 
-
+JointControl *jtControl;
 
 
 ////////// LOGGING BUFFER ///////////////
@@ -495,7 +496,6 @@ void RTRArm_run(void *arg)
 			cManipulator->pKin->HTransMatrix(info.act.q);
 			cManipulator->pDyn->Prepare_Dynamics(info.act.q, info.act.q_dot);
 
-			_robotNom.idyn_gravity(LieGroup::Vector3D(0,0,-GRAV_ACC));
 
 			compute();
 			Robot_Limit();
@@ -613,7 +613,6 @@ void RTRArm_run(void *arg)
 			Control->TorqueOutput(TargetToq, 1000, MotorDir);
 
 
-			tauGrav = _robotNom->tau();
 
 			//write the motor data
 			for(int j=0; j<NUM_AXIS; ++j)
@@ -828,7 +827,6 @@ int main(int argc, char **argv)
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
 
-	_robotNom = new ROBOT(USERNAME, EMAIL, SERIAL);
 	cManipulator = new robot;
 	Control = new HYUControl::Controller(cManipulator,ROBOT_DOF);
 	traj5th_joint =  new hyuCtrl::Trajectory();
