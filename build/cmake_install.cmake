@@ -1,8 +1,8 @@
-# Install script for directory: /home/mtplnr/Indy_ws/HYU_SPA_ver2_01
+# Install script for directory: /home/mtplnr/Indy_ws/RTIndy7_01
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/bin")
+  set(CMAKE_INSTALL_PREFIX "/home/mtplnr/Indy_ws/RTIndy7_01/bin")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mtplnr/Indy_ws/HYU_SPA_ver2_01/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/mtplnr/Indy_ws/RTIndy7_01/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

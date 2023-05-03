@@ -101,7 +101,7 @@ void Controller::SetPIDGain(double _Kp, double _Kd, double _Ki, int _JointNum){
     return;
 }
 
-void Controller::PDController_gravity(double *q, double *q_dot, double *dq, double *dq_dot, double *toq, Jointf &g_mat)
+void Controller::PDController_gravity(double *q, double *q_dot, double *dq, double *dq_dot, double *toq, Jointd &g_mat)
 {
 	//Real
 	Kp << 118.7931,		119.5279,	59.764,		160.2564,		19.1946, 1;
@@ -280,7 +280,7 @@ void Controller::Gravity(double * q, double * q_dot, double * toq)
         //dqdot=dq_dot;
         //dqddot=dq_ddot;
 
-        Jointf u, dq_dd;
+        Jointd u, dq_dd;
 
         e = dq - q;
         e_dev= dqdot - qdot;
@@ -331,7 +331,7 @@ void Controller::Gravity(double * q, double * q_dot, double * toq)
         //dqddot=dq_ddot;
 
 
-        Jointf u, uff, dq_dd;
+        Jointd u, uff, dq_dd;
 
         e = dq - q;
         e_dev= dqdot - qdot;
@@ -437,7 +437,7 @@ void Controller::Gravity(double * q, double * q_dot, double * toq)
 
     }
 
-void Controller::PDController(Jointf &q, Jointf &q_dot, double *dq, double *dq_dot, double *toq)
+void Controller::PDController(Jointd &q, Jointd &q_dot, double *dq, double *dq_dot, double *toq)
 {
 	Kp << 118.7931,		119.5279,	59.764,		160.2564,		19.1946,	19.1946;
 	//Ki={860.8196,		866.1442,	4.1716,		427.5721,	135.3359};
@@ -539,12 +539,12 @@ void Controller::Impedance(double *_q_dot, Matrix<double, 6, 1> & _x,Matrix<doub
     }
 }*/
     /*
-void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointf &g_mat)
+void Controller::Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixd &m_mat, Jointd &g_mat)
 {
 	Damp << 0.5, 0.5, 0.5, 0.5, 0.5;
 	Stiff << 8.0,8.0,8.0,8.0,8.0;
 
-	Jointf u;
+	Jointd u;
 
 	for(int i=0; i<m_Jnum; ++i)
 	{
@@ -585,14 +585,14 @@ void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, double *dq,
 			return;
 	}
 }
-void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointf &g_mat, Matrixf &c_mat)
+void Controller::Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixd &m_mat, Jointd &g_mat, Matrixd &c_mat)
 {
 //	Damp << 3.0, 3.0, 1.4, 2.8, 1.4;
 //	Stiff << 40.0,40.0,20.0,40.0,20.0;
 	Damp << 1.0, 1.0, 1.0, 1.0, 1.0;
 	Stiff << 30.0,30.0,30.0,30.0,30.0;
 
-	Jointf u, dq_ddot_vec;
+	Jointd u, dq_ddot_vec;
 
 	for(int i=0; i<m_Jnum; ++i)
 	{
@@ -635,7 +635,7 @@ void Controller::Impedance(Jointf &q, Jointf &q_dot, Jointf &q_ddot, double *dq,
 }*/
 
 /*
-void Controller::Impedance(double *q, double *q_dot, double *q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrix6d &m_mat, Matrix6d &c_mat, Jointf &g_mat)
+void Controller::Impedance(double *q, double *q_dot, double *q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrix6d &m_mat, Matrix6d &c_mat, Jointd &g_mat)
 {
 	Kp << 118.7931,		119.5279,	59.764,		160.2564,		19.1946;
 	//Ki={860.8196,		866.1442,	4.1716,		427.5721,	135.3359};
@@ -649,7 +649,7 @@ void Controller::Impedance(double *q, double *q_dot, double *q_ddot, double *dq,
 
 		e.at(i) = dq[i] - q[i];
 		e_dev.at(i) = dq_dot[i] - q_dot[i];
-		//Jointf g = Liedynamics::G_Matrix();
+		//Jointd g = Liedynamics::G_Matrix();
 
 		if(i==0){
 			u0=q_ddot[i] + m_mat(i).inverse()*(Damp.at(i)*e_dev.at(i)+Stiff.at(i)*e.at(i));
@@ -731,7 +731,7 @@ void Controller::FrictionIdentify(double *_q, double *_qdot, double *dq_, double
     //Kd << 0.01375482 * Kp(0), 0.014499895*Kp(1), 0.0145007*Kp(2), 0.005999985*Kp(3), 0.01599971*Kp(4);
     G.resize(ROBOT_DOF,1);
     G=pManipulator->pDyn->G_Matrix();
-	Jointf u;
+	Jointd u;
 	double T, w, Mag;
 	int joint;
 
@@ -843,7 +843,7 @@ double Controller::FrictionCompensation(double _qdot, int _JointNum)
 	return res;
 }
 
-Jointf Controller::return_u0(void)
+Jointd Controller::return_u0(void)
 {
 	return u0;
 }

@@ -17,6 +17,7 @@
 
 #include "Ecat_Elmo.h"
 #include "Ecat_NRMK_Drive.h"
+#include "Ecat_NRMK_Indy_Tool.h"
 
 namespace hyuEcat {
 class Slave;
@@ -29,6 +30,7 @@ public:
 	void addSlave(uint16_t alias, uint16_t position, Slave* slave);
 	void addSlaveElmo(uint16_t alias, uint16_t position, EcatElmo* slave);
 	void addSlaveNRMK_Drive(uint16_t alias, uint16_t position, EcatNRMK_Drive* slave);
+	void addSlaveNRMK_Indy_Tool(uint16_t alias, uint16_t position, EcatNRMK_Indy_Tool* slave);
 	void activate();
 	void activateWithDC(uint8_t RefPosition, uint32_t SyncCycleNano);
 	void SyncEcatMaster(uint64_t RefTime);

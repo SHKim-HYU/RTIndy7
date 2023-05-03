@@ -105,9 +105,9 @@ Matrix6n6nd Liedynamics::ad_V_Link(double qdot[])
 //	Matrix<double,ROBOT_DOF,1> q_dot;
 
 	q_d = Map<Jointd>(qdot,ROBOT_DOF);
-
+	cout<<A_mat<<endl;
+	cout<<L_mat<<endl;	
 	V = L_mat*A_mat*q_d;
-
 	for (int i = 0; i < ROBOT_DOF; ++i)
 	{
 		res.block<6, 6>(6 * i, 6 * i) = LieOperator::adjointMatrix(V.segment(6 * i, 6));
@@ -159,18 +159,18 @@ void Liedynamics::Prepare_Dynamics(double q[], double qdot[])
 	LA_mat = L_mat*A_mat;
 }
 
-Matrixf Liedynamics::M_Matrix(void)
+Matrixd Liedynamics::M_Matrix(void)
 {
     M_verify=LA_mat.transpose()*Iner_mat*LA_mat;
 	return M_verify;
 }
 
-Matrixf Liedynamics::C_Matrix(void)
+Matrixd Liedynamics::C_Matrix(void)
 {
 	C_verify = -LA_mat.transpose()*(Iner_mat*L_mat*ad_Aqd*Gamma_mat + ad_V.transpose() * Iner_mat)*LA_mat;
 	return C_verify;
 }
-Matrixf Liedynamics::C_out(void)
+Matrixd Liedynamics::C_out(void)
 {
     return C_verify;
 }
@@ -179,7 +179,7 @@ Jointd Liedynamics::G_Matrix(void)
 	G_verify = LA_mat.transpose()*Iner_mat*L_mat*Vdot_base(_RotZ);
 	return G_verify;
 }
-void Liedynamics::Mdot_Matrix( MatrixXf &_Mdot )
+void Liedynamics::Mdot_Matrix( MatrixXd &_Mdot )
 {
     _Mdot.resize(ROBOT_DOF, ROBOT_DOF);
     _Mdot.setZero();

@@ -25,7 +25,7 @@ set(CMAKE_SYSTEM_PROCESSOR i686)
 #############################################################
 # Project name                                              #
 #############################################################
-project(HYU_SPA_ver2_01)
+project(RTIndy7_01)
 
 #############################################################
 # Project Setting                                           #
@@ -137,7 +137,7 @@ link_directories(
 file(GLOB_RECURSE MR include/MR/modern_robotics.h include/MR/modern_robotics.cpp)
 file(GLOB_RECURSE KDL  "include/KDL/*.h" "include/KDL/*.cpp")
 file(GLOB_RECURSE PDO include/EcatSystem/PDOConfig.c include/EcatSystem/PDOConfig.h)
-file(GLOB_RECURSE EcatSystem include/EcatSystem/Ecat_Master.cpp include/EcatSystem/Ecat_Master.h include/EcatSystem/Ecat_Slave.h include/EcatSystem/Ecat_Robotus.h include/EcatSystem/Ecat_NRMK_Drive.h)
+file(GLOB_RECURSE EcatSystem include/EcatSystem/*.cpp include/EcatSystem/*h)
 file(GLOB_RECURSE Control include/Control/*.h include/Control/*.cpp include/Control/*.c)
 file(GLOB_RECURSE EcatDataSocket include/EcatDataSocket/EcatDataSocket.cpp include/EcatDataSocket/EcatDataSocket.h include/EcatDataSocket/EcatControlSocket.h) 
 file(GLOB_RECURSE CAN include/CAN/*.h include/CAN/*.cpp include/CAN/*.c)

@@ -196,7 +196,7 @@ public:
         MODE_HOMING                 = 6,
         MODE_INTERPOLATED_POSITION  = 7,
         MODE_CYCLIC_SYNC_POSITION   = 8,
-        MODE_CYCLIC_SYNC_VELEOCITY  = 9,
+        MODE_CYCLIC_SYNC_VELOCITY   = 9,
         MODE_CYCLIC_SYNC_TORQUE     = 10
     };
 
