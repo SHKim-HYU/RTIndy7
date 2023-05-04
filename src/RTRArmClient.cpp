@@ -10,16 +10,13 @@
 #ifndef __XENO__
 #define __XENO__
 #endif
-
 #include "RTRArmClient.h"
+#include "MR_Indy7.h"
 
 #define USE_DC_MODE
-
-
 #define NUM_FT	 	1
 
 hyuEcat::Master ecatmaster;
-
 hyuEcat::EcatNRMK_Indy_Tool ecat_nrmk_indy_tool[NUM_FT];
 hyuEcat::EcatNRMK_Drive ecat_nrmk_drive[NUM_AXIS];
 hyuCtrl::Trajectory *traj5th_joint; //make an instance each of a joint
@@ -27,10 +24,8 @@ hyuCtrl::Trajectory *traj5th_task;
 JointInfo info;
 robot *cManipulator;
 HYUControl::Controller *Control;
+MR_Indy7 mr_indy7;
 // ROBOT *_robotNom;
-
-
-
 
 ////////// LOGGING BUFFER ///////////////
 #define MAX_BUFF_SIZE 		1000
@@ -255,22 +250,27 @@ void EncToRad()
 			{
 			case 0:
 			case 1:
-				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
+				ActualPos_Rad[i]=-(double)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
+				ActualVel_Rad[i]=-(double)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
 				break;
 			case 2:
 				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
 				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
 				break;
 			case 3:
+				ActualPos_Rad[i]=-(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+				ActualVel_Rad[i]=-(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+				break;
 			case 4:
+				ActualPos_Rad[i]=-(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+				ActualVel_Rad[i]=-(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+				break;
 			case 5:
 				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
 				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
 				break;
 			}
 			
-
 			//for Kinematics & Dynamics
 			info.act.q[i]=ActualPos_Rad[i];
 			info.act.q_dot[i]=ActualVel_Rad[i];
@@ -282,39 +282,6 @@ void EncToRad()
 	}
 	info.act.j_q=Map<VectorXd>(info.act.q,NUM_AXIS);
 	info.act.j_q_d=Map<VectorXd>(info.act.q_dot,NUM_AXIS);
-
-	// for(int i=0; i<NUM_AXIS; i++)
-	// {
-	// 	switch(i)
-	// 	{
-	// 	case 0:
-	// 	case 1:
-	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
-	// 		break;
-	// 	case 2:
-	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
-	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
-	// 		break;
-	// 	case 3:
-	// 	case 4:
-	// 	case 5:
-	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
-	// 		break;
-	// 	}
-		
-	// 	//for Kinematics & Dynamics
-	// 	info.act.q[i]=ActualPos_Rad[i];
-	// 	info.act.q_dot[i]=ActualVel_Rad[i];
-
-	// 	//buffer for calculate velocity
-	// 	ActualPos_Old[i]=ActualPos[i];
-	// 	ActualVel_Old[i]=ActualVel[i];
-
-	// }
-	// info.act.j_q=Map<VectorXd>(info.act.q,NUM_AXIS);
-	// info.act.j_q_d=Map<VectorXd>(info.act.q_dot,NUM_AXIS);
 }
 
 void Robot_Limit()
@@ -493,86 +460,11 @@ void RTRArm_run(void *arg)
 
 
 			EncToRad();
-			cManipulator->pKin->Unflag_isInfoupdate();
-			cManipulator->pKin->HTransMatrix(info.act.q);
-			// cManipulator->pDyn->Prepare_Dynamics(info.act.q, info.act.q_dot);
-
-
-			// _robotNom->idyn_gravity(LieGroup::Vector3D(0,0,-GRAV_ACC));
 
 			compute();
-			
 			Robot_Limit();
-			//cManipulator->pDyn->Prepare_Dynamics(traq, traq_d);
 
-			/////////////Trajectory for Joint Space//////////////
-            if(Motion==1 &&TrajFlag_j[0]==0)
-            {
-                TargetTrajPos_Rad[0]=1.5709; TargetTrajPos_Rad[1]=-0.7071; TargetTrajPos_Rad[2]= 0.7071; 
-                TargetTrajPos_Rad[3]=1.57; TargetTrajPos_Rad[4]=1.5709; TargetTrajPos_Rad[5]=1.5709;
-                Motion++;
-                traj_time = 5;
-                for(int i=0;i<NUM_AXIS;i++)
-                {
-                    TrajFlag_j[i]=1;
-                }
-            }
-            else if(Motion==2 &&TrajFlag_j[0]==0)
-            {
-                TargetTrajPos_Rad[0]=0.0; TargetTrajPos_Rad[1]=0.0; TargetTrajPos_Rad[2]= 0.0; 
-                TargetTrajPos_Rad[3]=0.0; TargetTrajPos_Rad[4]=0.0; TargetTrajPos_Rad[5]=0.0;
-                Motion++;
-                traj_time = 5;
-                for(int i=0;i<NUM_AXIS;i++)
-                {
-                    TrajFlag_j[i]=1;
-                }
-            }
-            else if(Motion==3 &&TrajFlag_j[0]==0)
-            {
-                TargetTrajPos_Rad[0]=-1.5709; TargetTrajPos_Rad[1]=0.7071; TargetTrajPos_Rad[2]= -0.7071; 
-                TargetTrajPos_Rad[3]=-1.57; TargetTrajPos_Rad[4]=-1.5709; TargetTrajPos_Rad[5]=-1.5709;
-                Motion++;
-                traj_time = 5;
-                for(int i=0;i<NUM_AXIS;i++)
-                {
-                    TrajFlag_j[i]=1;
-                }
-            }
-            else if(Motion==4 &&TrajFlag_j[0]==0)
-            {
-                TargetTrajPos_Rad[0]=0.0; TargetTrajPos_Rad[1]=0.0; TargetTrajPos_Rad[2]= 0.0; 
-                TargetTrajPos_Rad[3]=0.0; TargetTrajPos_Rad[4]=0.0; TargetTrajPos_Rad[5]=0.0;
-                Motion=1;
-                traj_time = 5;
-                for(int i=0;i<NUM_AXIS;i++)
-                {
-                    TrajFlag_j[i]=1;
-                }
-            }
 
-			for(int i=0;i<NUM_AXIS;i++)
-			{
-				if(TrajFlag_j[i]==2)
-				{
-					traj5th_joint->Polynomial5th(i, double_gt, TrajFlag_j+i, q_);
-					traq[i]=q_[0];
-					traq_d[i]=q_[1];
-					traq_dd[i]=q_[2];
-				}
-				else if(TrajFlag_j[i]==1)
-				{
-					traj5th_joint->SetPolynomial5th_j(i, &info.act, TargetTrajPos_Rad[i], double_gt, traj_time, q_);
-					traq[i]=q_[0];
-					traq_d[i]=q_[1];
-					traq_dd[i]=q_[2];
-					info.act.dq[i]=traq[i];
-					info.act.dq_dot[i]=traq_d[i];
-					info.act.dq_ddot[i]=traq_dd[i];
-
-					TrajFlag_j[i]=2;
-				}
-			}
 			traq[0] = 0.0;
 			traq[1] = 0.0;
 			traq[2] = 0.0;
@@ -585,62 +477,11 @@ void RTRArm_run(void *arg)
 			traq_d[3] = 0.0;
 			traq_d[4] = 0.0;
 			traq_d[5] = 0.0;
-			//Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
 
-			//Gravity Controller
-			Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
-			// static int print_count=0;
-			// if(++print_count>100){
-			//  cout<<TargetToq[0]<<",";
-			//  cout<<TargetToq[1]<<",";
-			//  cout<<TargetToq[2]<<",";
-			//  cout<<TargetToq[3]<<",";
-			//  cout<<TargetToq[4]<<",";
-			//  cout<<TargetToq[5]<<endl;;
-			//  print_count = 0;
-			// }
-
-
-			//PD+Gravity Controller
-/*traj*/		//Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
-/*hold*/		//Control->PDController_gravity(ActualPos_Rad, ActualVel_Rad, TargetTrajPos_Rad, TargetVel_Rad, TargetToq, gmat);
-
-			//Impedance Controller
-			//Control->Impedance(info.act.j_q, info.act.j_q_d, info.act.j_q_dd, TargetPos_Rad, TargetVel_Rad, TargetAcc_Rad, TargetToq, mmat, gmat);
-/*hold*/		//Control->Impedance(info.act.j_q, info.act.j_q_d, info.act.j_q_dd, TargetTrajPos_Rad, TargetVel_Rad, TargetAcc_Rad, TargetToq, mmat, gmat, cmat);
-/*traj*/		//Control->Impedance(info.act.j_q, info.act.j_q_d, info.act.j_q_dd, traq, traq_d, traq_dd, TargetToq, mmat, gmat, cmat);
-			//Control->Impedance(ActualPos_Rad, ActualVel_Rad, ActualAcc_Rad, TargetPos_Rad, TargetVel_Rad, TargetAcc_Rad, TargetToq, gmat, mmat, cmat);
-
-			//IDC
-/*hold*/		//Control->Inverse_Dynamics_Control(info.act.q, info.act.q_dot, TargetTrajPos_Rad, TargetVel_Rad, TargetAcc_Rad, TargetToq);
-/*traj*/		//Control->Inverse_Dynamics_Control(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq);
-
-			//CTC
-/*hold*/		//Control->ComputedTorque(info.act.q, info.act.q_dot, TargetTrajPos_Rad, TargetVel_Rad, TargetAcc_Rad, TargetToq);
-/*traj*/		//Control->ComputedTorque(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq);
-
-			//VSD
-			//Control->VSD(info.act.q, info.act.q_dot, xd, TargetToq);
-
-			//Friction Identification
-			//Control->FrictionIdentify(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq, double_gt);
-//			}
-
-			//else if(flag==1)
-				//Control->FrictionIdentify(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq, double_gt);
-				//Control->VSD(info.act.q, info.act.q_dot, xd, TargetToq);
-				//Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
-				//Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
-				//Control->ComputedTorque(info.act.q, info.act.q_dot, traq, traq_d, traq_dd, TargetToq);
-			//else if(flag==2)//For Robot Limit
-				//Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
-
-
-
+//			Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
+			//mr_indy7.Gravity(info.act.q,TargetToq);
+			mr_indy7.ComputedTorqueControl( info.act.q ,info.act.q_dot,traq,traq_d,TargetToq);
 			Control->TorqueOutput(TargetToq, 1000, MotorDir);
-
-
-			// tauGrav = _robotNom->tau();
 
 			//write the motor data
 			for(int j=0; j<NUM_AXIS; ++j)
@@ -650,11 +491,6 @@ void RTRArm_run(void *arg)
 				ecat_nrmk_drive[j].writeTorque(TargetTor[j]);
 
 			}
-			// ecat_nrmk_drive[0].writeTorque(TargetTor[0]);
-			// ecat_nrmk_drive[1].writeTorque(TargetTor[1]);
-			// ecat_nrmk_drive[2].writeTorque(TargetTor[2]);
-			// ecat_nrmk_drive[3].writeTorque(TargetTor[3]);
-			// ecat_nrmk_drive[5].writeTorque(TargetTor[5]);
 
 		}
 
@@ -862,7 +698,8 @@ int main(int argc, char **argv)
 	
 	traj5th_joint =  new hyuCtrl::Trajectory();
 	traj5th_task =  new hyuCtrl::Trajectory();
-
+	mr_indy7=MR_Indy7();
+	mr_indy7.MRSetup();
 	for(int j=0; j<NUM_AXIS; ++j)
 	{
 		ecatmaster.addSlaveNRMK_Drive(0, j+1, &ecat_nrmk_drive[j]);

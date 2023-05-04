@@ -92,8 +92,7 @@ Controller::Controller(robot *pManipulator, int JointNum)
 
 	init_time_vsd=0;
     t_flag=0;
-	mr_indy7=MR_Indy7();
-	mr_indy7.MRSetup();
+
 
 }
 
@@ -219,33 +218,7 @@ void Controller::PD_Gravity(double * q, double * q_dot, double *dq_, double *dq_
 
 void Controller::Gravity(double * q, double * q_dot, double * toq)
 {
-    mr_indy7.q(0) = q[0];
-    mr_indy7.q(1) = -q[1];
-    mr_indy7.q(2) = q[2];
-    mr_indy7.q(3) = -q[3];
-    mr_indy7.q(4) = -q[4];
-    mr_indy7.q(5) = q[5];
-    
-    mr_indy7.torq= mr::GravityForces(mr_indy7.q,mr_indy7.g,mr_indy7.Mlist, mr_indy7.Glist, mr_indy7.Slist) ;
-	//cout<<mr_indy7.torq.transpose()<<endl;
 
-   for(int i=0; i<6; ++i) {
-
-        if(i==0)
-            toq[i] = (mr_indy7.torq(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
-		else if(i==1)
-            toq[i] = -(mr_indy7.torq(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==2)
-            toq[i] = (mr_indy7.torq(i))*(double)(TORQUE_ADC_200)/(double)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==3)
-            toq[i] = -(mr_indy7.torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==4)
-            toq[i] = -(mr_indy7.torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==5)
-            toq[i] = (mr_indy7.torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else
-            return;
-    }
 }
 
     void Controller::Inverse_Dynamics_Control(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq)

@@ -19,11 +19,24 @@ public:
 	vector<MatrixXd> Glist;	
 	vector<MatrixXd> Mlist;	
     VectorXd q;
+    VectorXd dq;
+    VectorXd ddq;
+
+    VectorXd q_des;
+    VectorXd dq_des;
+    VectorXd ddq_des;
+    
+
     VectorXd g;
     VectorXd torq;
-    
+
+    MatrixXd Kp;
+    MatrixXd Kv;
+    MatrixXd Ki;
+
     void MRSetup();
     void Gravity( double *q, double *toq);
+    void ComputedTorqueControl( double *q,double *dq,double *qdes,double *dqdes,  double *toq);
 };
 
 #endif // MR_INDY7_H
