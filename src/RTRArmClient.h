@@ -41,10 +41,11 @@
 
 #include "EcatDataSocket/EcatDataSocket.h"
 #include "EcatDataSocket/EcatControlSocket.h"
-
+//#include "EcatSystem/SystemInterface_EtherCAT_Neuromeka_NRMK_IO_Module.h"
 #include "EcatSystem/Ecat_NRMK_Indy_Tool.h"
 #include "EcatSystem/Ecat_Master.h"
 #include "EcatSystem/Ecat_Elmo.h"
+
 #include "Control/Trajectory.h"
 #include "Control/Controller.h"
 #include "KDL/SerialRobot.h"
@@ -129,7 +130,5 @@ typedef union{
 // Cycle time in nanosecond
 unsigned int cycle_ns = 1000000; /* 1 ms */
 static int period = 1000000;
-
-
 
 #endif /* RTRARMCLIENT_H_ */

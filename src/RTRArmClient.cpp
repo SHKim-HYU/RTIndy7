@@ -18,8 +18,6 @@
 
 #define NUM_FT	 	1
 
-#include "JointControl.h"
-
 hyuEcat::Master ecatmaster;
 
 hyuEcat::EcatNRMK_Indy_Tool ecat_nrmk_indy_tool[NUM_FT];
@@ -29,8 +27,9 @@ hyuCtrl::Trajectory *traj5th_task;
 JointInfo info;
 robot *cManipulator;
 HYUControl::Controller *Control;
+// ROBOT *_robotNom;
 
-JointControl *jtControl;
+
 
 
 ////////// LOGGING BUFFER ///////////////
@@ -97,24 +96,24 @@ INT16	TorqueOffset[NUM_AXIS] = {0,};
 UINT32	DigitalOutput[NUM_AXIS] = {0,};
 
 
-INT8   iLed              = 0;       // write
-INT8   iGripper          = 0; 		// write
-INT32  FT_configparam    = 0; 		// write
-INT8   LED_mode          = 0; 		// write (max torque (max current) = 1000)
-INT8   LED_G             = 0; 		// write (use enum ModeOfOperation for convenience)
-INT8   LED_R             = 0;       // write (use enum ModeOfOperation for convenience)
-INT8   LED_B             = 0;       // write (use enum ModeOfOperation for convenience)
+UINT8   iLed              = 0;       // write
+UINT8   iGripper          = 0; 		// write
+UINT32  FT_configparam    = 0; 		// write
+UINT8   LED_mode          = 0; 		// write (max torque (max current) = 1000)
+UINT8   LED_G             = 0; 		// write (use enum ModeOfOperation for convenience)
+UINT8   LED_R             = 0;       // write (use enum ModeOfOperation for convenience)
+UINT8   LED_B             = 0;       // write (use enum ModeOfOperation for convenience)
 
-INT8   iStatus           = 0;       // read
-INT32  iButton           = 0; 		// read
-INT16  FT_Raw_Fx         = 0;       // read
-INT16  FT_Raw_Fy         = 0;       // read
-INT16  FT_Raw_Fz         = 0;       // read
-INT16  FT_Raw_Tx         = 0;       // read
-INT16  FT_Raw_Ty         = 0;       // read
-INT16  FT_Raw_Tz         = 0; 		// read
-INT8   FT_OverloadStatus = 0; 		// read
-INT8   FT_ErrorFlag      = 0;       // read
+UINT8   iStatus           = 0;       // read
+UINT32  iButton           = 0; 		// read
+INT16  	FT_Raw_Fx         = 0;       // read
+INT16  	FT_Raw_Fy         = 0;       // read
+INT16  	FT_Raw_Fz         = 0;       // read
+INT16  	FT_Raw_Tx         = 0;       // read
+INT16  	FT_Raw_Ty         = 0;       // read
+INT16  	FT_Raw_Tz         = 0; 		// read
+UINT8   FT_OverloadStatus = 0; 		// read
+UINT8   FT_ErrorFlag      = 0;       // read
 
 
 double DF=50.0;
@@ -395,6 +394,10 @@ int isDriveInit(void)
 		if(ecat_nrmk_drive[i].initialized())
 			elmo_count++;
 	}
+	// for(int i=0;i<NUM_AXIS;i++)
+	// {
+	// 	ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
+	// }
 	if(elmo_count == NUM_AXIS)
 		return 1;
 	else
@@ -421,10 +424,7 @@ int compute()
 	//adv=cManipulator->ad_V_Link(ActualVel_Rad);
 	//gmat=cManipulator->pDyn->G_Matrix();
 
-	for(int i=0;i<NUM_AXIS;i++)
-	{
-		ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
-	}
+	
 	return 0;
 }
 
@@ -465,6 +465,7 @@ void RTRArm_run(void *arg)
 		ecatmaster.RxUpdate();
 		if(system_ready)
 		{
+
 			//read the motor data
 			for(int k=0; k<NUM_AXIS; ++k){
 
@@ -494,10 +495,13 @@ void RTRArm_run(void *arg)
 			EncToRad();
 			cManipulator->pKin->Unflag_isInfoupdate();
 			cManipulator->pKin->HTransMatrix(info.act.q);
-			cManipulator->pDyn->Prepare_Dynamics(info.act.q, info.act.q_dot);
+			// cManipulator->pDyn->Prepare_Dynamics(info.act.q, info.act.q_dot);
 
+
+			// _robotNom->idyn_gravity(LieGroup::Vector3D(0,0,-GRAV_ACC));
 
 			compute();
+			
 			Robot_Limit();
 			//cManipulator->pDyn->Prepare_Dynamics(traq, traq_d);
 
@@ -506,7 +510,7 @@ void RTRArm_run(void *arg)
             {
                 TargetTrajPos_Rad[0]=1.5709; TargetTrajPos_Rad[1]=-0.7071; TargetTrajPos_Rad[2]= 0.7071; 
                 TargetTrajPos_Rad[3]=1.57; TargetTrajPos_Rad[4]=1.5709; TargetTrajPos_Rad[5]=1.5709;
-                Motion=1;
+                Motion++;
                 traj_time = 5;
                 for(int i=0;i<NUM_AXIS;i++)
                 {
@@ -569,10 +573,33 @@ void RTRArm_run(void *arg)
 					TrajFlag_j[i]=2;
 				}
 			}
-			Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
+			traq[0] = 0.0;
+			traq[1] = 0.0;
+			traq[2] = 0.0;
+			traq[3] = 0.0;
+			traq[4] = 0.0;
+			traq[5] = 0.0;
+			traq_d[0] = 0.0;
+			traq_d[1] = 0.0;
+			traq_d[2] = 0.0;
+			traq_d[3] = 0.0;
+			traq_d[4] = 0.0;
+			traq_d[5] = 0.0;
+			//Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
 
 			//Gravity Controller
-			//Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
+			Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
+			// static int print_count=0;
+			// if(++print_count>100){
+			//  cout<<TargetToq[0]<<",";
+			//  cout<<TargetToq[1]<<",";
+			//  cout<<TargetToq[2]<<",";
+			//  cout<<TargetToq[3]<<",";
+			//  cout<<TargetToq[4]<<",";
+			//  cout<<TargetToq[5]<<endl;;
+			//  print_count = 0;
+			// }
+
 
 			//PD+Gravity Controller
 /*traj*/		//Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
@@ -613,11 +640,13 @@ void RTRArm_run(void *arg)
 			Control->TorqueOutput(TargetToq, 1000, MotorDir);
 
 
+			// tauGrav = _robotNom->tau();
 
 			//write the motor data
 			for(int j=0; j<NUM_AXIS; ++j)
 			{
 				TargetTor[j] = round(TargetToq[j]);
+				//ecat_nrmk_drive[j].writeVelocity(TargetVel[j]);
 				ecat_nrmk_drive[j].writeTorque(TargetTor[j]);
 
 			}
@@ -656,7 +685,7 @@ void RTRArm_run(void *arg)
 		if ( isDriveInit() == 1 && (runcount > WAKEUP_TIME*(NSEC_PER_SEC/cycle_ns)))
 		{
 			system_ready=1;	//all drives have been done
-
+			
 			gt+= period;
 
 			if (worst_time<ethercat_time)
@@ -699,7 +728,7 @@ void print_run(void *arg)
 			step=(unsigned long)(now - previous) / 1000000;
 			itime+=step;
 			previous=now;
-			rt_printf("Time=%0.3fs \tFlag : %d\n", double_gt,flag);
+			rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
 			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
 
 			cout<<"Manipulability   : "<<cManipulator->pKin->Manipulability(l_jaco)<<endl;
@@ -710,23 +739,23 @@ void print_run(void *arg)
 				rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
 			    rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
 				rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				rt_printf("\t ActPos: %f, ActVel :%f \n",ActualPos_Rad[j], ActualVel_Rad[j]);
+				rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
 				//rt_printf("\t DesPos: %f, DesVel :%f, DesAcc :%f\n",TargetTrajPos_Rad[j],TargetVel_Rad[j],TargetAcc_Rad[j]);
-				rt_printf("\t DesPos: %f, DesVel :%f, DesAcc :%f\n",traq[j],traq_d[j],traq_dd[j]);
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",traq[j],traq_d[j],traq_dd[j]);
 
-				rt_printf("\t TarTor: %d, ",				TargetTor[j]);
+				rt_printf("\t TarTor: %f, ",				TargetToq[j]);
 				rt_printf("\t ActTor: %d,\n",			ActualTor[j]);
 				rt_printf("Traj : %d,\n",               TrajFlag_j[j]);
 			}
 			rt_printf("\n");
-			rt_printf("Fx : %f, Fy : %f, Fz: %f, Tx : %f, Ty: %f, Tz : %f\n",FT_Raw_Fx,FT_Raw_Fy,FT_Raw_Fz,FT_Raw_Tx,FT_Raw_Ty,FT_Raw_Tz);
-			rt_printf("xd : %f, yd : %f, zd: %f\n",xd[0],xd[1],xd[2]);
+			rt_printf("Fx : %lf, Fy : %lf, Fz: %lf, Tx : %lf, Ty: %lf, Tz : %lf\n",FT_Raw_Fx,FT_Raw_Fy,FT_Raw_Fz,FT_Raw_Tx,FT_Raw_Ty,FT_Raw_Tz);
+			rt_printf("xd : %lf, yd : %lf, zd: %lf\n",xd[0],xd[1],xd[2]);
 			//rt_printf("xddot : %f, yddot : %f, zddot: %f\n",vive_vel[0],vive_vel[1],vive_vel[2]);
 			//std::cout<<l_jaco<<endl;
-			rt_printf("x : %f, y : %f, z : %f\n",info.act.x(0), info.act.x(1), info.act.x(2));
+			rt_printf("x : %lf, y : %lf, z : %lf\n",info.act.x(0), info.act.x(1), info.act.x(2));
 
-			rt_printf("r : %f, p : %f, y : %f\n",EulerAng(0),EulerAng(1),EulerAng(2));
-			rt_printf("x : %f, y : %f, z : %f\n",vive_pos[0],vive_pos[1],vive_pos[2]);
+			rt_printf("r : %lf, p : %lf, y : %lf\n",EulerAng(0),EulerAng(1),EulerAng(2));
+			rt_printf("x : %lf, y : %lf, z : %lf\n",vive_pos[0],vive_pos[1],vive_pos[2]);
 			cout<<limit_flag<<endl;
 
 		}
@@ -827,8 +856,10 @@ int main(int argc, char **argv)
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
 
+	// _robotNom = new ROBOT(USERNAME, EMAIL, SERIAL);
 	cManipulator = new robot;
 	Control = new HYUControl::Controller(cManipulator,ROBOT_DOF);
+	
 	traj5th_joint =  new hyuCtrl::Trajectory();
 	traj5th_task =  new hyuCtrl::Trajectory();
 
@@ -838,7 +869,7 @@ int main(int argc, char **argv)
 		ecat_nrmk_drive[j].mode_of_operation_ = ecat_nrmk_drive[j].MODE_CYCLIC_SYNC_TORQUE;
 	}
 	for(int i=0; i<NUM_FT; ++i)
-		ecatmaster.addSlave(0, i+NUM_AXIS+1, &ecat_nrmk_indy_tool[i]);
+		ecatmaster.addSlaveNRMK_Indy_Tool(0, i+NUM_AXIS+1, &ecat_nrmk_indy_tool[i]);
 
 
 

@@ -19,7 +19,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/sung/workspace/RTIndy7/include/KDL/PoEKinematics.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/PoEKinematics.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/PoEKinematics.cpp.o.d"
   "/home/sung/workspace/RTIndy7/include/KDL/SerialRobot.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/SerialRobot.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/SerialRobot.cpp.o.d"
   "/home/sung/workspace/RTIndy7/include/MR/modern_robotics.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/include/MR/modern_robotics.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/include/MR/modern_robotics.cpp.o.d"
-  "/home/sung/workspace/RTIndy7/src/JointControl.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/src/JointControl.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/src/JointControl.cpp.o.d"
   "/home/sung/workspace/RTIndy7/src/RTRArmClient.cpp" "CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o" "gcc" "CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o.d"
   )
 

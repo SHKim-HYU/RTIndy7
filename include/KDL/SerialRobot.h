@@ -22,9 +22,9 @@
 using namespace Eigen;
 typedef Matrix<double, ROBOT_DOF, 1> Jointd;
 typedef Matrix<double, 6, 1> Taskd;
-typedef Matrix<double, 3, 1> Cartecianf;
-typedef Matrix<double, 3, 1> Orientationf;
-typedef Matrix<double, 3, 1> Axisf;
+typedef Matrix<double, 3, 1> Carteciand;
+typedef Matrix<double, 3, 1> Orientationd;
+typedef Matrix<double, 3, 1> Axisd;
 
 typedef struct MOTOR_INFO{
     double toq_const[ROBOT_DOF];

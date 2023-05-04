@@ -8,129 +8,15 @@
 #include <Eigen/Dense>
 #include <cmath>
 #include <vector>
-#include <iostream>
+
 # define M_PI           3.14159265358979323846  /* pi */
-using namespace std;
+
 namespace mr {
 
 	/* Function: Find if the value is negligible enough to consider 0
 	 * Inputs: value to be checked as a double
 	 * Returns: Boolean of true-ignore or false-can't ignore
 	 */
-       Eigen::MatrixXd w_p_to_Slist(const Eigen::Vector3d *w, const Eigen::Vector3d *p,int dof){
-		// Minchang Sung
-		Eigen::MatrixXd Slist = Eigen::MatrixXd::Zero(6,6);
-		for(int i = 0;i<dof;i++){
-			Eigen::Vector3d temp = -w[i].cross(p[i]);
-			Eigen::VectorXd S(6);
-			S <<w[i](0),w[i](1),w[i](2),temp(0),temp(1),temp(2);
-			Slist.col(i)=S;
-
-		}
-		return Slist;
-	}
-	std::vector<Eigen::MatrixXd> getGlist(const Eigen::Matrix3d *inertia, double *mass,int dof  ){
-		std::vector<Eigen::MatrixXd> Glist;
-		for(int i = 0;i<dof;i++){
-			Eigen::MatrixXd G(6,6);
-			G = Eigen::MatrixXd::Identity(6,6);
-			Eigen::Matrix3d inertia_;			
-			inertia_ = inertia[i];
-			for(int j=0;j<3;j++){
-				for(int k=0;k<3;k++){
-					G(j,k) = inertia_(j,k);
-				}
-
-			}
-			for(int j=3;j<6;j++){
-				G(j,j) = mass[i];
-			}
-			Glist.push_back(G);	
-		}
-		return Glist;
-	}
-	std::vector<Eigen::MatrixXd> getMlist(const Eigen::Vector3d *L,const Eigen::Vector3d *CoM,int dof) {
-		// Minchang Sung
-		std::vector<Eigen::MatrixXd> Mlist;
-		std::vector<Eigen::MatrixXd> Mlist_;
-		Mlist.push_back(Eigen::MatrixXd::Identity(4,4));
-		for(int i = 0;i<dof-1;i++){
-			Eigen::MatrixXd M_0x(4,4);
-			Eigen::Vector3d temp = CoM[i];
-			M_0x<< 1,0,0,temp(0),
-				0,1,0,temp(1),
-				0,0,1,temp(2),
-				0,0,0,1;
-			Mlist.push_back(M_0x);
-		}
-		Eigen::MatrixXd M_0x(4,4);
-		M_0x =Eigen::MatrixXd::Identity(4,4);
-		Eigen::Vector3d temp = L[5];
-		M_0x<< 1,0,0,L[5](0),
-			0,1,0,L[5](1),
-			0,0,1,L[5](2),
-			0,0,0,1;
-		Mlist.push_back(M_0x);
-		Mlist_.push_back(Mlist.at(0)); 
-		for(int i = 1;i<dof+1;i++){
-			Mlist_.push_back(TransInv(Mlist.at(i-1))*Mlist.at(i));
-		}
-
-		
-		return Mlist_;
-	}
-		std::vector<Eigen::MatrixXd> getCoM_Mlist(const Eigen::Vector3d *CoM,int dof) {
-		// Minchang Sung
-		std::vector<Eigen::MatrixXd> Mlist;
-		std::vector<Eigen::MatrixXd> Mlist_;
-		for(int i = 0;i<dof+1;i++){
-			Eigen::MatrixXd M_0x(4,4);
-			Eigen::Vector3d temp = CoM[i];
-			M_0x<< 1,0,0,temp(0),
-				0,1,0,temp(1),
-				0,0,1,temp(2),
-				0,0,0,1;
-			Mlist.push_back(M_0x);
-		}
-
-		
-		Mlist_.push_back(Mlist.at(0)); 
-		for(int i = 1;i<dof+1;i++){
-			Mlist_.push_back(TransInv(Mlist.at(i-1))*Mlist.at(i));
-		}
-
-		
-		return Mlist_;
-	}
-	std::vector<Eigen::MatrixXd> getHTranslist(const Eigen::Vector3d *p,const Eigen::MatrixXd& M, const Eigen::MatrixXd& Slist, const Eigen::VectorXd& thetaList) {
-		// Minchang Sung
-		std::vector<Eigen::MatrixXd> HTranslist;
-		std::vector<Eigen::MatrixXd> Mlist;	
-		int dof = thetaList.size();
-		Eigen::Vector3d L[dof];
-		L[dof-1] << M(0,3),M(1,3),M(2,3);
-
-		Mlist = getMlist(L,p,dof);
-		Eigen::MatrixXd T_1(4,4);
-		Eigen::MatrixXd T_2(4,4);
-		
-		std::vector<Eigen::MatrixXd> matS_List;
-		Eigen::MatrixXd matS_(4,4);
-		for(int i = 0;i<dof;i++){
-			matS_ = MatrixExp6(VecTose3(Slist.col(i)*thetaList(i)));
-			matS_List.push_back(matS_);
-			T_1 = Eigen::MatrixXd::Identity(4,4);
-			T_2 = Eigen::MatrixXd::Identity(4,4);			
-			for(int j=0;j<i;j++){
-				T_1 = T_1*matS_List.at(j);
-				T_2 = T_2*Mlist.at(j+1);
-			}
-			HTranslist.push_back(T_1*T_2);
-		}
-		HTranslist.push_back(FKinSpace(M,Slist,thetaList));
-		return	HTranslist;
-
-	}
 	bool NearZero(const double val) {
 		return (std::abs(val) < .000001);
 	}
@@ -704,7 +590,6 @@ namespace mr {
 		}
 		return M;
 	}
-
 
 	/*
   	 * Function: This function calls InverseDynamics with g = 0, Ftip = 0, and

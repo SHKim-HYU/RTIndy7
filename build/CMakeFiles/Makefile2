@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/sung/workspace/RTIndy7/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/HYU_SPA_ver2_01.dir/all
+all: CMakeFiles/RTIndy7_01.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/HYU_SPA_ver2_01.dir/clean
+clean: CMakeFiles/RTIndy7_01.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/HYU_SPA_ver2_01.dir
+# Target rules for target CMakeFiles/RTIndy7_01.dir
 
 # All Build rule for target.
-CMakeFiles/HYU_SPA_ver2_01.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/HYU_SPA_ver2_01.dir/build.make CMakeFiles/HYU_SPA_ver2_01.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/HYU_SPA_ver2_01.dir/build.make CMakeFiles/HYU_SPA_ver2_01.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14 "Built target HYU_SPA_ver2_01"
-.PHONY : CMakeFiles/HYU_SPA_ver2_01.dir/all
+CMakeFiles/RTIndy7_01.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14 "Built target RTIndy7_01"
+.PHONY : CMakeFiles/RTIndy7_01.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/HYU_SPA_ver2_01.dir/rule: cmake_check_build_system
+CMakeFiles/RTIndy7_01.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/sung/workspace/RTIndy7/build/CMakeFiles 14
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/HYU_SPA_ver2_01.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/RTIndy7_01.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/sung/workspace/RTIndy7/build/CMakeFiles 0
-.PHONY : CMakeFiles/HYU_SPA_ver2_01.dir/rule
+.PHONY : CMakeFiles/RTIndy7_01.dir/rule
 
 # Convenience name for target.
-HYU_SPA_ver2_01: CMakeFiles/HYU_SPA_ver2_01.dir/rule
-.PHONY : HYU_SPA_ver2_01
+RTIndy7_01: CMakeFiles/RTIndy7_01.dir/rule
+.PHONY : RTIndy7_01
 
 # clean rule for target.
-CMakeFiles/HYU_SPA_ver2_01.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/HYU_SPA_ver2_01.dir/build.make CMakeFiles/HYU_SPA_ver2_01.dir/clean
-.PHONY : CMakeFiles/HYU_SPA_ver2_01.dir/clean
+CMakeFiles/RTIndy7_01.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/clean
+.PHONY : CMakeFiles/RTIndy7_01.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -5,25 +5,13 @@
 
 namespace mr {
 
-    class Test
-{   
-public:
-    Test();
-    virtual ~Test();
-    
-};
-
 /*
  * Function: Find if the value is negligible enough to consider 0
  * Inputs: value to be checked as a double
  * Returns: Boolean of true-ignore or false-can't ignore
  */
-Eigen::MatrixXd w_p_to_Slist(const Eigen::Vector3d *w, const Eigen::Vector3d *p,int dof);
 bool NearZero(const double);
-std::vector<Eigen::MatrixXd> getGlist(const Eigen::Matrix3d *inertia, double *mass ,int dof );
-std::vector<Eigen::MatrixXd> getMlist(const Eigen::Vector3d *L,const Eigen::Vector3d *CoM,int dof);
-std::vector<Eigen::MatrixXd> getCoM_Mlist(const Eigen::Vector3d *CoM,int dof);
-std::vector<Eigen::MatrixXd> getHTranslist(const Eigen::Vector3d *p,const Eigen::MatrixXd& M, const Eigen::MatrixXd& Slist, const Eigen::VectorXd& thetaList);
+
 /*
  * Function: Calculate the 6x6 matrix [adV] of the given 6-vector
  * Input: Eigen::VectorXd (6x1)

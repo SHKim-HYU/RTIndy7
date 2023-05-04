@@ -348,6 +348,7 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o: \
  /home/sung/workspace/RTIndy7/include/EcatSystem/Ecat_Master.h \
  /home/sung/workspace/RTIndy7/include/EcatSystem/Ecat_Elmo.h \
  /home/sung/workspace/RTIndy7/include/EcatSystem/Ecat_NRMK_Drive.h \
+ /home/sung/workspace/RTIndy7/include/EcatSystem/Ecat_NRMK_Indy_Tool.h \
  /home/sung/workspace/RTIndy7/include/EcatSystem/Ecat_Elmo.h \
  /home/sung/workspace/RTIndy7/include/Control/Trajectory.h \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/eigen/Eigen/Dense \
@@ -530,6 +531,22 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o: \
  /home/sung/workspace/RTIndy7/include/Control/../KDL/PoEKinematics.h \
  /home/sung/workspace/RTIndy7/include/Control/../KDL/LieOperator.h \
  /home/sung/workspace/RTIndy7/include/Control/Controller.h \
+ /home/sung/workspace/RTIndy7/include/MR/MR_Indy7.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/json.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/autolink.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/config.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/version.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/value.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/forwards.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/reader.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/features.h \
+ /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/deque \
+ /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/bits/stl_deque.h \
+ /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/bits/deque.tcc \
+ /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/stack \
+ /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include/c++/6.5.0/bits/stl_stack.h \
+ /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/writer.h \
+ /home/sung/workspace/RTIndy7/include/MR/modern_robotics.h \
  /home/sung/workspace/RTIndy7/include/KDL/SerialRobot.h \
  /home/sung/workspace/RTIndy7/include/KDL/PoEKinematics.h \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/helper/hw/NRMKsercan_tp.h \
@@ -650,9 +667,6 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o: \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/core/LieGroup/HTransform.h \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/NRMKFramework/NRMKFramework/Components/AbstractComponent.h \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/value.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/forwards.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/config.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/json/json/version.h \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/NRMKFramework/NRMKFramework/Components/AbstractRobot6D.h \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/core/Indy/Indy6D.h \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/core/Indy/IndyBase.h \
@@ -677,15 +691,4 @@ CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o: \
  /home/sung/workspace/RTIndy7/include/NRMKSDK/core/Framework/../Interpolator/RotationInterpolator.h \
  /home/sung/workspace/RTIndy7/include/CAN/can_define.h \
  /home/sung/workspace/RTIndy7/include/CAN/RoboLimb.h \
- /home/sung/workspace/RTIndy7/include/CAN/can_define.h \
- /home/sung/workspace/RTIndy7/src/JointControl.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/core/Indy/DynamicAnalysis6D.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/NRMKFramework/NRMKFramework/Indy/SharedMemory/SharedData.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/NRMKFramework/NRMKFramework/Indy/SharedMemory/SharedMemoryAddress.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/NRMKFramework/NRMKFramework/Indy/SharedMemory/../../shmem/ShmemManager.hpp \
- /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include/sys/stat.h \
- /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include/semaphore.h \
- /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include/bits/semaphore.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/NRMKFramework/NRMKFramework/Indy/SharedMemory/../../shmem/shmem.h \
- /home/sung/workspace/RTIndy7/include/NRMKSDK/NRMKFramework/NRMKFramework/Indy/SharedMemory/../../shmem/config.h \
- /home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include/inttypes.h
+ /home/sung/workspace/RTIndy7/include/CAN/can_define.h

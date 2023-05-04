@@ -21,8 +21,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/HYU_SPA_ver2_01.dir/include/KDL/SerialRobot.cpp.o.d"
   "CMakeFiles/HYU_SPA_ver2_01.dir/include/MR/modern_robotics.cpp.o"
   "CMakeFiles/HYU_SPA_ver2_01.dir/include/MR/modern_robotics.cpp.o.d"
-  "CMakeFiles/HYU_SPA_ver2_01.dir/src/JointControl.cpp.o"
-  "CMakeFiles/HYU_SPA_ver2_01.dir/src/JointControl.cpp.o.d"
   "CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o"
   "CMakeFiles/HYU_SPA_ver2_01.dir/src/RTRArmClient.cpp.o.d"
   "HYU_SPA_ver2_01"

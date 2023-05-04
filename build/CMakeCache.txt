@@ -145,7 +145,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=HYU_SPA_ver2_01
+CMAKE_PROJECT_NAME:STATIC=RTIndy7_01
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-ranlib
@@ -217,6 +217,15 @@ HYU_SPA_ver2_01_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 HYU_SPA_ver2_01_SOURCE_DIR:STATIC=/home/sung/workspace/RTIndy7
+
+//Value Computed by CMake
+RTIndy7_01_BINARY_DIR:STATIC=/home/sung/workspace/RTIndy7/build
+
+//Value Computed by CMake
+RTIndy7_01_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+RTIndy7_01_SOURCE_DIR:STATIC=/home/sung/workspace/RTIndy7
 
 
 ########################

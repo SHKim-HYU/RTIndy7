@@ -13,6 +13,7 @@
 #include <Eigen/Dense>
 #include "../KDL/PropertyDefinition.h"
 #include "../KDL/SerialRobot.h"
+#include "MR_Indy7.h"
 
 #define KpBase 10
 #define KdBase 0.01
@@ -47,9 +48,9 @@ public:
 	void Gravity(double * q, double * q_dot, double * toq);
 	void PDController(Jointd &q, Jointd &q_dot, double *dq, double *dq_dot, double *toq);
 //  void Impedance(double *_q_dot, Matrix<double, 6, 1> & _x,Matrix<double, 6, 1> & _x_dot, Matrix<double, 6, 1> & _dx, Matrix<double, 6, 1> & _dx_dot, Matrix<double, 6, 1> & _dx_ddot, double * toq);
-//	void Impedance(double *q, double *q_dot, double *q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Matrixf &c_mat, Jointd &g_mat);
-	//void Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointd &g_mat);
-	//void Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixf &m_mat, Jointd &g_mat, Matrixf &c_mat);
+//	void Impedance(double *q, double *q_dot, double *q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixd &m_mat, Matrixd &c_mat, Jointd &g_mat);
+	//void Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixd &m_mat, Jointd &g_mat);
+	//void Impedance(Jointd &q, Jointd &q_dot, Jointd &q_ddot, double *dq, double *dq_dot, double *dq_ddot, double *toq, Matrixd &m_mat, Jointd &g_mat, Matrixd &c_mat);
 	void Inverse_Dynamics_Control(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq);
     void ComputedTorque(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq);
     void VSD(double *_q, double *_qdot, Vector3d &xd, double *toq, double gt, int flag);
@@ -66,6 +67,13 @@ public:
 
 	int int_flag=0;
     robot *pManipulator;
+
+	MatrixXd Slist;
+	MatrixXd Blist;
+	vector<MatrixXd> Mlist;
+	vector<MatrixXd> Glist;
+	MatrixXd MR_M;	
+	MR_Indy7 mr_indy7;
 private:
 	Matrix<double,ROBOT_DOF,1> Kp;
 	Matrix<double,ROBOT_DOF,1> Kd;
@@ -89,6 +97,7 @@ private:
     VectorXd KiTask;
     MatrixXd G,Gx,M,C;
     MatrixXd _a_jaco, _pinv_jaco,_jaco_dot;
+	
 
     LinJaco l_Jaco, l_Jaco_dot;
     PinvLJaco DPI_l_jaco;
@@ -106,11 +115,12 @@ private:
 	int t_flag;
 	double init_time, init_time_vsd;
 
-
     Matrix<double,ROBOT_DOF,1> f_a, f_b, f_c, f_d, f_e, f_f;
 
 
     double m_KpBase, m_KdBase, m_KiBase;
+
+
 
 };
 

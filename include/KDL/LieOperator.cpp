@@ -17,7 +17,7 @@ LieOperator::~LieOperator() {
 
 }
 
-bool LieOperator::NearZero(double near){ 
+bool LieOperator::NearZero(double near){
 		if (near < 0.000001)
 			return true;
 		else

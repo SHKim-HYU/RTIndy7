@@ -40,33 +40,33 @@ public:
 		//RxPDO
 		case 0:
             
-            EC_WRITE_S8(domain_address, iLed_);
+            EC_WRITE_U8(domain_address, iLed_);
             break;
 		case 1:
-            EC_WRITE_S8(domain_address, iGripper_);
+            EC_WRITE_U8(domain_address, iGripper_);
             break;
 		case 2:
-            EC_WRITE_S32(domain_address, FT_configparam_);
+            EC_WRITE_U32(domain_address, FT_configparam_);
             break;
 		case 3:
-            EC_WRITE_S8(domain_address, LED_mode_);
+            EC_WRITE_U8(domain_address, LED_mode_);
             break;
 		case 4:
-            EC_WRITE_S8(domain_address, LED_G_);
+            EC_WRITE_U8(domain_address, LED_G_);
             break;
 		case 5:
-            EC_WRITE_S8(domain_address, LED_R_);
+            EC_WRITE_U8(domain_address, LED_R_);
             break;
 		case 6:
-            EC_WRITE_S8(domain_address, LED_B_);
+            EC_WRITE_U8(domain_address, LED_B_);
             break;
 
         //TxPDO    
 		case 7:
-			iStatus_ = EC_READ_S8(domain_address);
+			iStatus_ = EC_READ_U8(domain_address);
             break;
 		case 8:
-            iButton_ = EC_READ_S8(domain_address);
+            iButton_ = EC_READ_U8(domain_address);
             break;			
 		case 9:
             FT_Raw_Fx_= EC_READ_S16(domain_address);
@@ -87,10 +87,10 @@ public:
             FT_Raw_Tz_= EC_READ_S16(domain_address);
             break;
         case 15:
-            FT_OverloadStatus_= EC_READ_S8(domain_address);
+            FT_OverloadStatus_= EC_READ_U8(domain_address);
             break;
         case 16:
-            FT_ErrorFlag_= EC_READ_S8(domain_address);
+            FT_ErrorFlag_= EC_READ_U8(domain_address);
             break;
 		default:
 			std::cout << "WARNING. NRMK_Indy_Tool pdo index out of range." << std::endl;
@@ -124,24 +124,24 @@ public:
     }
 
 
-    int8_t   iLed_              = 0;        // write
-    int8_t   iGripper_          = 0; 		// write
-    int32_t  FT_configparam_    = 0; 		// write
-    int8_t   LED_mode_          = 0; 		// write (max torque (max current) = 1000)
-    int8_t   LED_G_             = 0; 		// write (use enum ModeOfOperation for convenience)
-    int8_t   LED_R_             = 0;        // write (use enum ModeOfOperation for convenience)
-    int8_t   LED_B_             = 0;        // write (use enum ModeOfOperation for convenience)
+    uint8_t   iLed_              = 0;        // write
+    uint8_t   iGripper_          = 0; 		// write
+    uint32_t  FT_configparam_    = 0; 		// write
+    uint8_t   LED_mode_          = 0; 		// write 
+    uint8_t   LED_G_             = 0; 		// write 
+    uint8_t   LED_R_             = 0;        // write
+    uint8_t   LED_B_             = 0;        // write
 
-    int8_t   iStatus_           = 0;        // read
-    int32_t  iButton_           = 0; 		// read
+    uint8_t   iStatus_           = 0;        // read
+    uint32_t  iButton_           = 0; 		// read
     int16_t  FT_Raw_Fx_         = 0;        // read
     int16_t  FT_Raw_Fy_         = 0;        // read
     int16_t  FT_Raw_Fz_         = 0;        // read
     int16_t  FT_Raw_Tx_         = 0;        // read
     int16_t  FT_Raw_Ty_         = 0;        // read
     int16_t  FT_Raw_Tz_         = 0; 		// read
-    int8_t   FT_OverloadStatus_ = 0; 		// read
-    int8_t   FT_ErrorFlag_      = 0;        // read
+    uint8_t   FT_OverloadStatus_ = 0; 		// read
+    uint8_t   FT_ErrorFlag_      = 0;        // read
     
     bool     digital_outputs_[6]        = {false}; // write
     bool     digital_inputs_[6]         = {false}; // read

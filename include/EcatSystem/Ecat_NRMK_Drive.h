@@ -37,6 +37,10 @@ public:
     {
  	   target_torque_ = torque;
     }
+    void writeVelocity(int32_t velocity)
+    {
+        target_velocity_ = velocity;
+    }
 
 
 
@@ -153,7 +157,7 @@ public:
         MODE_PROFILED_TORQUE        = 4,
         MODE_INTERPOLATED_POSITION  = 7,
         MODE_CYCLIC_SYNC_POSITION   = 8,
-        MODE_CYCLIC_SYNC_VELEOCITY  = 9,
+        MODE_CYCLIC_SYNC_VELOCITY   = 9,
         MODE_CYCLIC_SYNC_TORQUE     = 10
     };
 
@@ -250,6 +254,8 @@ private:
             return control_word;
         case STATE_FAULT:                   // -> STATE_SWITCH_ON_DISABLED
             return ((control_word & 0b11111111) | 0b10000000);
+        default:
+            break;
         }
         return control_word;
     }

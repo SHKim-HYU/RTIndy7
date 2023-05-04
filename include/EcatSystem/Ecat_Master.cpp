@@ -236,6 +236,52 @@ void Master::addSlaveNRMK_Drive(uint16_t alias, uint16_t position, EcatNRMK_Driv
     }
 }
 
+void Master::addSlaveNRMK_Indy_Tool(uint16_t alias, uint16_t position, EcatNRMK_Indy_Tool* slave)
+{
+    slave->setSlaveAlias(alias);
+    slave->setSlavePosition(position);
+
+    SlaveInfo slave_info;  //instance of struct
+    slave_info.slave = slave;
+    slave_info.config = ecrt_master_slave_config(p_master, alias, position, slave->m_vendor_id, slave->m_product_id);
+
+    if(slave_info.config == NULL){
+        printWarning("Err: Add slave, Failed to get slave configuration.");
+        return;
+    }
+    m_slave_info.push_back(slave_info);
+
+    
+    size_t num_syncs = slave->syncSize();
+    const ec_sync_info_t* syncs = slave->syncs();
+    if(num_syncs > 0){
+        int pdos_status = ecrt_slave_config_pdos(slave_info.config, num_syncs, syncs);
+        if(pdos_status){
+            printWarning("Err: Add slave Failed to configure PDOs");
+
+            return;
+        }
+    }
+    else{
+        printWarning("Add slave. Sync size is zero for "
+                + static_cast<std::ostringstream*>( &(std::ostringstream() << alias) )->str()
+                + ":"
+                + static_cast<std::ostringstream*>( &(std::ostringstream() << position) )->str());
+    }
+
+    Slave::DomainMap domain_map;
+    slave->domains(domain_map);
+    for(auto& iter : domain_map){
+        unsigned int domain_index = iter.first;
+        DomainInfo* domain_info = m_domain_info[domain_index];
+        if(domain_info == NULL){
+            domain_info = new DomainInfo(p_master);
+            m_domain_info[domain_index] = domain_info;
+        }
+        registerPDOInDomain(alias, position, iter.second, domain_info, slave);
+    }
+}
+
 void Master::registerPDOInDomain(uint16_t alias, uint16_t position, std::vector<unsigned int>& channel_indices, DomainInfo* domain_info, Slave* slave)
 {
     // expand the size of the domain
