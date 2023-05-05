@@ -1,5 +1,5 @@
 #include "MR_Indy7.h"
-#include "../KDL/PropertyDefinition.h"
+#include "../../src/PropertyDefinition.h"
 
 bool ReadFromFile(const char* filename, char* buffer, int len){
   FILE* r = fopen(filename,"rb");
@@ -87,95 +87,31 @@ MR_Indy7::MR_Indy7() {
 
 }
 
-void MR_Indy7::Gravity( double *q, double *toq){
-    this->q(0) = q[0];
-    this->q(1) = q[1];
-    this->q(2) = q[2];
-    this->q(3) = q[3];
-    this->q(4) = q[4];
-    this->q(5) = q[5];
-    this->torq= mr::GravityForces(this->q,this->g,this->Mlist, this->Glist, this->Slist) ;
-   for(int i=0; i<6; ++i) {
-        if(i==0)
-            toq[i] = (torq(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
-		else if(i==1)
-            toq[i] = -(torq(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==2)
-            toq[i] = (torq(i))*(double)(TORQUE_ADC_200)/(double)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==3)
-            toq[i] = -(torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==4)
-            toq[i] = -(torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==5)
-            toq[i] = (torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else
-            return;
-    }    
+JVec MR_Indy7::Gravity( JVec q){
+         return mr::GravityForces(q,this->g,this->Mlist, this->Glist, this->Slist) ; 
 }
-void MR_Indy7::EcatTorqueSaturation(double *p_toq , int maxtoq, int *p_dir)
-{
-    double toq_tmp=0;
-	for(int i=0; i<JOINTNUM; ++i)
-	{
-		toq_tmp = p_toq[i];
-		if(toq_tmp <= -maxtoq)
-		{
-			p_toq[i] = p_dir[i]*-maxtoq;
-		}
-		else if(toq_tmp >= maxtoq)
-		{
-			p_toq[i] = p_dir[i]*maxtoq;
-		}
-		else
-		{
-			p_toq[i] = p_dir[i]*toq_tmp;
-		}
-	}
-	return;
+void MR_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES){
+    for(int i =0;i<JOINTNUM;i++){
+        if(abs(torque(i))> MAX_TORQUES(i)){
+            if(torque(i)<0) torque(i) = MAX_TORQUES(i);
+            else torque(i) = -MAX_TORQUES(i);
+        }
+    }
+}
+JVec MR_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des){
+    JVec e = q_des-q;
+    JVec edot = dq_des-dq;
+    MassMat Mmat = mr::MassMatrix(q,this->Mlist, this->Glist, this->Slist);
+    JVec H=InverseDynamics(q, dq, JVec::Zero(),this->g,Vector6d::Zero(), this->Mlist,this->Glist, this->Slist);
+    JVec ddq_ref = Kv*edot+Kp*e;
+    JVec torq = Mmat*ddq_ref+H;
+    return torq;
 }
 
-void MR_Indy7::ComputedTorqueControl( double *q,double *dq,double *qdes,double *dqdes,  double *toq){
-    
-    this->q = Map<VectorXd>(q,6);
-    this->dq = Map<VectorXd>(dq,6);
-    this->q_des = Map<VectorXd>(qdes,6);
-    this->dq_des = Map<VectorXd>(dqdes,6);
-
-    //VectorXd e = this->q_des-this->q;
-    //VectorXd edot = this->dq_des-this->dq;
-    
-    //MatrixXd Mmat = mr::MassMatrix(this->q,this->Mlist, this->Glist, this->Slist);
-    //VectorXd C = mr::VelQuadraticForces(this->q, this->dq,this->Mlist, this->Glist, this->Slist);
-    VectorXd gravTorq= mr::GravityForces(this->q,this->g,this->Mlist, this->Glist, this->Slist) ;
-    //VectorXd ddq_ref = Kv*edot+Kp*e;
-    //torq = Mmat*ddq_ref+C*this->dq + gravTorq;
-    torq = gravTorq;
-   for(int i=0; i<6; ++i) {
-        if(i==0)
-            toq[i] = (torq(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
-		else if(i==1)
-            toq[i] = -(torq(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==2)
-            toq[i] = (torq(i))*(double)(TORQUE_ADC_200)/(double)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==3)
-            toq[i] = -(torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==4)
-            toq[i] = -(torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==5)
-            toq[i] = (torq(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else
-            return;
-    }    
-}
 void MR_Indy7::MRSetup(){
-	//cout<<"START MRSetup"<<endl;
 	Json::Value rootr;
 	bool ret = ReadMRData("MR_info.json",rootr);
-
-	//cout<<"MR Setup 2"<<endl;
 	for(int i =0;i<6 ; i++){
-        std::cout<<"asdfafsd"<<std::endl;
-
 		for(int j =0;j<6;j++){
 			this->Slist(i,j) = rootr["Slist"][i][j].asDouble();
 			this->Blist(i,j) = rootr["Blist"][i][j].asDouble();
@@ -207,15 +143,15 @@ void MR_Indy7::MRSetup(){
 		}
         cout<<"=================G"<<i<<"============================"<<endl;
         cout<<G<<endl;
-
 		char str[50];		
 		this->Glist.push_back(G);	}	
-
 	for (int i = 0;i<4;i++){
 		for (int j = 0;j<4;j++){
 			this->M(i,j) = rootr["M"][i][j].asDouble();
 		}
 	}	
+    cout<<"=================M================="<<endl;
+    cout<<this->M<<endl;    
 	cout<<"END MRSetup"<<endl;
 
 }

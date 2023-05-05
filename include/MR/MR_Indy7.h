@@ -35,9 +35,9 @@ public:
     mr::Matrix6d Ki;
 
     void MRSetup();
-    void Gravity( double *q, double *toq);
-    void ComputedTorqueControl( double *q,double *dq,double *qdes,double *dqdes,  double *toq);
-    void EcatTorqueSaturation(double *p_toq , int maxtoq, int *p_dir);
+    JVec Gravity( JVec q);
+    JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
+    void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
 };
 
 #endif // MR_INDY7_H

@@ -47,12 +47,7 @@
 #include "EcatSystem/Ecat_Master.h"
 #include "EcatSystem/Ecat_Elmo.h"
 
-// #include "Control/Trajectory.h"
-// #include "Control/Controller.h"
-// #include "KDL/SerialRobot.h"
-// #include "KDL/PoEKinematics.h"
-
-#include "KDL/PropertyDefinition.h"
+#include "PropertyDefinition.h"
 #include "NRMKsercan_tp.h"
 #include "NRMKhw_tp.h"
 
@@ -79,7 +74,7 @@ using namespace std;
 #include "CAN/can_define.h"
 #include "CAN/RoboLimb.h"
 
-
+#define NUM_FT	 	1
 #define NUM_AXIS	6	//Modify this number to indicate the actual number of motor on the network
 #ifndef PI
 #define PI	(3.14159265359)
@@ -95,6 +90,9 @@ typedef int16_t INT16;
 typedef uint16_t UINT16;
 typedef uint8_t UINT8;
 typedef int8_t INT8;
+
+unsigned long fault_count=0;
+long ethercat_time=0, worst_time=0;
 
 typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
 typedef Eigen::Matrix<double, 4, 4> SE3;
@@ -114,21 +112,83 @@ typedef Eigen::Matrix<double, 3, 3> Matrix3d;
 typedef Eigen::Matrix<double, 6, JOINTNUM> Matrix6xn;
 typedef Eigen::Matrix<double, 6, JOINTNUM+1> Matrix6xn_1;
 typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MassMat;
+////////// LOGGING BUFFER ///////////////
+#define MAX_BUFF_SIZE 		1000
 
+unsigned int frontIdx = 0, rearIdx = 0;
+/////////////////////////////////////////
+
+// NRMKDataSocket for plotting axes data in Data Scope
+EcatDataSocket datasocket;
+
+// When all slaves or drives reach OP mode,
+// system_ready becomes 1.
+int system_ready = 0;
+
+// Global time (beginning from zero)
+double gt=0;
+double double_gt=0;
+
+// EtherCAT Data (in pulse)
+INT32 	ZeroPos[JOINTNUM] = {0,};
+UINT16	StatusWord[JOINTNUM] = {0,};
+INT32 	ECAT_ActualPos[JOINTNUM] = {0,};
+INT32	ECAT_ActualPos_Old[JOINTNUM] = {0,};
+INT32 	ECAT_ActualVel[JOINTNUM] = {0,};
+INT32	ECAT_ActualAcc[JOINTNUM] = {0,};
+INT32	ECAT_ActualVel_Old[JOINTNUM] = {0,};
+INT32	ECAT_ActualAcc_Old[JOINTNUM] = {0,};
+INT16 	ECAT_ActualTor[JOINTNUM] = {0,};
+UINT32	DataIn[JOINTNUM] = {0,};
+INT8	ModeOfOperationDisplay[JOINTNUM] = {0,};
+INT8	DeviceState[JOINTNUM] = {0,};
+UINT32	DigitalInput[JOINTNUM] = {0,};
+INT32   HomePos[JOINTNUM]={0, 0, 0, -6553600, 0, 0};
+UINT32 	DataOut[JOINTNUM] = {0,};
+INT8 	ModeOfOperation[JOINTNUM] = {0,};
+UINT16	ControlWord[JOINTNUM] = {0,};
+INT32	VelocityOffset[JOINTNUM] = {0,};
+INT16	TorqueOffset[JOINTNUM] = {0,};
+UINT32	DigitalOutput[JOINTNUM] = {0,};
+
+UINT8   iLed              = 0;       // write
+UINT8   iGripper          = 0; 		// write
+UINT32  FT_configparam    = 0; 		// write
+UINT8   LED_mode          = 0; 		// write (max torque (max current) = 1000)
+UINT8   LED_G             = 0; 		// write (use enum ModeOfOperation for convenience)
+UINT8   LED_R             = 0;       // write (use enum ModeOfOperation for convenience)
+UINT8   LED_B             = 0;       // write (use enum ModeOfOperation for convenience)
+
+UINT8   iStatus           = 0;       // read
+UINT32  iButton           = 0; 		// read
+INT16  	FT_Raw_Fx         = 0;       // read
+INT16  	FT_Raw_Fy         = 0;       // read
+INT16  	FT_Raw_Fz         = 0;       // read
+INT16  	FT_Raw_Tx         = 0;       // read
+INT16  	FT_Raw_Ty         = 0;       // read
+INT16  	FT_Raw_Tz         = 0; 		// read
+UINT8   FT_OverloadStatus = 0; 		// read
+UINT8   FT_ErrorFlag      = 0;       // read
+
+double Tx[NUM_FT]={0.0};
+double Ty[NUM_FT]={0.0};
+double Tz[NUM_FT]={0.0};
+double Fx[NUM_FT]={0.0};
+double Fy[NUM_FT]={0.0};
+double Fz[NUM_FT]={0.0};
+
+struct LOGGING_PACK
+{
+	double Time;
+	INT32 	ActualPos[JOINTNUM];
+	INT32 	ActualVel[JOINTNUM];
+};
 
 typedef struct STATE{
-    double q[ROBOT_DOF];
-    double q_dot[ROBOT_DOF];
-    double q_ddot[ROBOT_DOF];
-    double torque[ROBOT_DOF];
-    double dq[ROBOT_DOF];
-    double dq_dot[ROBOT_DOF];
-    double dq_ddot[ROBOT_DOF];
-
-	JVec j_q;
-	JVec j_q_d;
-	JVec j_q_dd;
-	JVec j_torque;
+	JVec q;
+	JVec dq;
+	JVec ddq;
+	JVec torque;
 
 	Vector6d x;                           //Task space
 	Vector6d x_dot;
@@ -136,15 +196,11 @@ typedef struct STATE{
     double s_time;
 }state;
 typedef struct JOINT_INFO{
-
 	int Position;
-
 	int aq_inc[NUM_AXIS];
 	int atoq_per[NUM_AXIS];
 	short dtor_per[NUM_AXIS];
-
 	int statusword[NUM_AXIS];
-
 	double* TargetTrajPos_Rad[NUM_AXIS];
 	double TargetTrajTime[NUM_AXIS];
 
@@ -165,7 +221,7 @@ typedef union{
 unsigned int cycle_ns = (unsigned int)(1000.0/CONTROL_FREQ*1000000.0); /* 1 ms */
 double dt = 1.0/CONTROL_FREQ; /* 1 ms */
 double wc = 105.0; /* CUT OFF FREQUENCY*/
-double MAX_TORQUE[JOINTNUM]={431.97,431.97,197.23,79.79,79.79,79.79};
+JVec MAX_TORQUES;
 static int period = 1000000;
 
 #endif /* RTRARMCLIENT_H_ */
