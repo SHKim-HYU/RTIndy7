@@ -31,6 +31,7 @@
 #include "iostream"
 #include <fstream>
 #include <sstream>
+#include <Eigen/Dense>
 
 //-xenomai-///////////////////////////////////////////////////////////////
 #include <native/task.h>
@@ -46,16 +47,15 @@
 #include "EcatSystem/Ecat_Master.h"
 #include "EcatSystem/Ecat_Elmo.h"
 
-#include "Control/Trajectory.h"
-#include "Control/Controller.h"
-#include "KDL/SerialRobot.h"
-#include "KDL/PoEKinematics.h"
+// #include "Control/Trajectory.h"
+// #include "Control/Controller.h"
+// #include "KDL/SerialRobot.h"
+// #include "KDL/PoEKinematics.h"
+
 #include "KDL/PropertyDefinition.h"
 #include "NRMKsercan_tp.h"
 #include "NRMKhw_tp.h"
 
-#include <NRMKFramework/Components/AbstractJointController.h>
-#include <NRMKFramework/Components/AbstractRobot6D.h>
 
 // TCP-Server Communication
 //#include "TCP/RTTCP.h"
@@ -96,11 +96,45 @@ typedef uint16_t UINT16;
 typedef uint8_t UINT8;
 typedef int8_t INT8;
 
-typedef AbstractJointController<AbstractRobot6D> AbstractController;
-typedef AbstractRobot6D ROBOT;
-typedef typename ROBOT::JointVec JointVec;
-typedef typename ROBOT::JointMat JointMat;
+typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
+typedef Eigen::Matrix<double, 4, 4> SE3;
+typedef Eigen::Matrix<double, 3, 3> SO3;
+typedef Eigen::Matrix<double, 4, 4> se3;
+typedef Eigen::Matrix<double, 3, 3> so3;
+typedef Eigen::Matrix<double, 6, JOINTNUM> ScrewList;
+typedef Eigen::Matrix<double, 6, JOINTNUM> Jacobian;
+typedef Eigen::Matrix<double, JOINTNUM,6 > pinvJacobian;
+typedef Eigen::Matrix<double, 6*JOINTNUM, JOINTNUM> DerivativeJacobianVec;
+typedef Eigen::Matrix<double, 6*JOINTNUM, 1> vecJVec;
+typedef Eigen::Matrix<double, 6, 1> Vector6d;   
+typedef Eigen::Matrix<double, 3, 1> Vector3d;   
+typedef Eigen::Matrix<double, 4, 1> Vector4d;  
+typedef Eigen::Matrix<double, 6, 6> Matrix6d;  
+typedef Eigen::Matrix<double, 3, 3> Matrix3d;  
+typedef Eigen::Matrix<double, 6, JOINTNUM> Matrix6xn;
+typedef Eigen::Matrix<double, 6, JOINTNUM+1> Matrix6xn_1;
+typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MassMat;
 
+
+typedef struct STATE{
+    double q[ROBOT_DOF];
+    double q_dot[ROBOT_DOF];
+    double q_ddot[ROBOT_DOF];
+    double torque[ROBOT_DOF];
+    double dq[ROBOT_DOF];
+    double dq_dot[ROBOT_DOF];
+    double dq_ddot[ROBOT_DOF];
+
+	JVec j_q;
+	JVec j_q_d;
+	JVec j_q_dd;
+	JVec j_torque;
+
+	Vector6d x;                           //Task space
+	Vector6d x_dot;
+	Vector6d x_ddot;
+    double s_time;
+}state;
 typedef struct JOINT_INFO{
 
 	int Position;
@@ -128,7 +162,10 @@ typedef union{
 }FTPacket;
 
 // Cycle time in nanosecond
-unsigned int cycle_ns = 1000000; /* 1 ms */
+unsigned int cycle_ns = (unsigned int)(1000.0/CONTROL_FREQ*1000000.0); /* 1 ms */
+double dt = 1.0/CONTROL_FREQ; /* 1 ms */
+double wc = 105.0; /* CUT OFF FREQUENCY*/
+double MAX_TORQUE[JOINTNUM]={431.97,431.97,197.23,79.79,79.79,79.79};
 static int period = 1000000;
 
 #endif /* RTRARMCLIENT_H_ */

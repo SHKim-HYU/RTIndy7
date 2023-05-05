@@ -32,7 +32,6 @@ bool ReadMRData(const char* filename,Json::Value &rootr){
     return 1;
 }
 
-
 MR_Indy7::MR_Indy7() {
     // Constructor implementation
 
@@ -111,27 +110,6 @@ void MR_Indy7::Gravity( double *q, double *toq){
         else
             return;
     }    
-}
-void MR_Indy7::EcatTorqueSaturation(double *p_toq , int maxtoq, int *p_dir)
-{
-    double toq_tmp=0;
-	for(int i=0; i<JOINTNUM; ++i)
-	{
-		toq_tmp = p_toq[i];
-		if(toq_tmp <= -maxtoq)
-		{
-			p_toq[i] = p_dir[i]*-maxtoq;
-		}
-		else if(toq_tmp >= maxtoq)
-		{
-			p_toq[i] = p_dir[i]*maxtoq;
-		}
-		else
-		{
-			p_toq[i] = p_dir[i]*toq_tmp;
-		}
-	}
-	return;
 }
 
 void MR_Indy7::ComputedTorqueControl( double *q,double *dq,double *qdes,double *dqdes,  double *toq){

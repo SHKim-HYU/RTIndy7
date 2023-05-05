@@ -8,7 +8,7 @@
 #include <Eigen/Dense>
 using namespace Eigen;
 using namespace std;
-using namespace mr;
+
 class MR_Indy7 {
 public:
     MR_Indy7();  // Constructor
@@ -37,7 +37,6 @@ public:
     void MRSetup();
     void Gravity( double *q, double *toq);
     void ComputedTorqueControl( double *q,double *dq,double *qdes,double *dqdes,  double *toq);
-    void EcatTorqueSaturation(double *p_toq , int maxtoq, int *p_dir);
 };
 
 #endif // MR_INDY7_H

@@ -117,8 +117,7 @@ namespace mr {
 		return v_ret;
 	}
 	Vector6d se3ToVec(const se3& T) {
-		Vector6d m_ret;
-		m_ret<<T(2, 1), T(0, 2), T(1, 0), T(0, 3), T(1, 3), T(2, 3);
+		Vector6d m_ret(T(2, 1), T(0, 2), T(1, 0), T(0, 3), T(1, 3), T(2, 3));
 		return m_ret;
 	}
 

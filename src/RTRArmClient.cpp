@@ -19,13 +19,8 @@
 hyuEcat::Master ecatmaster;
 hyuEcat::EcatNRMK_Indy_Tool ecat_nrmk_indy_tool[NUM_FT];
 hyuEcat::EcatNRMK_Drive ecat_nrmk_drive[NUM_AXIS];
-hyuCtrl::Trajectory *traj5th_joint; //make an instance each of a joint
-hyuCtrl::Trajectory *traj5th_task;
 JointInfo info;
-robot *cManipulator;
-HYUControl::Controller *Control;
 MR_Indy7 mr_indy7;
-// ROBOT *_robotNom;
 
 ////////// LOGGING BUFFER ///////////////
 #define MAX_BUFF_SIZE 		1000
@@ -50,8 +45,6 @@ EcatDataSocket datasocket;
 // When all slaves or drives reach OP mode,
 // system_ready becomes 1.
 int system_ready = 0;
-int isElmoReady = 0;
-int isFirstRun = 0;
 
 // Global time (beginning from zero)
 double gt=0;
@@ -119,9 +112,6 @@ double Tz[NUM_FT]={0.0};
 double Fx[NUM_FT]={0.0};
 double Fy[NUM_FT]={0.0};
 double Fz[NUM_FT]={0.0};
-double ZMP_X[2]={0,};
-double ZMP_Y[2]={0,};
-
 
 //////////////////////////
 /****************************************************************************/
@@ -152,66 +142,26 @@ double TargetToq[NUM_AXIS] = {0.0,};
 INT32   MotorDir[NUM_AXIS] = {1,1,1,1,1,1};
 int   old_flag[NUM_AXIS]={0,};
 int   acc_flag[NUM_AXIS]={0,};
-Jointd gmat;
-Matrixd mmat;
-Matrixd cmat;
-Matrix6n6nd adv;
 
-Jaco b_jaco;
-InvJaco b_inv;
-LinJaco l_jaco, l_jaco_dot;
-PinvLJaco DPI_l_jaco;
-se3 wrench_test;
-Jointd torq;
-Vector3d EulerAng;
-double time_buf;
-int time_flag=0;
+
 int limit_flag=0;
 
 
 //For Trajectory management
-//Joint
-int NUM_MOTION=1;
-int Motion=1;
 double TargetTrajPos_Rad[NUM_AXIS]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};/////////////////////////must change/////////////////////////////////
-//double TargetTrajPos_Rad[NUM_AXIS]={0.0, -1.57, 0.0, 1.57, 0.0};
-double traj_time = 3;
 int traj_changed = 0;
 //Task
 double TargetTrajPos_Meter[NUM_AXIS]={0,0,};
-Vector3d xd, xd_dot, xd_ddot;
-Vector3d x_buf;
-Vector3d vive_pos;
-Vector3d vive_vel;
-Vector3d vive_buf;
-int vive_flag=0;
-double K_tracking_ = 1;
 int task_time=0;
 
-Matrix<double,NUM_AXIS,1> qd,qd_dot,qd_ddot ,qd_old, qd_dot_old;
 double q_[3]={0.0,};
-double traq[NUM_AXIS]={0.0, 0.0, 0.0, -1.5709, 0.0, 0.0};
+double traq[NUM_AXIS]={0.0, 0.0, 0.0, 0, 0.0, 0.0};
 double traq_d[NUM_AXIS]={0.0,};
 double traq_dd[NUM_AXIS]={0.0,};
-int cnt=0;
 int flag=0;
-int q_flag=0;
-
-//For sEMG
-int emg_state = 5;
-
-//For Robo-Limb
-int fd=-1;
 int rtsercan_fd  = -1;
-int ftsercan_fd  = -1;
-int open_state;
-int hand_flag = 0;
-int finger_state[6]={0,};
-
 // Signal handler for CTRL+C
 void signal_handler(int signum);
-
-
 void saveLogData()
 {
 /*	if (datasocket.hasConnection() && sampling_tick-- == 0)
@@ -233,9 +183,8 @@ void saveLogData()
 }
 
 /****************************************************************************/
-void EncToRad()
+void EncToRad(double wc, double dt)
 {
-	
 	for(int i=0; i<NUM_AXIS; i++)
 	{
 		if(old_flag[i]==0){
@@ -243,9 +192,8 @@ void EncToRad()
 			old_flag[i]=1;
 		}
 		else if(old_flag[i]==1){
-
-			ActualVel[i]=(2*0.01-0.001)/(2*0.01+0.001)*ActualVel_Old[i]+2/(2*0.01+0.001)*(ActualPos[i]-ActualPos_Old[i]);
-
+			//ActualVel[i]=(2*0.01-0.001)/(2*0.01+0.001)*ActualVel_Old[i]+2/(2*0.01+0.001)*(ActualPos[i]-ActualPos_Old[i]);
+			ActualVel[i]=1.0/(1.0+dt*wc)*ActualVel_Old[i]+dt*wc/(1.0+dt*wc)*(ActualPos[i]-ActualPos_Old[i]);
 			switch(i)
 			{
 			case 0:
@@ -280,69 +228,12 @@ void EncToRad()
 			ActualVel_Old[i]=ActualVel[i];
 		}
 	}
-	info.act.j_q=Map<VectorXd>(info.act.q,NUM_AXIS);
-	info.act.j_q_d=Map<VectorXd>(info.act.q_dot,NUM_AXIS);
+	info.act.j_q=Eigen::Map<JVec>(info.act.q,NUM_AXIS);
+	info.act.j_q_d=Eigen::Map<JVec>(info.act.q_dot,NUM_AXIS);
 }
 
 void Robot_Limit()
 {
-	//Joint limit
-	/*if(traq[0] <= -0.86 || traq[0] >= 2.61)
-	{
-		if(traq[0] <= -0.86){
-			traq[0] =-0.86;
-			//flag=1;
-		}
-		else{
-			traq[0]=2.61;
-			//flag=1;
-		}
-	}else{}
-	if(traq[1] <= -1.89 || traq[1] >=0.3)
-	{
-		if(traq[1] <= -1.89){
-			traq[1] =-1.89;
-			//flag=1;
-		}
-		else{
-			traq[1]=0.3;
-			//flag=1;
-		}
-	}
-	if(traq[2] <=-1.28  || traq[2] >=1.0)
-	{
-		if(traq[2] <= -1.28){
-			traq[2] = -1.28;
-			//flag=1;
-		}
-		else{
-			traq[2]=1.0;
-			//flag=1;
-		}
-	}
-	if(traq[3] <= 0.3 || traq[3] >=2.35)
-	{
-		if(traq[3] <= 0.3){
-			traq[3] =0.3;
-			//flag=1;
-		}
-		else{
-			traq[3]=2.35;
-			//flag=1;
-		}
-	}
-	if(traq[4] <= -1.35 || traq[4] >=1.25)
-	{
-		if(traq[4] <= -1.35){
-			traq[4] =-1.35;
-			//flag=1;
-		}
-		else{
-			traq[4]=1.25;
-			//flag=1;
-		}
-	}*/
-	//Velocity & Acceleration limit
 	for(int i=0;i<NUM_AXIS;i++)
 	{
 		if(abs(ActualVel_Rad[i])>4)
@@ -377,13 +268,12 @@ int isDriveInit(void)
 int compute()
 {
 	//FKin
-	info.act.x.head(3)=cManipulator->pKin->ForwardKinematics();
-	EulerAng = cManipulator->pKin->GetEulerAngle();
-	b_jaco = cManipulator->pKin->BodyJacobian();
-	l_jaco = cManipulator->pKin->LinearJacobian();
-	l_jaco_dot = cManipulator->pKin->Jacobian_l_dot();
-	DPI_l_jaco = cManipulator->pKin->DPI(l_jaco);
-	info.act.x_dot.head(3) = l_jaco*info.act.j_q_d;
+	//info.act.x.head(3)=cManipulator->pKin->ForwardKinematics();
+	//b_jaco = cManipulator->pKin->BodyJacobian();
+	//l_jaco = cManipulator->pKin->LinearJacobian();
+	//l_jaco_dot = cManipulator->pKin->Jacobian_l_dot();
+	//DPI_l_jaco = cManipulator->pKin->DPI(l_jaco);
+	//info.act.x_dot.head(3) = l_jaco*info.act.j_q_d;
 
 	//For InverseDynamics
 	//mmat=cManipulator->pDyn->M_Matrix();
@@ -403,39 +293,27 @@ void RTRArm_run(void *arg)
 	RTIME now, previous;
 	RTIME p1 = 0;
 	RTIME p3 = 0;
-
-	JointVec tauGrav, q_nom, qdot_nom;
-	tauGrav.Zero(); q_nom.Zero(); qdot_nom.Zero();
-
-	cManipulator->robot_update_R(); //update robot
+	//cManipulator->robot_update_R(); //update robot
 	//ecatmaster.SyncEcatMaster(rt_timer_read());
 	/* Arguments: &task (NULL=self),
 	 *            start time,
 	 *            period
 	 */
-
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
-
 	while (run)
 	{
-
 		runcount++;
-
 		if (!run)
 		{
 			break;
 		}
-
 		previous = rt_timer_read();
-
 		// [ToDo] Here is an error for PDO mapping
 		ecatmaster.RxUpdate();
 		if(system_ready)
 		{
-
 			//read the motor data
 			for(int k=0; k<NUM_AXIS; ++k){
-
 				DeviceState[k] = 			ecat_nrmk_drive[k].NRMK_Drive_DeviceState();
 				StatusWord[k] = 			ecat_nrmk_drive[k].status_word_;
 				ModeOfOperationDisplay[k] = ecat_nrmk_drive[k].mode_of_operation_display_;
@@ -443,9 +321,7 @@ void RTRArm_run(void *arg)
 				ActualPos[k] = 				ecat_nrmk_drive[k].position_-ActualPos_zero[k];
 				ActualVel[k] = 				ecat_nrmk_drive[k].velocity_;
 				ActualTor[k] = 				ecat_nrmk_drive[k].torque_;
-
 			}
-
 			// read FT
 			iStatus = ecat_nrmk_indy_tool[0].iStatus_;
 			iButton = ecat_nrmk_indy_tool[0].iButton_;
@@ -458,42 +334,21 @@ void RTRArm_run(void *arg)
 			FT_OverloadStatus = ecat_nrmk_indy_tool[0].FT_OverloadStatus_;
 			FT_ErrorFlag = ecat_nrmk_indy_tool[0].FT_ErrorFlag_;
 
-
-			EncToRad();
+			EncToRad(wc,dt);
 
 			compute();
 			Robot_Limit();
 
-
-			traq[0] = 0.0;
-			traq[1] = 0.0;
-			traq[2] = 0.0;
-			traq[3] = 0.0;
-			traq[4] = 0.0;
-			traq[5] = 0.0;
-			traq_d[0] = 0.0;
-			traq_d[1] = 0.0;
-			traq_d[2] = 0.0;
-			traq_d[3] = 0.0;
-			traq_d[4] = 0.0;
-			traq_d[5] = 0.0;
-
-//			Control->Gravity(info.act.q, info.act.q_dot,TargetToq);
-			//mr_indy7.Gravity(info.act.q,TargetToq);
 			mr_indy7.ComputedTorqueControl( info.act.q ,info.act.q_dot,traq,traq_d,TargetToq);
-			Control->TorqueOutput(TargetToq, 1000, MotorDir);
+			mr_indy7.EcatTorqueSaturation(TargetToq, 1000, MotorDir);
 
 			//write the motor data
 			for(int j=0; j<NUM_AXIS; ++j)
 			{
 				TargetTor[j] = round(TargetToq[j]);
-				//ecat_nrmk_drive[j].writeVelocity(TargetVel[j]);
 				ecat_nrmk_drive[j].writeTorque(TargetTor[j]);
-
 			}
-
 		}
-
 		ecatmaster.TxUpdate();
 #if defined(USE_DC_MODE)
 		ecatmaster.SyncEcatMaster(rt_timer_read());
@@ -508,8 +363,6 @@ void RTRArm_run(void *arg)
 			worst_time = 0;
 			ethercat_time = 0;
 		}
-			
-
 		// For EtherCAT performance statistics
 		p1 = p3;
 		p3 = rt_timer_read();
@@ -521,9 +374,7 @@ void RTRArm_run(void *arg)
 		if ( isDriveInit() == 1 && (runcount > WAKEUP_TIME*(NSEC_PER_SEC/cycle_ns)))
 		{
 			system_ready=1;	//all drives have been done
-			
 			gt+= period;
-
 			if (worst_time<ethercat_time)
 				worst_time=ethercat_time;
 			if(ethercat_time > (long)cycle_ns)
@@ -567,8 +418,6 @@ void print_run(void *arg)
 			rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
 			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
 
-			cout<<"Manipulability   : "<<cManipulator->pKin->Manipulability(l_jaco)<<endl;
-			cout<<"Condition Number : "<<cManipulator->pKin->Condition_Number(l_jaco)<<endl;
 			for(int j=0; j<NUM_AXIS; ++j){
 				rt_printf("ID: %d", j+NUM_FT);
 				rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
@@ -576,24 +425,12 @@ void print_run(void *arg)
 			    rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
 				rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
 				rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
-				//rt_printf("\t DesPos: %f, DesVel :%f, DesAcc :%f\n",TargetTrajPos_Rad[j],TargetVel_Rad[j],TargetAcc_Rad[j]);
 				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",traq[j],traq_d[j],traq_dd[j]);
-
 				rt_printf("\t TarTor: %f, ",				TargetToq[j]);
 				rt_printf("\t ActTor: %d,\n",			ActualTor[j]);
-				rt_printf("Traj : %d,\n",               TrajFlag_j[j]);
+				//rt_printf("Traj : %d,\n",               TrajFlag_j[j]);
 			}
 			rt_printf("\n");
-			rt_printf("Fx : %lf, Fy : %lf, Fz: %lf, Tx : %lf, Ty: %lf, Tz : %lf\n",FT_Raw_Fx,FT_Raw_Fy,FT_Raw_Fz,FT_Raw_Tx,FT_Raw_Ty,FT_Raw_Tz);
-			rt_printf("xd : %lf, yd : %lf, zd: %lf\n",xd[0],xd[1],xd[2]);
-			//rt_printf("xddot : %f, yddot : %f, zddot: %f\n",vive_vel[0],vive_vel[1],vive_vel[2]);
-			//std::cout<<l_jaco<<endl;
-			rt_printf("x : %lf, y : %lf, z : %lf\n",info.act.x(0), info.act.x(1), info.act.x(2));
-
-			rt_printf("r : %lf, p : %lf, y : %lf\n",EulerAng(0),EulerAng(1),EulerAng(2));
-			rt_printf("x : %lf, y : %lf, z : %lf\n",vive_pos[0],vive_pos[1],vive_pos[2]);
-			cout<<limit_flag<<endl;
-
 		}
 		else
 		{
@@ -642,23 +479,33 @@ void plot_run(void *arg)
 			frontIdx = rearIdx = 0;
 		}
 */
-
 		//usleep(1000);
 		rt_task_wait_period(NULL);
 	}
 }
 
 /****************************************************************************/
-void signal_handler(int signum = 0)
+void signal_handler(int signum)
 {
+	
 	rt_task_delete(&plot_task);
 	rt_task_delete(&RTRArm_task);
 	rt_task_delete(&print_task);
-    printf("\nServo drives Stopped!\n");
-
+	printf("\n\n");
+	if(signum==SIGINT)
+		printf("╔════════════════[SIGNAL INPUT SIGINT]═══════════════╗\n");
+	else if(signum==SIGTERM)
+		printf("╔═══════════════[SIGNAL INPUT SIGTERM]═══════════════╗\n");	
+	else if(signum==SIGWINCH)
+		printf("╔═══════════════[SIGNAL INPUT SIGWINCH]══════════════╗\n");		
+	else if(signum==SIGHUP)
+		printf("╔════════════════[SIGNAL INPUT SIGHUP]═══════════════╗\n");
+    printf("║                Servo drives Stopped!               ║\n");
+	printf("╚════════════════════════════════════════════════════╝\n");	
     ecatmaster.deactivate();
     exit(1);
 }
+
 
 /****************************************************************************/
 int main(int argc, char **argv)
@@ -669,6 +516,9 @@ int main(int argc, char **argv)
 
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);
+	signal(SIGWINCH, signal_handler);
+	signal(SIGHUP, signal_handler);
+
 
 	int portNum=1; //COM as default
 	char portName[100];
@@ -691,15 +541,10 @@ int main(int argc, char **argv)
 	cycle_ns = 1000000; // nanosecond -> 1kHz
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
-
-	// _robotNom = new ROBOT(USERNAME, EMAIL, SERIAL);
-	cManipulator = new robot;
-	Control = new HYUControl::Controller(cManipulator,ROBOT_DOF);
-	
-	traj5th_joint =  new hyuCtrl::Trajectory();
-	traj5th_task =  new hyuCtrl::Trajectory();
 	mr_indy7=MR_Indy7();
 	mr_indy7.MRSetup();
+
+
 	for(int j=0; j<NUM_AXIS; ++j)
 	{
 		ecatmaster.addSlaveNRMK_Drive(0, j+1, &ecat_nrmk_drive[j]);
@@ -751,7 +596,7 @@ int main(int argc, char **argv)
 	}
 	*/
 	// Finalize
-	signal_handler();
+	signal_handler(0);
 
     return 0;
 }

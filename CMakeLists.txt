@@ -150,7 +150,7 @@ file(GLOB_RECURSE SOURCES "src/RTRArmClient.cpp")
 # Executable                                                #
 #############################################################
 set(EXE ${PROJECT_NAME})
-add_executable(${EXE} ${SOURCES} ${PDO} ${MR} ${EcatDataSocket} ${KDL} ${Control} ${EcatSystem} ${CAN} ${MR_Indy7})
+add_executable(${EXE} ${SOURCES} ${PDO} ${MR_Indy7} ${MR} ${EcatDataSocket}   ${EcatSystem} ${CAN} )
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX  "")
 
 #############################################################

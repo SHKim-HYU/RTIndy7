@@ -124,7 +124,8 @@
 #define TORQUE_ADC_100 96
 
 #define EFFICIENCY 60.0
-
+#define JOINTNUM 6
+#define CONTROL_FREQ 1000
 
 
 

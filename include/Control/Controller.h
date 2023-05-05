@@ -13,7 +13,6 @@
 #include <Eigen/Dense>
 #include "../KDL/PropertyDefinition.h"
 #include "../KDL/SerialRobot.h"
-#include "MR_Indy7.h"
 
 #define KpBase 10
 #define KdBase 0.01
@@ -73,7 +72,6 @@ public:
 	vector<MatrixXd> Mlist;
 	vector<MatrixXd> Glist;
 	MatrixXd MR_M;	
-	MR_Indy7 mr_indy7;
 private:
 	Matrix<double,ROBOT_DOF,1> Kp;
 	Matrix<double,ROBOT_DOF,1> Kd;

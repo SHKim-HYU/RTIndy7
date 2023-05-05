@@ -153,54 +153,6 @@ include/CAN/RoboLimb.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.s
 .PHONY : include/CAN/RoboLimb.cpp.s
 
-include/Control/Controller.o: include/Control/Controller.cpp.o
-.PHONY : include/Control/Controller.o
-
-# target to build an object file
-include/Control/Controller.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o
-.PHONY : include/Control/Controller.cpp.o
-
-include/Control/Controller.i: include/Control/Controller.cpp.i
-.PHONY : include/Control/Controller.i
-
-# target to preprocess a source file
-include/Control/Controller.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.i
-.PHONY : include/Control/Controller.cpp.i
-
-include/Control/Controller.s: include/Control/Controller.cpp.s
-.PHONY : include/Control/Controller.s
-
-# target to generate assembly for a file
-include/Control/Controller.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.s
-.PHONY : include/Control/Controller.cpp.s
-
-include/Control/Trajectory.o: include/Control/Trajectory.cpp.o
-.PHONY : include/Control/Trajectory.o
-
-# target to build an object file
-include/Control/Trajectory.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o
-.PHONY : include/Control/Trajectory.cpp.o
-
-include/Control/Trajectory.i: include/Control/Trajectory.cpp.i
-.PHONY : include/Control/Trajectory.i
-
-# target to preprocess a source file
-include/Control/Trajectory.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.i
-.PHONY : include/Control/Trajectory.cpp.i
-
-include/Control/Trajectory.s: include/Control/Trajectory.cpp.s
-.PHONY : include/Control/Trajectory.s
-
-# target to generate assembly for a file
-include/Control/Trajectory.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.s
-.PHONY : include/Control/Trajectory.cpp.s
-
 include/EcatDataSocket/EcatDataSocket.o: include/EcatDataSocket/EcatDataSocket.cpp.o
 .PHONY : include/EcatDataSocket/EcatDataSocket.o
 
@@ -272,102 +224,6 @@ include/EcatSystem/PDOConfig.s: include/EcatSystem/PDOConfig.c.s
 include/EcatSystem/PDOConfig.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.s
 .PHONY : include/EcatSystem/PDOConfig.c.s
-
-include/KDL/LieDynamics.o: include/KDL/LieDynamics.cpp.o
-.PHONY : include/KDL/LieDynamics.o
-
-# target to build an object file
-include/KDL/LieDynamics.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o
-.PHONY : include/KDL/LieDynamics.cpp.o
-
-include/KDL/LieDynamics.i: include/KDL/LieDynamics.cpp.i
-.PHONY : include/KDL/LieDynamics.i
-
-# target to preprocess a source file
-include/KDL/LieDynamics.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.i
-.PHONY : include/KDL/LieDynamics.cpp.i
-
-include/KDL/LieDynamics.s: include/KDL/LieDynamics.cpp.s
-.PHONY : include/KDL/LieDynamics.s
-
-# target to generate assembly for a file
-include/KDL/LieDynamics.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.s
-.PHONY : include/KDL/LieDynamics.cpp.s
-
-include/KDL/LieOperator.o: include/KDL/LieOperator.cpp.o
-.PHONY : include/KDL/LieOperator.o
-
-# target to build an object file
-include/KDL/LieOperator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o
-.PHONY : include/KDL/LieOperator.cpp.o
-
-include/KDL/LieOperator.i: include/KDL/LieOperator.cpp.i
-.PHONY : include/KDL/LieOperator.i
-
-# target to preprocess a source file
-include/KDL/LieOperator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.i
-.PHONY : include/KDL/LieOperator.cpp.i
-
-include/KDL/LieOperator.s: include/KDL/LieOperator.cpp.s
-.PHONY : include/KDL/LieOperator.s
-
-# target to generate assembly for a file
-include/KDL/LieOperator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.s
-.PHONY : include/KDL/LieOperator.cpp.s
-
-include/KDL/PoEKinematics.o: include/KDL/PoEKinematics.cpp.o
-.PHONY : include/KDL/PoEKinematics.o
-
-# target to build an object file
-include/KDL/PoEKinematics.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o
-.PHONY : include/KDL/PoEKinematics.cpp.o
-
-include/KDL/PoEKinematics.i: include/KDL/PoEKinematics.cpp.i
-.PHONY : include/KDL/PoEKinematics.i
-
-# target to preprocess a source file
-include/KDL/PoEKinematics.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.i
-.PHONY : include/KDL/PoEKinematics.cpp.i
-
-include/KDL/PoEKinematics.s: include/KDL/PoEKinematics.cpp.s
-.PHONY : include/KDL/PoEKinematics.s
-
-# target to generate assembly for a file
-include/KDL/PoEKinematics.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.s
-.PHONY : include/KDL/PoEKinematics.cpp.s
-
-include/KDL/SerialRobot.o: include/KDL/SerialRobot.cpp.o
-.PHONY : include/KDL/SerialRobot.o
-
-# target to build an object file
-include/KDL/SerialRobot.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o
-.PHONY : include/KDL/SerialRobot.cpp.o
-
-include/KDL/SerialRobot.i: include/KDL/SerialRobot.cpp.i
-.PHONY : include/KDL/SerialRobot.i
-
-# target to preprocess a source file
-include/KDL/SerialRobot.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.i
-.PHONY : include/KDL/SerialRobot.cpp.i
-
-include/KDL/SerialRobot.s: include/KDL/SerialRobot.cpp.s
-.PHONY : include/KDL/SerialRobot.s
-
-# target to generate assembly for a file
-include/KDL/SerialRobot.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.s
-.PHONY : include/KDL/SerialRobot.cpp.s
 
 include/MR/MR_Indy7.o: include/MR/MR_Indy7.cpp.o
 .PHONY : include/MR/MR_Indy7.o
@@ -453,12 +309,6 @@ help:
 	@echo "... include/CAN/RoboLimb.o"
 	@echo "... include/CAN/RoboLimb.i"
 	@echo "... include/CAN/RoboLimb.s"
-	@echo "... include/Control/Controller.o"
-	@echo "... include/Control/Controller.i"
-	@echo "... include/Control/Controller.s"
-	@echo "... include/Control/Trajectory.o"
-	@echo "... include/Control/Trajectory.i"
-	@echo "... include/Control/Trajectory.s"
 	@echo "... include/EcatDataSocket/EcatDataSocket.o"
 	@echo "... include/EcatDataSocket/EcatDataSocket.i"
 	@echo "... include/EcatDataSocket/EcatDataSocket.s"
@@ -468,18 +318,6 @@ help:
 	@echo "... include/EcatSystem/PDOConfig.o"
 	@echo "... include/EcatSystem/PDOConfig.i"
 	@echo "... include/EcatSystem/PDOConfig.s"
-	@echo "... include/KDL/LieDynamics.o"
-	@echo "... include/KDL/LieDynamics.i"
-	@echo "... include/KDL/LieDynamics.s"
-	@echo "... include/KDL/LieOperator.o"
-	@echo "... include/KDL/LieOperator.i"
-	@echo "... include/KDL/LieOperator.s"
-	@echo "... include/KDL/PoEKinematics.o"
-	@echo "... include/KDL/PoEKinematics.i"
-	@echo "... include/KDL/PoEKinematics.s"
-	@echo "... include/KDL/SerialRobot.o"
-	@echo "... include/KDL/SerialRobot.i"
-	@echo "... include/KDL/SerialRobot.s"
 	@echo "... include/MR/MR_Indy7.o"
 	@echo "... include/MR/MR_Indy7.i"
 	@echo "... include/MR/MR_Indy7.s"

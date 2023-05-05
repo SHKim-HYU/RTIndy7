@@ -97,10 +97,24 @@ CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.s"
 	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sung/workspace/RTIndy7/include/EcatSystem/PDOConfig.c -o CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.s
 
+CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
+CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o: ../include/MR/MR_Indy7.cpp
+CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o"
+	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o -c /home/sung/workspace/RTIndy7/include/MR/MR_Indy7.cpp
+
+CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.i"
+	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/MR/MR_Indy7.cpp > CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.i
+
+CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.s"
+	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/MR/MR_Indy7.cpp -o CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.s
+
 CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
 CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o: ../include/MR/modern_robotics.cpp
 CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o"
 	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o -c /home/sung/workspace/RTIndy7/include/MR/modern_robotics.cpp
 
 CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.s: cmake_force
 CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
 CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o: ../include/EcatDataSocket/EcatDataSocket.cpp
 CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o"
 	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o -c /home/sung/workspace/RTIndy7/include/EcatDataSocket/EcatDataSocket.cpp
 
 CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.i: cmake_force
@@ -125,94 +139,10 @@ CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.s: cmake_for
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.s"
 	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/EcatDataSocket/EcatDataSocket.cpp -o CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.s
 
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o: ../include/KDL/LieDynamics.cpp
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o -c /home/sung/workspace/RTIndy7/include/KDL/LieDynamics.cpp
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.i"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/KDL/LieDynamics.cpp > CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.i
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.s"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/KDL/LieDynamics.cpp -o CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.s
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o: ../include/KDL/LieOperator.cpp
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o -c /home/sung/workspace/RTIndy7/include/KDL/LieOperator.cpp
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.i"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/KDL/LieOperator.cpp > CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.i
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.s"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/KDL/LieOperator.cpp -o CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.s
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
-CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o: ../include/KDL/PoEKinematics.cpp
-CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o -c /home/sung/workspace/RTIndy7/include/KDL/PoEKinematics.cpp
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.i"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/KDL/PoEKinematics.cpp > CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.i
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.s"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/KDL/PoEKinematics.cpp -o CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.s
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
-CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o: ../include/KDL/SerialRobot.cpp
-CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o -c /home/sung/workspace/RTIndy7/include/KDL/SerialRobot.cpp
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.i"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/KDL/SerialRobot.cpp > CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.i
-
-CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.s"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/KDL/SerialRobot.cpp -o CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.s
-
-CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
-CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o: ../include/Control/Controller.cpp
-CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o -c /home/sung/workspace/RTIndy7/include/Control/Controller.cpp
-
-CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.i"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/Control/Controller.cpp > CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.i
-
-CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.s"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/Control/Controller.cpp -o CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.s
-
-CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
-CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o: ../include/Control/Trajectory.cpp
-CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o -c /home/sung/workspace/RTIndy7/include/Control/Trajectory.cpp
-
-CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.i"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/Control/Trajectory.cpp > CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.i
-
-CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.s"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/Control/Trajectory.cpp -o CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.s
-
 CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
 CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o: ../include/EcatSystem/Ecat_Master.cpp
 CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o"
 	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o -c /home/sung/workspace/RTIndy7/include/EcatSystem/Ecat_Master.cpp
 
 CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.i: cmake_force
@@ -226,7 +156,7 @@ CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.s: cmake_force
 CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
 CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o: ../include/CAN/RoboLimb.cpp
 CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o"
 	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o -c /home/sung/workspace/RTIndy7/include/CAN/RoboLimb.cpp
 
 CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.i: cmake_force
@@ -237,55 +167,29 @@ CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.s"
 	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/CAN/RoboLimb.cpp -o CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.s
 
-CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
-CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o: ../include/MR/MR_Indy7.cpp
-CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o: CMakeFiles/RTIndy7_01.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o -MF CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o.d -o CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o -c /home/sung/workspace/RTIndy7/include/MR/MR_Indy7.cpp
-
-CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.i"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sung/workspace/RTIndy7/include/MR/MR_Indy7.cpp > CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.i
-
-CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.s"
-	/home/sung/workspace/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sung/workspace/RTIndy7/include/MR/MR_Indy7.cpp -o CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.s
-
 # Object files for target RTIndy7_01
 RTIndy7_01_OBJECTS = \
 "CMakeFiles/RTIndy7_01.dir/src/RTRArmClient.cpp.o" \
 "CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.o" \
+"CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o" \
 "CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o" \
 "CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o" \
 "CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o" \
-"CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o"
+"CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o"
 
 # External object files for target RTIndy7_01
 RTIndy7_01_EXTERNAL_OBJECTS =
 
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/src/RTRArmClient.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.o
+RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o
-RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o
-RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o
-RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o
-RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o
-RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o
-RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o
-RTIndy7_01: CMakeFiles/RTIndy7_01.dir/include/MR/MR_Indy7.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/build.make
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable RTIndy7_01"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sung/workspace/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable RTIndy7_01"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/RTIndy7_01.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
