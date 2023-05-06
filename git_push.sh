@@ -1,6 +1,6 @@
 #!/bin/bash
 now=$(date +"%Y-%m-%d %H:%M:%S")
-now_date=$(date +"%Y-%m-%d")
+now_date=$(date +"%Y-%m-%d %H:%M:%S")
 
 git add *
 git commit -m "$now"
