@@ -38,6 +38,8 @@ public:
     JVec Gravity( JVec q);
     JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
     void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
+    JVec ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint);
+    JVec HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint);
 };
 
 #endif // MR_INDY7_H
