@@ -99,7 +99,7 @@
 #define ZERO_POS_1 448713
 #define ZERO_POS_2 -25024
 #define ZERO_POS_3 138717
-#define ZERO_POS_4 -713436
+#define ZERO_POS_4 12528070//-713436
 #define ZERO_POS_5 -1058082
 #define ZERO_POS_6 -88988
 
@@ -133,6 +133,14 @@
 #define MAX_TORQUE_4 79.79
 #define MAX_TORQUE_5 79.79
 #define MAX_TORQUE_6 79.79
+
+
+#define invL2sqr_1 800
+#define invL2sqr_2 600
+#define invL2sqr_3 500
+#define invL2sqr_4 500
+#define invL2sqr_5 500
+#define invL2sqr_6 600
 
 
 

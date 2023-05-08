@@ -491,6 +491,29 @@ namespace mr {
                              dummyg, dummyforce, Mlist, Glist, Slist);
 		return c;
 	}	
+	void JointTrajectory(const JVec q0, const JVec qT, double Tf, double t , int method , JVec& q_des, JVec& dq_des, JVec& ddq_des) {
+		if(t>Tf)t = Tf;
+		if(t<0) t= 0;
+		double st;
+		double dst;
+		double ddst;
+		if (method == 3){
+			st = CubicTimeScaling(Tf, t);
+			dst = CubicTimeScalingDot(Tf, t);
+			ddst = CubicTimeScalingDdot(Tf, t);
+		}
+			
+		else{
+			st = QuinticTimeScaling(Tf, t);
+			dst = QuinticTimeScalingDot(Tf, t);
+			ddst = QuinticTimeScalingDdot(Tf, t);
+		}
+			
+		q_des =st * qT + (1 - st)*q0;
+		dq_des =dst * qT  - dst*q0;
+		ddq_des =ddst * qT  - ddst*q0;
+		
+	}
 	JVec EndEffectorForces(const JVec& thetalist, const Vector6d& Ftip,const vector<SE3>& Mlist, const vector<Matrix6d>& Glist, const ScrewList& Slist) {
 		int n = JOINTNUM;
 		JVec dummylist = JVec::Zero();

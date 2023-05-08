@@ -55,17 +55,38 @@ int main()
 	JVec MAX_TORQUES;
 	MAX_TORQUES<<431.97,431.97,197.23,79.79,79.79,79.79;
 	JVec q_des=JVec::Zero();
+	q_des(0) = 1.0;
+	q_des(1) = 1.0;
+	q_des(2) = 1.0;
+	q_des(3) = 1.0;
+	q_des(4) = 1.0;
+	q_des(5) = 1.0;
+	
 	JVec dq_des=JVec::Zero();	
+	JVec ddq_des=JVec::Zero();	
 	JVec eint = JVec::Zero();
+	JVec prev_dq = JVec::Zero();
+	JVec q0 = JVec::Zero();
+	JVec qT = JVec::Zero();
+	qT<<1.0,1.0,1.0,1.0,1.0,1.0;
+	int traj_flag = 0;
 	while(1){
 		JVec q= indy7.getQ( &sim);
 		JVec dq= indy7.getQdot( &sim);		
+		JVec ddq= (prev_dq-dq)/dt;
 		JVec e = q_des-q;
 		eint = eint+ e*dt;
+		
+		if(traj_flag ==0){
+				q0 = q;
+				traj_flag =1;
+			}
+		JointTrajectory(q0, qT, 5, t , 5 , q_des, dq_des, ddq_des) ;
+
 		JVec gravTorq = control.Gravity( q);
 		JVec clacTorq = control.ComputedTorqueControl( q, dq, q_des, dq_des); // calcTorque
 		JVec clacPIDTorq = control.ComputedTorquePIDControl( q, dq, q_des, dq_des,eint); // calcTorque
-		JVec clacHinfTorq=control.HinfControl(  q, dq, q_des, dq_des,eint);
+		JVec clacHinfTorq= control.HinfControl(  q, dq, q_des, dq_des,ddq_des,eint);
 
 		static int print_count = 0;
 		if(++print_count>100){
@@ -73,6 +94,7 @@ int main()
 			cout<<"eint:"<<eint.transpose()<<endl;
 			print_count = 0;
 		}
+		prev_dq = dq;
 		indy7.setTorques(&sim,  clacHinfTorq , MAX_TORQUES);
 		sim.stepSimulation();
 		b3Clock::usleep(1000. * 1000. * FIXED_TIMESTEP);

@@ -101,6 +101,7 @@ namespace mr {
     DerivativeJacobianVec DerivativeVectorizeAnalyticJacobianBody(const SE3& M, const ScrewList& Blist, const JVec& thetaList);
     Jacobian dJacobianBody(const Jacobian& Jb ,const JVec& dthetaList);
     Jacobian dAnalyticJacobianBody(const SE3&M, const ScrewList& Blist, const JVec& thetaList ,const JVec& dthetaList);
+    void JointTrajectory(const JVec q0, const JVec qT, double Tf, double t , int method , JVec& q_des, JVec& dq_des, JVec& ddq_des);
     double wrapTo2PI(double angle);
     double wrapToPI(double angle);
     JVec wrapTo2PI(const JVec& angles);

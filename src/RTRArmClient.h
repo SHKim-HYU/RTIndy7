@@ -135,6 +135,7 @@ UINT16	StatusWord[JOINTNUM] = {0,};
 INT32 	ECAT_ActualPos[JOINTNUM] = {0,};
 INT32	ECAT_ActualPos_Old[JOINTNUM] = {0,};
 INT32 	ECAT_ActualVel[JOINTNUM] = {0,};
+
 INT32	ECAT_ActualAcc[JOINTNUM] = {0,};
 INT32	ECAT_ActualVel_Old[JOINTNUM] = {0,};
 INT32	ECAT_ActualAcc_Old[JOINTNUM] = {0,};
@@ -223,5 +224,5 @@ double dt = 1.0/CONTROL_FREQ; /* 1 ms */
 double wc = 105.0; /* CUT OFF FREQUENCY*/
 JVec MAX_TORQUES;
 static int period = 1000000;
-
+int traj_flag = 0;
 #endif /* RTRARMCLIENT_H_ */

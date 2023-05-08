@@ -53,8 +53,52 @@ MR_Indy7::MR_Indy7() {
     this->Kp = mr::Matrix6d::Zero();
     this->Kv = mr::Matrix6d::Zero();
     this->Ki = mr::Matrix6d::Zero();
-    
+    this->Hinf_Kp = mr::Matrix6d::Zero();
+    this->Hinf_Kv = mr::Matrix6d::Zero();
+    this->Hinf_K_gamma = mr::Matrix6d::Zero();
+
     for (int i=0; i<6; ++i)
+    {
+        switch(i)
+        {
+        case 0:
+            Hinf_Kp(i,i) = 100.0;
+            Hinf_Kv(i,i) = 20.0;
+            Hinf_K_gamma(i,i) = 50+1.0/invL2sqr_1 ;
+            break;
+        case 1:
+            Hinf_Kp(i,i) = 100.0;
+            Hinf_Kv(i,i) = 20.0;
+            Hinf_K_gamma(i,i) = 50+1.0/invL2sqr_2 ;
+
+            break;
+        case 2:
+            Hinf_Kp(i,i) = 100.0;
+            Hinf_Kv(i,i) = 20.0;
+            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_3 ;
+
+            break;
+        case 3:
+            Hinf_Kp(i,i) = 100.0;
+            Hinf_Kv(i,i) = 20.0;
+            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_4 ;
+
+            break;
+        case 4:
+              Hinf_Kp(i,i) = 100.0;
+            Hinf_Kv(i,i) = 20.0;
+            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_5 ;
+
+            break;
+        case 5:
+            Hinf_Kp(i,i) = 100.0;
+            Hinf_Kv(i,i) = 20.0;
+            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_6 ;
+
+            break;
+        }
+    }
+   for (int i=0; i<6; ++i)
     {
         switch(i)
         {
@@ -90,8 +134,6 @@ MR_Indy7::MR_Indy7() {
             break;
         }
     }
-        
-
 }
 
 JVec MR_Indy7::Gravity( JVec q){
@@ -123,21 +165,14 @@ JVec MR_Indy7::ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,J
     JVec torq = Mmat*ddq_ref+H;
     return torq;
 }
-JVec MR_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint){
+JVec MR_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec& eint){
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
-
-    double gamma = 200;
-
-
     MassMat Mmat = mr::MassMatrix(q,this->Mlist, this->Glist, this->Slist);
     JVec C = mr::VelQuadraticForces(q, dq,this->Mlist, this->Glist, this->Slist);
     JVec G = mr::GravityForces(q,this->g,this->Mlist, this->Glist, this->Slist) ; 
-    JVec ddq_ref = Kv*edot+Kp*e;
-    JVec Ctemp = (dq_des+Kv*e+Kp*eint);
-    for(int i =0;i<JOINTNUM;i++)
-         C[i] = C[i]*Ctemp[i];
-    JVec torq = Mmat*ddq_ref+C+G;
+    JVec ddq_ref = ddq_des+Hinf_Kv*edot+Hinf_Kp*e;
+    JVec torq = Mmat*ddq_ref+C+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
     return torq;
 }
 
