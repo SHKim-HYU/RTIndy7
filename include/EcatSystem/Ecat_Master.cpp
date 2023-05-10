@@ -457,8 +457,9 @@ void Master::update(unsigned int domain)
 
 void Master::TxUpdate(unsigned int domain)
 {
-
     DomainInfo* domain_info = m_domain_info[domain];
+    ecrt_master_receive(p_master);
+    ecrt_domain_process(domain_info->domain);
 
     // read and write process data
     for (DomainInfo::Entry& entry : domain_info->entries){
@@ -474,13 +475,11 @@ void Master::TxUpdate(unsigned int domain)
 
 void Master::RxUpdate(unsigned int domain)
 {
-    ecrt_master_receive(p_master);
-
     DomainInfo* domain_info = m_domain_info[domain];
-
+    ecrt_master_receive(p_master);
     ecrt_domain_process(domain_info->domain);
 
-#if 1//defined(_DEBUG)
+#if defined(_DEBUG)
     // check process data state (optional)
     checkDomainState();
     checkMasterState();
@@ -495,6 +494,8 @@ void Master::RxUpdate(unsigned int domain)
             (entry.slave)->processData(i, domain_info->domain_pd + entry.offset[i]);
         }
     }
+    ecrt_domain_queue(domain_info->domain);
+    ecrt_master_send(p_master);
 }
 
 

@@ -142,7 +142,7 @@ JVec MR_Indy7::Gravity( JVec q){
 void MR_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES){
     for(int i =0;i<JOINTNUM;i++){
         if(abs(torque(i))> MAX_TORQUES(i)){
-            if(torque(i)<0) torque(i) = MAX_TORQUES(i);
+            if(torque(i)>0) torque(i) = MAX_TORQUES(i);
             else torque(i) = -MAX_TORQUES(i);
         }
     }

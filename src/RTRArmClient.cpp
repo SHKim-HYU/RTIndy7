@@ -280,12 +280,13 @@ void RTRArm_run(void *arg)
 			
 			compute();
 			Robot_Limit();
-			//JVec clacTorq = mr_indy7.Gravity( info.act.q ); // calcTorque
+			JVec clacTorq = mr_indy7.Gravity( info.act.q ); // calcTorque
 			//JVec clacTorq = mr_indy7.ComputedTorqueControl( info.act.q , info.act.dq, info.des.q, info.des.dq); // calcTorque
 			e = info.des.q-info.act.q;
+			// [ToDo] Add anti-windup function
 			eint = eint+e*dt;
-			JVec clacTorq = mr_indy7.HinfControl( info.act.q , info.act.dq, info.des.q, info.des.dq,info.des.ddq,eint);
-			mr_indy7.saturationMaxTorque(clacTorq,MAX_TORQUES);
+			// JVec clacTorq = mr_indy7.HinfControl( info.act.q , info.act.dq, info.des.q, info.des.dq,info.des.ddq,eint);
+			// mr_indy7.saturationMaxTorque(clacTorq,MAX_TORQUES);
 
 			calcTorque_To_EcatTorque(clacTorq, ECAT_calcTorq);
 			saturationEcatTorque(ECAT_calcTorq, 1000, MotorDir);
@@ -343,6 +344,7 @@ void print_run(void *arg)
 	 */
 	rt_task_set_periodic(NULL, TM_NOW, 1e8);
 	
+	
 	while (1)
 	{
 		if (++count==10)
@@ -360,12 +362,12 @@ void print_run(void *arg)
 			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
 
 			for(int j=0; j<JOINTNUM; ++j){
-				//rt_printf("ID: %d", j+NUM_FT);
-				//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-				//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			    //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-				//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				//rt_printf("\t ecat_ActPos : %d",ecat_nrmk_drive[j].position_);
+				rt_printf("ID: %d", j+NUM_FT);
+				rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+				rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			    rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+				rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+				// rt_printf("\t ecat_ActPos : %d",ecat_nrmk_drive[j].position_);
 				//rt_printf("\t ecat_ActPosZero : %f",ECAT_ActualPos_zero[j]);
 				rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
 				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.dq[j],info.des.ddq[j]);
