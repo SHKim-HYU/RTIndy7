@@ -10,21 +10,16 @@
 #ifndef __XENO__
 #define __XENO__
 #endif
-
 #include "RTRArmClient.h"
+#include "MR_Indy7.h"
 
 #define USE_DC_MODE
 
-
-#define NUM_FT	 	1
-
 hyuEcat::Master ecatmaster;
-
 hyuEcat::EcatNRMK_Indy_Tool ecat_nrmk_indy_tool[NUM_FT];
-hyuEcat::EcatNRMK_Drive ecat_nrmk_drive[NUM_AXIS];
-hyuCtrl::Trajectory *traj5th_joint; //make an instance each of a joint
-hyuCtrl::Trajectory *traj5th_task;
+hyuEcat::EcatNRMK_Drive ecat_nrmk_drive[JOINTNUM];
 JointInfo info;
+<<<<<<< HEAD
 robot *cManipulator;
 HYUControl::Controller *Control;
 // ROBOT *_robotNom;
@@ -130,6 +125,9 @@ double ZMP_Y[2]={0,};
 
 //////////////////////////
 /****************************************************************************/
+=======
+MR_Indy7 mr_indy7;
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 
 // Xenomai RT tasks
 RT_TASK RTRArm_task;
@@ -138,245 +136,89 @@ RT_TASK plot_task;
 
 // For RT thread management
 static int run = 1;
-unsigned long fault_count=0;
-long ethercat_time=0, worst_time=0;
-#define min_time	0
-#define max_time	100000
-#define hist_step	(100)
-unsigned int histdata[hist_step+1];
-unsigned int interval_size=350;
 
-double ActualPos_zero[NUM_AXIS] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
-double ActualPos_Rad[NUM_AXIS] = {0.0,};
-double ActualVel_Rad[NUM_AXIS] = {0.0,};
-double ActualAcc_Rad[NUM_AXIS] = {0.0,};
-double TargetPos_Rad[NUM_AXIS] = {0.0,};
-double TargetVel_Rad[NUM_AXIS] = {0.0,};
-double TargetAcc_Rad[NUM_AXIS] = {0.0,};
-double TargetToq[NUM_AXIS] = {0.0,};
-INT32   MotorDir[NUM_AXIS] = {1,1,1,1,1,1};
-int   old_flag[NUM_AXIS]={0,};
-int   acc_flag[NUM_AXIS]={0,};
-Jointd gmat;
-Matrixd mmat;
-Matrixd cmat;
-Matrix6n6nd adv;
+double ECAT_ActualPos_zero[JOINTNUM] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
+double ActualPos_Rad[JOINTNUM] = {0.0,};
+double ActualVel_Rad[JOINTNUM] = {0.0,};
+double ActualVel_Rad_Old[JOINTNUM] = {0.0,};
+double ActualAcc_Rad[JOINTNUM] = {0.0,};
+double TargetPos_Rad[JOINTNUM] = {0.0,};
+double TargetVel_Rad[JOINTNUM] = {0.0,};
+double TargetAcc_Rad[JOINTNUM] = {0.0,};
+double ECAT_calcTorq[JOINTNUM] = {0.0,};
+double ECAT_TargetToq[JOINTNUM] = {0.0,};
+INT32   MotorDir[JOINTNUM] = {1,1,1,1,1,1};
+int   old_flag[JOINTNUM]={0,};
 
-Jaco b_jaco;
-InvJaco b_inv;
-LinJaco l_jaco, l_jaco_dot;
-PinvLJaco DPI_l_jaco;
-se3 wrench_test;
-Jointd torq;
-Vector3d EulerAng;
-double time_buf;
-int time_flag=0;
 int limit_flag=0;
 
-
 //For Trajectory management
-//Joint
-int NUM_MOTION=1;
-int Motion=1;
-double TargetTrajPos_Rad[NUM_AXIS]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};/////////////////////////must change/////////////////////////////////
-//double TargetTrajPos_Rad[NUM_AXIS]={0.0, -1.57, 0.0, 1.57, 0.0};
-double traj_time = 3;
-int traj_changed = 0;
 //Task
-double TargetTrajPos_Meter[NUM_AXIS]={0,0,};
-Vector3d xd, xd_dot, xd_ddot;
-Vector3d x_buf;
-Vector3d vive_pos;
-Vector3d vive_vel;
-Vector3d vive_buf;
-int vive_flag=0;
-double K_tracking_ = 1;
-int task_time=0;
 
-Matrix<double,NUM_AXIS,1> qd,qd_dot,qd_ddot ,qd_old, qd_dot_old;
-double q_[3]={0.0,};
-double traq[NUM_AXIS]={0.0, 0.0, 0.0, -1.5709, 0.0, 0.0};
-double traq_d[NUM_AXIS]={0.0,};
-double traq_dd[NUM_AXIS]={0.0,};
-int cnt=0;
+double traq[JOINTNUM]={0.0, 0.0, 0.0, 0, 0.0, 0.0};
+double traq_d[JOINTNUM]={0.0,};
+double traq_dd[JOINTNUM]={0.0,};
 int flag=0;
-int q_flag=0;
-
-//For sEMG
-int emg_state = 5;
-
-//For Robo-Limb
-int fd=-1;
 int rtsercan_fd  = -1;
-int ftsercan_fd  = -1;
-int open_state;
-int hand_flag = 0;
-int finger_state[6]={0,};
-
-// Signal handler for CTRL+C
 void signal_handler(int signum);
-
-
-void saveLogData()
-{
-/*	if (datasocket.hasConnection() && sampling_tick-- == 0)
-	{
-		sampling_tick = sampling_time - 1; // 'minus one' is necessary for intended operation
-
-		if (rearIdx < MAX_BUFF_SIZE)
-		{
-			_loggingBuff[rearIdx].Time = gt;
-			for (int i=0; i<NUM_AXIS; i++)
-			{
-				_loggingBuff[rearIdx].ActualPos[i] = ActualPos[i];
-				_loggingBuff[rearIdx].ActualVel[i] = ActualVel[i];
-			}
-			rearIdx++;
-		}
-	}
-*/
-}
-
+void saveLogData(){}
 /****************************************************************************/
-void EncToRad()
+void EncToRad(double wc, double dt)
 {
-	
-	for(int i=0; i<NUM_AXIS; i++)
+	for(int i=0; i<JOINTNUM; i++)
 	{
 		if(old_flag[i]==0){
-			ActualPos_Old[i]=ActualPos[i];
+			ECAT_ActualPos_Old[i]=ECAT_ActualPos[i];
 			old_flag[i]=1;
 		}
 		else if(old_flag[i]==1){
-
-			ActualVel[i]=(2*0.01-0.001)/(2*0.01+0.001)*ActualVel_Old[i]+2/(2*0.01+0.001)*(ActualPos[i]-ActualPos_Old[i]);
-
+			//ECAT_ActualVel[i]=1.0/(1.0+dt*wc)*ECAT_ActualVel_Old[i]+dt*wc/(1.0+dt*wc)*(ECAT_ActualPos_Old[i]-ECAT_ActualPos[i])/dt;
 			switch(i)
 			{
-			case 0:
-			case 1:
-				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
-				break;
-			case 2:
-				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
-				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
-				break;
-			case 3:
-			case 4:
-			case 5:
-				ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-				ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
-				break;
+				case 0:
+					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
+					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
+					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];				
+				case 1:
+					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
+					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
+					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
+					break;
+				case 2:
+					ActualPos_Rad[i]=(double)ECAT_ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
+					ActualVel_Rad[i]=(double)ECAT_ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
+					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
+					break;
+				case 3:
+					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
+					break;
+				case 4:
+					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);	
+					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
+					break;
+				case 5:
+					ActualPos_Rad[i]=(double)ECAT_ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
+					ActualVel_Rad[i]=(double)ECAT_ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
+					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
+					break;
 			}
-			
-
 			//for Kinematics & Dynamics
-			info.act.q[i]=ActualPos_Rad[i];
-			info.act.q_dot[i]=ActualVel_Rad[i];
-
+			info.act.q(i)=ActualPos_Rad[i];
+			info.act.dq(i)=ActualVel_Rad[i];
+			ActualVel_Rad_Old[i]= ActualVel_Rad[i];
 			//buffer for calculate velocity
-			ActualPos_Old[i]=ActualPos[i];
-			ActualVel_Old[i]=ActualVel[i];
+			ECAT_ActualPos_Old[i]=ECAT_ActualPos[i];
+			ECAT_ActualVel_Old[i]=ECAT_ActualVel[i];
 		}
 	}
-	info.act.j_q=Map<VectorXd>(info.act.q,NUM_AXIS);
-	info.act.j_q_d=Map<VectorXd>(info.act.q_dot,NUM_AXIS);
-
-	// for(int i=0; i<NUM_AXIS; i++)
-	// {
-	// 	switch(i)
-	// 	{
-	// 	case 0:
-	// 	case 1:
-	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
-	// 		break;
-	// 	case 2:
-	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
-	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
-	// 		break;
-	// 	case 3:
-	// 	case 4:
-	// 	case 5:
-	// 		ActualPos_Rad[i]=(double)ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-	// 		ActualVel_Rad[i]=(double)ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
-	// 		break;
-	// 	}
-		
-	// 	//for Kinematics & Dynamics
-	// 	info.act.q[i]=ActualPos_Rad[i];
-	// 	info.act.q_dot[i]=ActualVel_Rad[i];
-
-	// 	//buffer for calculate velocity
-	// 	ActualPos_Old[i]=ActualPos[i];
-	// 	ActualVel_Old[i]=ActualVel[i];
-
-	// }
-	// info.act.j_q=Map<VectorXd>(info.act.q,NUM_AXIS);
-	// info.act.j_q_d=Map<VectorXd>(info.act.q_dot,NUM_AXIS);
 }
 
 void Robot_Limit()
 {
-	//Joint limit
-	/*if(traq[0] <= -0.86 || traq[0] >= 2.61)
-	{
-		if(traq[0] <= -0.86){
-			traq[0] =-0.86;
-			//flag=1;
-		}
-		else{
-			traq[0]=2.61;
-			//flag=1;
-		}
-	}else{}
-	if(traq[1] <= -1.89 || traq[1] >=0.3)
-	{
-		if(traq[1] <= -1.89){
-			traq[1] =-1.89;
-			//flag=1;
-		}
-		else{
-			traq[1]=0.3;
-			//flag=1;
-		}
-	}
-	if(traq[2] <=-1.28  || traq[2] >=1.0)
-	{
-		if(traq[2] <= -1.28){
-			traq[2] = -1.28;
-			//flag=1;
-		}
-		else{
-			traq[2]=1.0;
-			//flag=1;
-		}
-	}
-	if(traq[3] <= 0.3 || traq[3] >=2.35)
-	{
-		if(traq[3] <= 0.3){
-			traq[3] =0.3;
-			//flag=1;
-		}
-		else{
-			traq[3]=2.35;
-			//flag=1;
-		}
-	}
-	if(traq[4] <= -1.35 || traq[4] >=1.25)
-	{
-		if(traq[4] <= -1.35){
-			traq[4] =-1.35;
-			//flag=1;
-		}
-		else{
-			traq[4]=1.25;
-			//flag=1;
-		}
-	}*/
-	//Velocity & Acceleration limit
-	for(int i=0;i<NUM_AXIS;i++)
+	for(int i=0;i<JOINTNUM;i++)
 	{
 		if(abs(ActualVel_Rad[i])>4)
 		{
@@ -389,26 +231,32 @@ void Robot_Limit()
 int isDriveInit(void)
 {
 	int elmo_count = 0;
-	for(int i=0; i<NUM_AXIS; ++i)
+	for(int i=0; i<JOINTNUM; ++i)
 	{
 		if(ecat_nrmk_drive[i].initialized())
 			elmo_count++;
 	}
+<<<<<<< HEAD
 	// for(int i=0;i<NUM_AXIS;i++)
 	// {
 	// 	ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
 	// }
 	if(elmo_count == NUM_AXIS)
+=======
+	// for(int i=0;i<JOINTNUM;i++)
+	// {
+	// 	ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
+	// }
+	if(elmo_count == JOINTNUM)
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 		return 1;
 	else
 		return 0;
 }
 
-
-
-
 int compute()
 {
+<<<<<<< HEAD
 	//FKin
 	info.act.x.head(3)=cManipulator->pKin->ForwardKinematics();
 	EulerAng = cManipulator->pKin->GetEulerAngle();
@@ -425,10 +273,87 @@ int compute()
 	//gmat=cManipulator->pDyn->G_Matrix();
 
 	
+=======
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 	return 0;
 }
+void readEcatData(){
+		for(int k=0; k<JOINTNUM; ++k){
+			DeviceState[k] = 			ecat_nrmk_drive[k].NRMK_Drive_DeviceState();
+			StatusWord[k] = 			ecat_nrmk_drive[k].status_word_;
+			ModeOfOperationDisplay[k] = ecat_nrmk_drive[k].mode_of_operation_display_;
+			ControlWord[k] = 			ecat_nrmk_drive[k].control_word_;
+			ECAT_ActualPos[k] = 				ecat_nrmk_drive[k].position_-ECAT_ActualPos_zero[k];
+			ECAT_ActualVel[k] = 				ecat_nrmk_drive[k].velocity_;
+			ECAT_ActualTor[k] = 				ecat_nrmk_drive[k].torque_;
+		}
+		// read FT
+		iStatus = ecat_nrmk_indy_tool[0].iStatus_;
+		iButton = ecat_nrmk_indy_tool[0].iButton_;
+		FT_Raw_Fx = ecat_nrmk_indy_tool[0].FT_Raw_Fx_;
+		FT_Raw_Fy = ecat_nrmk_indy_tool[0].FT_Raw_Fy_;
+		FT_Raw_Fz = ecat_nrmk_indy_tool[0].FT_Raw_Fz_;
+		FT_Raw_Tx = ecat_nrmk_indy_tool[0].FT_Raw_Tx_;
+		FT_Raw_Ty = ecat_nrmk_indy_tool[0].FT_Raw_Ty_;
+		FT_Raw_Tz = ecat_nrmk_indy_tool[0].FT_Raw_Tz_;
+		FT_OverloadStatus = ecat_nrmk_indy_tool[0].FT_OverloadStatus_;
+		FT_ErrorFlag = ecat_nrmk_indy_tool[0].FT_ErrorFlag_;
+}
 
-
+void calcTorque_To_EcatTorque(JVec calc_torque, double* toq){
+   for(int i=0; i<6; ++i) {
+        if(i==0)
+            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
+		else if(i==1)
+            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
+        else if(i==2)
+            toq[i] = (calc_torque(i))*(double)(TORQUE_ADC_200)/(double)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
+        else if(i==3)
+            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
+        else if(i==4)
+            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
+        else if(i==5)
+            toq[i] = (calc_torque(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
+        else
+            return;
+    }    
+}
+void saturationEcatTorque(double *p_toq , int maxtoq, int *p_dir)
+{
+    double toq_tmp=0;
+	for(int i=0; i<JOINTNUM; ++i)
+	{
+		toq_tmp = p_toq[i];
+		if(toq_tmp <= -maxtoq)
+		{
+			p_toq[i] = p_dir[i]*-maxtoq;
+		}
+		else if(toq_tmp >= maxtoq)
+		{
+			p_toq[i] = p_dir[i]*maxtoq;
+		}
+		else
+		{
+			p_toq[i] = p_dir[i]*toq_tmp;
+		}
+	}
+	return;
+}
+void saturationEint(JVec &torque, JVec MAX_TORQUES){
+    for(int i =0;i<JOINTNUM;i++){
+        if(abs(torque(i))> MAX_TORQUES(i)){
+            if(torque(i)<0) torque(i) = MAX_TORQUES(i);
+            else torque(i) = -MAX_TORQUES(i);
+        }
+    }
+}
+void writeEcatData(double* ECAT_calcTorq){
+	for(int j=0; j<JOINTNUM; ++j)
+	{
+		ECAT_TargetToq[j] = round(ECAT_calcTorq[j]);
+		ecat_nrmk_drive[j].writeTorque(ECAT_TargetToq[j]);
+	}
+}
 // RTRArm_task
 void RTRArm_run(void *arg)
 {
@@ -436,35 +361,35 @@ void RTRArm_run(void *arg)
 	RTIME now, previous;
 	RTIME p1 = 0;
 	RTIME p3 = 0;
-
-	JointVec tauGrav, q_nom, qdot_nom;
-	tauGrav.Zero(); q_nom.Zero(); qdot_nom.Zero();
-
-	cManipulator->robot_update_R(); //update robot
 	//ecatmaster.SyncEcatMaster(rt_timer_read());
 	/* Arguments: &task (NULL=self),
 	 *            start time,
 	 *            period
 	 */
-
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
-
+	info.des.q = JVec::Zero();
+	info.des.dq = JVec::Zero();
+	info.des.ddq = JVec::Zero();
+	JVec eint = JVec::Zero();
+	JVec e = JVec::Zero();
+	JVec q0 = JVec::Zero();
+	JVec qT = JVec::Zero();
+	//qT<< 0.1,0.1,-1.5708,0.1,-1.5708,0.1;
+	qT<< 0.1,0.1,-1.5707,0.1,0.1,0.1;
+	double Tf = 5;
+	int method =5;
 	while (run)
 	{
-
 		runcount++;
-
-		if (!run)
-		{
+		if (!run){
 			break;
 		}
-
 		previous = rt_timer_read();
-
 		// [ToDo] Here is an error for PDO mapping
 		ecatmaster.RxUpdate();
 		if(system_ready)
 		{
+<<<<<<< HEAD
 
 			//read the motor data
 			for(int k=0; k<NUM_AXIS; ++k){
@@ -571,8 +496,25 @@ void RTRArm_run(void *arg)
 					info.act.dq_ddot[i]=traq_dd[i];
 
 					TrajFlag_j[i]=2;
-				}
+=======
+			readEcatData();
+			EncToRad(wc,dt);
+			if(traj_flag ==0){
+				q0 = info.act.q;
+				traj_flag =1;
 			}
+			if(traj_flag == 1){
+				if (double_gt <=Tf){
+					JointTrajectory(q0, qT, Tf, double_gt , method , info.des.q, info.des.dq, info.des.ddq) ;
+				}else if(double_gt > Tf){
+					q0 = info.act.q;
+					qT = JVec::Zero();
+					traj_flag =2;
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
+				}
+				
+			}
+<<<<<<< HEAD
 			Control->PD_Gravity(info.act.q, info.act.q_dot,traq, traq_d, TargetToq);
 
 			//Gravity Controller
@@ -626,15 +568,25 @@ void RTRArm_run(void *arg)
 				ecat_nrmk_drive[j].writeVelocity(TargetVel[j]);
 				// ecat_nrmk_drive[j].writeTorque(TargetTor[j]);
 
+=======
+			if(traj_flag ==2){
+				JointTrajectory(q0, qT, Tf, double_gt-Tf , method , info.des.q, info.des.dq, info.des.ddq) ;
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 			}
-			// ecat_nrmk_drive[0].writeTorque(TargetTor[0]);
-			// ecat_nrmk_drive[1].writeTorque(TargetTor[1]);
-			// ecat_nrmk_drive[2].writeTorque(TargetTor[2]);
-			// ecat_nrmk_drive[3].writeTorque(TargetTor[3]);
-			// ecat_nrmk_drive[5].writeTorque(TargetTor[5]);
+			
+			compute();
+			Robot_Limit();
+			//JVec clacTorq = mr_indy7.Gravity( info.act.q ); // calcTorque
+			//JVec clacTorq = mr_indy7.ComputedTorqueControl( info.act.q , info.act.dq, info.des.q, info.des.dq); // calcTorque
+			e = info.des.q-info.act.q;
+			eint = eint+e*dt;
+			JVec clacTorq = mr_indy7.HinfControl( info.act.q , info.act.dq, info.des.q, info.des.dq,info.des.ddq,eint);
+			mr_indy7.saturationMaxTorque(clacTorq,MAX_TORQUES);
 
+			calcTorque_To_EcatTorque(clacTorq, ECAT_calcTorq);
+			saturationEcatTorque(ECAT_calcTorq, 1000, MotorDir);
+			writeEcatData(ECAT_calcTorq);
 		}
-
 		ecatmaster.TxUpdate();
 #if defined(USE_DC_MODE)
 		ecatmaster.SyncEcatMaster(rt_timer_read());
@@ -649,8 +601,6 @@ void RTRArm_run(void *arg)
 			worst_time = 0;
 			ethercat_time = 0;
 		}
-			
-
 		// For EtherCAT performance statistics
 		p1 = p3;
 		p3 = rt_timer_read();
@@ -658,13 +608,14 @@ void RTRArm_run(void *arg)
 		double_gt += ((double)(long)(p3 - p1))*1e-9;
 		ethercat_time = (long) now - previous;
 
-
 		if ( isDriveInit() == 1 && (runcount > WAKEUP_TIME*(NSEC_PER_SEC/cycle_ns)))
 		{
 			system_ready=1;	//all drives have been done
+<<<<<<< HEAD
 			
+=======
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 			gt+= period;
-
 			if (worst_time<ethercat_time)
 				worst_time=ethercat_time;
 			if(ethercat_time > (long)cycle_ns)
@@ -707,6 +658,7 @@ void print_run(void *arg)
 			previous=now;
 			rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
 			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
+<<<<<<< HEAD
 
 			cout<<"Manipulability   : "<<cManipulator->pKin->Manipulability(l_jaco)<<endl;
 			cout<<"Condition Number : "<<cManipulator->pKin->Condition_Number(l_jaco)<<endl;
@@ -735,6 +687,23 @@ void print_run(void *arg)
 			rt_printf("x : %lf, y : %lf, z : %lf\n",vive_pos[0],vive_pos[1],vive_pos[2]);
 			cout<<limit_flag<<endl;
 
+=======
+			for(int j=0; j<JOINTNUM; ++j){
+				//rt_printf("ID: %d", j+NUM_FT);
+				//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+				//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			    //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+				//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+				//rt_printf("\t ecat_ActPos : %d",ecat_nrmk_drive[j].position_);
+				//rt_printf("\t ecat_ActPosZero : %f",ECAT_ActualPos_zero[j]);
+				rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.dq[j],info.des.ddq[j]);
+				rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j]);
+				rt_printf("\t TarTor: %f, ",				ECAT_calcTorq[j]);
+				rt_printf("\t ActTor: %d,\n",			ECAT_ActualTor[j]);
+			}
+			rt_printf("\n");
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 		}
 		else
 		{
@@ -763,53 +732,43 @@ void plot_run(void *arg)
 
 	while (1)
 	{
-		/// TO DO: You have to prepare data for NRMKDataSocket
-/*		if (datasocket.hasConnection() && system_ready)
-		{
-			if (frontIdx < rearIdx)
-			{
-				datasocket.updateControlData(_loggingBuff[frontIdx].ActualPos, _loggingBuff[frontIdx].ActualVel);
-				datasocket.update(_loggingBuff[frontIdx].Time);
 
-				frontIdx++;
-			}
-			else if (rearIdx == MAX_BUFF_SIZE)
-			{
-				frontIdx = rearIdx = 0;
-			}
-		}
-		else
-		{
-			frontIdx = rearIdx = 0;
-		}
-*/
-
-		//usleep(1000);
 		rt_task_wait_period(NULL);
 	}
 }
 
 /****************************************************************************/
-void signal_handler(int signum = 0)
+void signal_handler(int signum)
 {
 	rt_task_delete(&plot_task);
 	rt_task_delete(&RTRArm_task);
 	rt_task_delete(&print_task);
-    printf("\nServo drives Stopped!\n");
-
+	printf("\n\n");
+	if(signum==SIGINT)
+		printf("╔════════════════[SIGNAL INPUT SIGINT]═══════════════╗\n");
+	else if(signum==SIGTERM)
+		printf("╔═══════════════[SIGNAL INPUT SIGTERM]═══════════════╗\n");	
+	else if(signum==SIGWINCH)
+		printf("╔═══════════════[SIGNAL INPUT SIGWINCH]══════════════╗\n");		
+	else if(signum==SIGHUP)
+		printf("╔════════════════[SIGNAL INPUT SIGHUP]═══════════════╗\n");
+    printf("║                Servo drives Stopped!               ║\n");
+	printf("╚════════════════════════════════════════════════════╝\n");	
     ecatmaster.deactivate();
     exit(1);
 }
 
+
 /****************************************************************************/
 int main(int argc, char **argv)
 {
-
 	// Perform auto-init of rt_print buffers if the task doesn't do so
     rt_print_auto_init(1);
 
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);
+	signal(SIGWINCH, signal_handler);
+	signal(SIGHUP, signal_handler);
 
 	int portNum=1; //COM as default
 	char portName[100];
@@ -832,7 +791,11 @@ int main(int argc, char **argv)
 	cycle_ns = 1000000; // nanosecond -> 1kHz
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
+	mr_indy7=MR_Indy7();
+	mr_indy7.MRSetup();
+	MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
 
+<<<<<<< HEAD
 	// _robotNom = new ROBOT(USERNAME, EMAIL, SERIAL);
 	cManipulator = new robot;
 	Control = new HYUControl::Controller(cManipulator,ROBOT_DOF);
@@ -840,15 +803,22 @@ int main(int argc, char **argv)
 	traj5th_task =  new hyuCtrl::Trajectory();
 
 	for(int j=0; j<NUM_AXIS; ++j)
+=======
+	for(int j=0; j<JOINTNUM; ++j)
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 	{
 		ecatmaster.addSlaveNRMK_Drive(0, j+1, &ecat_nrmk_drive[j]);
 		ecat_nrmk_drive[j].mode_of_operation_ = ecat_nrmk_drive[j].MODE_CYCLIC_SYNC_TORQUE;
 	}
 	for(int i=0; i<NUM_FT; ++i)
+<<<<<<< HEAD
 		ecatmaster.addSlaveNRMK_Indy_Tool(0, i+NUM_AXIS+1, &ecat_nrmk_indy_tool[i]);
 
 
 
+=======
+		ecatmaster.addSlaveNRMK_Indy_Tool(0, i+JOINTNUM+1, &ecat_nrmk_indy_tool[i]);
+>>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 
 #if defined(USE_DC_MODE)
 	ecatmaster.activateWithDC(0, cycle_ns);  //a first arg DC location of MotorDriver?
@@ -878,8 +848,8 @@ int main(int argc, char **argv)
 	rt_task_start(&print_task, &print_run, NULL);
 	
 	// plotting: data socket comm
-	rt_task_create(&plot_task, "plotting", 0, 80, 0);
-	rt_task_start(&plot_task, &plot_run, NULL);
+	//rt_task_create(&plot_task, "plotting", 0, 80, 0);
+	//rt_task_start(&plot_task, &plot_run, NULL);
 
 	// Must pause here
 	pause();
@@ -890,7 +860,7 @@ int main(int argc, char **argv)
 	}
 	*/
 	// Finalize
-	signal_handler();
+	signal_handler(0);
 
     return 0;
 }
