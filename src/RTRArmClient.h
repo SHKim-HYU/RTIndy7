@@ -47,15 +47,8 @@
 #include "EcatSystem/Ecat_Master.h"
 #include "EcatSystem/Ecat_Elmo.h"
 
-<<<<<<< HEAD
-#include "Control/Trajectory.h"
-#include "Control/Controller.h"
-#include "KDL/SerialRobot.h"
-#include "KDL/PoEKinematics.h"
-#include "KDL/PropertyDefinition.h"
-=======
+
 #include "PropertyDefinition.h"
->>>>>>> f3d98de0673001638a49a504f68ca8198c6ee832
 #include "NRMKsercan_tp.h"
 #include "NRMKhw_tp.h"
 
