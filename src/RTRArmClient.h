@@ -9,9 +9,9 @@
 #define RTRARMCLIENT_H_
 
 /***** License Information *****/
-#define USERNAME "NeuromekaDev"
-#define EMAIL "dev@neuromeka.com"
-#define SERIAL "nrmk13766"
+#define USERNAME "USER"
+#define EMAIL "user@email.com"
+#define SERIAL "ABCD"
 /******************************/
 
 #include <stdio.h>

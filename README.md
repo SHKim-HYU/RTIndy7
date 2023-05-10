@@ -1,1 +1,3 @@
-# HYU_SPA_ver2
+# RTIndy7 Task
+
+Ubuntu14.04
