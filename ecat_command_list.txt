@@ -1,2 +1,183 @@
 엔코더 값 읽기
+sudo ethercattool slaves
 sudo ethercattool -p6 upload -t int32 0x6064 0
+
+
+=== Master 0, Slave 0 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1100, DefaultSize   25, ControlRegister 0x64, Enable 1
+  RxPDO 0x1610 "IO_OUT process data mapping"
+    PDO entry 0x7100:01,  8 bit, "ControlCode"
+    PDO entry 0x7100:02,  8 bit, "DO_5V"
+    PDO entry 0x7100:03,  8 bit, "TO"
+    PDO entry 0x7100:04,  8 bit, "DO"
+    PDO entry 0x7100:05, 16 bit, "AO1"
+    PDO entry 0x7100:06, 16 bit, "AO2"
+    PDO entry 0x7100:07, 32 bit, "FT_ConfigParam"
+    PDO entry 0x7100:08,  8 bit, "RS485_ConfigParam"
+    PDO entry 0x7100:09,  8 bit, "RS485_CMD"
+    PDO entry 0x7100:0a,  8 bit, "RS485_Tx_Cnt"
+    PDO entry 0x7100:0b,  8 bit, "RS485_Tx_D0"
+    PDO entry 0x7100:0c,  8 bit, "RS485_Tx_D1"
+    PDO entry 0x7100:0d,  8 bit, "RS485_Tx_D2"
+    PDO entry 0x7100:0e,  8 bit, "RS485_Tx_D3"
+    PDO entry 0x7100:0f,  8 bit, "RS485_Tx_D4"
+    PDO entry 0x7100:10,  8 bit, "RS485_Tx_D5"
+    PDO entry 0x7100:11,  8 bit, "RS485_Tx_D6"
+    PDO entry 0x7100:12,  8 bit, "RS485_Tx_D7"
+    PDO entry 0x7100:13,  8 bit, "RS485_Tx_D8"
+    PDO entry 0x7100:14,  8 bit, "RS485_Tx_D9"
+SM3: PhysAddr 0x1400, DefaultSize   33, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a10 "IO_IN process data mapping"
+    PDO entry 0x6100:01,  8 bit, "StatusCode"
+    PDO entry 0x6100:02,  8 bit, "DI_5V"
+    PDO entry 0x6100:03,  8 bit, "DI1"
+    PDO entry 0x6100:04,  8 bit, "DI2"
+    PDO entry 0x6100:05, 16 bit, "AI1"
+    PDO entry 0x6100:06, 16 bit, "AI2"
+    PDO entry 0x6100:07, 16 bit, "FT_Raw_Fx"
+    PDO entry 0x6100:08, 16 bit, "FT_Raw_Fy"
+    PDO entry 0x6100:09, 16 bit, "FT_Raw_Fz"
+    PDO entry 0x6100:0a, 16 bit, "FT_Raw_Tx"
+    PDO entry 0x6100:0b, 16 bit, "FT_Raw_Ty"
+    PDO entry 0x6100:0c, 16 bit, "FT_Raw_Tz"
+    PDO entry 0x6100:0d,  8 bit, "FT_OverloadStatus"
+    PDO entry 0x6100:0e,  8 bit, "FT_ErrorFlag"
+    PDO entry 0x6100:0f,  8 bit, "RS485_Rx_Cnt"
+    PDO entry 0x6100:10,  8 bit, "RS485_Rx_D0"
+    PDO entry 0x6100:11,  8 bit, "RS485_Rx_D1"
+    PDO entry 0x6100:12,  8 bit, "RS485_Rx_D2"
+    PDO entry 0x6100:13,  8 bit, "RS485_Rx_D3"
+    PDO entry 0x6100:14,  8 bit, "RS485_Rx_D4"
+    PDO entry 0x6100:15,  8 bit, "RS485_Rx_D5"
+    PDO entry 0x6100:16,  8 bit, "RS485_Rx_D6"
+    PDO entry 0x6100:17,  8 bit, "RS485_Rx_D7"
+    PDO entry 0x6100:18,  8 bit, "RS485_Rx_D8"
+    PDO entry 0x6100:19,  8 bit, "RS485_Rx_D9"
+=== Master 0, Slave 1 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1800, DefaultSize   13, ControlRegister 0x64, Enable 1
+  RxPDO 0x1600 "Drive RxPDO"
+    PDO entry 0x6040:00, 16 bit, "controlword"
+    PDO entry 0x607a:00, 32 bit, "target_position"
+    PDO entry 0x60ff:00, 32 bit, "target_velocity"
+    PDO entry 0x6071:00, 16 bit, "target_torque"
+    PDO entry 0x6060:00,  8 bit, "modes_of_operation"
+SM3: PhysAddr 0x1c00, DefaultSize   13, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a00 "Drive TxPDO"
+    PDO entry 0x6041:00, 16 bit, "statusword"
+    PDO entry 0x6064:00, 32 bit, "position_actual_value"
+    PDO entry 0x606c:00, 32 bit, "velocity_actual_value"
+    PDO entry 0x6077:00, 16 bit, "torque_actual_value"
+    PDO entry 0x6061:00,  8 bit, "modes_of_operation_display"
+=== Master 0, Slave 2 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1800, DefaultSize   13, ControlRegister 0x64, Enable 1
+  RxPDO 0x1600 "Drive RxPDO"
+    PDO entry 0x6040:00, 16 bit, "controlword"
+    PDO entry 0x607a:00, 32 bit, "target_position"
+    PDO entry 0x60ff:00, 32 bit, "target_velocity"
+    PDO entry 0x6071:00, 16 bit, "target_torque"
+    PDO entry 0x6060:00,  8 bit, "modes_of_operation"
+SM3: PhysAddr 0x1c00, DefaultSize   13, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a00 "Drive TxPDO"
+    PDO entry 0x6041:00, 16 bit, "statusword"
+    PDO entry 0x6064:00, 32 bit, "position_actual_value"
+    PDO entry 0x606c:00, 32 bit, "velocity_actual_value"
+    PDO entry 0x6077:00, 16 bit, "torque_actual_value"
+    PDO entry 0x6061:00,  8 bit, "modes_of_operation_display"
+=== Master 0, Slave 3 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1800, DefaultSize   13, ControlRegister 0x64, Enable 1
+  RxPDO 0x1600 "Drive RxPDO"
+    PDO entry 0x6040:00, 16 bit, "controlword"
+    PDO entry 0x607a:00, 32 bit, "target_position"
+    PDO entry 0x60ff:00, 32 bit, "target_velocity"
+    PDO entry 0x6071:00, 16 bit, "target_torque"
+    PDO entry 0x6060:00,  8 bit, "modes_of_operation"
+SM3: PhysAddr 0x1c00, DefaultSize   13, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a00 "Drive TxPDO"
+    PDO entry 0x6041:00, 16 bit, "statusword"
+    PDO entry 0x6064:00, 32 bit, "position_actual_value"
+    PDO entry 0x606c:00, 32 bit, "velocity_actual_value"
+    PDO entry 0x6077:00, 16 bit, "torque_actual_value"
+    PDO entry 0x6061:00,  8 bit, "modes_of_operation_display"
+=== Master 0, Slave 4 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1800, DefaultSize   13, ControlRegister 0x64, Enable 1
+  RxPDO 0x1600 "Drive RxPDO"
+    PDO entry 0x6040:00, 16 bit, "controlword"
+    PDO entry 0x607a:00, 32 bit, "target_position"
+    PDO entry 0x60ff:00, 32 bit, "target_velocity"
+    PDO entry 0x6071:00, 16 bit, "target_torque"
+    PDO entry 0x6060:00,  8 bit, "modes_of_operation"
+SM3: PhysAddr 0x1c00, DefaultSize   13, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a00 "Drive TxPDO"
+    PDO entry 0x6041:00, 16 bit, "statusword"
+    PDO entry 0x6064:00, 32 bit, "position_actual_value"
+    PDO entry 0x606c:00, 32 bit, "velocity_actual_value"
+    PDO entry 0x6077:00, 16 bit, "torque_actual_value"
+    PDO entry 0x6061:00,  8 bit, "modes_of_operation_display"
+=== Master 0, Slave 5 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1800, DefaultSize   13, ControlRegister 0x64, Enable 1
+  RxPDO 0x1600 "Drive RxPDO"
+    PDO entry 0x6040:00, 16 bit, "controlword"
+    PDO entry 0x607a:00, 32 bit, "target_position"
+    PDO entry 0x60ff:00, 32 bit, "target_velocity"
+    PDO entry 0x6071:00, 16 bit, "target_torque"
+    PDO entry 0x6060:00,  8 bit, "modes_of_operation"
+SM3: PhysAddr 0x1c00, DefaultSize   13, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a00 "Drive TxPDO"
+    PDO entry 0x6041:00, 16 bit, "statusword"
+    PDO entry 0x6064:00, 32 bit, "position_actual_value"
+    PDO entry 0x606c:00, 32 bit, "velocity_actual_value"
+    PDO entry 0x6077:00, 16 bit, "torque_actual_value"
+    PDO entry 0x6061:00,  8 bit, "modes_of_operation_display"
+=== Master 0, Slave 6 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1800, DefaultSize   13, ControlRegister 0x64, Enable 1
+  RxPDO 0x1600 "Drive RxPDO"
+    PDO entry 0x6040:00, 16 bit, "controlword"
+    PDO entry 0x607a:00, 32 bit, "target_position"
+    PDO entry 0x60ff:00, 32 bit, "target_velocity"
+    PDO entry 0x6071:00, 16 bit, "target_torque"
+    PDO entry 0x6060:00,  8 bit, "modes_of_operation"
+SM3: PhysAddr 0x1c00, DefaultSize   13, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a00 "Drive TxPDO"
+    PDO entry 0x6041:00, 16 bit, "statusword"
+    PDO entry 0x6064:00, 32 bit, "position_actual_value"
+    PDO entry 0x606c:00, 32 bit, "velocity_actual_value"
+    PDO entry 0x6077:00, 16 bit, "torque_actual_value"
+    PDO entry 0x6061:00,  8 bit, "modes_of_operation_display"
+=== Master 0, Slave 7 ===
+SM0: PhysAddr 0x1000, DefaultSize  128, ControlRegister 0x26, Enable 1
+SM1: PhysAddr 0x1080, DefaultSize  128, ControlRegister 0x22, Enable 1
+SM2: PhysAddr 0x1100, DefaultSize   10, ControlRegister 0x64, Enable 1
+  RxPDO 0x1600 "HRI_OUT process data mapping"
+    PDO entry 0x7000:01,  8 bit, "iLed"
+    PDO entry 0x7000:02,  8 bit, "iGripper"
+    PDO entry 0x7000:03, 32 bit, "FT_ConfigParam"
+    PDO entry 0x7000:04,  8 bit, "LED_Mode"
+    PDO entry 0x7000:05,  8 bit, "LED_G"
+    PDO entry 0x7000:06,  8 bit, "LED_R"
+    PDO entry 0x7000:07,  8 bit, "LED_B"
+SM3: PhysAddr 0x1400, DefaultSize   16, ControlRegister 0x20, Enable 1
+  TxPDO 0x1a00 "HRI_IN process data mapping"
+    PDO entry 0x6000:01,  8 bit, "iStatus"
+    PDO entry 0x6000:02,  8 bit, "iButton"
+    PDO entry 0x6000:03, 16 bit, "FT_Raw_Fx"
+    PDO entry 0x6000:04, 16 bit, "FT_Raw_Fy"
+    PDO entry 0x6000:05, 16 bit, "FT_Raw_Fz"
+    PDO entry 0x6000:06, 16 bit, "FT_Raw_Tx"
+    PDO entry 0x6000:07, 16 bit, "FT_Raw_Ty"
+    PDO entry 0x6000:08, 16 bit, "FT_Raw_Tz"
+    PDO entry 0x6000:09,  8 bit, "FT_OverloadStatus"
+    PDO entry 0x6000:0a,  8 bit, "FT_ErrorFlag"

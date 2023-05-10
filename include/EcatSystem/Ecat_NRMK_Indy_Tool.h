@@ -31,6 +31,11 @@ public:
      *  User must first set max_torque_Nm_.
      *  Provided as a convenience to calculate target_torque_
      *  NOTE: function assumes [max_torque_ = 1000]  */
+    void writeLED_G(uint8_t flag)
+    {
+        LED_mode_ = flag;
+        LED_G_ = flag;
+    }
 
 	virtual void processData(size_t index, uint8_t* domain_address) //read and write PDO and if index is 8,
 	{                                                               //check the state and change the flag of state

@@ -295,16 +295,18 @@ void RTRArm_run(void *arg)
 			//Robot_Limit();
 			//JVec calcTorq = mr_indy7.Gravity( info.act.q ); // calcTorque
 			//JVec calcTorq = mr_indy7.ComputedTorqueControl( info.act.q , info.act.dq, info.des.q, info.des.dq); // calcTorque
+
 			e = info.des.q-info.act.q;
 			eint = eint+e*dt;
-			//saturationEint(eint,saturation_value);
+
 			JVec calcTorq = mr_indy7.HinfControl( info.act.q , info.act.dq, info.des.q, info.des.dq,info.des.ddq,eint);
-			mr_indy7.saturationMaxTorque(calcTorq,MAX_TORQUES);
-			
+
 			setUDPInfo(calcTorq);
 			calcTorque_To_EcatTorque(calcTorq, ECAT_calcTorq);
 			saturationEcatTorque(ECAT_calcTorq, 1000, MotorDir);
 			writeEcatData(ECAT_calcTorq);
+			
+			//ecat_nrmk_indy_tool[0].writeLED_G(0);
 		}
 		ecatmaster.TxUpdate();
 #if defined(USE_DC_MODE)
@@ -356,7 +358,7 @@ void print_run(void *arg)
 	 *            start time,
 	 *            period (here: 100ms = 0.1s)
 	 */
-	rt_task_set_periodic(NULL, TM_NOW, 1e8);
+	rt_task_set_periodic(NULL, TM_NOW, 3e8);
 	
 	while (1)
 	{
@@ -383,9 +385,10 @@ void print_run(void *arg)
 				//rt_printf("\t ecat_ActPosZero : %f",ECAT_ActualPos_zero[j]);
 				//rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
 				//rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.dq[j],info.des.ddq[j]);
-				rt_printf("\t e: %lf, edot :%lf, eint : %lf \n",info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j],eint(j));
+				rt_printf("\t Joint %d \t e: %lf \t edot :%lf \t eint : %lf \n", j ,info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j],eint(j));
 				//rt_printf("\t TarTor: %f, ",				ECAT_calcTorq[j]);
 				//rt_printf("\t ActTor: %d,\n",			ECAT_ActualTor[j]);
+				rt_printf("\t LEDmode %d , LED_G %d \n",ecat_nrmk_indy_tool[0].LED_mode_,ecat_nrmk_indy_tool[0].LED_G_);
 			}
 			rt_printf("\n");
 		}
@@ -491,7 +494,6 @@ int main(int argc, char **argv)
 	mr_indy7=MR_Indy7();
 	mr_indy7.MRSetup();
 	MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
-	//JointControl 
 	for(int j=0; j<JOINTNUM; ++j)
 	{
 		ecatmaster.addSlaveNRMK_Drive(0, j+1, &ecat_nrmk_drive[j]);
@@ -526,8 +528,8 @@ int main(int argc, char **argv)
 	rt_task_create(&RTRArm_task, "RTRArm_task", 0, 99, 0);
 	rt_task_start(&RTRArm_task, &RTRArm_run, NULL);
 	// UDP task
-	rt_task_create(&RTUDP_task, "RTUDP_task", 0, 80, 0);
-	rt_task_start(&RTUDP_task, &UDP_run, NULL);
+//	rt_task_create(&RTUDP_task, "RTUDP_task", 0, 80, 0);
+//	rt_task_start(&RTUDP_task, &UDP_run, NULL);
 
 	// printing: create and start
 	rt_task_create(&print_task, "printing", 0, 70, 0);
