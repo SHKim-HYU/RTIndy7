@@ -1,6 +1,6 @@
 # RTIndy7 Task
 
-This source is built by Cross compiler for Ubuntu14.04, 32bits
+This source is built by cross compiler for Ubuntu14.04, 32bits
 
 
 ## build
