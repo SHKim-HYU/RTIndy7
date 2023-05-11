@@ -155,6 +155,7 @@ void readEcatData(){
 			ECAT_ActualTor[k] = 				ecat_nrmk_drive[k].torque_;
 		}
 		// read FT
+		/*
 		iStatus = ecat_nrmk_indy_tool[0].iStatus_;
 		iButton = ecat_nrmk_indy_tool[0].iButton_;
 		FT_Raw_Fx = ecat_nrmk_indy_tool[0].FT_Raw_Fx_;
@@ -165,6 +166,8 @@ void readEcatData(){
 		FT_Raw_Tz = ecat_nrmk_indy_tool[0].FT_Raw_Tz_;
 		FT_OverloadStatus = ecat_nrmk_indy_tool[0].FT_OverloadStatus_;
 		FT_ErrorFlag = ecat_nrmk_indy_tool[0].FT_ErrorFlag_;
+		*/
+		
 }
 
 void calcTorque_To_EcatTorque(JVec calc_torque, double* toq){
@@ -272,11 +275,12 @@ void RTRArm_run(void *arg)
 	JVec q0 = JVec::Zero();
 	JVec qT = JVec::Zero();
 	//qT<< 0.1,0.1,-1.5708,0.1,-1.5708,0.1;
-	qT<< 0.1,0.1,-1.5707,0.1,0.1,0.1;
+	qT<< 0.5,0.5,-1.5707,0.5,0.5,0.5;
 	JVec saturation_value = JVec::Zero();
 	saturation_value<<0.001,0.001,0.001,0.001,0.001,0.001;
 	double Tf = 5;
 	int method =5;
+	JVec calcTorq = JVec::Zero();
 	while (run)
 	{
 		runcount++;
@@ -285,7 +289,7 @@ void RTRArm_run(void *arg)
 		}
 		previous = rt_timer_read();
 		// [ToDo] Here is an error for PDO mapping
-		ecatmaster.RxUpdate();
+		ecatmaster.TxUpdate();
 		if(system_ready)
 		{
 			readEcatData();
@@ -294,21 +298,24 @@ void RTRArm_run(void *arg)
 			//compute();
 			//Robot_Limit();
 			//JVec calcTorq = mr_indy7.Gravity( info.act.q ); // calcTorque
+			//for(int j =0;j<50;j++)
+				//JVec calcTorq2 = mr_indy7.Gravity( info.act.q );
+
 			//JVec calcTorq = mr_indy7.ComputedTorqueControl( info.act.q , info.act.dq, info.des.q, info.des.dq); // calcTorque
 
 			e = info.des.q-info.act.q;
 			eint = eint+e*dt;
 
-			JVec calcTorq = mr_indy7.HinfControl( info.act.q , info.act.dq, info.des.q, info.des.dq,info.des.ddq,eint);
+			calcTorq = mr_indy7.HinfControl( info.act.q , info.act.dq, info.des.q, info.des.dq,info.des.ddq,eint);
 
-			setUDPInfo(calcTorq);
+			//setUDPInfo(calcTorq);
 			calcTorque_To_EcatTorque(calcTorq, ECAT_calcTorq);
 			saturationEcatTorque(ECAT_calcTorq, 1000, MotorDir);
 			writeEcatData(ECAT_calcTorq);
 			
 			//ecat_nrmk_indy_tool[0].writeLED_G(0);
 		}
-		ecatmaster.TxUpdate();
+		ecatmaster.RxUpdate();
 #if defined(USE_DC_MODE)
 		ecatmaster.SyncEcatMaster(rt_timer_read());
 #endif
@@ -388,7 +395,7 @@ void print_run(void *arg)
 				rt_printf("\t Joint %d \t e: %lf \t edot :%lf \t eint : %lf \n", j ,info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j],eint(j));
 				//rt_printf("\t TarTor: %f, ",				ECAT_calcTorq[j]);
 				//rt_printf("\t ActTor: %d,\n",			ECAT_ActualTor[j]);
-				rt_printf("\t LEDmode %d , LED_G %d \n",ecat_nrmk_indy_tool[0].LED_mode_,ecat_nrmk_indy_tool[0].LED_G_);
+				//rt_printf("\t LEDmode %d , LED_G %d \n",ecat_nrmk_indy_tool[0].LED_mode_,ecat_nrmk_indy_tool[0].LED_G_);
 			}
 			rt_printf("\n");
 		}
@@ -499,8 +506,8 @@ int main(int argc, char **argv)
 		ecatmaster.addSlaveNRMK_Drive(0, j+1, &ecat_nrmk_drive[j]);
 		ecat_nrmk_drive[j].mode_of_operation_ = ecat_nrmk_drive[j].MODE_CYCLIC_SYNC_TORQUE;
 	}
-	for(int i=0; i<NUM_FT; ++i)
-		ecatmaster.addSlaveNRMK_Indy_Tool(0, i+JOINTNUM+1, &ecat_nrmk_indy_tool[i]);
+	//for(int i=0; i<NUM_FT; ++i)
+	//	ecatmaster.addSlaveNRMK_Indy_Tool(0, i+JOINTNUM+1, &ecat_nrmk_indy_tool[i]);
 
 #if defined(USE_DC_MODE)
 	ecatmaster.activateWithDC(0, cycle_ns);  //a first arg DC location of MotorDriver?
@@ -532,21 +539,21 @@ int main(int argc, char **argv)
 //	rt_task_start(&RTUDP_task, &UDP_run, NULL);
 
 	// printing: create and start
-	rt_task_create(&print_task, "printing", 0, 70, 0);
-	rt_task_start(&print_task, &print_run, NULL);
+	//rt_task_create(&print_task, "printing", 0, 70, 0);
+	//rt_task_start(&print_task, &print_run, NULL);
 	
 	// plotting: data socket comm
 	//rt_task_create(&plot_task, "plotting", 0, 80, 0);
 	//rt_task_start(&plot_task, &plot_run, NULL);
 
 	// Must pause here
-	pause();
-	/*
+	//pause();
+	
 	while (1)
 	{
 		usleep(1e5);
 	}
-	*/
+	
 	// Finalize
 	signal_handler(0);
 

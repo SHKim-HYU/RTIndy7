@@ -476,7 +476,9 @@ void Master::TxUpdate(unsigned int domain)
 void Master::RxUpdate(unsigned int domain)
 {
     DomainInfo* domain_info = m_domain_info[domain];
+
     ecrt_master_receive(p_master);
+    
     ecrt_domain_process(domain_info->domain);
 
 #if defined(_DEBUG)
