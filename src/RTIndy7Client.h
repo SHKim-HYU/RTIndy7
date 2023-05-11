@@ -75,8 +75,13 @@ using namespace std;
 #include "CAN/can_define.h"
 #include "CAN/RoboLimb.h"
 
-#define NUM_FT	 	1
-#define NUM_AXIS	6	//Modify this number to indicate the actual number of motor on the network
+
+#include "ServoAxis.h"
+
+#define NUM_IO_MODULE 	1
+#define NUM_TOOL 		1
+#define NUM_AXIS		6		//Modify this number to indicate the actual number of motor on the network
+
 #ifndef PI
 #define PI	(3.14159265359)
 #define PI2	(6.28318530718)
@@ -122,62 +127,114 @@ unsigned int frontIdx = 0, rearIdx = 0;
 // NRMKDataSocket for plotting axes data in Data Scope
 EcatDataSocket datasocket;
 
+// EtherCAT System interface object
+NRMK_Master nrmk_master;
+
+// NRMK socket for online commands from NRMK EtherLab Configuration Tool
+NRMKHelper::EcatControlSocket<NUM_AXIS> guicontrolsocket;
+
 // When all slaves or drives reach OP mode,
 // system_ready becomes 1.
 int system_ready = 0;
 
 // Global time (beginning from zero)
 double gt=0;
-double double_gt=0;
+
+/// TO DO: This is user-code.
+double sine_amp=50000, f=0.2, period;
+
+int InitFlag[NUM_AXIS] = {0,};
 
 // EtherCAT Data (in pulse)
-INT32 	ZeroPos[JOINTNUM] = {0,};
-UINT16	StatusWord[JOINTNUM] = {0,};
-INT32 	ECAT_ActualPos[JOINTNUM] = {0,};
-INT32	ECAT_ActualPos_Old[JOINTNUM] = {0,};
-INT32 	ECAT_ActualVel[JOINTNUM] = {0,};
+INT32 	ZeroPos[NUM_AXIS] = {0,};
+// Drive
+UINT16	StatusWord[NUM_AXIS] = {0,};
+INT32 	ActualPos[NUM_AXIS] = {0,};
+INT32 	ActualVel[NUM_AXIS] = {0,};
+INT16 	ActualTor[NUM_AXIS] = {0,};
+UINT32	DataIn[NUM_AXIS] = {0,};
+UINT8	ModeOfOperationDisplay[NUM_AXIS] = {0,};
+// IO
+UINT8	StatusCode[NUM_IO_MODULE] = {0,};
+UINT8	DI5V[NUM_IO_MODULE] = {0,};
+UINT8	DI1[NUM_IO_MODULE] = {0,};
+UINT8	DI2[NUM_IO_MODULE] = {0,};
+UINT16	AI1[NUM_IO_MODULE] = {0,};
+UINT16	AI2[NUM_IO_MODULE] = {0,};
+INT16	FTRawFxCB[NUM_IO_MODULE] = {0,};
+INT16	FTRawFyCB[NUM_IO_MODULE] = {0,};
+INT16	FTRawFzCB[NUM_IO_MODULE] = {0,};
+INT16	FTRawTxCB[NUM_IO_MODULE] = {0,};
+INT16	FTRawTyCB[NUM_IO_MODULE] = {0,};
+INT16	FTRawTzCB[NUM_IO_MODULE] = {0,};
+UINT8	FTOverloadStatusCB[NUM_IO_MODULE] = {0,};
+UINT8	FTErrorFlagCB[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxCnt[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD0[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD1[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD2[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD3[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD4[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD5[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD6[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD7[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD8[NUM_IO_MODULE] = {0,};
+UINT8	RS485RxD9[NUM_IO_MODULE] = {0,};
+// Tool
+UINT8	IStatus[NUM_TOOL] = {0,};
+UINT8	IButton[NUM_TOOL] = {0,};
+INT16	FTRawFx[NUM_TOOL] = {0,};
+INT16	FTRawFy[NUM_TOOL] = {0,};
+INT16	FTRawFz[NUM_TOOL] = {0,};
+INT16	FTRawTx[NUM_TOOL] = {0,};
+INT16	FTRawTy[NUM_TOOL] = {0,};
+INT16	FTRawTz[NUM_TOOL] = {0,};
+UINT8	FTOverloadStatus[NUM_TOOL] = {0,};
+UINT8	FTErrorFlag[NUM_TOOL] = {0,};
 
-INT32	ECAT_ActualAcc[JOINTNUM] = {0,};
-INT32	ECAT_ActualVel_Old[JOINTNUM] = {0,};
-INT32	ECAT_ActualAcc_Old[JOINTNUM] = {0,};
-INT16 	ECAT_ActualTor[JOINTNUM] = {0,};
-UINT32	DataIn[JOINTNUM] = {0,};
-INT8	ModeOfOperationDisplay[JOINTNUM] = {0,};
-INT8	DeviceState[JOINTNUM] = {0,};
-UINT32	DigitalInput[JOINTNUM] = {0,};
-INT32   HomePos[JOINTNUM]={0, 0, 0, -6553600, 0, 0};
-UINT32 	DataOut[JOINTNUM] = {0,};
-INT8 	ModeOfOperation[JOINTNUM] = {0,};
-UINT16	ControlWord[JOINTNUM] = {0,};
-INT32	VelocityOffset[JOINTNUM] = {0,};
-INT16	TorqueOffset[JOINTNUM] = {0,};
-UINT32	DigitalOutput[JOINTNUM] = {0,};
+// Drive
+INT32 	TargetPos[NUM_AXIS] = {0,};
+INT32 	TargetVel[NUM_AXIS] = {0,};
+INT16 	TargetTor[NUM_AXIS] = {0,};
+UINT8 	ModeOfOperation[NUM_AXIS] = {0,};
+UINT16	Controlword[NUM_AXIS] = {0,};
 
-UINT8   iLed              = 0;       // write
-UINT8   iGripper          = 0; 		// write
-UINT32  FT_configparam    = 0; 		// write
-UINT8   LED_mode          = 0; 		// write (max torque (max current) = 1000)
-UINT8   LED_G             = 0; 		// write (use enum ModeOfOperation for convenience)
-UINT8   LED_R             = 0;       // write (use enum ModeOfOperation for convenience)
-UINT8   LED_B             = 0;       // write (use enum ModeOfOperation for convenience)
+// IO
+UINT8	ControlCode[NUM_IO_MODULE] = {0,};
+UINT8	DO5V[NUM_IO_MODULE] = {0,};
+UINT8	TO[NUM_IO_MODULE] = {0,};
+UINT8	DO[NUM_IO_MODULE] = {0,};
+UINT16	AO1[NUM_IO_MODULE] = {0,};
+UINT16	AO2[NUM_IO_MODULE] = {0,};
+UINT32	FTConfigParamCB[NUM_IO_MODULE] = {0,};
+UINT8	RS485ConfigParam[NUM_IO_MODULE] = {0,};
+UINT8	RS485CMD[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxCnt[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD0[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD1[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD2[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD3[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD4[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD5[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD6[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD7[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD8[NUM_IO_MODULE] = {0,};
+UINT8	RS485TxD9[NUM_IO_MODULE] = {0,};
 
-UINT8   iStatus           = 0;       // read
-UINT32  iButton           = 0; 		// read
-INT16  	FT_Raw_Fx         = 0;       // read
-INT16  	FT_Raw_Fy         = 0;       // read
-INT16  	FT_Raw_Fz         = 0;       // read
-INT16  	FT_Raw_Tx         = 0;       // read
-INT16  	FT_Raw_Ty         = 0;       // read
-INT16  	FT_Raw_Tz         = 0; 		// read
-UINT8   FT_OverloadStatus = 0; 		// read
-UINT8   FT_ErrorFlag      = 0;       // read
+// Tool
+UINT8	ILed[NUM_TOOL] = {0,};
+UINT8	IGripper[NUM_TOOL] = {0,};
+UINT32	FTConfigParam[NUM_TOOL] = {0,};
+UINT8	LEDMode[NUM_TOOL] = {0,};
+UINT8	LEDG[NUM_TOOL] = {0,};
+UINT8	LEDR[NUM_TOOL] = {0,};
+UINT8	LEDB[NUM_TOOL] = {0,};
 
-double Tx[NUM_FT]={0.0};
-double Ty[NUM_FT]={0.0};
-double Tz[NUM_FT]={0.0};
-double Fx[NUM_FT]={0.0};
-double Fy[NUM_FT]={0.0};
-double Fz[NUM_FT]={0.0};
+
+//////////////////////////
+
+// Interface to physical axes
+NRMKHelper::ServoAxis Axis[NUM_AXIS];
 
 struct LOGGING_PACK
 {
@@ -197,6 +254,7 @@ typedef struct STATE{
 	Vector6d x_ddot;
     double s_time;
 }state;
+
 typedef struct JOINT_INFO{
 	int Position;
 	int aq_inc[NUM_AXIS];
@@ -209,15 +267,6 @@ typedef struct JOINT_INFO{
 	STATE act;
 	STATE des;
 }JointInfo;
-
-typedef union{
-	struct{
-		uint8 reserve;
-		uint8 opt;
-		uint16 data;
-	}info;
-	uint8 value[8];
-}FTPacket;
 
 // Cycle time in nanosecond
 unsigned int cycle_ns = (unsigned int)(1000.0/CONTROL_FREQ*1000000.0); /* 1 ms */

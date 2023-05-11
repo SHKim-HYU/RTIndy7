@@ -10,20 +10,17 @@
 #ifndef __XENO__
 #define __XENO__
 #endif
-#include "RTRArmClient.h"
+#include "RTIndy7Client.h"
 #include "MR_Indy7.h"
 
 #define USE_DC_MODE
 
-hyuEcat::Master ecatmaster;
-hyuEcat::EcatNRMK_Indy_Tool ecat_nrmk_indy_tool[NUM_FT];
-hyuEcat::EcatNRMK_Drive ecat_nrmk_drive[JOINTNUM];
 JointInfo info;
 
 MR_Indy7 mr_indy7;
 
 // Xenomai RT tasks
-RT_TASK RTRArm_task;
+RT_TASK RTIndy7_task;
 RT_TASK print_task;
 RT_TASK plot_task;
 
@@ -53,7 +50,85 @@ double traq_d[JOINTNUM]={0.0,};
 double traq_dd[JOINTNUM]={0.0,};
 int flag=0;
 int rtsercan_fd  = -1;
+
+
 void signal_handler(int signum);
+
+int initAxes()
+{
+	/*
+	const int gearRatio[NUM_AXIS] = {0,0,0,0,0,0,0,0};
+	const int pulsePerRevolution[NUM_AXIS] = {0,0,0,0,0,0,0,0};
+	const double ratedTau[NUM_AXIS] = {0,0,0,0,0,0,0,0};
+	const int dirQ[NUM_AXIS] = {0,0,0,0,0,0,0,0};
+	const int dirTau[NUM_AXIS] = {0,0,0,0,0,0,0,0};
+	const int zeroPos[NUM_AXIS] = {0,0,0,0,0,0,0,0};
+	*/
+
+	for (int i = 0; i < NUM_AXIS; i++)
+	{	
+		switch(i)
+		{
+		case 0:
+		case 1:
+			Axis[i].setGearRatio(1);
+			Axis[i].setPulsePerRevolution(1);
+			Axis[i].setRatedTau(1);
+
+			Axis[i].setDirQ(1);
+			Axis[i].setDirTau(1);
+
+			Axis[i].setConversionConstants();
+
+			Axis[i].setTrajPeriod(period);
+			
+			Axis[i].setTarVelInCnt(0);
+			Axis[i].setTarTorInCnt(0);
+			
+			nrmk_master.setServoOn(i);
+			break;
+		case 2:
+			Axis[i].setGearRatio(1);
+			Axis[i].setPulsePerRevolution(1);
+			Axis[i].setRatedTau(1);
+
+			Axis[i].setDirQ(1);
+			Axis[i].setDirTau(1);
+
+			Axis[i].setConversionConstants();
+
+			Axis[i].setTrajPeriod(period);
+			
+			Axis[i].setTarVelInCnt(0);
+			Axis[i].setTarTorInCnt(0);
+			
+			nrmk_master.setServoOn(i);
+			break;
+		case 3:
+		case 4:
+		case 5:
+			Axis[i].setGearRatio(1);
+			Axis[i].setPulsePerRevolution(1);
+			Axis[i].setRatedTau(1);
+
+			Axis[i].setDirQ(1);
+			Axis[i].setDirTau(1);
+
+			Axis[i].setConversionConstants();
+
+			Axis[i].setTrajPeriod(period);
+			
+			Axis[i].setTarVelInCnt(0);
+			Axis[i].setTarTorInCnt(0);
+			
+			nrmk_master.setServoOn(i);
+			break;
+		}
+
+	}
+	
+	return 1;
+}
 void saveLogData(){}
 /****************************************************************************/
 void EncToRad(double wc, double dt)
@@ -121,25 +196,25 @@ void Robot_Limit()
 		}
 	}
 }
-int isDriveInit(void)
-{
-	int elmo_count = 0;
-	for(int i=0; i<JOINTNUM; ++i)
-	{
-		if(ecat_nrmk_drive[i].initialized())
-			elmo_count++;
-	}
+// int isDriveInit(void)
+// {
+// 	int elmo_count = 0;
+// 	for(int i=0; i<JOINTNUM; ++i)
+// 	{
+// 		if(ecat_nrmk_drive[i].initialized())
+// 			elmo_count++;
+// 	}
 
-	// for(int i=0;i<JOINTNUM;i++)
-	// {
-	// 	ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
-	// }
-	if(elmo_count == JOINTNUM)
+// 	// for(int i=0;i<JOINTNUM;i++)
+// 	// {
+// 	// 	ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
+// 	// }
+// 	if(elmo_count == JOINTNUM)
 
-		return 1;
-	else
-		return 0;
-}
+// 		return 1;
+// 	else
+// 		return 0;
+// }
 
 int compute()
 {
@@ -147,26 +222,46 @@ int compute()
 	return 0;
 }
 void readEcatData(){
-		for(int k=0; k<JOINTNUM; ++k){
-			DeviceState[k] = 			ecat_nrmk_drive[k].NRMK_Drive_DeviceState();
-			StatusWord[k] = 			ecat_nrmk_drive[k].status_word_;
-			ModeOfOperationDisplay[k] = ecat_nrmk_drive[k].mode_of_operation_display_;
-			ControlWord[k] = 			ecat_nrmk_drive[k].control_word_;
-			ECAT_ActualPos[k] = 				ecat_nrmk_drive[k].position_-ECAT_ActualPos_zero[k];
-			ECAT_ActualVel[k] = 				ecat_nrmk_drive[k].velocity_;
-			ECAT_ActualTor[k] = 				ecat_nrmk_drive[k].torque_;
-		}
-		// read FT
-		iStatus = ecat_nrmk_indy_tool[0].iStatus_;
-		iButton = ecat_nrmk_indy_tool[0].iButton_;
-		FT_Raw_Fx = ecat_nrmk_indy_tool[0].FT_Raw_Fx_;
-		FT_Raw_Fy = ecat_nrmk_indy_tool[0].FT_Raw_Fy_;
-		FT_Raw_Fz = ecat_nrmk_indy_tool[0].FT_Raw_Fz_;
-		FT_Raw_Tx = ecat_nrmk_indy_tool[0].FT_Raw_Tx_;
-		FT_Raw_Ty = ecat_nrmk_indy_tool[0].FT_Raw_Ty_;
-		FT_Raw_Tz = ecat_nrmk_indy_tool[0].FT_Raw_Tz_;
-		FT_OverloadStatus = ecat_nrmk_indy_tool[0].FT_OverloadStatus_;
-		FT_ErrorFlag = ecat_nrmk_indy_tool[0].FT_ErrorFlag_;
+	nrmk_master.readBuffer(0x60410, StatusWord);
+	nrmk_master.readBuffer(0x60640, ActualPos);
+	nrmk_master.readBuffer(0x606c0, ActualVel);
+	nrmk_master.readBuffer(0x60770, ActualTor);
+	nrmk_master.readBuffer(0x60610, ModeOfOperationDisplay);
+	nrmk_master.readBuffer(0x61001, StatusCode);
+	nrmk_master.readBuffer(0x61002, DI5V);
+	nrmk_master.readBuffer(0x61003, DI1);
+	nrmk_master.readBuffer(0x61004, DI2);
+	nrmk_master.readBuffer(0x61005, AI1);
+	nrmk_master.readBuffer(0x61006, AI2);
+	nrmk_master.readBuffer(0x61007, FTRawFxCB);
+	nrmk_master.readBuffer(0x61008, FTRawFyCB);
+	nrmk_master.readBuffer(0x61009, FTRawFzCB);
+	nrmk_master.readBuffer(0x610010, FTRawTxCB);
+	nrmk_master.readBuffer(0x610011, FTRawTyCB);
+	nrmk_master.readBuffer(0x610012, FTRawTzCB);
+	nrmk_master.readBuffer(0x610013, FTOverloadStatusCB);
+	nrmk_master.readBuffer(0x610014, FTErrorFlagCB);
+	nrmk_master.readBuffer(0x610015, RS485RxCnt);
+	nrmk_master.readBuffer(0x610016, RS485RxD0);
+	nrmk_master.readBuffer(0x610017, RS485RxD1);
+	nrmk_master.readBuffer(0x610018, RS485RxD2);
+	nrmk_master.readBuffer(0x610019, RS485RxD3);
+	nrmk_master.readBuffer(0x610020, RS485RxD4);
+	nrmk_master.readBuffer(0x610021, RS485RxD5);
+	nrmk_master.readBuffer(0x610022, RS485RxD6);
+	nrmk_master.readBuffer(0x610023, RS485RxD7);
+	nrmk_master.readBuffer(0x610024, RS485RxD8);
+	nrmk_master.readBuffer(0x610025, RS485RxD9);
+	nrmk_master.readBuffer(0x60001, IStatus);
+	nrmk_master.readBuffer(0x60002, IButton);
+	nrmk_master.readBuffer(0x60003, FTRawFx);
+	nrmk_master.readBuffer(0x60004, FTRawFy);
+	nrmk_master.readBuffer(0x60005, FTRawFz);
+	nrmk_master.readBuffer(0x60006, FTRawTx);
+	nrmk_master.readBuffer(0x60007, FTRawTy);
+	nrmk_master.readBuffer(0x60008, FTRawTz);
+	nrmk_master.readBuffer(0x60009, FTOverloadStatus);
+	nrmk_master.readBuffer(0x600010, FTErrorFlag);	
 }
 
 void calcTorque_To_EcatTorque(JVec calc_torque, double* toq){
@@ -223,19 +318,20 @@ void writeEcatData(double* ECAT_calcTorq){
 		ecat_nrmk_drive[j].writeTorque(ECAT_TargetToq[j]);
 	}
 }
-// RTRArm_task
-void RTRArm_run(void *arg)
+// RTIndy7_task
+void RTIndy7_run(void *arg)
 {
-	unsigned int runcount=0;
 	RTIME now, previous;
-	RTIME p1 = 0;
-	RTIME p3 = 0;
-	//ecatmaster.SyncEcatMaster(rt_timer_read());
+
+	// Synchronize EtherCAT Master (for Distributed Clock Mode)
+	nrmk_master.syncEcatMaster();
+
 	/* Arguments: &task (NULL=self),
 	 *            start time,
 	 *            period
 	 */
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
+
 	info.des.q = JVec::Zero();
 	info.des.dq = JVec::Zero();
 	info.des.ddq = JVec::Zero();
@@ -247,17 +343,18 @@ void RTRArm_run(void *arg)
 	qT<< 0.1,0.1,-1.5707,0.1,0.1,0.1;
 	double Tf = 5;
 	int method =5;
+
 	while (run)
 	{
-		runcount++;
-		if (!run){
-			break;
-		}
 		previous = rt_timer_read();
-		// [ToDo] Here is an error for PDO mapping
-		ecatmaster.RxUpdate();
+		// [ToDo] Here is an error for PDO mapping		
+		
 		if(system_ready)
 		{
+			/// TO DO: read data from sensors in EtherCAT system interface
+			nrmk_master.processTxDomain();
+
+
 			readEcatData();
 			EncToRad(wc,dt);
 			if(traj_flag ==0){
@@ -290,35 +387,31 @@ void RTRArm_run(void *arg)
 			calcTorque_To_EcatTorque(clacTorq, ECAT_calcTorq);
 			saturationEcatTorque(ECAT_calcTorq, 1000, MotorDir);
 			writeEcatData(ECAT_calcTorq);
+
+			/// TO DO: write data to actuators in EtherCAT system interface
+			nrmk_master.writeBuffer(0x60710, TargetTor);
+			//nrmk_master.writeBuffer(0x60600, ModeOfOperation);
+			nrmk_master.processRxDomain();
 		}
-		ecatmaster.TxUpdate();
-#if defined(USE_DC_MODE)
-		ecatmaster.SyncEcatMaster(rt_timer_read());
-#endif
+
+
+		
+
 		if (system_ready)
-		{
 			//saveLogData();
-		}
-		else
-		{
-			double_gt = 0;
-			worst_time = 0;
-			ethercat_time = 0;
-		}
+			
 		// For EtherCAT performance statistics
-		p1 = p3;
-		p3 = rt_timer_read();
 		now = rt_timer_read();
-		double_gt += ((double)(long)(p3 - p1))*1e-9;
 		ethercat_time = (long) now - previous;
 
-		if ( isDriveInit() == 1 && (runcount > WAKEUP_TIME*(NSEC_PER_SEC/cycle_ns)))
+		if (nrmk_master.isSystemReady())
 		{
 			system_ready=1;	//all drives have been done
+
 			gt+= period;
-			if (worst_time<ethercat_time)
-				worst_time=ethercat_time;
-			if(ethercat_time > (long)cycle_ns)
+			
+			if (worst_time<ethercat_time) worst_time=ethercat_time;
+			if(ethercat_time > max_time)
 				++fault_count;
 		}
 		rt_task_wait_period(NULL); 	//wait for next cycle
@@ -334,6 +427,7 @@ void print_run(void *arg)
 	unsigned long itime=0, step;
 	long stick=0;
 	int count=0;
+	unsigned int NumSlaves=0, masterState=0, slaveState=0;
 	
 	rt_printf("\e[31;1m \nPlease WAIT at least %i (s) until the system getting ready...\e[0m\n", WAKEUP_TIME);
 	
@@ -356,8 +450,23 @@ void print_run(void *arg)
 			step=(unsigned long)(now - previous) / 1000000;
 			itime+=step;
 			previous=now;
-			rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
+			rt_printf("Time=%0.3lf s \n", gt);
 			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
+
+			if (nrmk_master.getMasterStatus(NumSlaves, masterState))
+				rt_printf("Master: Online - State %i - %i slave(s)\n", masterState, NumSlaves);
+			else
+				rt_printf("Master: Offline\n");
+
+			if (nrmk_master.getRxDomainStatus())
+				rt_printf("RxDomain: Online\n");
+			else
+				rt_printf("RxDomain: Offline\n");
+
+			if (nrmk_master.getTxDomainStatus())
+				rt_printf("TxDomain: Online\n");
+			else
+				rt_printf("TxDomain: Offline\n");
 
 			for(int j=0; j<JOINTNUM; ++j){
 				//rt_printf("ID: %d", j+NUM_FT);
@@ -390,28 +499,11 @@ void print_run(void *arg)
 }
 
 
-void plot_run(void *arg)
-{
-	/*
-	 * Arguments: &task (NULL=self),
-	 *            start time,
-	 *            period (here: 100 ms)
-	 */
-	rt_task_set_periodic(NULL, TM_NOW, 1e7);	// period = 10 (msec)
-
-
-	while (1)
-	{
-
-		rt_task_wait_period(NULL);
-	}
-}
-
 /****************************************************************************/
 void signal_handler(int signum)
 {
 	rt_task_delete(&plot_task);
-	rt_task_delete(&RTRArm_task);
+	rt_task_delete(&RTIndy7_task);
 	rt_task_delete(&print_task);
 	printf("\n\n");
 	if(signum==SIGINT)
@@ -424,7 +516,8 @@ void signal_handler(int signum)
 		printf("╔════════════════[SIGNAL INPUT SIGHUP]═══════════════╗\n");
     printf("║                Servo drives Stopped!               ║\n");
 	printf("╚════════════════════════════════════════════════════╝\n");	
-    ecatmaster.deactivate();
+    
+    nrmk_master.deinit();
     exit(1);
 }
 
@@ -440,20 +533,6 @@ int main(int argc, char **argv)
 	signal(SIGWINCH, signal_handler);
 	signal(SIGHUP, signal_handler);
 
-	int portNum=1; //COM as default
-	char portName[100];
-	unsigned int baud = 9600;
-	switch (portNum)
-	{
-		case 0: strcpy(portName, RS485PORT); break;
-		case 1: strcpy(portName, COM1); break;
-		case 2: strcpy(portName, COM2); break;
-		default: strcpy(portName, COM1); break;
-	}
-	if ((portNum>0) && (baud>RS232_BAUD_LIMIT))
-		baud=RS232_BAUD_LIMIT;
-	if (baud<1200)
-		baud=1200;
 	/* Avoids memory swapping for this program */
 	mlockall(MCL_CURRENT|MCL_FUTURE);
 
@@ -465,22 +544,18 @@ int main(int argc, char **argv)
 	mr_indy7.MRSetup();
 	MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
 
-
-	for(int j=0; j<JOINTNUM; ++j)
-
+	// For CST (cyclic synchronous torque) control
+	if (nrmk_master.init(OP_MODE_CYCLIC_SYNC_TORQUE, cycle_ns) == -1)
 	{
-		ecatmaster.addSlaveNRMK_Drive(0, j+1, &ecat_nrmk_drive[j]);
-		ecat_nrmk_drive[j].mode_of_operation_ = ecat_nrmk_drive[j].MODE_CYCLIC_SYNC_TORQUE;
+		printf("System Initialization Failed\n");
+	    return 0;
 	}
-	for(int i=0; i<NUM_FT; ++i)
-		ecatmaster.addSlaveNRMK_Indy_Tool(0, i+JOINTNUM+1, &ecat_nrmk_indy_tool[i]);
+	for (int i = 0; i < NUM_AXIS; ++i)
+		ModeOfOperation[i] = OP_MODE_CYCLIC_SYNC_TORQUE;
 
-#if defined(USE_DC_MODE)
-	ecatmaster.activateWithDC(0, cycle_ns);  //a first arg DC location of MotorDriver?
-	rtsercan_fd=SERCAN_open();
-#else
-	ecatmaster.activate();
-#endif
+	// For trajectory interpolation
+	initAxes();
+
 	// TO DO: Create data socket server
 	datasocket.setPeriod(period);
 
@@ -491,20 +566,17 @@ int main(int argc, char **argv)
 	datasocket.waitForConnection(0);
 	
 
-	// RTRArm_task: create and start
+	// RTIndy7_task: create and start
 	printf("Now running rt task ...\n");
 	rt_printf(" sercan_dev_open = %d\n", rtsercan_fd);
 
-	rt_task_create(&RTRArm_task, "RTRArm_task", 0, 99, 0);
-	rt_task_start(&RTRArm_task, &RTRArm_run, NULL);
+	rt_task_create(&RTIndy7_task, "RTIndy7_task", 0, 99, 0);
+	rt_task_start(&RTIndy7_task, &RTIndy7_run, NULL);
 
 	// printing: create and start
 	rt_task_create(&print_task, "printing", 0, 70, 0);
 	rt_task_start(&print_task, &print_run, NULL);
 	
-	// plotting: data socket comm
-	//rt_task_create(&plot_task, "plotting", 0, 80, 0);
-	//rt_task_start(&plot_task, &plot_run, NULL);
 
 	// Must pause here
 	pause();
