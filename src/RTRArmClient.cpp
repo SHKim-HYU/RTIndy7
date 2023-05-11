@@ -244,7 +244,7 @@ void RTRArm_run(void *arg)
 	JVec q0 = JVec::Zero();
 	JVec qT = JVec::Zero();
 	//qT<< 0.1,0.1,-1.5708,0.1,-1.5708,0.1;
-	qT<< 0.1,0.1,-1.5707,0.1,0.1,0.1;
+	qT<< 1.0,-1.0,-1.5707,0.5,-1.0,1.0;
 	double Tf = 5;
 	int method =5;
 	while (run)
@@ -255,7 +255,11 @@ void RTRArm_run(void *arg)
 		}
 		previous = rt_timer_read();
 		// [ToDo] Here is an error for PDO mapping
-		ecatmaster.RxUpdate();
+
+		ecatmaster.TxUpdate();
+#if defined(USE_DC_MODE)
+		ecatmaster.SyncEcatMaster(rt_timer_read());
+#endif
 		if(system_ready)
 		{
 			readEcatData();
@@ -269,7 +273,7 @@ void RTRArm_run(void *arg)
 					JointTrajectory(q0, qT, Tf, double_gt , method , info.des.q, info.des.dq, info.des.ddq) ;
 				}else if(double_gt > Tf){
 					q0 = info.act.q;
-					qT = JVec::Zero();
+					// qT = JVec::Zero();
 					traj_flag =2;
 				}
 				
@@ -292,10 +296,8 @@ void RTRArm_run(void *arg)
 			saturationEcatTorque(ECAT_calcTorq, 1000, MotorDir);
 			writeEcatData(ECAT_calcTorq);
 		}
-		ecatmaster.TxUpdate();
-#if defined(USE_DC_MODE)
-		ecatmaster.SyncEcatMaster(rt_timer_read());
-#endif
+		ecatmaster.RxUpdate();
+
 		if (system_ready)
 		{
 			//saveLogData();
@@ -343,7 +345,7 @@ void print_run(void *arg)
 	 *            period (here: 100ms = 0.1s)
 	 */
 	rt_task_set_periodic(NULL, TM_NOW, 1e8);
-	
+
 	
 	while (1)
 	{
@@ -358,24 +360,24 @@ void print_run(void *arg)
 			step=(unsigned long)(now - previous) / 1000000;
 			itime+=step;
 			previous=now;
-			rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
-			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
+			// rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
+			// rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
 
-			for(int j=0; j<JOINTNUM; ++j){
-				rt_printf("ID: %d", j+NUM_FT);
-				rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-				rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			    rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-				rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				// rt_printf("\t ecat_ActPos : %d",ecat_nrmk_drive[j].position_);
-				//rt_printf("\t ecat_ActPosZero : %f",ECAT_ActualPos_zero[j]);
-				rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
-				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.dq[j],info.des.ddq[j]);
-				rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j]);
-				rt_printf("\t TarTor: %f, ",				ECAT_calcTorq[j]);
-				rt_printf("\t ActTor: %d,\n",			ECAT_ActualTor[j]);
-			}
-			rt_printf("\n");
+			// for(int j=0; j<JOINTNUM; ++j){
+			// 	rt_printf("ID: %d", j+NUM_FT);
+			// 	rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// 	rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			//     rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// 	rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+			// 	// rt_printf("\t ecat_ActPos : %d",ecat_nrmk_drive[j].position_);
+			// 	//rt_printf("\t ecat_ActPosZero : %f",ECAT_ActualPos_zero[j]);
+			// 	rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
+			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.dq[j],info.des.ddq[j]);
+			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j]);
+			// 	rt_printf("\t TarTor: %f, ",				ECAT_calcTorq[j]);
+			// 	rt_printf("\t ActTor: %d,\n",			ECAT_ActualTor[j]);
+			// }
+			// rt_printf("\n");
 		}
 		else
 		{

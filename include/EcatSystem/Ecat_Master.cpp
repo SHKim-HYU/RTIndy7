@@ -208,8 +208,10 @@ void Master::addSlaveNRMK_Drive(uint16_t alias, uint16_t position, EcatNRMK_Driv
     
     size_t num_syncs = slave->syncSize();
     const ec_sync_info_t* syncs = slave->syncs();
+    std::cout<<syncs<<std::endl;
     if(num_syncs > 0){
         int pdos_status = ecrt_slave_config_pdos(slave_info.config, num_syncs, syncs);
+        std::cout<<pdos_status<<std::endl;
         if(pdos_status){
             printWarning("Err: Add slave Failed to configure PDOs");
 

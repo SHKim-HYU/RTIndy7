@@ -18,6 +18,54 @@ namespace hyuEcat{
 class EcatNRMK_Drive : public Slave
 {
 public:
+    struct NRMK_DRIVE_IN
+            {
+                UINT16      Controlword;    // 0x6040
+                INT32       Targetposition;     // 0x607a
+                INT32       Targetvelocity;     // 0x60ff
+                INT16       Targettorque;   // 0x6071
+                INT8        Modesofoperation;   // 0x6060               
+            };
+            struct NRMK_DRIVE_OUT
+            {
+                UINT16      Statusword;     // 0x6041
+                INT32       Positionactualvalue;    // 0x6064
+                INT32       Velocityactualvalue;    // 0x606c
+                INT16       Torqueactualvalue;  // 0x6077
+                INT8        Modesofoperationdisplay;    // 0x6061               
+            };
+            struct NRMK_DRIVE
+            {
+                UINT32 Index;
+                UINT32 Alias;
+                UINT32 Position;
+                SLAVE_CONFIG Config;
+                
+                NEUROMEKA_NRMK_DRIVE_IN     InParam;
+                NEUROMEKA_NRMK_DRIVE_OUT    OutParam;
+                
+                UINT32 offControlword;
+                UINT32 offTargetposition;
+                UINT32 offTargetvelocity;
+                UINT32 offTargettorque;
+                UINT32 offModesofoperation;
+                UINT32 offStatusword;
+                UINT32 offPositionactualvalue;
+                UINT32 offVelocityactualvalue;
+                UINT32 offTorqueactualvalue;
+                UINT32 offModesofoperationdisplay;
+                UINT32 bitoffControlword;
+                UINT32 bitoffTargetposition;
+                UINT32 bitoffTargetvelocity;
+                UINT32 bitoffTargettorque;
+                UINT32 bitoffModesofoperation;
+                UINT32 bitoffStatusword;
+                UINT32 bitoffPositionactualvalue;
+                UINT32 bitoffVelocityactualvalue;
+                UINT32 bitoffTorqueactualvalue;
+                UINT32 bitoffModesofoperationdisplay;                               
+                
+            };
 public:
 	EcatNRMK_Drive() : Slave(NRMK_Drive_VendorID, NRMK_Drive_ProductCode) {}
     virtual ~EcatNRMK_Drive() {}
