@@ -1,3 +1,0 @@
-/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/edit_cache.dir
-/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/rebuild_cache.dir
-/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir
