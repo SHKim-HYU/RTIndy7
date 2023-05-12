@@ -605,7 +605,7 @@ void NRMK_Master::processTxDomain()
     ecrt_master_send(_systemVars->_master); //SEND ALL QUEUED DATAGRAMS             
 }
 
-
+// [ToDo] Seperate Slaves to each modules
 void NRMK_Master::processRxDomain()
 {
     ecrt_master_receive(_systemVars->_master); //RECEIVE A FRAME

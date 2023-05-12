@@ -76,7 +76,8 @@ using namespace std;
 
 #define NUM_IO_MODULE 	1
 #define NUM_TOOL 		1
-#define NUM_AXIS		6		//Modify this number to indicate the actual number of motor on the network
+#define NUM_AXIS		6
+#define NUM_SLAVES (NUM_IO_MODULE+NUM_AXIS+NUM_TOOL)		//Modify this number to indicate the actual number of motor on the network
 
 #ifndef PI
 #define PI	(3.14159265359)
@@ -98,13 +99,17 @@ typedef int8_t INT8;
 
 // For RT thread management
 static int run = 1;
-unsigned long fault_count=0;
-long ethercat_time=0, worst_time=0;
 #define min_time	0
 #define max_time	100000
 #define hist_step	(100)
 unsigned int histdata[hist_step+1];
 unsigned int interval_size=350;
+
+unsigned long periodCycle = 0, worstCycle = 0;
+unsigned long periodCompute = 0, worstCompute = 0;
+unsigned long periodEcat = 0, worstEcat = 0;
+unsigned int overruns = 0;
+
 
 typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
 typedef Eigen::Matrix<double, 4, 4> SE3;
@@ -153,88 +158,88 @@ int InitFlag[NUM_AXIS] = {0,};
 
 ////////////// TxPDO //////////////
 // Drive
-UINT16	StatusWord[NUM_AXIS] = {0,};
-INT32 	ActualPos[NUM_AXIS] = {0,};
-INT32 	ActualVel[NUM_AXIS] = {0,};
-INT16 	ActualTor[NUM_AXIS] = {0,};
-UINT32	DataIn[NUM_AXIS] = {0,};
-UINT8	ModeOfOperationDisplay[NUM_AXIS] = {0,};
+UINT16	StatusWord[NUM_SLAVES] = {0,};
+INT32 	ActualPos[NUM_SLAVES] = {0,};
+INT32 	ActualVel[NUM_SLAVES] = {0,};
+INT16 	ActualTor[NUM_SLAVES] = {0,};
+UINT32	DataIn[NUM_SLAVES] = {0,};
+UINT8	ModeOfOperationDisplay[NUM_SLAVES] = {0,};
 // IO
-UINT8	StatusCode[NUM_IO_MODULE] = {0,};
-UINT8	DI5V[NUM_IO_MODULE] = {0,};
-UINT8	DI1[NUM_IO_MODULE] = {0,};
-UINT8	DI2[NUM_IO_MODULE] = {0,};
-UINT16	AI1[NUM_IO_MODULE] = {0,};
-UINT16	AI2[NUM_IO_MODULE] = {0,};
-INT16	FTRawFxCB[NUM_IO_MODULE] = {0,};
-INT16	FTRawFyCB[NUM_IO_MODULE] = {0,};
-INT16	FTRawFzCB[NUM_IO_MODULE] = {0,};
-INT16	FTRawTxCB[NUM_IO_MODULE] = {0,};
-INT16	FTRawTyCB[NUM_IO_MODULE] = {0,};
-INT16	FTRawTzCB[NUM_IO_MODULE] = {0,};
-UINT8	FTOverloadStatusCB[NUM_IO_MODULE] = {0,};
-UINT8	FTErrorFlagCB[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxCnt[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD0[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD1[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD2[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD3[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD4[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD5[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD6[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD7[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD8[NUM_IO_MODULE] = {0,};
-UINT8	RS485RxD9[NUM_IO_MODULE] = {0,};
+UINT8	StatusCode[NUM_SLAVES] = {0,};
+UINT8	DI5V[NUM_SLAVES] = {0,};
+UINT8	DI1[NUM_SLAVES] = {0,};
+UINT8	DI2[NUM_SLAVES] = {0,};
+UINT16	AI1[NUM_SLAVES] = {0,};
+UINT16	AI2[NUM_SLAVES] = {0,};
+INT16	FTRawFxCB[NUM_SLAVES] = {0,};
+INT16	FTRawFyCB[NUM_SLAVES] = {0,};
+INT16	FTRawFzCB[NUM_SLAVES] = {0,};
+INT16	FTRawTxCB[NUM_SLAVES] = {0,};
+INT16	FTRawTyCB[NUM_SLAVES] = {0,};
+INT16	FTRawTzCB[NUM_SLAVES] = {0,};
+UINT8	FTOverloadStatusCB[NUM_SLAVES] = {0,};
+UINT8	FTErrorFlagCB[NUM_SLAVES] = {0,};
+UINT8	RS485RxCnt[NUM_SLAVES] = {0,};
+UINT8	RS485RxD0[NUM_SLAVES] = {0,};
+UINT8	RS485RxD1[NUM_SLAVES] = {0,};
+UINT8	RS485RxD2[NUM_SLAVES] = {0,};
+UINT8	RS485RxD3[NUM_SLAVES] = {0,};
+UINT8	RS485RxD4[NUM_SLAVES] = {0,};
+UINT8	RS485RxD5[NUM_SLAVES] = {0,};
+UINT8	RS485RxD6[NUM_SLAVES] = {0,};
+UINT8	RS485RxD7[NUM_SLAVES] = {0,};
+UINT8	RS485RxD8[NUM_SLAVES] = {0,};
+UINT8	RS485RxD9[NUM_SLAVES] = {0,};
 // Tool
-UINT8	IStatus[NUM_TOOL] = {0,};
-UINT8	IButton[NUM_TOOL] = {0,};
-INT16	FTRawFx[NUM_TOOL] = {0,};
-INT16	FTRawFy[NUM_TOOL] = {0,};
-INT16	FTRawFz[NUM_TOOL] = {0,};
-INT16	FTRawTx[NUM_TOOL] = {0,};
-INT16	FTRawTy[NUM_TOOL] = {0,};
-INT16	FTRawTz[NUM_TOOL] = {0,};
-UINT8	FTOverloadStatus[NUM_TOOL] = {0,};
-UINT8	FTErrorFlag[NUM_TOOL] = {0,};
+UINT8	IStatus[NUM_SLAVES] = {0,};
+UINT8	IButton[NUM_SLAVES] = {0,};
+INT16	FTRawFx[NUM_SLAVES] = {0,};
+INT16	FTRawFy[NUM_SLAVES] = {0,};
+INT16	FTRawFz[NUM_SLAVES] = {0,};
+INT16	FTRawTx[NUM_SLAVES] = {0,};
+INT16	FTRawTy[NUM_SLAVES] = {0,};
+INT16	FTRawTz[NUM_SLAVES] = {0,};
+UINT8	FTOverloadStatus[NUM_SLAVES] = {0,};
+UINT8	FTErrorFlag[NUM_SLAVES] = {0,};
 
 ////////////// RxPDO //////////////
 // Drive
-INT32 	TargetPos[NUM_AXIS] = {0,};
-INT32 	TargetVel[NUM_AXIS] = {0,};
-INT16 	TargetTor[NUM_AXIS] = {0,};
-UINT8 	ModeOfOperation[NUM_AXIS] = {0,};
-UINT16	Controlword[NUM_AXIS] = {0,};
+INT32 	TargetPos[NUM_SLAVES] = {0,};
+INT32 	TargetVel[NUM_SLAVES] = {0,};
+INT16 	TargetTor[NUM_SLAVES] = {0,};
+UINT8 	ModeOfOperation[NUM_SLAVES] = {0,};
+UINT16	Controlword[NUM_SLAVES] = {0,};
 
 // IO
-UINT8	ControlCode[NUM_IO_MODULE] = {0,};
-UINT8	DO5V[NUM_IO_MODULE] = {0,};
-UINT8	TO[NUM_IO_MODULE] = {0,};
-UINT8	DO[NUM_IO_MODULE] = {0,};
-UINT16	AO1[NUM_IO_MODULE] = {0,};
-UINT16	AO2[NUM_IO_MODULE] = {0,};
-UINT32	FTConfigParamCB[NUM_IO_MODULE] = {0,};
-UINT8	RS485ConfigParam[NUM_IO_MODULE] = {0,};
-UINT8	RS485CMD[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxCnt[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD0[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD1[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD2[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD3[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD4[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD5[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD6[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD7[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD8[NUM_IO_MODULE] = {0,};
-UINT8	RS485TxD9[NUM_IO_MODULE] = {0,};
+UINT8	ControlCode[NUM_SLAVES] = {0,};
+UINT8	DO5V[NUM_SLAVES] = {0,};
+UINT8	TO[NUM_SLAVES] = {0,};
+UINT8	DO[NUM_SLAVES] = {0,};
+UINT16	AO1[NUM_SLAVES] = {0,};
+UINT16	AO2[NUM_SLAVES] = {0,};
+UINT32	FTConfigParamCB[NUM_SLAVES] = {0,};
+UINT8	RS485ConfigParam[NUM_SLAVES] = {0,};
+UINT8	RS485CMD[NUM_SLAVES] = {0,};
+UINT8	RS485TxCnt[NUM_SLAVES] = {0,};
+UINT8	RS485TxD0[NUM_SLAVES] = {0,};
+UINT8	RS485TxD1[NUM_SLAVES] = {0,};
+UINT8	RS485TxD2[NUM_SLAVES] = {0,};
+UINT8	RS485TxD3[NUM_SLAVES] = {0,};
+UINT8	RS485TxD4[NUM_SLAVES] = {0,};
+UINT8	RS485TxD5[NUM_SLAVES] = {0,};
+UINT8	RS485TxD6[NUM_SLAVES] = {0,};
+UINT8	RS485TxD7[NUM_SLAVES] = {0,};
+UINT8	RS485TxD8[NUM_SLAVES] = {0,};
+UINT8	RS485TxD9[NUM_SLAVES] = {0,};
 
 // Tool
-UINT8	ILed[NUM_TOOL] = {0,};
-UINT8	IGripper[NUM_TOOL] = {0,};
-UINT32	FTConfigParam[NUM_TOOL] = {0,};
-UINT8	LEDMode[NUM_TOOL] = {0,};
-UINT8	LEDG[NUM_TOOL] = {0,};
-UINT8	LEDR[NUM_TOOL] = {0,};
-UINT8	LEDB[NUM_TOOL] = {0,};
+UINT8	ILed[NUM_SLAVES] = {0,};
+UINT8	IGripper[NUM_SLAVES] = {0,};
+UINT32	FTConfigParam[NUM_SLAVES] = {0,};
+UINT8	LEDMode[NUM_SLAVES] = {0,};
+UINT8	LEDG[NUM_SLAVES] = {0,};
+UINT8	LEDR[NUM_SLAVES] = {0,};
+UINT8	LEDB[NUM_SLAVES] = {0,};
 
 // Axis for CORE
 const int 	 zeroPos[NUM_AXIS] = {ZERO_POS_1,ZERO_POS_2,ZERO_POS_3,ZERO_POS_4,ZERO_POS_5,ZERO_POS_6};
@@ -259,9 +264,9 @@ struct LOGGING_PACK
 
 typedef struct STATE{
 	JVec q;
-	JVec dq;
-	JVec ddq;
-	JVec torque;
+	JVec q_dot;
+	JVec q_ddot;
+	JVec tau;
 
 	Vector6d x;                           //Task space
 	Vector6d x_dot;
