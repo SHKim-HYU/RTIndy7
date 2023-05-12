@@ -93,15 +93,16 @@
 #define ENC_CORE_500 65536
 #define ENC_CORE_200 65536
 #define ENC_CORE_100 65536
+#define ENC_CORE 65536
 
-// SN: DB45I7E0B008
+// SN: DB45I7E0B007
 
-#define ZERO_POS_1 448713
-#define ZERO_POS_2 -25024
-#define ZERO_POS_3 138717
-#define ZERO_POS_4 12528070//-713436
-#define ZERO_POS_5 -1058082
-#define ZERO_POS_6 -88988
+#define ZERO_POS_1 -389838
+#define ZERO_POS_2 57701
+#define ZERO_POS_3 -199021
+#define ZERO_POS_4 9040
+#define ZERO_POS_5 656537
+#define ZERO_POS_6 -650739
 
 #define MAX_CURRENT_1 2.55
 #define MAX_CURRENT_2 2.55
@@ -111,13 +112,16 @@
 #define MAX_CURRENT_5 2.83
 #define MAX_CURRENT_6 2.83
 
-#define TORQUE_CONST_1 0.0884 		// Power 500, Rev C, Value 0.088390. Nm/A
-#define TORQUE_CONST_2 0.0884		// Power 500, Rev C, Value 0.083971. Nm/A
-#define TORQUE_CONST_3 0.087		// Power 200, Rev C, Value 0.089144. Nm/A
+// Power 500, Rev C, Value 0.088390. Nm/A
+// Power 500, Rev C, Value 0.083971. Nm/A
+// Power 200, Rev C, Value 0.089144. Nm/A
+// Power 100, Rev C, Value 0.057980. Nm/A
+// Power 100, Rev C, Value 0.055081. Nm/A
+// Power 100, Rev C, Value 0.057980. Nm/A
 
-#define TORQUE_CONST_4 0.058		// Power 100, Rev C, Value 0.057980. Nm/A
-#define TORQUE_CONST_5 0.058		// Power 100, Rev C, Value 0.055081. Nm/A
-#define TORQUE_CONST_6 0.058		// Power 100, Rev C, Value 0.057980. Nm/A
+#define TORQUE_CONST_500 0.0884 		
+#define TORQUE_CONST_200 0.087		
+#define TORQUE_CONST_100 0.058		
 
 #define TORQUE_ADC_500 48
 #define TORQUE_ADC_200 96

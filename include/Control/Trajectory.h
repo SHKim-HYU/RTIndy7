@@ -11,10 +11,9 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <math.h>
-#include "../KDL/SerialRobot.h"
 
 using namespace Eigen;
-namespace hyuCtrl {
+namespace hyuIndy7Ctrl {
 
 
 
@@ -48,6 +47,6 @@ private:
     double dq, dq_dot, dq_ddot;
 };
 
-} /* namespace HYUDA */
+} /* namespace hyuIndy7Ctrl */
 
 #endif /* CONTROL_TRAJECTORY_H_ */

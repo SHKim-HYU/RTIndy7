@@ -24,30 +24,28 @@ RT_TASK RTIndy7_task;
 RT_TASK print_task;
 RT_TASK plot_task;
 
-// For RT thread management
-static int run = 1;
 
-double ECAT_ActualPos_zero[JOINTNUM] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
-double ActualPos_Rad[JOINTNUM] = {0.0,};
-double ActualVel_Rad[JOINTNUM] = {0.0,};
-double ActualVel_Rad_Old[JOINTNUM] = {0.0,};
-double ActualAcc_Rad[JOINTNUM] = {0.0,};
-double TargetPos_Rad[JOINTNUM] = {0.0,};
-double TargetVel_Rad[JOINTNUM] = {0.0,};
-double TargetAcc_Rad[JOINTNUM] = {0.0,};
-double ECAT_calcTorq[JOINTNUM] = {0.0,};
-double ECAT_TargetToq[JOINTNUM] = {0.0,};
-INT32   MotorDir[JOINTNUM] = {1,1,1,1,1,1};
-int   old_flag[JOINTNUM]={0,};
+double ECAT_ActualPos_zero[NUM_AXIS] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
+double ActualPos_Rad[NUM_AXIS] = {0.0,};
+double ActualVel_Rad[NUM_AXIS] = {0.0,};
+double ActualVel_Rad_Old[NUM_AXIS] = {0.0,};
+double ActualAcc_Rad[NUM_AXIS] = {0.0,};
+double TargetPos_Rad[NUM_AXIS] = {0.0,};
+double TargetVel_Rad[NUM_AXIS] = {0.0,};
+double TargetAcc_Rad[NUM_AXIS] = {0.0,};
+double ECAT_calcTorq[NUM_AXIS] = {0.0,};
+double ECAT_TargetToq[NUM_AXIS] = {0.0,};
+INT32   MotorDir[NUM_AXIS] = {1,1,1,1,1,1};
+int   old_flag[NUM_AXIS]={0,};
 
 int limit_flag=0;
 
 //For Trajectory management
 //Task
 
-double traq[JOINTNUM]={0.0, 0.0, 0.0, 0, 0.0, 0.0};
-double traq_d[JOINTNUM]={0.0,};
-double traq_dd[JOINTNUM]={0.0,};
+double traq[NUM_AXIS]={0.0, 0.0, 0.0, 0, 0.0, 0.0};
+double traq_d[NUM_AXIS]={0.0,};
+double traq_dd[NUM_AXIS]={0.0,};
 int flag=0;
 int rtsercan_fd  = -1;
 
@@ -56,137 +54,33 @@ void signal_handler(int signum);
 
 int initAxes()
 {
-	/*
-	const int gearRatio[NUM_AXIS] = {0,0,0,0,0,0,0,0};
-	const int pulsePerRevolution[NUM_AXIS] = {0,0,0,0,0,0,0,0};
-	const double ratedTau[NUM_AXIS] = {0,0,0,0,0,0,0,0};
-	const int dirQ[NUM_AXIS] = {0,0,0,0,0,0,0,0};
-	const int dirTau[NUM_AXIS] = {0,0,0,0,0,0,0,0};
-	const int zeroPos[NUM_AXIS] = {0,0,0,0,0,0,0,0};
-	*/
-
 	for (int i = 0; i < NUM_AXIS; i++)
 	{	
-		switch(i)
-		{
-		case 0:
-		case 1:
-			Axis[i].setGearRatio(1);
-			Axis[i].setPulsePerRevolution(1);
-			Axis[i].setRatedTau(1);
+		Axis[i].setGearRatio(gearRatio[i]);
+		Axis[i].setGearEfficiency(EFFICIENCY);
+		Axis[i].setPulsePerRevolution(ENC_CORE);
+		Axis[i].setTauADC(TauADC[i]);
+		Axis[i].setTauK(TauK[i]);
+		Axis[i].setZeroPos(zeroPos[i]);
 
-			Axis[i].setDirQ(1);
-			Axis[i].setDirTau(1);
+		Axis[i].setDirQ(-1);
+		Axis[i].setDirTau(-1);
 
-			Axis[i].setConversionConstants();
-
-			Axis[i].setTrajPeriod(period);
-			
-			Axis[i].setTarVelInCnt(0);
-			Axis[i].setTarTorInCnt(0);
-			
-			nrmk_master.setServoOn(i);
-			break;
-		case 2:
-			Axis[i].setGearRatio(1);
-			Axis[i].setPulsePerRevolution(1);
-			Axis[i].setRatedTau(1);
-
-			Axis[i].setDirQ(1);
-			Axis[i].setDirTau(1);
-
-			Axis[i].setConversionConstants();
-
-			Axis[i].setTrajPeriod(period);
-			
-			Axis[i].setTarVelInCnt(0);
-			Axis[i].setTarTorInCnt(0);
-			
-			nrmk_master.setServoOn(i);
-			break;
-		case 3:
-		case 4:
-		case 5:
-			Axis[i].setGearRatio(1);
-			Axis[i].setPulsePerRevolution(1);
-			Axis[i].setRatedTau(1);
-
-			Axis[i].setDirQ(1);
-			Axis[i].setDirTau(1);
-
-			Axis[i].setConversionConstants();
-
-			Axis[i].setTrajPeriod(period);
-			
-			Axis[i].setTarVelInCnt(0);
-			Axis[i].setTarTorInCnt(0);
-			
-			nrmk_master.setServoOn(i);
-			break;
-		}
-
+		Axis[i].setConversionConstants();
+		
+		Axis[i].setTarVelInCnt(0);
+		Axis[i].setTarTorInCnt(0);
+		
+		nrmk_master.setServoOn(i);
 	}
 	
 	return 1;
 }
 void saveLogData(){}
 /****************************************************************************/
-void EncToRad(double wc, double dt)
-{
-	for(int i=0; i<JOINTNUM; i++)
-	{
-		if(old_flag[i]==0){
-			ECAT_ActualPos_Old[i]=ECAT_ActualPos[i];
-			old_flag[i]=1;
-		}
-		else if(old_flag[i]==1){
-			//ECAT_ActualVel[i]=1.0/(1.0+dt*wc)*ECAT_ActualVel_Old[i]+dt*wc/(1.0+dt*wc)*(ECAT_ActualPos_Old[i]-ECAT_ActualPos[i])/dt;
-			switch(i)
-			{
-				case 0:
-					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
-					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];				
-				case 1:
-					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121); //262144/2PI
-					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_500/PI2*GEAR_RATIO_121);
-					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
-					break;
-				case 2:
-					ActualPos_Rad[i]=(double)ECAT_ActualPos[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121); //262144/2PI
-					ActualVel_Rad[i]=(double)ECAT_ActualVel[i]/(ENC_CORE_200/PI2*GEAR_RATIO_121);
-					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
-					break;
-				case 3:
-					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
-					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
-					break;
-				case 4:
-					ActualPos_Rad[i]=-(double)ECAT_ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-					ActualVel_Rad[i]=-(double)ECAT_ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);	
-					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
-					break;
-				case 5:
-					ActualPos_Rad[i]=(double)ECAT_ActualPos[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101); //262144/2PI
-					ActualVel_Rad[i]=(double)ECAT_ActualVel[i]/(ENC_CORE_100/PI2*GEAR_RATIO_101);
-					ActualVel_Rad[i] =1.0/(1.0+dt*wc)*ActualVel_Rad_Old[i]+wc*dt/(1.0+dt*wc)*ActualVel_Rad[i];
-					break;
-			}
-			//for Kinematics & Dynamics
-			info.act.q(i)=ActualPos_Rad[i];
-			info.act.dq(i)=ActualVel_Rad[i];
-			ActualVel_Rad_Old[i]= ActualVel_Rad[i];
-			//buffer for calculate velocity
-			ECAT_ActualPos_Old[i]=ECAT_ActualPos[i];
-			ECAT_ActualVel_Old[i]=ECAT_ActualVel[i];
-		}
-	}
-}
-
 void Robot_Limit()
 {
-	for(int i=0;i<JOINTNUM;i++)
+	for(int i=0;i<NUM_AXIS;i++)
 	{
 		if(abs(ActualVel_Rad[i])>4)
 		{
@@ -199,17 +93,17 @@ void Robot_Limit()
 // int isDriveInit(void)
 // {
 // 	int elmo_count = 0;
-// 	for(int i=0; i<JOINTNUM; ++i)
+// 	for(int i=0; i<NUM_AXIS; ++i)
 // 	{
 // 		if(ecat_nrmk_drive[i].initialized())
 // 			elmo_count++;
 // 	}
 
-// 	// for(int i=0;i<JOINTNUM;i++)
+// 	// for(int i=0;i<NUM_AXIS;i++)
 // 	// {
 // 	// 	ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
 // 	// }
-// 	if(elmo_count == JOINTNUM)
+// 	if(elmo_count == NUM_AXIS)
 
 // 		return 1;
 // 	else
@@ -262,62 +156,18 @@ void readEcatData(){
 	nrmk_master.readBuffer(0x60008, FTRawTz);
 	nrmk_master.readBuffer(0x60009, FTOverloadStatus);
 	nrmk_master.readBuffer(0x600010, FTErrorFlag);	
+	
+	for(int i=0; i<NUM_AXIS;i++)
+	{
+		Axis[i].setCurrentPosInCnt(ActualPos[i]);
+		Axis[i].setCurrentVelInCnt(ActualVel[i]);
+		Axis[i].setCurrentTorInCnt(ActualTor[i]);
+		Axis[i].setDataIn(DataIn[i]);
+		
+		Axis[i].setCurrentTime(gt);
+	}
 }
 
-void calcTorque_To_EcatTorque(JVec calc_torque, double* toq){
-   for(int i=0; i<6; ++i) {
-        if(i==0)
-            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
-		else if(i==1)
-            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==2)
-            toq[i] = (calc_torque(i))*(double)(TORQUE_ADC_200)/(double)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
-        else if(i==3)
-            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==4)
-            toq[i] = -(calc_torque(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else if(i==5)
-            toq[i] = (calc_torque(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        else
-            return;
-    }    
-}
-void saturationEcatTorque(double *p_toq , int maxtoq, int *p_dir)
-{
-    double toq_tmp=0;
-	for(int i=0; i<JOINTNUM; ++i)
-	{
-		toq_tmp = p_toq[i];
-		if(toq_tmp <= -maxtoq)
-		{
-			p_toq[i] = p_dir[i]*-maxtoq;
-		}
-		else if(toq_tmp >= maxtoq)
-		{
-			p_toq[i] = p_dir[i]*maxtoq;
-		}
-		else
-		{
-			p_toq[i] = p_dir[i]*toq_tmp;
-		}
-	}
-	return;
-}
-void saturationEint(JVec &torque, JVec MAX_TORQUES){
-    for(int i =0;i<JOINTNUM;i++){
-        if(abs(torque(i))> MAX_TORQUES(i)){
-            if(torque(i)<0) torque(i) = MAX_TORQUES(i);
-            else torque(i) = -MAX_TORQUES(i);
-        }
-    }
-}
-void writeEcatData(double* ECAT_calcTorq){
-	for(int j=0; j<JOINTNUM; ++j)
-	{
-		ECAT_TargetToq[j] = round(ECAT_calcTorq[j]);
-		ecat_nrmk_drive[j].writeTorque(ECAT_TargetToq[j]);
-	}
-}
 // RTIndy7_task
 void RTIndy7_run(void *arg)
 {
@@ -348,23 +198,23 @@ void RTIndy7_run(void *arg)
 	{
 		previous = rt_timer_read();
 		// [ToDo] Here is an error for PDO mapping		
-		
+		nrmk_master.processTxDomain();
+		readEcatData();
 		if(system_ready)
 		{
 			/// TO DO: read data from sensors in EtherCAT system interface
-			nrmk_master.processTxDomain();
+			
 
 
-			readEcatData();
-			EncToRad(wc,dt);
+			
 			if(traj_flag ==0){
 				q0 = info.act.q;
 				traj_flag =1;
 			}
 			if(traj_flag == 1){
-				if (double_gt <=Tf){
-					JointTrajectory(q0, qT, Tf, double_gt , method , info.des.q, info.des.dq, info.des.ddq) ;
-				}else if(double_gt > Tf){
+				if (gt <=Tf){
+					JointTrajectory(q0, qT, Tf, gt , method , info.des.q, info.des.dq, info.des.ddq) ;
+				}else if(gt > Tf){
 					q0 = info.act.q;
 					qT = JVec::Zero();
 					traj_flag =2;
@@ -372,7 +222,7 @@ void RTIndy7_run(void *arg)
 				
 			}
 			if(traj_flag ==2){
-				JointTrajectory(q0, qT, Tf, double_gt-Tf , method , info.des.q, info.des.dq, info.des.ddq) ;
+				JointTrajectory(q0, qT, Tf, gt-Tf , method , info.des.q, info.des.dq, info.des.ddq) ;
 			}
 			
 			compute();
@@ -380,20 +230,16 @@ void RTIndy7_run(void *arg)
 			//JVec clacTorq = mr_indy7.Gravity( info.act.q ); // calcTorque
 			//JVec clacTorq = mr_indy7.ComputedTorqueControl( info.act.q , info.act.dq, info.des.q, info.des.dq); // calcTorque
 			e = info.des.q-info.act.q;
-			eint = eint+e*dt;
+			eint = eint+e*0.001;
 			JVec clacTorq = mr_indy7.HinfControl( info.act.q , info.act.dq, info.des.q, info.des.dq,info.des.ddq,eint);
 			mr_indy7.saturationMaxTorque(clacTorq,MAX_TORQUES);
 
-			calcTorque_To_EcatTorque(clacTorq, ECAT_calcTorq);
-			saturationEcatTorque(ECAT_calcTorq, 1000, MotorDir);
-			writeEcatData(ECAT_calcTorq);
-
 			/// TO DO: write data to actuators in EtherCAT system interface
-			nrmk_master.writeBuffer(0x60710, TargetTor);
-			//nrmk_master.writeBuffer(0x60600, ModeOfOperation);
-			nrmk_master.processRxDomain();
+			// nrmk_master.writeBuffer(0x60710, TargetTor);
+			// nrmk_master.writeBuffer(0x60600, ModeOfOperation);
+			
 		}
-
+		nrmk_master.processRxDomain();
 
 		
 
@@ -406,6 +252,7 @@ void RTIndy7_run(void *arg)
 
 		if (nrmk_master.isSystemReady())
 		{
+			rt_printf("system is ready\n");
 			system_ready=1;	//all drives have been done
 
 			gt+= period;
@@ -435,11 +282,11 @@ void print_run(void *arg)
 	 *            start time,
 	 *            period (here: 100ms = 0.1s)
 	 */
-	rt_task_set_periodic(NULL, TM_NOW, 1e8);
+	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
 	
 	while (1)
 	{
-		if (++count==10)
+		if (++count==1000)
 		{
 			++stick;
 			count=0;
@@ -468,20 +315,20 @@ void print_run(void *arg)
 			else
 				rt_printf("TxDomain: Offline\n");
 
-			for(int j=0; j<JOINTNUM; ++j){
-				//rt_printf("ID: %d", j+NUM_FT);
-				//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-				//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			    //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-				//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				//rt_printf("\t ecat_ActPos : %d",ecat_nrmk_drive[j].position_);
-				//rt_printf("\t ecat_ActPosZero : %f",ECAT_ActualPos_zero[j]);
-				rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
-				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.dq[j],info.des.ddq[j]);
-				rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j]);
-				rt_printf("\t TarTor: %f, ",				ECAT_calcTorq[j]);
-				rt_printf("\t ActTor: %d,\n",			ECAT_ActualTor[j]);
-			}
+			// for(int j=0; j<NUM_AXIS; ++j){
+			// 	//rt_printf("ID: %d", j+NUM_FT);
+			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+			// 	//rt_printf("\t ecat_ActPos : %d",ecat_nrmk_drive[j].position_);
+			// 	//rt_printf("\t ecat_ActPosZero : %f",ECAT_ActualPos_zero[j]);
+			// 	rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
+			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.dq[j],info.des.ddq[j]);
+			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.dq[j]-info.act.dq[j]);
+			// 	rt_printf("\t TarTor: %f, ",				ECAT_calcTorq[j]);
+			// 	rt_printf("\t ActTor: %d,\n",			ECAT_ActualTor[j]);
+			// }
 			rt_printf("\n");
 		}
 		else

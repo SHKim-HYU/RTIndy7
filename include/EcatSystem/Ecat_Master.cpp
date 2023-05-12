@@ -7,7 +7,7 @@
 //
 // Copyright (C) 2013-2016 Neuromeka <http://www.neuromeka.com>
 #if !defined(_USE_LIB_)
-#include "Ecat_master.h"
+#include "Ecat_Master.h"
 
 #include <unistd.h>
 #include <native/timer.h>
@@ -1563,7 +1563,7 @@ int NRMK_Master::_initSlaves()
     
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
     {
-        _NRMK_Drive[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, Neuromeka, NRMK_Drive);                   
+        _NRMK_Drive[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, NRMK_VendorID, NRMK_Drive_ProductCode);                   
         if (_NRMK_Drive[i].Config == NULL)
         {
             printf("There is no configuration on slave NRMK_DRIVE!\n");
@@ -1580,7 +1580,7 @@ int NRMK_Master::_initSlaves()
 
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
     {
-        _NRMK_IO_Module[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, Neuromeka, NRMK_IO_Module);                   
+        _NRMK_IO_Module[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, NRMK_VendorID, NRMK_IO_Module_ProductCode);                   
         if (_NRMK_IO_Module[i].Config == NULL)
         {
             printf("There is no configuration on slave NRMK_IO_MODULE!\n");
@@ -1597,7 +1597,7 @@ int NRMK_Master::_initSlaves()
 
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
     {
-        _NRMK_Indy_Tool[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, Neuromeka, NRMK_Indy_Tool);                   
+        _NRMK_Indy_Tool[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, NRMK_VendorID, NRMK_Indy_Tool_ProductCode);                   
         if (_NRMK_Indy_Tool[i].Config == NULL)
         {
             printf("There is no configuration on slave NRMK_INDY_TOOL!\n");
@@ -1637,103 +1637,103 @@ int NRMK_Master::_initDomains()
     // Register Entries
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
                 {
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6040, 0, &(_NRMK_Drive[i].offControlword), &(_NRMK_Drive[i].bitoffControlword));  // Controlword
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x607a, 0, &(_NRMK_Drive[i].offTargetposition), &(_NRMK_Drive[i].bitoffTargetposition));    // Targetposition
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x60ff, 0, &(_NRMK_Drive[i].offTargetvelocity), &(_NRMK_Drive[i].bitoffTargetvelocity));    // Targetvelocity
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6071, 0, &(_NRMK_Drive[i].offTargettorque), &(_NRMK_Drive[i].bitoffTargettorque));    // Targettorque
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6060, 0, &(_NRMK_Drive[i].offModesofoperation), &(_NRMK_Drive[i].bitoffModesofoperation));    // Modesofoperation
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6040, 0, &(_NRMK_Drive[i].offControlword), &(_NRMK_Drive[i].bitoffControlword));  // Controlword
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x607a, 0, &(_NRMK_Drive[i].offTargetposition), &(_NRMK_Drive[i].bitoffTargetposition));    // Targetposition
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x60ff, 0, &(_NRMK_Drive[i].offTargetvelocity), &(_NRMK_Drive[i].bitoffTargetvelocity));    // Targetvelocity
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6071, 0, &(_NRMK_Drive[i].offTargettorque), &(_NRMK_Drive[i].bitoffTargettorque));    // Targettorque
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6060, 0, &(_NRMK_Drive[i].offModesofoperation), &(_NRMK_Drive[i].bitoffModesofoperation));    // Modesofoperation
                     
                 }
 
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
                 {
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 1, &(_NRMK_IO_Module[i].offControlCode), &(_NRMK_IO_Module[i].bitoffControlCode));  // ControlCode
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 2, &(_NRMK_IO_Module[i].offDO5V), &(_NRMK_IO_Module[i].bitoffDO5V));    // DO5V
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 3, &(_NRMK_IO_Module[i].offTO), &(_NRMK_IO_Module[i].bitoffTO));    // TO
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 4, &(_NRMK_IO_Module[i].offDO), &(_NRMK_IO_Module[i].bitoffDO));    // DO
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 5, &(_NRMK_IO_Module[i].offAO1), &(_NRMK_IO_Module[i].bitoffAO1));  // AO1
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 6, &(_NRMK_IO_Module[i].offAO2), &(_NRMK_IO_Module[i].bitoffAO2));  // AO2
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 7, &(_NRMK_IO_Module[i].offFTConfigParam), &(_NRMK_IO_Module[i].bitoffFTConfigParam));  // FTConfigParam
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 8, &(_NRMK_IO_Module[i].offRS485ConfigParam), &(_NRMK_IO_Module[i].bitoffRS485ConfigParam));    // RS485ConfigParam
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 9, &(_NRMK_IO_Module[i].offRS485CMD), &(_NRMK_IO_Module[i].bitoffRS485CMD));    // RS485CMD
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 10, &(_NRMK_IO_Module[i].offRS485TxCnt), &(_NRMK_IO_Module[i].bitoffRS485TxCnt));   // RS485TxCnt
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 11, &(_NRMK_IO_Module[i].offRS485TxD0), &(_NRMK_IO_Module[i].bitoffRS485TxD0)); // RS485TxD0
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 12, &(_NRMK_IO_Module[i].offRS485TxD1), &(_NRMK_IO_Module[i].bitoffRS485TxD1)); // RS485TxD1
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 13, &(_NRMK_IO_Module[i].offRS485TxD2), &(_NRMK_IO_Module[i].bitoffRS485TxD2)); // RS485TxD2
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 14, &(_NRMK_IO_Module[i].offRS485TxD3), &(_NRMK_IO_Module[i].bitoffRS485TxD3)); // RS485TxD3
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 15, &(_NRMK_IO_Module[i].offRS485TxD4), &(_NRMK_IO_Module[i].bitoffRS485TxD4)); // RS485TxD4
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 16, &(_NRMK_IO_Module[i].offRS485TxD5), &(_NRMK_IO_Module[i].bitoffRS485TxD5)); // RS485TxD5
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 17, &(_NRMK_IO_Module[i].offRS485TxD6), &(_NRMK_IO_Module[i].bitoffRS485TxD6)); // RS485TxD6
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 18, &(_NRMK_IO_Module[i].offRS485TxD7), &(_NRMK_IO_Module[i].bitoffRS485TxD7)); // RS485TxD7
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 19, &(_NRMK_IO_Module[i].offRS485TxD8), &(_NRMK_IO_Module[i].bitoffRS485TxD8)); // RS485TxD8
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 20, &(_NRMK_IO_Module[i].offRS485TxD9), &(_NRMK_IO_Module[i].bitoffRS485TxD9)); // RS485TxD9
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 1, &(_NRMK_IO_Module[i].offControlCode), &(_NRMK_IO_Module[i].bitoffControlCode));  // ControlCode
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 2, &(_NRMK_IO_Module[i].offDO5V), &(_NRMK_IO_Module[i].bitoffDO5V));    // DO5V
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 3, &(_NRMK_IO_Module[i].offTO), &(_NRMK_IO_Module[i].bitoffTO));    // TO
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 4, &(_NRMK_IO_Module[i].offDO), &(_NRMK_IO_Module[i].bitoffDO));    // DO
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 5, &(_NRMK_IO_Module[i].offAO1), &(_NRMK_IO_Module[i].bitoffAO1));  // AO1
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 6, &(_NRMK_IO_Module[i].offAO2), &(_NRMK_IO_Module[i].bitoffAO2));  // AO2
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 7, &(_NRMK_IO_Module[i].offFTConfigParam), &(_NRMK_IO_Module[i].bitoffFTConfigParam));  // FTConfigParam
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 8, &(_NRMK_IO_Module[i].offRS485ConfigParam), &(_NRMK_IO_Module[i].bitoffRS485ConfigParam));    // RS485ConfigParam
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 9, &(_NRMK_IO_Module[i].offRS485CMD), &(_NRMK_IO_Module[i].bitoffRS485CMD));    // RS485CMD
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 10, &(_NRMK_IO_Module[i].offRS485TxCnt), &(_NRMK_IO_Module[i].bitoffRS485TxCnt));   // RS485TxCnt
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 11, &(_NRMK_IO_Module[i].offRS485TxD0), &(_NRMK_IO_Module[i].bitoffRS485TxD0)); // RS485TxD0
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 12, &(_NRMK_IO_Module[i].offRS485TxD1), &(_NRMK_IO_Module[i].bitoffRS485TxD1)); // RS485TxD1
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 13, &(_NRMK_IO_Module[i].offRS485TxD2), &(_NRMK_IO_Module[i].bitoffRS485TxD2)); // RS485TxD2
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 14, &(_NRMK_IO_Module[i].offRS485TxD3), &(_NRMK_IO_Module[i].bitoffRS485TxD3)); // RS485TxD3
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 15, &(_NRMK_IO_Module[i].offRS485TxD4), &(_NRMK_IO_Module[i].bitoffRS485TxD4)); // RS485TxD4
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 16, &(_NRMK_IO_Module[i].offRS485TxD5), &(_NRMK_IO_Module[i].bitoffRS485TxD5)); // RS485TxD5
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 17, &(_NRMK_IO_Module[i].offRS485TxD6), &(_NRMK_IO_Module[i].bitoffRS485TxD6)); // RS485TxD6
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 18, &(_NRMK_IO_Module[i].offRS485TxD7), &(_NRMK_IO_Module[i].bitoffRS485TxD7)); // RS485TxD7
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 19, &(_NRMK_IO_Module[i].offRS485TxD8), &(_NRMK_IO_Module[i].bitoffRS485TxD8)); // RS485TxD8
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 20, &(_NRMK_IO_Module[i].offRS485TxD9), &(_NRMK_IO_Module[i].bitoffRS485TxD9)); // RS485TxD9
                     
                 }
 
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
                 {
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 1, &(_NRMK_Indy_Tool[i].offILed), &(_NRMK_Indy_Tool[i].bitoffILed));    // ILed
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 2, &(_NRMK_Indy_Tool[i].offIGripper), &(_NRMK_Indy_Tool[i].bitoffIGripper));    // IGripper
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 3, &(_NRMK_Indy_Tool[i].offFTConfigParam), &(_NRMK_Indy_Tool[i].bitoffFTConfigParam));  // FTConfigParam
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 4, &(_NRMK_Indy_Tool[i].offLEDMode), &(_NRMK_Indy_Tool[i].bitoffLEDMode));  // LEDMode
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 5, &(_NRMK_Indy_Tool[i].offLEDG), &(_NRMK_Indy_Tool[i].bitoffLEDG));    // LEDG
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 6, &(_NRMK_Indy_Tool[i].offLEDR), &(_NRMK_Indy_Tool[i].bitoffLEDR));    // LEDR
-                    _systemVars->_registerRxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 7, &(_NRMK_Indy_Tool[i].offLEDB), &(_NRMK_Indy_Tool[i].bitoffLEDB));    // LEDB
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 1, &(_NRMK_Indy_Tool[i].offILed), &(_NRMK_Indy_Tool[i].bitoffILed));    // ILed
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 2, &(_NRMK_Indy_Tool[i].offIGripper), &(_NRMK_Indy_Tool[i].bitoffIGripper));    // IGripper
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 3, &(_NRMK_Indy_Tool[i].offFTConfigParam), &(_NRMK_Indy_Tool[i].bitoffFTConfigParam));  // FTConfigParam
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 4, &(_NRMK_Indy_Tool[i].offLEDMode), &(_NRMK_Indy_Tool[i].bitoffLEDMode));  // LEDMode
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 5, &(_NRMK_Indy_Tool[i].offLEDG), &(_NRMK_Indy_Tool[i].bitoffLEDG));    // LEDG
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 6, &(_NRMK_Indy_Tool[i].offLEDR), &(_NRMK_Indy_Tool[i].bitoffLEDR));    // LEDR
+                    _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 7, &(_NRMK_Indy_Tool[i].offLEDB), &(_NRMK_Indy_Tool[i].bitoffLEDB));    // LEDB
                     
                 }
 
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
                 {
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6041, 0, &(_NRMK_Drive[i].offStatusword), &(_NRMK_Drive[i].bitoffStatusword));    // Statusword
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6064, 0, &(_NRMK_Drive[i].offPositionactualvalue), &(_NRMK_Drive[i].bitoffPositionactualvalue));  // Positionactualvalue
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x606c, 0, &(_NRMK_Drive[i].offVelocityactualvalue), &(_NRMK_Drive[i].bitoffVelocityactualvalue));  // Velocityactualvalue
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6077, 0, &(_NRMK_Drive[i].offTorqueactualvalue), &(_NRMK_Drive[i].bitoffTorqueactualvalue));  // Torqueactualvalue
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Drive, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6061, 0, &(_NRMK_Drive[i].offModesofoperationdisplay), &(_NRMK_Drive[i].bitoffModesofoperationdisplay));  // Modesofoperationdisplay
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6041, 0, &(_NRMK_Drive[i].offStatusword), &(_NRMK_Drive[i].bitoffStatusword));    // Statusword
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6064, 0, &(_NRMK_Drive[i].offPositionactualvalue), &(_NRMK_Drive[i].bitoffPositionactualvalue));  // Positionactualvalue
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x606c, 0, &(_NRMK_Drive[i].offVelocityactualvalue), &(_NRMK_Drive[i].bitoffVelocityactualvalue));  // Velocityactualvalue
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6077, 0, &(_NRMK_Drive[i].offTorqueactualvalue), &(_NRMK_Drive[i].bitoffTorqueactualvalue));  // Torqueactualvalue
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6061, 0, &(_NRMK_Drive[i].offModesofoperationdisplay), &(_NRMK_Drive[i].bitoffModesofoperationdisplay));  // Modesofoperationdisplay
                     
                 }
 
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
                 {
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 1, &(_NRMK_IO_Module[i].offStatusCode), &(_NRMK_IO_Module[i].bitoffStatusCode));    // StatusCode
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 2, &(_NRMK_IO_Module[i].offDI5V), &(_NRMK_IO_Module[i].bitoffDI5V));    // DI5V
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 3, &(_NRMK_IO_Module[i].offDI1), &(_NRMK_IO_Module[i].bitoffDI1));  // DI1
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 4, &(_NRMK_IO_Module[i].offDI2), &(_NRMK_IO_Module[i].bitoffDI2));  // DI2
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 5, &(_NRMK_IO_Module[i].offAI1), &(_NRMK_IO_Module[i].bitoffAI1));  // AI1
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 6, &(_NRMK_IO_Module[i].offAI2), &(_NRMK_IO_Module[i].bitoffAI2));  // AI2
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 7, &(_NRMK_IO_Module[i].offFTRawFx), &(_NRMK_IO_Module[i].bitoffFTRawFx));  // FTRawFx
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 8, &(_NRMK_IO_Module[i].offFTRawFy), &(_NRMK_IO_Module[i].bitoffFTRawFy));  // FTRawFy
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 9, &(_NRMK_IO_Module[i].offFTRawFz), &(_NRMK_IO_Module[i].bitoffFTRawFz));  // FTRawFz
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 10, &(_NRMK_IO_Module[i].offFTRawTx), &(_NRMK_IO_Module[i].bitoffFTRawTx)); // FTRawTx
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 11, &(_NRMK_IO_Module[i].offFTRawTy), &(_NRMK_IO_Module[i].bitoffFTRawTy)); // FTRawTy
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 12, &(_NRMK_IO_Module[i].offFTRawTz), &(_NRMK_IO_Module[i].bitoffFTRawTz)); // FTRawTz
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 13, &(_NRMK_IO_Module[i].offFTOverloadStatus), &(_NRMK_IO_Module[i].bitoffFTOverloadStatus));   // FTOverloadStatus
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 14, &(_NRMK_IO_Module[i].offFTErrorFlag), &(_NRMK_IO_Module[i].bitoffFTErrorFlag)); // FTErrorFlag
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 15, &(_NRMK_IO_Module[i].offRS485RxCnt), &(_NRMK_IO_Module[i].bitoffRS485RxCnt));   // RS485RxCnt
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 16, &(_NRMK_IO_Module[i].offRS485RxD0), &(_NRMK_IO_Module[i].bitoffRS485RxD0)); // RS485RxD0
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 17, &(_NRMK_IO_Module[i].offRS485RxD1), &(_NRMK_IO_Module[i].bitoffRS485RxD1)); // RS485RxD1
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 18, &(_NRMK_IO_Module[i].offRS485RxD2), &(_NRMK_IO_Module[i].bitoffRS485RxD2)); // RS485RxD2
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 19, &(_NRMK_IO_Module[i].offRS485RxD3), &(_NRMK_IO_Module[i].bitoffRS485RxD3)); // RS485RxD3
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 20, &(_NRMK_IO_Module[i].offRS485RxD4), &(_NRMK_IO_Module[i].bitoffRS485RxD4)); // RS485RxD4
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 21, &(_NRMK_IO_Module[i].offRS485RxD5), &(_NRMK_IO_Module[i].bitoffRS485RxD5)); // RS485RxD5
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 22, &(_NRMK_IO_Module[i].offRS485RxD6), &(_NRMK_IO_Module[i].bitoffRS485RxD6)); // RS485RxD6
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 23, &(_NRMK_IO_Module[i].offRS485RxD7), &(_NRMK_IO_Module[i].bitoffRS485RxD7)); // RS485RxD7
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 24, &(_NRMK_IO_Module[i].offRS485RxD8), &(_NRMK_IO_Module[i].bitoffRS485RxD8)); // RS485RxD8
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_IO_Module, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 25, &(_NRMK_IO_Module[i].offRS485RxD9), &(_NRMK_IO_Module[i].bitoffRS485RxD9)); // RS485RxD9
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 1, &(_NRMK_IO_Module[i].offStatusCode), &(_NRMK_IO_Module[i].bitoffStatusCode));    // StatusCode
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 2, &(_NRMK_IO_Module[i].offDI5V), &(_NRMK_IO_Module[i].bitoffDI5V));    // DI5V
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 3, &(_NRMK_IO_Module[i].offDI1), &(_NRMK_IO_Module[i].bitoffDI1));  // DI1
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 4, &(_NRMK_IO_Module[i].offDI2), &(_NRMK_IO_Module[i].bitoffDI2));  // DI2
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 5, &(_NRMK_IO_Module[i].offAI1), &(_NRMK_IO_Module[i].bitoffAI1));  // AI1
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 6, &(_NRMK_IO_Module[i].offAI2), &(_NRMK_IO_Module[i].bitoffAI2));  // AI2
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 7, &(_NRMK_IO_Module[i].offFTRawFx), &(_NRMK_IO_Module[i].bitoffFTRawFx));  // FTRawFx
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 8, &(_NRMK_IO_Module[i].offFTRawFy), &(_NRMK_IO_Module[i].bitoffFTRawFy));  // FTRawFy
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 9, &(_NRMK_IO_Module[i].offFTRawFz), &(_NRMK_IO_Module[i].bitoffFTRawFz));  // FTRawFz
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 10, &(_NRMK_IO_Module[i].offFTRawTx), &(_NRMK_IO_Module[i].bitoffFTRawTx)); // FTRawTx
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 11, &(_NRMK_IO_Module[i].offFTRawTy), &(_NRMK_IO_Module[i].bitoffFTRawTy)); // FTRawTy
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 12, &(_NRMK_IO_Module[i].offFTRawTz), &(_NRMK_IO_Module[i].bitoffFTRawTz)); // FTRawTz
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 13, &(_NRMK_IO_Module[i].offFTOverloadStatus), &(_NRMK_IO_Module[i].bitoffFTOverloadStatus));   // FTOverloadStatus
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 14, &(_NRMK_IO_Module[i].offFTErrorFlag), &(_NRMK_IO_Module[i].bitoffFTErrorFlag)); // FTErrorFlag
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 15, &(_NRMK_IO_Module[i].offRS485RxCnt), &(_NRMK_IO_Module[i].bitoffRS485RxCnt));   // RS485RxCnt
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 16, &(_NRMK_IO_Module[i].offRS485RxD0), &(_NRMK_IO_Module[i].bitoffRS485RxD0)); // RS485RxD0
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 17, &(_NRMK_IO_Module[i].offRS485RxD1), &(_NRMK_IO_Module[i].bitoffRS485RxD1)); // RS485RxD1
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 18, &(_NRMK_IO_Module[i].offRS485RxD2), &(_NRMK_IO_Module[i].bitoffRS485RxD2)); // RS485RxD2
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 19, &(_NRMK_IO_Module[i].offRS485RxD3), &(_NRMK_IO_Module[i].bitoffRS485RxD3)); // RS485RxD3
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 20, &(_NRMK_IO_Module[i].offRS485RxD4), &(_NRMK_IO_Module[i].bitoffRS485RxD4)); // RS485RxD4
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 21, &(_NRMK_IO_Module[i].offRS485RxD5), &(_NRMK_IO_Module[i].bitoffRS485RxD5)); // RS485RxD5
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 22, &(_NRMK_IO_Module[i].offRS485RxD6), &(_NRMK_IO_Module[i].bitoffRS485RxD6)); // RS485RxD6
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 23, &(_NRMK_IO_Module[i].offRS485RxD7), &(_NRMK_IO_Module[i].bitoffRS485RxD7)); // RS485RxD7
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 24, &(_NRMK_IO_Module[i].offRS485RxD8), &(_NRMK_IO_Module[i].bitoffRS485RxD8)); // RS485RxD8
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 25, &(_NRMK_IO_Module[i].offRS485RxD9), &(_NRMK_IO_Module[i].bitoffRS485RxD9)); // RS485RxD9
                     
                 }
 
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
                 {
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 1, &(_NRMK_Indy_Tool[i].offIStatus), &(_NRMK_Indy_Tool[i].bitoffIStatus));  // IStatus
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 2, &(_NRMK_Indy_Tool[i].offIButton), &(_NRMK_Indy_Tool[i].bitoffIButton));  // IButton
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 3, &(_NRMK_Indy_Tool[i].offFTRawFx), &(_NRMK_Indy_Tool[i].bitoffFTRawFx));  // FTRawFx
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 4, &(_NRMK_Indy_Tool[i].offFTRawFy), &(_NRMK_Indy_Tool[i].bitoffFTRawFy));  // FTRawFy
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 5, &(_NRMK_Indy_Tool[i].offFTRawFz), &(_NRMK_Indy_Tool[i].bitoffFTRawFz));  // FTRawFz
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 6, &(_NRMK_Indy_Tool[i].offFTRawTx), &(_NRMK_Indy_Tool[i].bitoffFTRawTx));  // FTRawTx
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 7, &(_NRMK_Indy_Tool[i].offFTRawTy), &(_NRMK_Indy_Tool[i].bitoffFTRawTy));  // FTRawTy
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 8, &(_NRMK_Indy_Tool[i].offFTRawTz), &(_NRMK_Indy_Tool[i].bitoffFTRawTz));  // FTRawTz
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 9, &(_NRMK_Indy_Tool[i].offFTOverloadStatus), &(_NRMK_Indy_Tool[i].bitoffFTOverloadStatus));    // FTOverloadStatus
-                    _systemVars->_registerTxDomainEntry(Neuromeka, NRMK_Indy_Tool, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 10, &(_NRMK_Indy_Tool[i].offFTErrorFlag), &(_NRMK_Indy_Tool[i].bitoffFTErrorFlag)); // FTErrorFlag
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 1, &(_NRMK_Indy_Tool[i].offIStatus), &(_NRMK_Indy_Tool[i].bitoffIStatus));  // IStatus
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 2, &(_NRMK_Indy_Tool[i].offIButton), &(_NRMK_Indy_Tool[i].bitoffIButton));  // IButton
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 3, &(_NRMK_Indy_Tool[i].offFTRawFx), &(_NRMK_Indy_Tool[i].bitoffFTRawFx));  // FTRawFx
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 4, &(_NRMK_Indy_Tool[i].offFTRawFy), &(_NRMK_Indy_Tool[i].bitoffFTRawFy));  // FTRawFy
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 5, &(_NRMK_Indy_Tool[i].offFTRawFz), &(_NRMK_Indy_Tool[i].bitoffFTRawFz));  // FTRawFz
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 6, &(_NRMK_Indy_Tool[i].offFTRawTx), &(_NRMK_Indy_Tool[i].bitoffFTRawTx));  // FTRawTx
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 7, &(_NRMK_Indy_Tool[i].offFTRawTy), &(_NRMK_Indy_Tool[i].bitoffFTRawTy));  // FTRawTy
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 8, &(_NRMK_Indy_Tool[i].offFTRawTz), &(_NRMK_Indy_Tool[i].bitoffFTRawTz));  // FTRawTz
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 9, &(_NRMK_Indy_Tool[i].offFTOverloadStatus), &(_NRMK_Indy_Tool[i].bitoffFTOverloadStatus));    // FTOverloadStatus
+                    _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 10, &(_NRMK_Indy_Tool[i].offFTErrorFlag), &(_NRMK_Indy_Tool[i].bitoffFTErrorFlag)); // FTErrorFlag
                     
                 }
     

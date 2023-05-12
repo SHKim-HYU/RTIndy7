@@ -42,11 +42,7 @@
 
 #include "EcatDataSocket/EcatDataSocket.h"
 #include "EcatDataSocket/EcatControlSocket.h"
-//#include "EcatSystem/SystemInterface_EtherCAT_Neuromeka_NRMK_IO_Module.h"
-#include "EcatSystem/Ecat_NRMK_Indy_Tool.h"
 #include "EcatSystem/Ecat_Master.h"
-#include "EcatSystem/Ecat_Elmo.h"
-
 
 #include "PropertyDefinition.h"
 #include "NRMKsercan_tp.h"
@@ -76,7 +72,7 @@ using namespace std;
 #include "CAN/RoboLimb.h"
 
 
-#include "ServoAxis.h"
+#include "ServoAxis_Core.h"
 
 #define NUM_IO_MODULE 	1
 #define NUM_TOOL 		1
@@ -90,6 +86,9 @@ using namespace std;
 #define WAKEUP_TIME				(5)	// wake up timeout before really run, in second
 #define NSEC_PER_SEC 			1000000000
 
+// Cycle time in nanosecond
+unsigned int cycle_ns = 1000000; /* 1 ms */
+
 typedef unsigned int UINT32;
 typedef int32_t INT32;
 typedef int16_t INT16;
@@ -97,8 +96,15 @@ typedef uint16_t UINT16;
 typedef uint8_t UINT8;
 typedef int8_t INT8;
 
+// For RT thread management
+static int run = 1;
 unsigned long fault_count=0;
 long ethercat_time=0, worst_time=0;
+#define min_time	0
+#define max_time	100000
+#define hist_step	(100)
+unsigned int histdata[hist_step+1];
+unsigned int interval_size=350;
 
 typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
 typedef Eigen::Matrix<double, 4, 4> SE3;
@@ -145,8 +151,7 @@ double sine_amp=50000, f=0.2, period;
 
 int InitFlag[NUM_AXIS] = {0,};
 
-// EtherCAT Data (in pulse)
-INT32 	ZeroPos[NUM_AXIS] = {0,};
+////////////// TxPDO //////////////
 // Drive
 UINT16	StatusWord[NUM_AXIS] = {0,};
 INT32 	ActualPos[NUM_AXIS] = {0,};
@@ -192,6 +197,7 @@ INT16	FTRawTz[NUM_TOOL] = {0,};
 UINT8	FTOverloadStatus[NUM_TOOL] = {0,};
 UINT8	FTErrorFlag[NUM_TOOL] = {0,};
 
+////////////// RxPDO //////////////
 // Drive
 INT32 	TargetPos[NUM_AXIS] = {0,};
 INT32 	TargetVel[NUM_AXIS] = {0,};
@@ -229,6 +235,14 @@ UINT8	LEDMode[NUM_TOOL] = {0,};
 UINT8	LEDG[NUM_TOOL] = {0,};
 UINT8	LEDR[NUM_TOOL] = {0,};
 UINT8	LEDB[NUM_TOOL] = {0,};
+
+// Axis for CORE
+const int 	 zeroPos[NUM_AXIS] = {ZERO_POS_1,ZERO_POS_2,ZERO_POS_3,ZERO_POS_4,ZERO_POS_5,ZERO_POS_6};
+const int 	 gearRatio[NUM_AXIS] = {GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_101,GEAR_RATIO_101,GEAR_RATIO_101};
+const int 	 TauADC[NUM_AXIS] = {TORQUE_ADC_500,TORQUE_ADC_500,TORQUE_ADC_200,TORQUE_ADC_100,TORQUE_ADC_100,TORQUE_ADC_100};
+const double TauK[NUM_AXIS] = {TORQUE_CONST_500,TORQUE_CONST_500,TORQUE_CONST_200,TORQUE_CONST_100,TORQUE_CONST_100,TORQUE_CONST_100};
+const int 	 dirQ[NUM_AXIS] = {-1,-1,1,-1,-1,1};
+const int 	 dirTau[NUM_AXIS] = {-1,-1,1,-1,-1,1};
 
 
 //////////////////////////
@@ -268,11 +282,8 @@ typedef struct JOINT_INFO{
 	STATE des;
 }JointInfo;
 
-// Cycle time in nanosecond
-unsigned int cycle_ns = (unsigned int)(1000.0/CONTROL_FREQ*1000000.0); /* 1 ms */
-double dt = 1.0/CONTROL_FREQ; /* 1 ms */
-double wc = 105.0; /* CUT OFF FREQUENCY*/
+
 JVec MAX_TORQUES;
-static int period = 1000000;
+
 int traj_flag = 0;
 #endif /* RTRARMCLIENT_H_ */
