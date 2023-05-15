@@ -173,6 +173,8 @@ void readEcatData(){
 		info.act.q_dot(i) = Axis[i].getCurrVelInRad();
 		info.act.tau(i) = Axis[i].getCurrTorInNm();
 	}
+	// info.act.F<<(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
+	//           <<(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS];
 }
 
 void writeEcatData(){
@@ -244,16 +246,22 @@ void RTIndy7_run(void *arg)
 		// }
 
 		beginCompute = rt_timer_read();
-		compute();
-		Robot_Limit();
-		info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
-		//info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
-		e = info.des.q-info.act.q;
-		eint = eint+e*0.001;
-		// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
-		// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
-
-
+		if(system_ready){
+			compute();	
+			Robot_Limit();
+			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
+			//info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
+			e = info.des.q-info.act.q;
+			eint = eint+e*0.001;
+			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
+		}
+		else
+		{
+			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
+		}
+		
+		
 		periodCompute  = (unsigned long) rt_timer_read() - beginCompute;
 		
 		// Write data in EtherCAT Buffer
@@ -335,6 +343,9 @@ void print_run(void *arg)
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
 				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
 			}
+			rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n",(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
+				,(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS]);
+			
 			rt_printf("\n");
 		}
 		else

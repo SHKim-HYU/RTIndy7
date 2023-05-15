@@ -271,6 +271,7 @@ typedef struct STATE{
 	Vector6d x;                           //Task space
 	Vector6d x_dot;
 	Vector6d x_ddot;
+	Vector6d F;
     double s_time;
 }state;
 
