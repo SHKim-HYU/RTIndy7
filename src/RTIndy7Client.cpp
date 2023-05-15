@@ -222,6 +222,7 @@ void RTIndy7_run(void *arg)
 		nrmk_master.processTxDomain();
 		periodEcat += (unsigned long) rt_timer_read() - beginRead;
 		
+		// Write data in EtherCAT Buffer
 		readEcatData();	
 	
 		// [ToDo] Trajectory update
@@ -255,7 +256,8 @@ void RTIndy7_run(void *arg)
 
 		periodCompute  = (unsigned long) rt_timer_read() - beginCompute;
 		
-		// writeEcatData();
+		// Write data in EtherCAT Buffer
+		writeEcatData();
 
 		beginWrite = rt_timer_read();
 		nrmk_master.processRxDomain();
