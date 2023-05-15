@@ -138,11 +138,11 @@ file(GLOB_RECURSE MR include/MR/modern_robotics.h include/MR/modern_robotics.cpp
 file(GLOB_RECURSE MR_Indy7 include/MR/MR_Indy7.h include/MR/MR_Indy7.cpp)
 file(GLOB_RECURSE KDL  "include/KDL/*.h" "include/KDL/*.cpp")
 file(GLOB_RECURSE PDO include/EcatSystem/PDOConfig.c include/EcatSystem/PDOConfig.h)
-file(GLOB_RECURSE EcatSystem include/EcatSystem/*.cpp include/EcatSystem/*h)
+file(GLOB_RECURSE EcatSystem include/EcatSystem/Ecat_Master.cpp include/EcatSystem/Ecat_Master.h)
 file(GLOB_RECURSE Control include/Control/*.h include/Control/*.cpp include/Control/*.c)
 file(GLOB_RECURSE EcatDataSocket include/EcatDataSocket/EcatDataSocket.cpp include/EcatDataSocket/EcatDataSocket.h include/EcatDataSocket/EcatControlSocket.h) 
 file(GLOB_RECURSE CAN include/CAN/*.h include/CAN/*.cpp include/CAN/*.c)
-file(GLOB_RECURSE SOURCES "src/RTRArmClient.cpp")
+file(GLOB_RECURSE SOURCES "src/RTIndy7Client.cpp")
 
 
 

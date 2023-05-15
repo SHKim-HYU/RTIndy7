@@ -125,18 +125,6 @@ ec_pdo_entry_info_t NRMK_IO_Module_pdo_entries[] = {
     {0x6100, 0x19, 8}, /* RS485_Rx_D9 */
 };
 
-ec_pdo_info_t NRMK_IO_Module_pdos[] = {
-    {0x1610, 20, NRMK_IO_Module_pdo_entries + 0}, /* IO_OUT process data mapping */
-    {0x1a10, 25, NRMK_IO_Module_pdo_entries + 20}, /* IO_IN process data mapping */
-};
-
-ec_sync_info_t NRMK_IO_Module_syncs[] = {
-    {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
-    {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
-    {2, EC_DIR_OUTPUT, 1, NRMK_IO_Module_pdos + 0, EC_WD_ENABLE},
-    {3, EC_DIR_INPUT, 1, NRMK_IO_Module_pdos + 1, EC_WD_DISABLE},
-    {0xff}
-};
 
 
 // Index, Subindex, DataType
@@ -154,18 +142,7 @@ ec_pdo_entry_info_t NRMK_Drive_pdo_entries[] = {
     {0x6061, 0x00, 8}, /* modes_of_operation_display */
 };
 
-ec_pdo_info_t NRMK_Drive_pdos[] = {
-    {0x1600, 5, NRMK_Drive_pdo_entries + 0}, /* Drive RxPDO */
-    {0x1a00, 5, NRMK_Drive_pdo_entries + 5}, /* Drive TxPDO */
-};
 
-ec_sync_info_t NRMK_Drive_syncs[] = {
-    {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
-    {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
-    {2, EC_DIR_OUTPUT, 1, NRMK_Drive_pdos + 0, EC_WD_ENABLE},
-    {3, EC_DIR_INPUT, 1, NRMK_Drive_pdos + 1, EC_WD_DISABLE},
-    {0xff}
-};
 
 
 // Index, Subindex, DataType
@@ -190,15 +167,3 @@ ec_pdo_entry_info_t NRMK_Indy_Tool_pdo_entries[] = {
     {0x6000, 0x0a, 8}, /* FT_ErrorFlag */
 };
 
-ec_pdo_info_t NRMK_Indy_Tool_pdos[] = {
-    {0x1600, 7, NRMK_Indy_Tool_pdo_entries + 0}, /* HRI_OUT process data mapping */
-    {0x1a00, 10, NRMK_Indy_Tool_pdo_entries + 7}, /* HRI_IN process data mapping */
-};
-
-ec_sync_info_t NRMK_Indy_Tool_syncs[] = {
-    {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
-    {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
-    {2, EC_DIR_OUTPUT, 1, NRMK_Indy_Tool_pdos + 0, EC_WD_ENABLE},
-    {3, EC_DIR_INPUT, 1, NRMK_Indy_Tool_pdos + 1, EC_WD_DISABLE},
-    {0xff}
-};

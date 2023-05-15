@@ -7,7 +7,7 @@
 
 #include "Trajectory.h"
 
-namespace hyuCtrl {
+namespace hyuIndy7Ctrl {
 
 
 
@@ -213,6 +213,6 @@ void Trajectory::SetPolynomial5th(int NumJoint, double startPos, double FinalPos
 
 
 
-} /* namespace HYUDA */
+} /* namespace hyuIndy7Ctrl */
 
 
