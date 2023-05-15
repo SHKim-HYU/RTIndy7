@@ -303,6 +303,7 @@ int NRMK_Master::_activateMaster()
 
         usleep(1000);
 
+
         if (!(_systemVars->_rxDomain_pd = ecrt_domain_data(_systemVars->_rxDomain)))
         {
             printf("Failed to initialize RxDomain data pointer.\n");
