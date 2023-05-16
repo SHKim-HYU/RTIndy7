@@ -211,23 +211,24 @@ void RTIndy7_run(void *arg)
 
 	while (run)
 	{
-		
 		beginCycle = rt_timer_read();
 		periodEcat = 0;
-		beginRead = rt_timer_read();
 
+		beginRead = rt_timer_read();
 		nrmk_master.processTxDomain();
 		periodEcat += (unsigned long) rt_timer_read() - beginRead;
 		
 		// Write data in EtherCAT Buffer
 		readEcatData();	
 	
-
 		beginCompute = rt_timer_read();
 		if(system_ready){
 
+
 			compute();	
 			
+
+			// Calculate Joint controller
 			// info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
 			//info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
 			e = info.des.q-info.act.q;
@@ -240,8 +241,6 @@ void RTIndy7_run(void *arg)
 		{
 			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
 		}
-		
-		
 		periodCompute  = (unsigned long) rt_timer_read() - beginCompute;
 		
 		// Write data in EtherCAT Buffer
@@ -249,11 +248,11 @@ void RTIndy7_run(void *arg)
 
 		beginWrite = rt_timer_read();
 		nrmk_master.processRxDomain();
-
 		periodEcat += (unsigned long) rt_timer_read() - beginWrite;
 
 		endCycle = rt_timer_read();
 		periodCycle = (unsigned long) endCycle - beginCycle;
+		
 		if (nrmk_master.isSystemReady())
 		{
 			system_ready=1;	//all drives have been done
