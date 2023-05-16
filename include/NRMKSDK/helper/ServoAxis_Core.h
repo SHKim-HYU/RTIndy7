@@ -223,7 +223,18 @@ namespace NRMKHelper
 		{
 			_taudes = taud;
 		}
-		
+		void setTarPosInRad(double qtar)
+		{
+			_qtar = qtar;
+		}
+		void setTarVelInRad(double qdtar)
+		{
+			_qdottar = qdtar;
+		}
+		void setTarAccInRad(double qddtar)
+		{
+			_qddottar = qddtar;
+		}
 		void setDesPosInCnt(INT32 DesPosInCnt)
 		{
 			_qdes = (double) ((DesPosInCnt - _zeroPos)*_cntToRad);
@@ -244,6 +255,14 @@ namespace NRMKHelper
 		double getDesPosInRad()
 		{
 			return _qdes;
+		}
+		double getDesVelInRad()
+		{
+			return _qdotdes;
+		}
+		double getDesAccInRad()
+		{
+			return _qddotdes;
 		}
 
 		// Trapezoidal trajectory
@@ -267,6 +286,22 @@ namespace NRMKHelper
 			_trajMaxVel = max_vel * _cntToRad;
 			_trajMaxAcc = max_acc * _cntToRad;
 			_trajMaxJerk = max_jerk * _cntToRad;
+		}
+
+		// Quintic Trajectory
+		void setTrajInitialQuintic()
+		{
+			_quintic.setInitialTraj(_t, _q, _qdot, 0);
+		}
+		void setTrajTargetQuintic(double duration)
+		{
+			_quintic.setTargetTraj(_t+duration, _qtar, _qdottar, 0);
+			_trajInitialized = true;
+		}
+		void TrajQuintic(){
+			_quintic.traj(_t, _qdes, _qdotdes, _qddotdes);
+			if(_quintic.isArrived())
+				_trajInitialized = false;
 		}
 
 		void setTrajInitialCond(double t, double pos, double vel)
@@ -316,9 +351,15 @@ namespace NRMKHelper
 
 		double _q;			// Current Angle in Radiant
 		double _qdot;		// Current Velocity in Radiant
+		double _qddot;		// Current Acceleration
 
 		double _qdes;		// Desired Angle in Radiant
 		double _qdotdes;	// Desired Vel in Radiant
+		double _qddotdes;	// Desired Acc
+
+		double _qtar;		// Target Angle in Radiant
+		double _qdottar;	// Target Vel in Radiant
+		double _qddottar;	// Target Acc
 
 		double _tau;		// Current Torque in Nm
 		double _taudes;		// Desired Torque in Nm
@@ -348,5 +389,6 @@ namespace NRMKHelper
 		bool _trajInitialized;
 
 		NRMKFoundation::internal::_ClosedLoopTrapezoidalInterpolator _trapezoidal;
+		NRMKFoundation::internal::_QuinticPolynomialInterpolator _quintic;
 	};
 }

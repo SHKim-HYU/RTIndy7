@@ -11,11 +11,10 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <math.h>
+#include "../KDL/SerialRobot.h"
 
 using namespace Eigen;
 namespace hyuIndy7Ctrl {
-
-
 
 class Trajectory {
 public:

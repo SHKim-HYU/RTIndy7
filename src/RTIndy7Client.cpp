@@ -24,34 +24,14 @@ RT_TASK RTIndy7_task;
 RT_TASK print_task;
 RT_TASK plot_task;
 
-
-double ECAT_ActualPos_zero[NUM_AXIS] = {ZERO_POS_1, ZERO_POS_2,ZERO_POS_3, ZERO_POS_4, ZERO_POS_5, ZERO_POS_6};
-double ActualPos_Rad[NUM_AXIS] = {0.0,};
-double ActualVel_Rad[NUM_AXIS] = {0.0,};
-double ActualVel_Rad_Old[NUM_AXIS] = {0.0,};
-double ActualAcc_Rad[NUM_AXIS] = {0.0,};
-double ActualTau[NUM_AXIS] = {0.0,};
-double TargetPos_Rad[NUM_AXIS] = {0.0,};
-double TargetVel_Rad[NUM_AXIS] = {0.0,};
-double TargetAcc_Rad[NUM_AXIS] = {0.0,};
-double ECAT_calcTorq[NUM_AXIS] = {0.0,};
-double ECAT_TargetToq[NUM_AXIS] = {0.0,};
-INT32   MotorDir[NUM_AXIS] = {1,1,1,1,1,1};
-int   old_flag[NUM_AXIS]={0,};
-
-int limit_flag=0;
-
 //For Trajectory management
 //Task
 
-double traq[NUM_AXIS]={0.0, 0.0, 0.0, 0, 0.0, 0.0};
-double traq_d[NUM_AXIS]={0.0,};
-double traq_dd[NUM_AXIS]={0.0,};
-int flag=0;
 int rtsercan_fd  = -1;
 
-
 void signal_handler(int signum);
+
+void saveLogData(){}
 
 int initAxes()
 {
@@ -68,6 +48,8 @@ int initAxes()
 		Axis[i].setDirTau(dirTau[i]);
 
 		Axis[i].setConversionConstants();
+
+		Axis[i].setTrajPeriod(period);
 		
 		Axis[i].setTarVelInCnt(0);
 		Axis[i].setTarTorInCnt(0);
@@ -75,43 +57,61 @@ int initAxes()
 	
 	return 1;
 }
-void saveLogData(){}
 /****************************************************************************/
-void Robot_Limit()
-{
-	for(int i=0;i<NUM_AXIS;i++)
-	{
-		if(abs(ActualVel_Rad[i])>4)
-		{
-			traq_d[i]=0;
-			traq_dd[i]=0;
-			limit_flag=1;
-		}
-	}
-}
-// int isDriveInit(void)
-// {
-// 	int elmo_count = 0;
-// 	for(int i=0; i<NUM_AXIS; ++i)
-// 	{
-// 		if(ecat_nrmk_drive[i].initialized())
-// 			elmo_count++;
-// 	}
-
-// 	// for(int i=0;i<NUM_AXIS;i++)
-// 	// {
-// 	// 	ecat_nrmk_drive[i].mode_of_operation_ = ecat_nrmk_drive[i].MODE_CYCLIC_SYNC_TORQUE;
-// 	// }
-// 	if(elmo_count == NUM_AXIS)
-
-// 		return 1;
-// 	else
-// 		return 0;
-// }
-
 int compute()
 {
+	/////////////Trajectory for Joint Space//////////////
+    if(!Axis[0].trajInitialized())
+    {
+	    switch(motion)
+	    {
+	    case 1:
+	    	info.q_target(0)=1.5709; 	info.q_target(1)=-0.7071; 	info.q_target(2)=0.7071;
+	    	info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
+	    	traj_time = 5.0;
+	    	motion++;
+	        break;
+	    case 2:
+	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
+	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
+	    	traj_time = 5.0;
+	    	motion++;
+	        break;
+	    case 3:
+	    	info.q_target(0)=-1.5709; 	info.q_target(1)=0.7071; 	info.q_target(2)=-0.7071;
+	    	info.q_target(3)=-1.5709; 	info.q_target(4)=-1.5709; 	info.q_target(5)=-1.5709;
+	    	traj_time = 5.0;
+	    	motion++;
+	        break;
+	    case 4:
+	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
+	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
+	    	traj_time = 5.0;
+	    	motion=1;
+	    	break;
+	    default:
+	    	motion=1;
+	    	break;
+	    }
+	}
 
+	for(int i=0;i<NUM_AXIS;i++)
+	{
+		if(!Axis[i].trajInitialized())
+		{
+			Axis[i].setTrajInitialQuintic();
+			Axis[i].setTarPosInRad(info.q_target(i));
+			Axis[i].setTarVelInRad(0);
+			Axis[i].setTrajTargetQuintic(traj_time);
+		}
+
+		Axis[i].TrajQuintic();
+
+		info.des.q(i)=Axis[i].getDesPosInRad();
+		info.des.q_dot(i)=Axis[i].getDesVelInRad();
+		info.des.q_ddot(i)=Axis[i].getDesAccInRad();
+	}
+	
 	return 0;
 }
 void readEcatData(){
@@ -205,14 +205,9 @@ void RTIndy7_run(void *arg)
 	info.des.q = JVec::Zero();
 	info.des.q_dot = JVec::Zero();
 	info.des.q_ddot = JVec::Zero();
+
 	JVec eint = JVec::Zero();
 	JVec e = JVec::Zero();
-	JVec q0 = JVec::Zero();
-	JVec qT = JVec::Zero();
-	//qT<< 0.1,0.1,-1.5708,0.1,-1.5708,0.1;
-	qT<< 0.1,0.1,-1.5707,0.1,0.1,0.1;
-	double Tf = 5;
-	int method =5;
 
 	while (run)
 	{
@@ -227,33 +222,15 @@ void RTIndy7_run(void *arg)
 		// Write data in EtherCAT Buffer
 		readEcatData();	
 	
-		// [ToDo] Trajectory update
-		// if(traj_flag ==0){
-		// 	q0 = info.act.q;
-		// 	traj_flag =1;
-		// }
-		// if(traj_flag == 1){
-		// 	if (gt <=Tf){
-		// 		JointTrajectory(q0, qT, Tf, gt , method , info.des.q, info.des.q_dot, info.des.q_ddot) ;
-		// 	}else if(gt > Tf){
-		// 		q0 = info.act.q;
-		// 		qT = JVec::Zero();
-		// 		traj_flag =2;
-		// 	}
-		// }
-		// if(traj_flag ==2){
-		// 	JointTrajectory(q0, qT, Tf, gt-Tf , method , info.des.q, info.des.q_dot, info.des.q_ddot) ;
-		// }
 
 		beginCompute = rt_timer_read();
 		if(system_ready){
 			compute();	
-			Robot_Limit();
-			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
+			// info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
 			//info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
 			e = info.des.q-info.act.q;
 			eint = eint+e*0.001;
-			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
 		}
 		else
@@ -297,7 +274,7 @@ void print_run(void *arg)
 	unsigned long itime=0, step;
 	long stick=0;
 	int count=0;
-	unsigned int NumSlaves=0, masterState=0, slaveState=0;
+	unsigned int NumSlaves=0, masterState=0, slaveState[NUM_AXIS]={0,};
 	
 	rt_printf("\e[31;1m \nPlease WAIT at least %i (s) until the system getting ready...\e[0m\n", WAKEUP_TIME);
 	
@@ -315,6 +292,7 @@ void print_run(void *arg)
 			++stick;
 			count=0;
 		}
+		
 		if (system_ready)
 		{
 			now = rt_timer_read();
@@ -327,7 +305,11 @@ void print_run(void *arg)
 				rt_printf("RxDomain: Offline\n");
 			if (!nrmk_master.getTxDomainStatus())
 				rt_printf("TxDomain: Offline\n");
-
+			for(int i=1;i<=NUM_AXIS;i++){
+				if (!nrmk_master.getAxisEcatStatus(i,slaveState[i-1]))
+				rt_printf("idx: %u, slaveState: %u",i,slaveState[i-1]);	
+			}
+			
 			rt_printf("Time=%0.3lfs,  worst_dt= %lius, overrun=%d\n", gt, worstCompute/1000, overruns);
 			rt_printf("cycle_dt=%lius, ethercat_dt= %lius\n", periodCycle/1000, periodEcat/1000);
 
@@ -338,14 +320,15 @@ void print_run(void *arg)
 			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
 			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
 				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-				// rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
 			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
 				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
 			}
-			rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n",(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
-				,(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS]);
-			
+			// rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n",(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
+			// 	,(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS]);
+			// rt_printf("overload: %u, error: %u", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
+			rt_printf("motion: %d",motion);
 			rt_printf("\n");
 		}
 		else

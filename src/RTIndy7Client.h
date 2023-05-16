@@ -151,6 +151,10 @@ int system_ready = 0;
 // Global time (beginning from zero)
 double gt=0;
 
+// Trajectory parameers
+double traj_time=0;
+int motion=1;
+
 /// TO DO: This is user-code.
 double sine_amp=50000, f=0.2, period;
 
@@ -281,8 +285,11 @@ typedef struct JOINT_INFO{
 	int atoq_per[NUM_AXIS];
 	short dtor_per[NUM_AXIS];
 	int statusword[NUM_AXIS];
-	double* TargetTrajPos_Rad[NUM_AXIS];
-	double TargetTrajTime[NUM_AXIS];
+
+	JVec q_target;
+	JVec qdot_target;
+	JVec qddot_target;
+	JVec traj_time;
 
 	STATE act;
 	STATE des;
@@ -291,5 +298,4 @@ typedef struct JOINT_INFO{
 
 JVec MAX_TORQUES;
 
-int traj_flag = 0;
 #endif /* RTRARMCLIENT_H_ */

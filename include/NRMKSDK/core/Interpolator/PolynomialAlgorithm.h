@@ -203,6 +203,9 @@ public:
 	//! \brief This returns the trajectory sampling period
 	inline double period() const { return _delT; }
 
+	//! \brief This returns the trajectory finished
+	inline bool isArrived() const { return _isArrived; }
+
 protected:
 	//  ---------------------- Doxygen info ----------------------
 	//! \var double _t0
@@ -307,6 +310,9 @@ protected:
 
 	//! \brief minimum jerk
 	double _jmin;
+
+	//! \brief isArrived
+	bool _isArrived;
 };
 
 //  ---------------------- Doxygen info ----------------------
@@ -524,6 +530,7 @@ public:
 	//! \details sets the duration
 	inline void setDuration(double duration)
 	{
+		_duration = duration;
 	}
 
 	//! \details This calculates the desired trajectory at a given time.
@@ -664,6 +671,7 @@ class _QuinticPolynomialInterpolator : public _PolynomialInterpolator<POLYNOMIAL
 public:
 	inline void setInitialTraj(double t0, double p0, double v0 = 0, double a0 = 0, double = 0)
 	{
+		_isArrived = false;
 		_t0 = t0;
 		_p0 = p0;
 		_v0 = v0;
@@ -717,13 +725,20 @@ public:
 	inline void traj(double t, double & pd, double & vd, double & ad)
 	{
 		double T = t - _t0;
-		double T2 = T*T;
-		double T3 = T2*T;
-		double T4 = T3*T;
+		if (T>_duration)
+		{
+			_isArrived = true;
+		}
+		else
+		{
+			double T2 = T*T;
+			double T3 = T2*T;
+			double T4 = T3*T;
 
-		pd = _a[0] + _a[1]*T + _a[2]*T2 + _a[3]*T3 + _a[4]*T4 + _a[5]*T4*T;
-		vd = _a[1] + 2*_a[2]*T + 3*_a[3]*T2 + 4*_a[4]*T3 + 5*_a[5]*T4;
-		ad = 2*_a[2] + 6*_a[3]*T + 12*_a[4]*T2 + 20*_a[5]*T3;
+			pd = _a[0] + _a[1]*T + _a[2]*T2 + _a[3]*T3 + _a[4]*T4 + _a[5]*T4*T;
+			vd = _a[1] + 2*_a[2]*T + 3*_a[3]*T2 + 4*_a[4]*T3 + 5*_a[5]*T4;
+			ad = 2*_a[2] + 6*_a[3]*T + 12*_a[4]*T2 + 20*_a[5]*T3;
+		}
 	}
 
 private:
