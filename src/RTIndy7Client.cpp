@@ -58,8 +58,7 @@ int initAxes()
 	return 1;
 }
 /****************************************************************************/
-int compute()
-{
+void trajectory_generation(){
 	/////////////Trajectory for Joint Space//////////////
     if(!Axis[0].trajInitialized())
     {
@@ -111,7 +110,12 @@ int compute()
 		info.des.q_dot(i)=Axis[i].getDesVelInRad();
 		info.des.q_ddot(i)=Axis[i].getDesAccInRad();
 	}
-	
+}
+
+
+int compute()
+{
+		
 	return 0;
 }
 void readEcatData(){
@@ -223,11 +227,12 @@ void RTIndy7_run(void *arg)
 	
 		beginCompute = rt_timer_read();
 		if(system_ready){
+			// Trajectory Generation
+			trajectory_generation();
 
-
+			//[ToDo] Add MPC Function 
 			compute();	
 			
-
 			// Calculate Joint controller
 			// info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
 			//info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
