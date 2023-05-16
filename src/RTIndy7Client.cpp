@@ -68,25 +68,25 @@ int compute()
 	    case 1:
 	    	info.q_target(0)=1.5709; 	info.q_target(1)=-0.7071; 	info.q_target(2)=0.7071;
 	    	info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
-	    	traj_time = 5.0;
+	    	traj_time = 3.0;
 	    	motion++;
 	        break;
 	    case 2:
 	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
 	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
-	    	traj_time = 5.0;
+	    	traj_time = 3.0;
 	    	motion++;
 	        break;
 	    case 3:
 	    	info.q_target(0)=-1.5709; 	info.q_target(1)=0.7071; 	info.q_target(2)=-0.7071;
 	    	info.q_target(3)=-1.5709; 	info.q_target(4)=-1.5709; 	info.q_target(5)=-1.5709;
-	    	traj_time = 5.0;
+	    	traj_time = 3.0;
 	    	motion++;
 	        break;
 	    case 4:
 	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
 	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
-	    	traj_time = 5.0;
+	    	traj_time = 3.0;
 	    	motion=1;
 	    	break;
 	    default:
@@ -225,13 +225,16 @@ void RTIndy7_run(void *arg)
 
 		beginCompute = rt_timer_read();
 		if(system_ready){
+
 			compute();	
+			
 			// info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
 			//info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
 			e = info.des.q-info.act.q;
 			eint = eint+e*0.001;
 			info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
+		
 		}
 		else
 		{
@@ -310,8 +313,8 @@ void print_run(void *arg)
 				rt_printf("idx: %u, slaveState: %u",i,slaveState[i-1]);	
 			}
 			
-			rt_printf("Time=%0.3lfs,  worst_dt= %lius, overrun=%d\n", gt, worstCompute/1000, overruns);
-			rt_printf("cycle_dt=%lius, ethercat_dt= %lius\n", periodCycle/1000, periodEcat/1000);
+			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
+			rt_printf("compute_dt= %lius, worst_dt= %lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodEcat/1000);
 
 			for(int j=0; j<NUM_AXIS; ++j){
 				rt_printf("ID: %d", j);
@@ -328,7 +331,6 @@ void print_run(void *arg)
 			// rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n",(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
 			// 	,(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS]);
 			// rt_printf("overload: %u, error: %u", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
-			rt_printf("motion: %d",motion);
 			rt_printf("\n");
 		}
 		else
