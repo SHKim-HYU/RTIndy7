@@ -317,25 +317,25 @@ void print_run(void *arg)
 				rt_printf("idx: %u, slaveState: %u",i,slaveState[i-1]);	
 			}
 			
-			// rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
-			// rt_printf("compute_dt= %lius, worst_dt= %lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodEcat/1000);
+			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
+			rt_printf("compute_dt= %lius, worst_dt= %lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodEcat/1000);
 
-			// for(int j=0; j<NUM_AXIS; ++j){
-			// 	rt_printf("ID: %d", j);
-			// // 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-			// // 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			// //     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-			// // 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-			// 	rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
-			// // 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
-			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-			// 	rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
-			// }
-			// // rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n",(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
-			// // 	,(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS]);
-			// // rt_printf("overload: %u, error: %u", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
-			// rt_printf("\n");
+			for(int j=0; j<NUM_AXIS; ++j){
+				rt_printf("ID: %d", j);
+			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
+				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
+				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
+			}
+			// rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n",(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
+			// 	,(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS]);
+			// rt_printf("overload: %u, error: %u", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
+			rt_printf("\n");
 		}
 		else
 		{

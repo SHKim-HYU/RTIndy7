@@ -48,6 +48,8 @@
 #include "NRMKsercan_tp.h"
 #include "NRMKhw_tp.h"
 
+// Abastract for Indy7
+#include <Indy6D.h>
 
 // TCP-Server Communication
 //#include "TCP/RTTCP.h"
