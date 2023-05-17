@@ -1758,15 +1758,15 @@ int NRMK_Master::_initDomains()
         
     // Config DC Mode
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
-        ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0200, _systemVars->_cycle_ns, 0, 0, 0);
+        ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
 
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
-        ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
+        ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
 
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
-        ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
+        ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
     
     

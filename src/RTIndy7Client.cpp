@@ -68,7 +68,7 @@ void trajectory_generation(){
 	    	info.q_target(0)=1.5709; 	info.q_target(1)=-0.7071; 	info.q_target(2)=0.7071;
 	    	info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
 	    	traj_time = 3.0;
-	    	// motion++;
+	    	motion++;
 	        break;
 	    case 2:
 	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
