@@ -1758,6 +1758,7 @@ int NRMK_Master::_initDomains()
         
     // Config DC Mode
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
+        // 0x0700(sync0,1), 0x0300(sync0), 0x0000(none)
         ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
 
