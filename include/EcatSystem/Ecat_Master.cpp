@@ -378,7 +378,7 @@ void Master::activateWithDC(uint8_t RefPosition, uint32_t SyncCycleNano)
     // register sync manager
     for (SlaveInfo& slave : m_slave_info)
     {
-    	ecrt_slave_config_dc(slave.config, 0x0200, SyncCycleNano, 0, 0, 0 );
+    	ecrt_slave_config_dc(slave.config, 0x0300, SyncCycleNano, 0, 0, 0 );
     }
     printf("activeWithDC: ecrt_slave config dc is done\n");
     int res = ecrt_master_select_reference_clock(p_master, m_slave_info.at(RefPosition).config );  //error point
