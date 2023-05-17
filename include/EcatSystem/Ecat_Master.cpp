@@ -691,6 +691,9 @@ void NRMK_Master::readBuffer(int EntryID, void * const data)
             
             for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++){
                             _statusword[_NRMK_Drive[i].Index] = _NRMK_Drive[i].OutParam.Statusword;
+                            if(_statusword[_NRMK_Drive[i].Index]!=_statusword_buff[i])
+                                std::cout<<"index: "<<i<<", stwrd: "<<_NRMK_Drive[i].OutParam.Statusword<<std::endl;
+                            _statusword_buff[i] = _statusword[_NRMK_Drive[i].Index];
                         }
 
         }
@@ -1755,15 +1758,16 @@ int NRMK_Master::_initDomains()
         
     // Config DC Mode
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
-        ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
+        // 0x0700(sync0,1), 0x0300(sync0), 0x0000(none)
+        ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
 
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
-        ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x300, _systemVars->_cycle_ns, 0, 0, 0);
+        ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
 
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
-        ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x300, _systemVars->_cycle_ns, 0, 0, 0);
+        ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
     
     

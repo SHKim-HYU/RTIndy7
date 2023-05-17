@@ -68,10 +68,6 @@ const Poco::UInt16 SERVER_PORT = 9911;
 
 using namespace std;
 
-#include "CAN/can_define.h"
-#include "CAN/RoboLimb.h"
-
-
 #include "ServoAxis_Core.h"
 
 #define NUM_IO_MODULE 	1
