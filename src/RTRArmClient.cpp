@@ -705,35 +705,35 @@ void print_run(void *arg)
 			step=(unsigned long)(now - previous) / 1000000;
 			itime+=step;
 			previous=now;
-			rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
-			rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
+			// rt_printf("Time=%0.3lfs \tFlag : %d\n", double_gt,flag);
+			// rt_printf("ethercat_dt= %lius, worst_dt= %lins, fault=%d\n", ethercat_time/1000, worst_time, fault_count);
 
-			cout<<"Manipulability   : "<<cManipulator->pKin->Manipulability(l_jaco)<<endl;
-			cout<<"Condition Number : "<<cManipulator->pKin->Condition_Number(l_jaco)<<endl;
-			for(int j=0; j<NUM_AXIS; ++j){
-				rt_printf("ID: %d", j+NUM_FT);
-				rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-				rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			    rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-				rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
-				//rt_printf("\t DesPos: %f, DesVel :%f, DesAcc :%f\n",TargetTrajPos_Rad[j],TargetVel_Rad[j],TargetAcc_Rad[j]);
-				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",traq[j],traq_d[j],traq_dd[j]);
+			// cout<<"Manipulability   : "<<cManipulator->pKin->Manipulability(l_jaco)<<endl;
+			// cout<<"Condition Number : "<<cManipulator->pKin->Condition_Number(l_jaco)<<endl;
+			// for(int j=0; j<NUM_AXIS; ++j){
+			// 	rt_printf("ID: %d", j+NUM_FT);
+			// 	rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// 	rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			//     rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// 	rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+			// 	rt_printf("\t ActPos: %lf, ActVel :%lf \n",ActualPos_Rad[j], ActualVel_Rad[j]);
+			// 	//rt_printf("\t DesPos: %f, DesVel :%f, DesAcc :%f\n",TargetTrajPos_Rad[j],TargetVel_Rad[j],TargetAcc_Rad[j]);
+			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",traq[j],traq_d[j],traq_dd[j]);
 
-				rt_printf("\t TarTor: %d, ",				TargetTor[j]);
-				rt_printf("\t ActTor: %d,\n",			ActualTor[j]);
-				rt_printf("Traj : %d,\n",               TrajFlag_j[j]);
-			}
-			rt_printf("\n");
-			rt_printf("Fx : %lf, Fy : %lf, Fz: %lf, Tx : %lf, Ty: %lf, Tz : %lf\n",FT_Raw_Fx,FT_Raw_Fy,FT_Raw_Fz,FT_Raw_Tx,FT_Raw_Ty,FT_Raw_Tz);
-			rt_printf("xd : %lf, yd : %lf, zd: %lf\n",xd[0],xd[1],xd[2]);
-			//rt_printf("xddot : %f, yddot : %f, zddot: %f\n",vive_vel[0],vive_vel[1],vive_vel[2]);
-			//std::cout<<l_jaco<<endl;
-			rt_printf("x : %lf, y : %lf, z : %lf\n",info.act.x(0), info.act.x(1), info.act.x(2));
+			// 	rt_printf("\t TarTor: %d, ",				TargetTor[j]);
+			// 	rt_printf("\t ActTor: %d,\n",			ActualTor[j]);
+			// 	rt_printf("Traj : %d,\n",               TrajFlag_j[j]);
+			// }
+			// rt_printf("\n");
+			// rt_printf("Fx : %lf, Fy : %lf, Fz: %lf, Tx : %lf, Ty: %lf, Tz : %lf\n",FT_Raw_Fx,FT_Raw_Fy,FT_Raw_Fz,FT_Raw_Tx,FT_Raw_Ty,FT_Raw_Tz);
+			// rt_printf("xd : %lf, yd : %lf, zd: %lf\n",xd[0],xd[1],xd[2]);
+			// //rt_printf("xddot : %f, yddot : %f, zddot: %f\n",vive_vel[0],vive_vel[1],vive_vel[2]);
+			// //std::cout<<l_jaco<<endl;
+			// rt_printf("x : %lf, y : %lf, z : %lf\n",info.act.x(0), info.act.x(1), info.act.x(2));
 
-			rt_printf("r : %lf, p : %lf, y : %lf\n",EulerAng(0),EulerAng(1),EulerAng(2));
-			rt_printf("x : %lf, y : %lf, z : %lf\n",vive_pos[0],vive_pos[1],vive_pos[2]);
-			cout<<limit_flag<<endl;
+			// rt_printf("r : %lf, p : %lf, y : %lf\n",EulerAng(0),EulerAng(1),EulerAng(2));
+			// rt_printf("x : %lf, y : %lf, z : %lf\n",vive_pos[0],vive_pos[1],vive_pos[2]);
+			// cout<<limit_flag<<endl;
 
 		}
 		else

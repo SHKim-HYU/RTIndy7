@@ -1,4 +1,4 @@
-set(CMAKE_C_COMPILER "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc")
+set(CMAKE_C_COMPILER "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc")
 set(CMAKE_C_COMPILER_ARG1 "")
 set(CMAKE_C_COMPILER_ID "GNU")
 set(CMAKE_C_COMPILER_VERSION "6.5.0")
@@ -17,11 +17,11 @@ set(CMAKE_C_SIMULATE_VERSION "")
 
 
 
-set(CMAKE_AR "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-ar")
-set(CMAKE_C_COMPILER_AR "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc-ar")
-set(CMAKE_RANLIB "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-ranlib")
-set(CMAKE_C_COMPILER_RANLIB "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc-ranlib")
-set(CMAKE_LINKER "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-ld")
+set(CMAKE_AR "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-ar")
+set(CMAKE_C_COMPILER_AR "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc-ar")
+set(CMAKE_RANLIB "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-ranlib")
+set(CMAKE_C_COMPILER_RANLIB "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc-ranlib")
+set(CMAKE_LINKER "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-ld")
 set(CMAKE_MT "")
 set(CMAKE_COMPILER_IS_GNUCC 1)
 set(CMAKE_C_COMPILER_LOADED 1)
@@ -70,7 +70,7 @@ endif()
 
 
 
-set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include;/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed;/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include;/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include")
+set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include;/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0/include-fixed;/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/include;/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/include")
 set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "gcc;gcc_s;c;gcc;gcc_s")
-set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0;/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/lib/gcc;/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/lib;/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/lib;/home/mtplnr/Indy_ws/RTIndy7_01/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/lib")
+set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/6.5.0;/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/lib/gcc;/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/lib;/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/lib;/home/mtplnr/Indy_ws/RTIndy7/toolchain/i686-unknown-linux-gnu/i686-unknown-linux-gnu/sysroot/usr/lib")
 set(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

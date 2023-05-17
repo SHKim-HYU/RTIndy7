@@ -378,7 +378,7 @@ void Master::activateWithDC(uint8_t RefPosition, uint32_t SyncCycleNano)
     // register sync manager
     for (SlaveInfo& slave : m_slave_info)
     {
-    	ecrt_slave_config_dc(slave.config, 0x0300, SyncCycleNano, 0, 0, 0 );
+    	ecrt_slave_config_dc(slave.config, 0x0200, SyncCycleNano, 0, 0, 0 );
     }
     printf("activeWithDC: ecrt_slave config dc is done\n");
     int res = ecrt_master_select_reference_clock(p_master, m_slave_info.at(RefPosition).config );  //error point
@@ -457,8 +457,11 @@ void Master::update(unsigned int domain)
 
 void Master::TxUpdate(unsigned int domain)
 {
+    ecrt_master_receive(p_master);
 
     DomainInfo* domain_info = m_domain_info[domain];
+
+    ecrt_domain_process(domain_info->domain);
 
     // read and write process data
     for (DomainInfo::Entry& entry : domain_info->entries){
@@ -480,7 +483,7 @@ void Master::RxUpdate(unsigned int domain)
 
     ecrt_domain_process(domain_info->domain);
 
-#if 1//defined(_DEBUG)
+#if defined(_DEBUG)// 1//
     // check process data state (optional)
     checkDomainState();
     checkMasterState();
@@ -495,6 +498,8 @@ void Master::RxUpdate(unsigned int domain)
             (entry.slave)->processData(i, domain_info->domain_pd + entry.offset[i]);
         }
     }
+    ecrt_domain_queue(domain_info->domain);
+    ecrt_master_send(p_master);
 }
 
 
