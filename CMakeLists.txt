@@ -68,10 +68,10 @@ include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/qpOASES")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/cryptopp")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/NRMKFramework")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/ModernRobotics")
-include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/KDL")
-include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/CAN")
+#include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/KDL")
+#include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/CAN")
+#include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/Control")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/EcatSystem")
-include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/Control")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/MR")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/EcatDataSocket")
@@ -136,12 +136,12 @@ link_directories(
 #############################################################
 file(GLOB_RECURSE MR include/MR/modern_robotics.h include/MR/modern_robotics.cpp)
 file(GLOB_RECURSE MR_Indy7 include/MR/MR_Indy7.h include/MR/MR_Indy7.cpp)
-file(GLOB_RECURSE KDL  "include/KDL/*.h" "include/KDL/*.cpp")
+#file(GLOB_RECURSE KDL  "include/KDL/*.h" "include/KDL/*.cpp")
 file(GLOB_RECURSE PDO include/EcatSystem/PDOConfig.c include/EcatSystem/PDOConfig.h)
 file(GLOB_RECURSE EcatSystem include/EcatSystem/Ecat_Master.cpp include/EcatSystem/Ecat_Master.h)
-file(GLOB_RECURSE Control include/Control/*.h include/Control/*.cpp include/Control/*.c)
+#file(GLOB_RECURSE Control include/Control/*.h include/Control/*.cpp include/Control/*.c)
 file(GLOB_RECURSE EcatDataSocket include/EcatDataSocket/EcatDataSocket.cpp include/EcatDataSocket/EcatDataSocket.h include/EcatDataSocket/EcatControlSocket.h) 
-file(GLOB_RECURSE CAN include/CAN/*.h include/CAN/*.cpp include/CAN/*.c)
+#file(GLOB_RECURSE CAN include/CAN/*.h include/CAN/*.cpp include/CAN/*.c)
 file(GLOB_RECURSE SOURCES "src/RTIndy7Client.cpp")
 
 
@@ -150,7 +150,8 @@ file(GLOB_RECURSE SOURCES "src/RTIndy7Client.cpp")
 # Executable                                                #
 #############################################################
 set(EXE ${PROJECT_NAME})
-add_executable(${EXE} ${SOURCES} ${PDO} ${MR_Indy7} ${MR} ${EcatDataSocket}   ${EcatSystem} ${CAN} )
+#add_executable(${EXE} ${SOURCES} ${PDO} ${MR_Indy7} ${MR} ${EcatDataSocket}   ${EcatSystem} ${CAN} )
+add_executable(${EXE} ${SOURCES} ${PDO} ${MR_Indy7} ${MR} ${EcatDataSocket} ${EcatSystem})
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX  "")
 
 #############################################################

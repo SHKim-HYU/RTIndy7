@@ -20,6 +20,7 @@
 #include "PDOConfig.h"
 #include <stdio.h>
 #include <memory>
+#include <iostream>
 
 class NRMK_Master
 { 
@@ -428,6 +429,8 @@ class NRMK_Master
 		int _initSlaves();
 		int _initDomains();		
 		int _activateMaster();
+		UINT16 _statusword_buff[NUM_NRMK_DRIVE_AXES] = {0,};
+		UINT16 _controlword_buff[NUM_NRMK_DRIVE_AXES] = {0,};
 		
 	private: 
 		EcatSystemVars _systemVars;
