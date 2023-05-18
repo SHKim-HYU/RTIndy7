@@ -8,12 +8,6 @@
 #ifndef RTRARMCLIENT_H_
 #define RTRARMCLIENT_H_
 
-/***** License Information *****/
-#define USERNAME "USER"
-#define EMAIL "user@email.com"
-#define SERIAL "ABCD"
-/******************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -48,8 +42,17 @@
 #include "NRMKsercan_tp.h"
 #include "NRMKhw_tp.h"
 
-// Abastract for Indy7
-#include <Indy6D.h>
+// Define for Indy7
+#include "Robot/robotIndy7.h"      // For NRMK SDK
+#include "Robot/ServoAxis_Core.h"  // For Indy7 interface
+
+typedef robotIndy7 ROBOT;
+
+// Controller
+// [ToDo] Must be updated
+#include "Control/JointGravityPDControl.h"
+typedef JointGravityPDControl CONTROLJ;
+
 
 // TCP-Server Communication
 //#include "TCP/RTTCP.h"
@@ -70,7 +73,7 @@ const Poco::UInt16 SERVER_PORT = 9911;
 
 using namespace std;
 
-#include "ServoAxis_Core.h"
+
 
 #define NUM_IO_MODULE 	1
 #define NUM_TOOL 		1
