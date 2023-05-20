@@ -8,12 +8,6 @@
 #ifndef RTRARMCLIENT_H_
 #define RTRARMCLIENT_H_
 
-/***** License Information *****/
-#define USERNAME "NeuromekaDev"
-#define EMAIL "dev@neuromeka.com"
-#define SERIAL "nrmk13766"
-/******************************/
-
 //#define USE_MR
 //#define USE_MR_KDL
 //#define USE_NRMK_SDK
