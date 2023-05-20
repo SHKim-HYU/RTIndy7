@@ -8,6 +8,17 @@
 #ifndef RTRARMCLIENT_H_
 #define RTRARMCLIENT_H_
 
+/***** License Information *****/
+#define USERNAME "NeuromekaDev"
+#define EMAIL "dev@neuromeka.com"
+#define SERIAL "nrmk13766"
+/******************************/
+
+//#define USE_MR
+//#define USE_MR_KDL
+//#define USE_NRMK_SDK
+#define USE_CASADI
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -42,17 +53,9 @@
 #include "NRMKsercan_tp.h"
 #include "NRMKhw_tp.h"
 
-// Define for Indy7
-#include "Robot/robotIndy7.h"      // For NRMK SDK
 #include "Robot/ServoAxis_Core.h"  // For Indy7 interface
 
-typedef robotIndy7 ROBOT;
-
-// Controller
-// [ToDo] Must be updated
-#include "Control/JointGravityPDControl.h"
-typedef JointGravityPDControl CONTROLJ;
-
+#include "casadi/casadi.hpp"
 
 // TCP-Server Communication
 //#include "TCP/RTTCP.h"
@@ -72,7 +75,7 @@ using Poco::Thread;
 const Poco::UInt16 SERVER_PORT = 9911;
 
 using namespace std;
-
+using namespace casadi;
 
 
 #define NUM_IO_MODULE 	1
@@ -295,7 +298,6 @@ typedef struct JOINT_INFO{
 	STATE act;
 	STATE des;
 }JointInfo;
-
 
 JVec MAX_TORQUES;
 

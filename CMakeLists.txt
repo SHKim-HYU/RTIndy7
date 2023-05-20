@@ -77,6 +77,7 @@ include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/EcatSystem")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/MR")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/EcatDataSocket")
+include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/casadi")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}")
 message("Done")
 
@@ -118,6 +119,7 @@ set( LIBS
 	qpOASES
 	cryptopp
 	NRMKFramework
+	casadi
 )
 
 link_directories(
@@ -130,7 +132,7 @@ link_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/qpOASES"		
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/cryptopp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/NRMKFramework"
-	
+	"${CMAKE_CURRENT_SOURCE_DIR}/lib/casadi"
 )
 
 #############################################################
