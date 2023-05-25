@@ -49,7 +49,7 @@
 
 #include "Robot/ServoAxis_Core.h"  // For Indy7 interface
 
-#include "casadi/casadi.hpp"
+// #include "casadi/casadi.hpp"
 
 // TCP-Server Communication
 //#include "TCP/RTTCP.h"
@@ -69,7 +69,7 @@ using Poco::Thread;
 const Poco::UInt16 SERVER_PORT = 9911;
 
 using namespace std;
-using namespace casadi;
+// using namespace casadi;
 
 
 #define NUM_IO_MODULE 	1
@@ -106,6 +106,7 @@ unsigned int interval_size=350;
 unsigned long periodCycle = 0, worstCycle = 0;
 unsigned long periodCompute = 0, worstCompute = 0;
 unsigned long periodEcat = 0, worstEcat = 0;
+unsigned long periodBuffer = 0, worstBuffer = 0;
 unsigned int overruns = 0;
 
 
@@ -119,7 +120,8 @@ typedef Eigen::Matrix<double, 6, JOINTNUM> Jacobian;
 typedef Eigen::Matrix<double, JOINTNUM,6 > pinvJacobian;
 typedef Eigen::Matrix<double, 6*JOINTNUM, JOINTNUM> DerivativeJacobianVec;
 typedef Eigen::Matrix<double, 6*JOINTNUM, 1> vecJVec;
-typedef Eigen::Matrix<double, 6, 1> Vector6d;   
+typedef Eigen::Matrix<double, 6, 1> Vector6d;
+typedef Eigen::Matrix<float, 6, 1> Vector6f;   
 typedef Eigen::Matrix<double, 3, 1> Vector3d;   
 typedef Eigen::Matrix<double, 4, 1> Vector4d;  
 typedef Eigen::Matrix<double, 6, 6> Matrix6d;  
@@ -129,6 +131,15 @@ typedef Eigen::Matrix<double, 6, JOINTNUM+1> Matrix6xn_1;
 typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MassMat;
 ////////// LOGGING BUFFER ///////////////
 #define MAX_BUFF_SIZE 		1000
+
+#define FT_READ_ONCE 0x0A
+#define FT_START_DEVICE 0x0B
+#define FT_STOP_DEVICE 0x0C
+#define FT_SET_OUTPUT_RATE 0x0F
+#define FT_GET_OUTPUT_RATE 0x10
+#define FT_SET_BIAS 0x11
+#define FT_BIAS_SUB 0x01
+#define FT_UNBIAS_SUB 0x00
 
 unsigned int frontIdx = 0, rearIdx = 0;
 /////////////////////////////////////////
@@ -243,6 +254,15 @@ UINT8	LEDG[NUM_SLAVES] = {0,};
 UINT8	LEDR[NUM_SLAVES] = {0,};
 UINT8	LEDB[NUM_SLAVES] = {0,};
 
+// Robotous FT EtherCAT
+union DeviceConfig
+{
+	uint8_t u8Param[4];
+	uint32_t u32Param;
+};
+float force_divider =50.0;
+float torque_divider = 2000.0;
+
 // Axis for CORE
 const int 	 zeroPos[NUM_AXIS] = {ZERO_POS_1,ZERO_POS_2,ZERO_POS_3,ZERO_POS_4,ZERO_POS_5,ZERO_POS_6};
 const int 	 gearRatio[NUM_AXIS] = {GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_101,GEAR_RATIO_101,GEAR_RATIO_101};
@@ -273,7 +293,7 @@ typedef struct STATE{
 	Vector6d x;                           //Task space
 	Vector6d x_dot;
 	Vector6d x_ddot;
-	Vector6d F;
+	Vector6f F;
     double s_time;
 }state;
 

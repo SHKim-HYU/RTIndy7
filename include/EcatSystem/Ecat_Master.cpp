@@ -294,7 +294,7 @@ int NRMK_Master::_activateMaster()
 {
     if (_systemVars->_master != NULL)
     {
-        printf("Activating master...");
+        printf("Activating master...\n");
         if (ecrt_master_activate(_systemVars->_master))
         {
             fprintf(stderr,"Master Activation failed.\n");\
@@ -1469,6 +1469,7 @@ void NRMK_Master::writeBuffer(int EntryID, void * const data)
             {
                 _NRMK_Indy_Tool[i].InParam.FTConfigParam = _fTConfigParam[_NRMK_Indy_Tool[i].Index];
             }
+            std::cout<<"FT Initialization done"<<_fTConfigParam[_NRMK_Indy_Tool[0].Index]<<std::endl;
 
         }
             break;                      

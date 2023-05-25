@@ -126,31 +126,31 @@ void readEcatData(){
 	nrmk_master.readBuffer(0x60610, ModeOfOperationDisplay);
 	// IO Module
 	// [ToDo] 0x61001~0x610025 addition iteratively
-	nrmk_master.readBuffer(0x61001, StatusCode);
-	nrmk_master.readBuffer(0x61002, DI5V);
-	nrmk_master.readBuffer(0x61003, DI1);
-	nrmk_master.readBuffer(0x61004, DI2);
-	nrmk_master.readBuffer(0x61005, AI1);
-	nrmk_master.readBuffer(0x61006, AI2);
-	nrmk_master.readBuffer(0x61007, FTRawFxCB);
-	nrmk_master.readBuffer(0x61008, FTRawFyCB);
-	nrmk_master.readBuffer(0x61009, FTRawFzCB);
-	nrmk_master.readBuffer(0x610010, FTRawTxCB);
-	nrmk_master.readBuffer(0x610011, FTRawTyCB);
-	nrmk_master.readBuffer(0x610012, FTRawTzCB);
-	nrmk_master.readBuffer(0x610013, FTOverloadStatusCB);
-	nrmk_master.readBuffer(0x610014, FTErrorFlagCB);
-	nrmk_master.readBuffer(0x610015, RS485RxCnt);
-	nrmk_master.readBuffer(0x610016, RS485RxD0);
-	nrmk_master.readBuffer(0x610017, RS485RxD1);
-	nrmk_master.readBuffer(0x610018, RS485RxD2);
-	nrmk_master.readBuffer(0x610019, RS485RxD3);
-	nrmk_master.readBuffer(0x610020, RS485RxD4);
-	nrmk_master.readBuffer(0x610021, RS485RxD5);
-	nrmk_master.readBuffer(0x610022, RS485RxD6);
-	nrmk_master.readBuffer(0x610023, RS485RxD7);
-	nrmk_master.readBuffer(0x610024, RS485RxD8);
-	nrmk_master.readBuffer(0x610025, RS485RxD9);
+	// nrmk_master.readBuffer(0x61001, StatusCode);
+	// nrmk_master.readBuffer(0x61002, DI5V);
+	// nrmk_master.readBuffer(0x61003, DI1);
+	// nrmk_master.readBuffer(0x61004, DI2);
+	// nrmk_master.readBuffer(0x61005, AI1);
+	// nrmk_master.readBuffer(0x61006, AI2);
+	// nrmk_master.readBuffer(0x61007, FTRawFxCB);
+	// nrmk_master.readBuffer(0x61008, FTRawFyCB);
+	// nrmk_master.readBuffer(0x61009, FTRawFzCB);
+	// nrmk_master.readBuffer(0x610010, FTRawTxCB);
+	// nrmk_master.readBuffer(0x610011, FTRawTyCB);
+	// nrmk_master.readBuffer(0x610012, FTRawTzCB);
+	// nrmk_master.readBuffer(0x610013, FTOverloadStatusCB);
+	// nrmk_master.readBuffer(0x610014, FTErrorFlagCB);
+	// nrmk_master.readBuffer(0x610015, RS485RxCnt);
+	// nrmk_master.readBuffer(0x610016, RS485RxD0);
+	// nrmk_master.readBuffer(0x610017, RS485RxD1);
+	// nrmk_master.readBuffer(0x610018, RS485RxD2);
+	// nrmk_master.readBuffer(0x610019, RS485RxD3);
+	// nrmk_master.readBuffer(0x610020, RS485RxD4);
+	// nrmk_master.readBuffer(0x610021, RS485RxD5);
+	// nrmk_master.readBuffer(0x610022, RS485RxD6);
+	// nrmk_master.readBuffer(0x610023, RS485RxD7);
+	// nrmk_master.readBuffer(0x610024, RS485RxD8);
+	// nrmk_master.readBuffer(0x610025, RS485RxD9);
 	// Tool
 	// [ToDo] 0x61001~0x610025 addition iteratively
 	nrmk_master.readBuffer(0x60001, IStatus);
@@ -177,6 +177,13 @@ void readEcatData(){
 		info.act.tau(i) = Axis[i].getCurrTorInNm();
 	}
 
+	// Update RFT data
+	info.act.F(0) = FTRawFx[NUM_IO_MODULE+NUM_AXIS] / force_divider;
+	info.act.F(1) = FTRawFy[NUM_IO_MODULE+NUM_AXIS] / force_divider;
+	info.act.F(2) = FTRawFz[NUM_IO_MODULE+NUM_AXIS] / force_divider;
+	info.act.F(3) = FTRawTx[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+	info.act.F(4) = FTRawTy[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+	info.act.F(5) = FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 	// info.act.F<<(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
 	//           <<(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS];
 }
@@ -189,16 +196,18 @@ void writeEcatData(){
 	// TO DO: write data to actuators in EtherCAT system interface
 	nrmk_master.writeBuffer(0x60710, TargetTor);
 	// nrmk_master.writeBuffer(0x60600, ModeOfOperation);
+
+
 }
 
 // RTIndy7_task
 void RTIndy7_run(void *arg)
 {
 	RTIME beginCycle, endCycle;
-	RTIME beginRead, beginWrite, beginCompute;
+	RTIME beginRead, beginReadbuf, beginWrite, beginWritebuf, beginCompute;
 
 	// Synchronize EtherCAT Master (for Distributed Clock Mode)
-	nrmk_master.syncEcatMaster();
+	// nrmk_master.syncEcatMaster();
 
 	/* Arguments: &task (NULL=self),
 	 *            start time,
@@ -209,21 +218,37 @@ void RTIndy7_run(void *arg)
 	info.des.q = JVec::Zero();
 	info.des.q_dot = JVec::Zero();
 	info.des.q_ddot = JVec::Zero();
+	info.des.F = Vector6f::Zero();
 
 	JVec eint = JVec::Zero();
 	JVec e = JVec::Zero();
+
+	// Robotus FT Sensor init
+	DeviceConfig DataConfig;
+	DataConfig.u8Param[0] = 0x00;
+	DataConfig.u8Param[1] = 0x00;
+	DataConfig.u8Param[2] = 0x00;
+	DataConfig.u8Param[3] = FT_START_DEVICE;
+	// DataConfig.u32Param = 0x0000000B;
+	FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=DataConfig.u32Param;
+	// std::cout<<DataConfig.u32Param<<std::endl;
+	nrmk_master.writeBuffer(0x70003, FTConfigParam);
+	nrmk_master.processRxDomain();
 
 	while (run)
 	{
 		beginCycle = rt_timer_read();
 		periodEcat = 0;
+		periodBuffer = 0;
 
 		beginRead = rt_timer_read();
 		nrmk_master.processTxDomain();
 		periodEcat += (unsigned long) rt_timer_read() - beginRead;
 		
-		// Write data in EtherCAT Buffer
+		// Read data in EtherCAT Buffer
+		beginReadbuf = rt_timer_read();
 		readEcatData();	
+		periodBuffer += (unsigned long) rt_timer_read() - beginReadbuf;
 	
 		beginCompute = rt_timer_read();
 		if(system_ready){
@@ -249,7 +274,9 @@ void RTIndy7_run(void *arg)
 		periodCompute  = (unsigned long) rt_timer_read() - beginCompute;
 		
 		// Write data in EtherCAT Buffer
+		beginWritebuf = rt_timer_read();
 		writeEcatData();
+		periodBuffer += (unsigned long) rt_timer_read() - beginWritebuf;
 
 		beginWrite = rt_timer_read();
 		nrmk_master.processRxDomain();
@@ -265,6 +292,7 @@ void RTIndy7_run(void *arg)
 			gt+= period;
 			
 			if (periodEcat > worstEcat)	worstEcat = periodEcat;
+			if (periodBuffer > worstBuffer)	worstBuffer = periodBuffer;
 			if (periodCompute > worstCompute) worstCompute = periodCompute;
 			if (periodCycle > cycle_ns) overruns++;
 		}
@@ -317,8 +345,8 @@ void print_run(void *arg)
 				rt_printf("idx: %u, slaveState: %u",i,slaveState[i-1]);	
 			}
 			
-			// rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
-			// rt_printf("compute_dt= %lius, worst_dt= %lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodEcat/1000);
+			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
+			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
 
 			// for(int j=0; j<NUM_AXIS; ++j){
 			// 	rt_printf("ID: %d", j);
@@ -332,11 +360,11 @@ void print_run(void *arg)
 			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
 			// 	rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
 			// }
-			// // rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n",(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
-			// // 	,(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS],(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS]);
-			// // rt_printf("overload: %u, error: %u", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
+
+			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
+			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
 			
-			// rt_printf("\n");
+			rt_printf("\n");
 		}
 		else
 		{
@@ -410,6 +438,7 @@ int main(int argc, char **argv)
 	for(int i=0;i<NUM_IO_MODULE+NUM_AXIS+NUM_TOOL;i++)
 		nrmk_master.setServoOn(i);
 	
+
 	// TO DO: Create data socket server
 	datasocket.setPeriod(period);
 

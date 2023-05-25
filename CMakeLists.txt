@@ -119,7 +119,7 @@ set( LIBS
 	qpOASES
 	cryptopp
 	NRMKFramework
-	casadi
+	# casadi
 )
 
 link_directories(
@@ -132,9 +132,28 @@ link_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/qpOASES"		
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/cryptopp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/NRMKFramework"
-	"${CMAKE_CURRENT_SOURCE_DIR}/lib/casadi"
+	# "${CMAKE_CURRENT_SOURCE_DIR}/lib/casadi"
 )
 
+# set( INDY7_CASADI
+# 	indy7_M
+# 	indy7_Minv
+# 	indy7_C
+# 	indy7_G
+# 	indy7_id
+# 	indy7_fd
+# 	indy7_fk
+# 	indy7_fk_ee
+# 	indy7_fkrot_ee
+# 	indy7_J_s
+# 	indy7_J_b
+# 	indy7_J_fd
+# 	indy7_J_id
+# )
+
+# link_directories(
+# 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
+# )
 #############################################################
 # Sources                                                   #
 #############################################################
@@ -162,5 +181,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX  "")
 #############################################################
 # Libraries linking                                         #
 #############################################################
-target_link_libraries(${EXE} ${LIBS} )
-
+# target_link_libraries(${EXE} ${LIBS} ${INDY7_CASADI})
+target_link_libraries(${EXE} ${LIBS})
