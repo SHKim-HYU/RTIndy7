@@ -53,8 +53,9 @@ int main()
 	double t = 0;
 	double dt= FIXED_TIMESTEP;
 	JVec MAX_TORQUES;
-	//MAX_TORQUES<<431.97,431.97,197.23,79.79,79.79,79.79;
-	MAX_TORQUES<<1000,1000,1000,1000,1000,1000,1000;
+//	MAX_TORQUES<<431.97,431.97,197.23,79.79,79.79,79.79;
+	MAX_TORQUES<<1000,1000,1000,1000,1000,1000;
+
 	JVec q_des=JVec::Zero();
 	q_des(0) = 1.0;
 	q_des(1) = 1.0;
@@ -71,6 +72,7 @@ int main()
 	JVec qT = JVec::Zero();
 	qT<<1.0,1.0,1.0,1.0,1.0,1.0;
 	int traj_flag = 0;
+	double Tf = 1.0;
 	while(1){
 		JVec q= indy7.getQ( &sim);
 		JVec dq= indy7.getQdot( &sim);		
@@ -82,7 +84,7 @@ int main()
 				q0 = q;
 				traj_flag =1;
 			}
-		JointTrajectory(q0, qT, 1, t , 5 , q_des, dq_des, ddq_des) ;
+		JointTrajectory(q0, qT, Tf, t , 5 , q_des, dq_des, ddq_des) ;
 
 		JVec gravTorq = control.Gravity( q);
 		JVec clacTorq = control.ComputedTorqueControl( q, dq, q_des, dq_des); // calcTorque
@@ -91,6 +93,7 @@ int main()
 
 		static int print_count = 0;
 		if(++print_count>100){
+			cout<<t<<endl;
 			cout<<"e   :"<<e.transpose()<<endl;
 			cout<<"eint:"<<eint.transpose()<<endl;
 			print_count = 0;

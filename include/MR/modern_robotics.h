@@ -85,16 +85,10 @@ namespace mr {
     Vector6d CartesianVel(const SE3& Xstart, const SE3& Xend, double t , double Tf, int method);
     Vector6d CartesianAcc(const SE3& Xstart, const SE3& Xend, double t , double Tf, int method);
     void rotm2eulm(SO3 R,SO3& Rz,SO3& Ry,SO3& Rx);
-    SE3 EulerT(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf);
-    void AngularJacobian(const SO3& R0,const SO3& RT,Matrix3d& Jw0, Matrix3d& JwT);
     so3 LieBracket(const so3& A,const so3& B);
-    void DerivativeAngularJacobian(const Matrix3d& Jw0, const Matrix3d& JwT, Matrix3d& Cw0,Matrix3d& CwT);
     Vector3d QuinticTimeScalingKinematics(double s0,double sT,double ds0,double dsT,double dds0,double ddsT,double Tf, double t) ;
     SE3 TransInv(const SE3& transform);
-    Vector6d EulerVel(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf);
-    Vector6d EulerAcc(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf);
-     //void EulerKinematics(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd) ;
-    void EulerKinematics(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd ,int* order) ;
+    
     Vector6d AccVeltoVel(const Vector6d &Vd,const Vector6d &V,double dt);
     DerivativeJacobianVec DerivativeVectorizeJacobianBody(const ScrewList& Blist, const JVec& thetaList);
     vecJVec vec(const JVec& thetaList);
@@ -108,12 +102,20 @@ namespace mr {
     JVec wrapToPI(const JVec& angles);
     Vector6d CartesianError(const SE3& X,const SE3& Xd );
     pinvJacobian pinvAnalyticJacobianBody(SE3 M, const ScrewList& Blist, const JVec& thetaList) ;
-    void EulerKinematicsZYX(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd);
-    void EulerKinematicsZXY(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd);
-    void EulerKinematicsYXZ(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd);
-    void EulerKinematicsYZX(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd);
-    void EulerKinematicsXYZ(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd);
-    void EulerKinematicsXZY(const SE3& Xstart, const SE3& Xend, const Vector6d& Vstart, const Vector6d& Vdotend, const Vector6d& Vdotstart, const Vector6d& Vend, double t, double Tf, SE3& Xd, Vector6d& Vd, Vector6d& dVd);
-
+  void FkinBody(SE3 M,ScrewList Blist, const JVec& q ,const JVec& dq, SE3 &T, Jacobian &Jb,Jacobian& dJb);
+  Matrix3d dexp3(const Vector3d& xi);
+  Matrix3d dlog3(const Vector3d& xi);
+  Matrix3d skew3(const Vector3d& xi) ;
+  Matrix6d dexp6(const Vector6d& lambda);
+  Matrix3d ddexp3(const Vector3d& xi, const Vector3d& dxi);
+  Matrix3d dddexp3(const Vector3d& xi, const Vector3d& dxi, const Vector3d& y, const Vector3d& dy);
+  Matrix6d ddexp6(const Vector6d& lambda, const Vector6d& lambda_dot);
+  Matrix3d skew_sum(const Vector3d& a, const Vector3d& b);
+  Matrix3d ddlog3(const Vector3d& xi, const Vector3d& dxi);
+  Matrix3d dddlog3(const Vector3d& xi, const Vector3d& dxi, const Vector3d& y, const Vector3d& dy);
+  Matrix6d dlog6(const Vector6d& lambda);
+  Matrix6d ddlog6(const Vector6d& lambda, const Vector6d& lambda_dot) ;
+  void LieScrewTrajectory(const SE3 X0,const SE3 XT,const Vector6d V0,const Vector6d VT,const Vector6d dV0,const Vector6d dVT,double Tf,int N,std::vector<SE3>&Xd_list,std::vector<Vector6d>&Vd_list,std::vector<Vector6d>&dVd_list);
 }
+
 

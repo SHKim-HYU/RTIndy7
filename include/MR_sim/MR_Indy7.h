@@ -8,7 +8,7 @@
 #include <Eigen/Dense>
 using namespace Eigen;
 using namespace std;
-
+using namespace mr;
 class MR_Indy7 {
 public:
     MR_Indy7();  // Constructor
@@ -34,9 +34,17 @@ public:
     mr::Matrix6d Kv;
     mr::Matrix6d Ki;
 
+    mr::Matrix6d Hinf_Kp;
+    mr::Matrix6d Hinf_Kv;
+    mr::Matrix6d Hinf_Ki;
+    mr::Matrix6d Hinf_K_gamma;
+
     void MRSetup();
-    void Gravity( double *q, double *toq);
-    void ComputedTorqueControl( double *q,double *dq,double *qdes,double *dqdes,  double *toq);
+    JVec Gravity( JVec q);
+    JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
+    void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
+    JVec ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint);
+    JVec HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec& eint);
 };
 
 #endif // MR_INDY7_H
