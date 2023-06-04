@@ -96,6 +96,15 @@
 #define ENC_CORE 65536
 
 
+// SN: DB45I7E0B008
+
+#define ZERO_POS_1 448713
+#define ZERO_POS_2 -25024
+#define ZERO_POS_3 138717
+#define ZERO_POS_4 5909388//-713436
+#define ZERO_POS_5 -1058082
+#define ZERO_POS_6 -88988
+/*
 // SN: DB45I17E0B007
 
 #define ZERO_POS_1 -389838
@@ -104,6 +113,7 @@
 #define ZERO_POS_4 9040
 #define ZERO_POS_5 656537
 #define ZERO_POS_6 -650739
+*/
 
 #define MAX_CURRENT_1 2.55
 #define MAX_CURRENT_2 2.55

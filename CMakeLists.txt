@@ -68,13 +68,16 @@ include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/qpOASES")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/cryptopp")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/NRMKFramework")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/ModernRobotics")
+include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/NRMKSDK/XML")
 #include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/KDL")
 #include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/CAN")
-#include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/Control")
+include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/Control")
+include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/Robot")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/EcatSystem")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/MR")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/EcatDataSocket")
+include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}/include/casadi")
 include_directories(	"${CMAKE_CURRENT_SOURCE_DIR}")
 message("Done")
 
@@ -116,6 +119,7 @@ set( LIBS
 	qpOASES
 	cryptopp
 	NRMKFramework
+	# casadi
 )
 
 link_directories(
@@ -128,9 +132,28 @@ link_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/qpOASES"		
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/cryptopp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/NRMKFramework"
-	
+	# "${CMAKE_CURRENT_SOURCE_DIR}/lib/casadi"
 )
 
+# set( INDY7_CASADI
+# 	indy7_M
+# 	indy7_Minv
+# 	indy7_C
+# 	indy7_G
+# 	indy7_id
+# 	indy7_fd
+# 	indy7_fk
+# 	indy7_fk_ee
+# 	indy7_fkrot_ee
+# 	indy7_J_s
+# 	indy7_J_b
+# 	indy7_J_fd
+# 	indy7_J_id
+# )
+
+# link_directories(
+# 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
+# )
 #############################################################
 # Sources                                                   #
 #############################################################
@@ -139,7 +162,8 @@ file(GLOB_RECURSE MR_Indy7 include/MR/MR_Indy7.h include/MR/MR_Indy7.cpp)
 #file(GLOB_RECURSE KDL  "include/KDL/*.h" "include/KDL/*.cpp")
 file(GLOB_RECURSE PDO include/EcatSystem/PDOConfig.c include/EcatSystem/PDOConfig.h)
 file(GLOB_RECURSE EcatSystem include/EcatSystem/Ecat_Master.cpp include/EcatSystem/Ecat_Master.h)
-#file(GLOB_RECURSE Control include/Control/*.h include/Control/*.cpp include/Control/*.c)
+file(GLOB_RECURSE Robot include/Robot/*.h)
+file(GLOB_RECURSE Control include/Control/*.h include/Control/*.cpp include/Control/*.c)
 file(GLOB_RECURSE EcatDataSocket include/EcatDataSocket/EcatDataSocket.cpp include/EcatDataSocket/EcatDataSocket.h include/EcatDataSocket/EcatControlSocket.h) 
 #file(GLOB_RECURSE CAN include/CAN/*.h include/CAN/*.cpp include/CAN/*.c)
 file(GLOB_RECURSE SOURCES "src/RTIndy7Client.cpp")
@@ -151,11 +175,11 @@ file(GLOB_RECURSE SOURCES "src/RTIndy7Client.cpp")
 #############################################################
 set(EXE ${PROJECT_NAME})
 #add_executable(${EXE} ${SOURCES} ${PDO} ${MR_Indy7} ${MR} ${EcatDataSocket}   ${EcatSystem} ${CAN} )
-add_executable(${EXE} ${SOURCES} ${PDO} ${MR_Indy7} ${MR} ${EcatDataSocket} ${EcatSystem})
+add_executable(${EXE} ${SOURCES} ${PDO} ${MR_Indy7} ${MR} ${EcatDataSocket} ${EcatSystem} ${Control} ${Robot})
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX  "")
 
 #############################################################
 # Libraries linking                                         #
 #############################################################
-target_link_libraries(${EXE} ${LIBS} )
-
+# target_link_libraries(${EXE} ${LIBS} ${INDY7_CASADI})
+target_link_libraries(${EXE} ${LIBS})

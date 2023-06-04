@@ -22,6 +22,14 @@
 #include <memory>
 #include <iostream>
 
+#define FT_START_DEVICE 0x0B
+#define FT_STOP_DEVICE 0x0C
+#define FT_SET_OUTPUT_RATE 0x0F
+#define FT_GET_OUTPUT_RATE 0x10
+#define FT_SET_BIAS 0x11
+#define FT_BIAS_SUB 0x01
+#define FT_UNBIAS_SUB 0x00
+
 class NRMK_Master
 { 
 	public:
@@ -422,7 +430,7 @@ class NRMK_Master
 
 			return true;
 		}
-	
+
 	private:
 		void _setMasterCycle(UINT32 DCCycle);
 		int	_initMaster();

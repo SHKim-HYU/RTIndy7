@@ -9,7 +9,7 @@
 #include "Indy7.h"
 
 #include "../../include/MR/modern_robotics.h"
-#include "../../include/MR/MR_Indy7.h"
+#include "../../include/MR_sim/MR_Indy7.h"
 #include <vector>
 #include <iostream>
 
@@ -53,7 +53,8 @@ int main()
 	double t = 0;
 	double dt= FIXED_TIMESTEP;
 	JVec MAX_TORQUES;
-	MAX_TORQUES<<431.97,431.97,197.23,79.79,79.79,79.79;
+	//MAX_TORQUES<<431.97,431.97,197.23,79.79,79.79,79.79;
+	MAX_TORQUES<<1000,1000,1000,1000,1000,1000,1000;
 	JVec q_des=JVec::Zero();
 	q_des(0) = 1.0;
 	q_des(1) = 1.0;
@@ -81,7 +82,7 @@ int main()
 				q0 = q;
 				traj_flag =1;
 			}
-		JointTrajectory(q0, qT, 5, t , 5 , q_des, dq_des, ddq_des) ;
+		JointTrajectory(q0, qT, 1, t , 5 , q_des, dq_des, ddq_des) ;
 
 		JVec gravTorq = control.Gravity( q);
 		JVec clacTorq = control.ComputedTorqueControl( q, dq, q_des, dq_des); // calcTorque
