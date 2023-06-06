@@ -1,94 +1,37 @@
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "C"
   "CXX"
   )
 # The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_C
-  "/home/mtplnr/Indy_ws/RTIndy7/include/EcatSystem/PDOConfig.c" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.o"
-  )
-set(CMAKE_C_COMPILER_ID "GNU")
-
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_C
-  "__ROBOT_6DOF__"
-  "__XENO__"
-  )
-
-# The include file search paths:
-set(CMAKE_C_TARGET_INCLUDE_PATH
-  "../include/NRMKSDK/xenomai"
-  "../include/NRMKSDK/ethercat"
-  "../include/NRMKSDK/core"
-  "../include/NRMKSDK/helper"
-  "../include/NRMKSDK/helper/hw"
-  "../include/NRMKSDK/helper/hw/nrmk_ecat"
-  "../include/NRMKSDK/eigen"
-  "../include/NRMKSDK/Poco"
-  "../include/NRMKSDK/json"
-  "../include/NRMKSDK/modbus"
-  "../include/NRMKSDK/qpOASES"
-  "../include/NRMKSDK/cryptopp"
-  "../include/NRMKSDK/NRMKFramework"
-  "../include/NRMKSDK/ModernRobotics"
-  "../include/KDL"
-  "../include/CAN"
-  "../include/EcatSystem"
-  "../include/Control"
-  "../include/MR"
-  "../include"
-  "../include/EcatDataSocket"
-  "../"
-  )
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/mtplnr/Indy_ws/RTIndy7/include/CAN/RoboLimb.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/Control/Controller.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/Control/Trajectory.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/EcatDataSocket/EcatDataSocket.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/EcatSystem/Ecat_Master.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/KDL/LieDynamics.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/KDL/LieOperator.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/KDL/PoEKinematics.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/KDL/SerialRobot.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/include/MR/modern_robotics.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o"
-  "/home/mtplnr/Indy_ws/RTIndy7/src/RTRArmClient.cpp" "/home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/src/RTRArmClient.cpp.o"
+  "/home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp" "/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_CXX
-  "__ROBOT_6DOF__"
-  "__XENO__"
-  )
-
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../include/NRMKSDK/xenomai"
-  "../include/NRMKSDK/ethercat"
-  "../include/NRMKSDK/core"
-  "../include/NRMKSDK/helper"
-  "../include/NRMKSDK/helper/hw"
-  "../include/NRMKSDK/helper/hw/nrmk_ecat"
-  "../include/NRMKSDK/eigen"
-  "../include/NRMKSDK/Poco"
-  "../include/NRMKSDK/json"
-  "../include/NRMKSDK/modbus"
-  "../include/NRMKSDK/qpOASES"
-  "../include/NRMKSDK/cryptopp"
-  "../include/NRMKSDK/NRMKFramework"
-  "../include/NRMKSDK/ModernRobotics"
-  "../include/KDL"
-  "../include/CAN"
-  "../include/EcatSystem"
+  "../bin/inc"
   "../include/Control"
+  "../include/EcatSystem"
+  "../include/KDL"
   "../include/MR"
-  "../include"
-  "../include/EcatDataSocket"
-  "../"
+  "../include/Network"
+  "/usr/src/linux-headers-5.4.124-xenomai-3.1.1+"
+  "/usr/xenomai/include/trank"
+  "/usr/xenomai/include/cobalt"
+  "/usr/xenomai/include"
+  "/usr/xenomai/include/alchemy"
+  "/opt/etherlab/include"
+  "/usr/include/eigen3"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/xeno/Indy_ws/RTIndy7/build/include/Control/CMakeFiles/Control.dir/DependInfo.cmake"
+  "/home/xeno/Indy_ws/RTIndy7/build/include/EcatSystem/CMakeFiles/EcatSystem.dir/DependInfo.cmake"
+  "/home/xeno/Indy_ws/RTIndy7/build/include/KDL/CMakeFiles/KDL.dir/DependInfo.cmake"
+  "/home/xeno/Indy_ws/RTIndy7/build/include/MR/CMakeFiles/MR.dir/DependInfo.cmake"
+  "/home/xeno/Indy_ws/RTIndy7/build/include/Network/CMakeFiles/Network.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

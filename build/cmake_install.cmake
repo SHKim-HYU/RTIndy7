@@ -1,8 +1,8 @@
-# Install script for directory: /home/mtplnr/Indy_ws/RTIndy7
+# Install script for directory: /home/xeno/Indy_ws/RTIndy7
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mtplnr/Indy_ws/RTIndy7/bin")
+  set(CMAKE_INSTALL_PREFIX "/home/xeno/Indy_ws/RTIndy7")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,7 +34,17 @@ endif()
 
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
-  set(CMAKE_CROSSCOMPILING "true")
+  set(CMAKE_CROSSCOMPILING "FALSE")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  include("/home/xeno/Indy_ws/RTIndy7/build/include/Control/cmake_install.cmake")
+  include("/home/xeno/Indy_ws/RTIndy7/build/include/EcatSystem/cmake_install.cmake")
+  include("/home/xeno/Indy_ws/RTIndy7/build/include/KDL/cmake_install.cmake")
+  include("/home/xeno/Indy_ws/RTIndy7/build/include/MR/cmake_install.cmake")
+  include("/home/xeno/Indy_ws/RTIndy7/build/include/Network/cmake_install.cmake")
+
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -45,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mtplnr/Indy_ws/RTIndy7/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/xeno/Indy_ws/RTIndy7/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

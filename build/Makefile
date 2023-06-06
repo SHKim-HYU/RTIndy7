@@ -48,13 +48,37 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mtplnr/Indy_ws/RTIndy7
+CMAKE_SOURCE_DIR = /home/xeno/Indy_ws/RTIndy7
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mtplnr/Indy_ws/RTIndy7/build
+CMAKE_BINARY_DIR = /home/xeno/Indy_ws/RTIndy7/build
 
 #=============================================================================
 # Targets provided globally by CMake.
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -66,6 +90,28 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Only default component available"
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -80,9 +126,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles /home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mtplnr/Indy_ws/RTIndy7/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,329 +169,97 @@ RTIndy7_01/fast:
 	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/build
 .PHONY : RTIndy7_01/fast
 
-include/CAN/RoboLimb.o: include/CAN/RoboLimb.cpp.o
+#=============================================================================
+# Target rules for targets named Control
 
-.PHONY : include/CAN/RoboLimb.o
+# Build rule for target.
+Control: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Control
+.PHONY : Control
 
-# target to build an object file
-include/CAN/RoboLimb.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.o
-.PHONY : include/CAN/RoboLimb.cpp.o
+# fast build rule for target.
+Control/fast:
+	$(MAKE) -f include/Control/CMakeFiles/Control.dir/build.make include/Control/CMakeFiles/Control.dir/build
+.PHONY : Control/fast
 
-include/CAN/RoboLimb.i: include/CAN/RoboLimb.cpp.i
+#=============================================================================
+# Target rules for targets named EcatSystem
 
-.PHONY : include/CAN/RoboLimb.i
+# Build rule for target.
+EcatSystem: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 EcatSystem
+.PHONY : EcatSystem
 
-# target to preprocess a source file
-include/CAN/RoboLimb.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.i
-.PHONY : include/CAN/RoboLimb.cpp.i
+# fast build rule for target.
+EcatSystem/fast:
+	$(MAKE) -f include/EcatSystem/CMakeFiles/EcatSystem.dir/build.make include/EcatSystem/CMakeFiles/EcatSystem.dir/build
+.PHONY : EcatSystem/fast
 
-include/CAN/RoboLimb.s: include/CAN/RoboLimb.cpp.s
+#=============================================================================
+# Target rules for targets named KDL
 
-.PHONY : include/CAN/RoboLimb.s
+# Build rule for target.
+KDL: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 KDL
+.PHONY : KDL
 
-# target to generate assembly for a file
-include/CAN/RoboLimb.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/CAN/RoboLimb.cpp.s
-.PHONY : include/CAN/RoboLimb.cpp.s
+# fast build rule for target.
+KDL/fast:
+	$(MAKE) -f include/KDL/CMakeFiles/KDL.dir/build.make include/KDL/CMakeFiles/KDL.dir/build
+.PHONY : KDL/fast
 
-include/Control/Controller.o: include/Control/Controller.cpp.o
+#=============================================================================
+# Target rules for targets named MR
 
-.PHONY : include/Control/Controller.o
+# Build rule for target.
+MR: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 MR
+.PHONY : MR
 
-# target to build an object file
-include/Control/Controller.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.o
-.PHONY : include/Control/Controller.cpp.o
+# fast build rule for target.
+MR/fast:
+	$(MAKE) -f include/MR/CMakeFiles/MR.dir/build.make include/MR/CMakeFiles/MR.dir/build
+.PHONY : MR/fast
 
-include/Control/Controller.i: include/Control/Controller.cpp.i
+#=============================================================================
+# Target rules for targets named Network
 
-.PHONY : include/Control/Controller.i
+# Build rule for target.
+Network: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Network
+.PHONY : Network
 
-# target to preprocess a source file
-include/Control/Controller.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.i
-.PHONY : include/Control/Controller.cpp.i
+# fast build rule for target.
+Network/fast:
+	$(MAKE) -f include/Network/CMakeFiles/Network.dir/build.make include/Network/CMakeFiles/Network.dir/build
+.PHONY : Network/fast
 
-include/Control/Controller.s: include/Control/Controller.cpp.s
+src/RTIndy7Client.o: src/RTIndy7Client.cpp.o
 
-.PHONY : include/Control/Controller.s
-
-# target to generate assembly for a file
-include/Control/Controller.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Controller.cpp.s
-.PHONY : include/Control/Controller.cpp.s
-
-include/Control/Trajectory.o: include/Control/Trajectory.cpp.o
-
-.PHONY : include/Control/Trajectory.o
-
-# target to build an object file
-include/Control/Trajectory.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.o
-.PHONY : include/Control/Trajectory.cpp.o
-
-include/Control/Trajectory.i: include/Control/Trajectory.cpp.i
-
-.PHONY : include/Control/Trajectory.i
-
-# target to preprocess a source file
-include/Control/Trajectory.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.i
-.PHONY : include/Control/Trajectory.cpp.i
-
-include/Control/Trajectory.s: include/Control/Trajectory.cpp.s
-
-.PHONY : include/Control/Trajectory.s
-
-# target to generate assembly for a file
-include/Control/Trajectory.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/Control/Trajectory.cpp.s
-.PHONY : include/Control/Trajectory.cpp.s
-
-include/EcatDataSocket/EcatDataSocket.o: include/EcatDataSocket/EcatDataSocket.cpp.o
-
-.PHONY : include/EcatDataSocket/EcatDataSocket.o
+.PHONY : src/RTIndy7Client.o
 
 # target to build an object file
-include/EcatDataSocket/EcatDataSocket.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.o
-.PHONY : include/EcatDataSocket/EcatDataSocket.cpp.o
+src/RTIndy7Client.cpp.o:
+	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o
+.PHONY : src/RTIndy7Client.cpp.o
 
-include/EcatDataSocket/EcatDataSocket.i: include/EcatDataSocket/EcatDataSocket.cpp.i
+src/RTIndy7Client.i: src/RTIndy7Client.cpp.i
 
-.PHONY : include/EcatDataSocket/EcatDataSocket.i
-
-# target to preprocess a source file
-include/EcatDataSocket/EcatDataSocket.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.i
-.PHONY : include/EcatDataSocket/EcatDataSocket.cpp.i
-
-include/EcatDataSocket/EcatDataSocket.s: include/EcatDataSocket/EcatDataSocket.cpp.s
-
-.PHONY : include/EcatDataSocket/EcatDataSocket.s
-
-# target to generate assembly for a file
-include/EcatDataSocket/EcatDataSocket.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatDataSocket/EcatDataSocket.cpp.s
-.PHONY : include/EcatDataSocket/EcatDataSocket.cpp.s
-
-include/EcatSystem/Ecat_Master.o: include/EcatSystem/Ecat_Master.cpp.o
-
-.PHONY : include/EcatSystem/Ecat_Master.o
-
-# target to build an object file
-include/EcatSystem/Ecat_Master.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.o
-.PHONY : include/EcatSystem/Ecat_Master.cpp.o
-
-include/EcatSystem/Ecat_Master.i: include/EcatSystem/Ecat_Master.cpp.i
-
-.PHONY : include/EcatSystem/Ecat_Master.i
+.PHONY : src/RTIndy7Client.i
 
 # target to preprocess a source file
-include/EcatSystem/Ecat_Master.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.i
-.PHONY : include/EcatSystem/Ecat_Master.cpp.i
+src/RTIndy7Client.cpp.i:
+	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.i
+.PHONY : src/RTIndy7Client.cpp.i
 
-include/EcatSystem/Ecat_Master.s: include/EcatSystem/Ecat_Master.cpp.s
+src/RTIndy7Client.s: src/RTIndy7Client.cpp.s
 
-.PHONY : include/EcatSystem/Ecat_Master.s
-
-# target to generate assembly for a file
-include/EcatSystem/Ecat_Master.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatSystem/Ecat_Master.cpp.s
-.PHONY : include/EcatSystem/Ecat_Master.cpp.s
-
-include/EcatSystem/PDOConfig.o: include/EcatSystem/PDOConfig.c.o
-
-.PHONY : include/EcatSystem/PDOConfig.o
-
-# target to build an object file
-include/EcatSystem/PDOConfig.c.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.o
-.PHONY : include/EcatSystem/PDOConfig.c.o
-
-include/EcatSystem/PDOConfig.i: include/EcatSystem/PDOConfig.c.i
-
-.PHONY : include/EcatSystem/PDOConfig.i
-
-# target to preprocess a source file
-include/EcatSystem/PDOConfig.c.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.i
-.PHONY : include/EcatSystem/PDOConfig.c.i
-
-include/EcatSystem/PDOConfig.s: include/EcatSystem/PDOConfig.c.s
-
-.PHONY : include/EcatSystem/PDOConfig.s
+.PHONY : src/RTIndy7Client.s
 
 # target to generate assembly for a file
-include/EcatSystem/PDOConfig.c.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/EcatSystem/PDOConfig.c.s
-.PHONY : include/EcatSystem/PDOConfig.c.s
-
-include/KDL/LieDynamics.o: include/KDL/LieDynamics.cpp.o
-
-.PHONY : include/KDL/LieDynamics.o
-
-# target to build an object file
-include/KDL/LieDynamics.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.o
-.PHONY : include/KDL/LieDynamics.cpp.o
-
-include/KDL/LieDynamics.i: include/KDL/LieDynamics.cpp.i
-
-.PHONY : include/KDL/LieDynamics.i
-
-# target to preprocess a source file
-include/KDL/LieDynamics.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.i
-.PHONY : include/KDL/LieDynamics.cpp.i
-
-include/KDL/LieDynamics.s: include/KDL/LieDynamics.cpp.s
-
-.PHONY : include/KDL/LieDynamics.s
-
-# target to generate assembly for a file
-include/KDL/LieDynamics.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieDynamics.cpp.s
-.PHONY : include/KDL/LieDynamics.cpp.s
-
-include/KDL/LieOperator.o: include/KDL/LieOperator.cpp.o
-
-.PHONY : include/KDL/LieOperator.o
-
-# target to build an object file
-include/KDL/LieOperator.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.o
-.PHONY : include/KDL/LieOperator.cpp.o
-
-include/KDL/LieOperator.i: include/KDL/LieOperator.cpp.i
-
-.PHONY : include/KDL/LieOperator.i
-
-# target to preprocess a source file
-include/KDL/LieOperator.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.i
-.PHONY : include/KDL/LieOperator.cpp.i
-
-include/KDL/LieOperator.s: include/KDL/LieOperator.cpp.s
-
-.PHONY : include/KDL/LieOperator.s
-
-# target to generate assembly for a file
-include/KDL/LieOperator.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/LieOperator.cpp.s
-.PHONY : include/KDL/LieOperator.cpp.s
-
-include/KDL/PoEKinematics.o: include/KDL/PoEKinematics.cpp.o
-
-.PHONY : include/KDL/PoEKinematics.o
-
-# target to build an object file
-include/KDL/PoEKinematics.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.o
-.PHONY : include/KDL/PoEKinematics.cpp.o
-
-include/KDL/PoEKinematics.i: include/KDL/PoEKinematics.cpp.i
-
-.PHONY : include/KDL/PoEKinematics.i
-
-# target to preprocess a source file
-include/KDL/PoEKinematics.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.i
-.PHONY : include/KDL/PoEKinematics.cpp.i
-
-include/KDL/PoEKinematics.s: include/KDL/PoEKinematics.cpp.s
-
-.PHONY : include/KDL/PoEKinematics.s
-
-# target to generate assembly for a file
-include/KDL/PoEKinematics.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/PoEKinematics.cpp.s
-.PHONY : include/KDL/PoEKinematics.cpp.s
-
-include/KDL/SerialRobot.o: include/KDL/SerialRobot.cpp.o
-
-.PHONY : include/KDL/SerialRobot.o
-
-# target to build an object file
-include/KDL/SerialRobot.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.o
-.PHONY : include/KDL/SerialRobot.cpp.o
-
-include/KDL/SerialRobot.i: include/KDL/SerialRobot.cpp.i
-
-.PHONY : include/KDL/SerialRobot.i
-
-# target to preprocess a source file
-include/KDL/SerialRobot.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.i
-.PHONY : include/KDL/SerialRobot.cpp.i
-
-include/KDL/SerialRobot.s: include/KDL/SerialRobot.cpp.s
-
-.PHONY : include/KDL/SerialRobot.s
-
-# target to generate assembly for a file
-include/KDL/SerialRobot.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/KDL/SerialRobot.cpp.s
-.PHONY : include/KDL/SerialRobot.cpp.s
-
-include/MR/modern_robotics.o: include/MR/modern_robotics.cpp.o
-
-.PHONY : include/MR/modern_robotics.o
-
-# target to build an object file
-include/MR/modern_robotics.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.o
-.PHONY : include/MR/modern_robotics.cpp.o
-
-include/MR/modern_robotics.i: include/MR/modern_robotics.cpp.i
-
-.PHONY : include/MR/modern_robotics.i
-
-# target to preprocess a source file
-include/MR/modern_robotics.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.i
-.PHONY : include/MR/modern_robotics.cpp.i
-
-include/MR/modern_robotics.s: include/MR/modern_robotics.cpp.s
-
-.PHONY : include/MR/modern_robotics.s
-
-# target to generate assembly for a file
-include/MR/modern_robotics.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/include/MR/modern_robotics.cpp.s
-.PHONY : include/MR/modern_robotics.cpp.s
-
-src/RTRArmClient.o: src/RTRArmClient.cpp.o
-
-.PHONY : src/RTRArmClient.o
-
-# target to build an object file
-src/RTRArmClient.cpp.o:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/src/RTRArmClient.cpp.o
-.PHONY : src/RTRArmClient.cpp.o
-
-src/RTRArmClient.i: src/RTRArmClient.cpp.i
-
-.PHONY : src/RTRArmClient.i
-
-# target to preprocess a source file
-src/RTRArmClient.cpp.i:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/src/RTRArmClient.cpp.i
-.PHONY : src/RTRArmClient.cpp.i
-
-src/RTRArmClient.s: src/RTRArmClient.cpp.s
-
-.PHONY : src/RTRArmClient.s
-
-# target to generate assembly for a file
-src/RTRArmClient.cpp.s:
-	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/src/RTRArmClient.cpp.s
-.PHONY : src/RTRArmClient.cpp.s
+src/RTIndy7Client.cpp.s:
+	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.s
+.PHONY : src/RTIndy7Client.cpp.s
 
 # Help Target
 help:
@@ -453,45 +267,21 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... install/strip"
+	@echo "... install/local"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... RTIndy7_01"
-	@echo "... include/CAN/RoboLimb.o"
-	@echo "... include/CAN/RoboLimb.i"
-	@echo "... include/CAN/RoboLimb.s"
-	@echo "... include/Control/Controller.o"
-	@echo "... include/Control/Controller.i"
-	@echo "... include/Control/Controller.s"
-	@echo "... include/Control/Trajectory.o"
-	@echo "... include/Control/Trajectory.i"
-	@echo "... include/Control/Trajectory.s"
-	@echo "... include/EcatDataSocket/EcatDataSocket.o"
-	@echo "... include/EcatDataSocket/EcatDataSocket.i"
-	@echo "... include/EcatDataSocket/EcatDataSocket.s"
-	@echo "... include/EcatSystem/Ecat_Master.o"
-	@echo "... include/EcatSystem/Ecat_Master.i"
-	@echo "... include/EcatSystem/Ecat_Master.s"
-	@echo "... include/EcatSystem/PDOConfig.o"
-	@echo "... include/EcatSystem/PDOConfig.i"
-	@echo "... include/EcatSystem/PDOConfig.s"
-	@echo "... include/KDL/LieDynamics.o"
-	@echo "... include/KDL/LieDynamics.i"
-	@echo "... include/KDL/LieDynamics.s"
-	@echo "... include/KDL/LieOperator.o"
-	@echo "... include/KDL/LieOperator.i"
-	@echo "... include/KDL/LieOperator.s"
-	@echo "... include/KDL/PoEKinematics.o"
-	@echo "... include/KDL/PoEKinematics.i"
-	@echo "... include/KDL/PoEKinematics.s"
-	@echo "... include/KDL/SerialRobot.o"
-	@echo "... include/KDL/SerialRobot.i"
-	@echo "... include/KDL/SerialRobot.s"
-	@echo "... include/MR/modern_robotics.o"
-	@echo "... include/MR/modern_robotics.i"
-	@echo "... include/MR/modern_robotics.s"
-	@echo "... src/RTRArmClient.o"
-	@echo "... src/RTRArmClient.i"
-	@echo "... src/RTRArmClient.s"
+	@echo "... Control"
+	@echo "... EcatSystem"
+	@echo "... KDL"
+	@echo "... MR"
+	@echo "... Network"
+	@echo "... src/RTIndy7Client.o"
+	@echo "... src/RTIndy7Client.i"
+	@echo "... src/RTIndy7Client.s"
 .PHONY : help
 
 
