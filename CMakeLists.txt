@@ -114,42 +114,54 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS
 set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_DEBUG} -pg")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
-set(CTRL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Control)
+# set(CTRL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Control)
+# set(KDL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/KDL)
 set(ECAT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/EcatSystem)
-set(KDL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/KDL)
+set(INTP_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Interpolator)
 set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
 set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
+set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 
 include_directories(${PROJ_INSTALL_INCLUDE_DIR})
 include_directories(
         ${KERNELHEADERS_DIR}
-        ${CTRL_HEADERS_DIR}
+        # ${CTRL_HEADERS_DIR}
+        # ${KDL_HEADERS_DIR}
         ${ECAT_HEADERS_DIR}
-        ${KDL_HEADERS_DIR}
+        ${INTP_HEADERS_DIR}
         ${MR_HEADERS_DIR}
         ${NET_HEADERS_DIR}
+        ${ROBOT_HEADERS_DIR}
 )
 
-add_subdirectory(include/Control)
+# add_subdirectory(include/Control)
+# add_subdirectory(include/KDL)
 add_subdirectory(include/EcatSystem)
-add_subdirectory(include/KDL)
+add_subdirectory(include/Interpolator)
 add_subdirectory(include/MR)
 add_subdirectory(include/Network)
-
+add_subdirectory(include/Robot)
 
 add_executable(${PROJECT_NAME}
         src/RTIndy7Client.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
-        sub::CTRL
+        # sub::CTRL
+        # sub::KDL
         sub::ECAT
-        sub::KDL
+        sub::Interpolator
         sub::MR
         sub::NETWORK
+        sub::Robot
 )
 
-find_package(Xenomai 2.6.0 REQUIRED NATIVE)
+# jsoncpp
+find_package(jsoncpp REQUIRED)
+target_link_libraries(${PROJECT_NAME} jsoncpp_lib)
+list(APPEND INCLUDE_DIRS_FOR_DYNAMIC_VIEW ${jSONCPP_INCLUDE_DIRS})
+
+find_package(Xenomai 3.1.1 REQUIRED NATIVE)
 message(STATUS "Xenomai found with theses skins: ${Xenomai_SKINS}")
 if(Xenomai_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${KERNELHEADERS_DIR})
@@ -162,11 +174,13 @@ if(Xenomai_FOUND)
         #message(STATUS "Xenomai ${comp_lists} DL_FLAGS : ${Xenomai_${comp_lists}_DL_FLAGS}")
 
         target_include_directories(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_INCLUDE_DIRS})
-        #target_link_libraries(${PROJECT_NAME} ${Xenomai_${comp_lists}_LIBRARY_DIRS} ${Xenomai_${comp_lists}_LIBRARIES})
+        # target_link_libraries(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_LIBRARY_DIRS} ${Xenomai_${comp_lists}_LIBRARIES})
         target_link_libraries(${PROJECT_NAME} ${Xenomai_${comp_lists}_DL_FLAGS})
         set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS ${Xenomai_${comp_lists}_DEFINITIONS})
     endforeach(comp_lists ${Xenomai_SKINS})
 endif(Xenomai_FOUND)
+
+
 
 # check if Doxygen is installed
 #find_package(Doxygen)

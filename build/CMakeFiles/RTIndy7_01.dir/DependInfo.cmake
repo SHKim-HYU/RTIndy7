@@ -11,11 +11,11 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../bin/inc"
-  "../include/Control"
   "../include/EcatSystem"
-  "../include/KDL"
+  "../include/Interpolator"
   "../include/MR"
   "../include/Network"
+  "../include/Robot"
   "/usr/src/linux-headers-5.4.124-xenomai-3.1.1+"
   "/usr/xenomai/include/trank"
   "/usr/xenomai/include/cobalt"
@@ -23,15 +23,16 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/xenomai/include/alchemy"
   "/opt/etherlab/include"
   "/usr/include/eigen3"
+  "/usr/include/jsoncpp"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/xeno/Indy_ws/RTIndy7/build/include/Control/CMakeFiles/Control.dir/DependInfo.cmake"
   "/home/xeno/Indy_ws/RTIndy7/build/include/EcatSystem/CMakeFiles/EcatSystem.dir/DependInfo.cmake"
-  "/home/xeno/Indy_ws/RTIndy7/build/include/KDL/CMakeFiles/KDL.dir/DependInfo.cmake"
+  "/home/xeno/Indy_ws/RTIndy7/build/include/Interpolator/CMakeFiles/Interpolator.dir/DependInfo.cmake"
   "/home/xeno/Indy_ws/RTIndy7/build/include/MR/CMakeFiles/MR.dir/DependInfo.cmake"
   "/home/xeno/Indy_ws/RTIndy7/build/include/Network/CMakeFiles/Network.dir/DependInfo.cmake"
+  "/home/xeno/Indy_ws/RTIndy7/build/include/Robot/CMakeFiles/Robot.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

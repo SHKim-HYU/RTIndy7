@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG   -D__XENO_COMPAT__ -D_
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/xeno/Indy_ws/RTIndy7/bin/inc -I/home/xeno/Indy_ws/RTIndy7/include/Control -I/home/xeno/Indy_ws/RTIndy7/include/EcatSystem -I/home/xeno/Indy_ws/RTIndy7/include/KDL -I/home/xeno/Indy_ws/RTIndy7/include/MR -I/home/xeno/Indy_ws/RTIndy7/include/Network -I/usr/src/linux-headers-5.4.124-xenomai-3.1.1+ -I/usr/xenomai/include/trank -I/usr/xenomai/include/cobalt -I/usr/xenomai/include -I/usr/xenomai/include/alchemy -I/opt/etherlab/include -isystem /usr/include/eigen3 
+CXX_INCLUDES = -I/home/xeno/Indy_ws/RTIndy7/bin/inc -I/home/xeno/Indy_ws/RTIndy7/include/EcatSystem -I/home/xeno/Indy_ws/RTIndy7/include/Interpolator -I/home/xeno/Indy_ws/RTIndy7/include/MR -I/home/xeno/Indy_ws/RTIndy7/include/Network -I/home/xeno/Indy_ws/RTIndy7/include/Robot -I/usr/src/linux-headers-5.4.124-xenomai-3.1.1+ -I/usr/xenomai/include/trank -I/usr/xenomai/include/cobalt -I/usr/xenomai/include -I/usr/xenomai/include/alchemy -I/opt/etherlab/include -isystem /usr/include/eigen3 -isystem /usr/include/jsoncpp 
 

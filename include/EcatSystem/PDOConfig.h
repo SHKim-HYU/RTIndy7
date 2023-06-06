@@ -10,13 +10,9 @@
 #define Elmo_VendorID  0x0000009a
 #define Elmo_ProductCode 0x00030924
 
-#define NRMK_IO_Module_VendorID  0x0000089a
+#define NRMK_VendorID  0x0000089a
 #define NRMK_IO_Module_ProductCode 0x40000000
-
-#define NRMK_Drive_VendorID  0x0000089a
 #define NRMK_Drive_ProductCode 0x30000000
-
-#define NRMK_Indy_Tool_VendorID  0x0000089a
 #define NRMK_Indy_Tool_ProductCode 0x10000007
 
 extern ec_pdo_entry_info_t 	RobotusFT_pdo_entries[];

@@ -170,19 +170,6 @@ RTIndy7_01/fast:
 .PHONY : RTIndy7_01/fast
 
 #=============================================================================
-# Target rules for targets named Control
-
-# Build rule for target.
-Control: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Control
-.PHONY : Control
-
-# fast build rule for target.
-Control/fast:
-	$(MAKE) -f include/Control/CMakeFiles/Control.dir/build.make include/Control/CMakeFiles/Control.dir/build
-.PHONY : Control/fast
-
-#=============================================================================
 # Target rules for targets named EcatSystem
 
 # Build rule for target.
@@ -196,17 +183,17 @@ EcatSystem/fast:
 .PHONY : EcatSystem/fast
 
 #=============================================================================
-# Target rules for targets named KDL
+# Target rules for targets named Interpolator
 
 # Build rule for target.
-KDL: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 KDL
-.PHONY : KDL
+Interpolator: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Interpolator
+.PHONY : Interpolator
 
 # fast build rule for target.
-KDL/fast:
-	$(MAKE) -f include/KDL/CMakeFiles/KDL.dir/build.make include/KDL/CMakeFiles/KDL.dir/build
-.PHONY : KDL/fast
+Interpolator/fast:
+	$(MAKE) -f include/Interpolator/CMakeFiles/Interpolator.dir/build.make include/Interpolator/CMakeFiles/Interpolator.dir/build
+.PHONY : Interpolator/fast
 
 #=============================================================================
 # Target rules for targets named MR
@@ -233,6 +220,19 @@ Network: cmake_check_build_system
 Network/fast:
 	$(MAKE) -f include/Network/CMakeFiles/Network.dir/build.make include/Network/CMakeFiles/Network.dir/build
 .PHONY : Network/fast
+
+#=============================================================================
+# Target rules for targets named Robot
+
+# Build rule for target.
+Robot: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Robot
+.PHONY : Robot
+
+# fast build rule for target.
+Robot/fast:
+	$(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/build
+.PHONY : Robot/fast
 
 src/RTIndy7Client.o: src/RTIndy7Client.cpp.o
 
@@ -274,11 +274,11 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... RTIndy7_01"
-	@echo "... Control"
 	@echo "... EcatSystem"
-	@echo "... KDL"
+	@echo "... Interpolator"
 	@echo "... MR"
 	@echo "... Network"
+	@echo "... Robot"
 	@echo "... src/RTIndy7Client.o"
 	@echo "... src/RTIndy7Client.i"
 	@echo "... src/RTIndy7Client.s"
