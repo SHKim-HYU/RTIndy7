@@ -1,1 +1,0 @@
-../../i686-unknown-linux-gnu/sysroot/lib/libcilkrts.spec
