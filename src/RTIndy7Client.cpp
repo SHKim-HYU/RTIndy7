@@ -252,11 +252,12 @@ int indy7_C()
 
     return 0;
 }
-/*
+
 int indy7_FK()
 {
+    RTIME start, end;
 // Load the shared library
-    void* handle = dlopen("indy7_fk.so", RTLD_LAZY);
+    void* handle = dlopen("../lib/URDF2CASADI/indy7_fk.so", RTLD_LAZY);
     if (handle == 0) {
         printf("Cannot open indy7_fk.so, error: %s\n", dlerror());
         return 1;
@@ -266,9 +267,9 @@ int indy7_FK()
     dlerror();
 
     // Function evaluation
-    eval_t eval = (eval_t)dlsym(handle, "M");
+    eval_t eval = (eval_t)dlsym(handle, "fk_T");
     if (dlerror()) {
-        printf("Failed to retrieve \"M\" function.\n");
+        printf("Failed to retrieve \"fk_T\" function.\n");
         return 1;
     }
 
@@ -298,30 +299,34 @@ int indy7_FK()
     // Evaluate the function
     int mem = 0;  // No thread-local memory management
     
-    system_clock::time_point start = system_clock::now();
+    start = rt_timer_read();
     if (eval(arg, res, iw, w, mem)) {
         printf("Function evaluation failed.\n");
         return 1;
     }
-    system_clock::time_point end = system_clock::now();
+    end = rt_timer_read();
     
     
     // Print the result
-    printf("Result:\n");
-    for (casadi_int i = 0; i < sz_res; ++i) {
-        for (casadi_int j = 0; j < sz_res; ++j) {
-            printf("%g ", output_values[i * sz_res + j]);
-        }
-        printf("\n");
-    }
-    nanoseconds nano = end - start;
-    cout<<"computation time for \"M\": "<< nano.count()/1000.0<<"[us]"<<endl;
+    // printf("Result:\n");
+    // for (casadi_int i = 0; i < sz_res; ++i) {
+    //     for (casadi_int j = 0; j < sz_res; ++j) {
+    //         printf("%g ", output_values[i * sz_res + j]);
+    //     }
+    //     printf("\n");
+    // }
+    rt_printf("[cs]computation time for \"FK\": %lius\n", (end-start)/1000);
+    start = rt_timer_read();
+    mr_indy7.T_s(info.act.q);
+    end = rt_timer_read();
+    rt_printf("[mr]computation time for \"FK\": %lius\n", (end-start)/1000);
+
     // Free the handle
     dlclose(handle);
 
     return 0;
 }
-*/
+
 int indy7_J_b()
 {
 	RTIME start, end;
@@ -844,6 +849,7 @@ void print_run(void *arg)
 		    indy7_G();
 		    indy7_J_b();
 		    indy7_J_s();
+            indy7_FK();
 
 			rt_printf("\n");
 		}

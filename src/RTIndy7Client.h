@@ -5,13 +5,13 @@
  *      Author: Sunhong Kim
  */
 
-#ifndef RTRARMCLIENT_H_
-#define RTRARMCLIENT_H_
+#ifndef RTINDY7CLIENT_H_
+#define RTINDY7CLIENT_H_
 
 //#define USE_MR
 //#define USE_MR_KDL
 //#define USE_NRMK_SDK
-#define USE_CASADI
+//#define USE_CASADI
 
 /////////////////////////////////////////////////////////////
 
@@ -303,4 +303,4 @@ typedef struct JOINT_INFO{
 
 JVec MAX_TORQUES;
 
-#endif /* RTRARMCLIENT_H_ */
+#endif /* RTINDY7CLIENT_H_ */

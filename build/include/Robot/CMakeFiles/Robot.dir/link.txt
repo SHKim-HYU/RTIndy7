@@ -1,0 +1,2 @@
+/usr/bin/ar qc libRobot.a  
+/usr/bin/ranlib libRobot.a

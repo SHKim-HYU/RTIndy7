@@ -173,6 +173,16 @@ Jacobian MR_Indy7::J_b(JVec q)
     return mr::JacobianBody(this->Blist, q);
 }
 
+SE3 MR_Indy7::T_s(JVec q)
+{
+    return mr::FKinSpace(this->M, this->Slist, q);
+}
+
+SE3 MR_Indy7::T_b(JVec q)
+{
+    return mr::FKinBody(this->M, this->Blist, q);
+}
+
 JVec MR_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des){
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
