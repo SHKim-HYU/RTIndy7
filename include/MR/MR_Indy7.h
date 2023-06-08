@@ -41,6 +41,13 @@ public:
 
     void MRSetup();
     JVec Gravity( JVec q);
+
+    Matrix6xn Mmat(JVec q);
+    JVec Cvec(JVec q, JVec dq);
+    JVec Gvec(JVec q);
+    Jacobian J_s(JVec q);
+    Jacobian J_b(JVec q);
+
     JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
     void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
     JVec ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint);

@@ -21,6 +21,8 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/xenomai/include/cobalt"
   "/usr/xenomai/include"
   "/usr/xenomai/include/alchemy"
+  "/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/include"
+  "/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/include/casadi"
   "/opt/etherlab/include"
   "/usr/include/eigen3"
   "/usr/include/jsoncpp"

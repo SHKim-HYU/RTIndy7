@@ -387,10 +387,10 @@ class NRMK_Master
 				deinit();
 				return -1;
 			}
-			
+
 			return 0;
 		}
-		
+
 		int deinit();
 	
 		void processTxDomain();

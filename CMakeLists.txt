@@ -154,6 +154,7 @@ target_link_libraries(${PROJECT_NAME}
         sub::MR
         sub::NETWORK
         sub::Robot
+        dl
 )
 
 # jsoncpp
@@ -161,6 +162,7 @@ find_package(jsoncpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} jsoncpp_lib)
 list(APPEND INCLUDE_DIRS_FOR_DYNAMIC_VIEW ${jSONCPP_INCLUDE_DIRS})
 
+# xenomai
 find_package(Xenomai 3.1.1 REQUIRED NATIVE)
 message(STATUS "Xenomai found with theses skins: ${Xenomai_SKINS}")
 if(Xenomai_FOUND)
@@ -180,7 +182,34 @@ if(Xenomai_FOUND)
     endforeach(comp_lists ${Xenomai_SKINS})
 endif(Xenomai_FOUND)
 
+# casadi
+find_package(CASADI REQUIRED)
+if (CASADI_FOUND)
+    MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
+    MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
+    target_include_directories(${PROJECT_NAME} PUBLIC ${CASADI_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
+endif ()
 
+set( INDY7_CASADI
+  indy7_M
+  indy7_Minv
+  indy7_C
+  indy7_G
+  indy7_id
+  indy7_fd
+  indy7_fk
+  indy7_fk_ee
+  indy7_fkrot_ee
+  indy7_J_s
+  indy7_J_b
+  indy7_J_fd
+  indy7_J_id
+)
+
+link_directories(
+  "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
+)
 
 # check if Doxygen is installed
 #find_package(Doxygen)

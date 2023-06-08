@@ -85,6 +85,7 @@ RTIndy7_01: include/MR/libMR.a
 RTIndy7_01: include/Network/libNetwork.a
 RTIndy7_01: include/Robot/libRobot.a
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
+RTIndy7_01: /home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
 RTIndy7_01: /opt/etherlab/lib/libethercat.a
 RTIndy7_01: /opt/etherlab/lib/libethercat_rtdm.a
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so

@@ -13,6 +13,24 @@
 //#define USE_NRMK_SDK
 #define USE_CASADI
 
+/////////////////////////////////////////////////////////////
+
+#include <stdio.h>
+#include <dlfcn.h>
+#include <iostream>
+#include <chrono>
+
+
+using namespace std;
+using namespace chrono;
+
+typedef long long int casadi_int;
+typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
+
+
+////////////////////////////////////////////////////////////
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -280,6 +298,7 @@ typedef struct JOINT_INFO{
 
 	STATE act;
 	STATE des;
+	STATE nom;
 }JointInfo;
 
 JVec MAX_TORQUES;

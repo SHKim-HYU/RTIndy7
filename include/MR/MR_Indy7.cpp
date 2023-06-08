@@ -147,6 +147,32 @@ void MR_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES){
         }
     }
 }
+
+Matrix6xn MR_Indy7::Mmat(JVec q)
+{
+    return mr::MassMatrix(q,this->Mlist, this->Glist, this->Slist);
+}
+
+JVec MR_Indy7::Cvec(JVec q, JVec dq)
+{
+    return mr::VelQuadraticForces(q, dq,this->Mlist, this->Glist, this->Slist);
+}
+
+JVec MR_Indy7::Gvec(JVec q)
+{
+    return mr::GravityForces(q,this->g,this->Mlist, this->Glist, this->Slist) ; 
+}
+
+Jacobian MR_Indy7::J_s(JVec q)
+{
+    return mr::JacobianSpace(this->Slist, q);
+}
+
+Jacobian MR_Indy7::J_b(JVec q)
+{
+    return mr::JacobianBody(this->Blist, q);
+}
+
 JVec MR_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des){
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
