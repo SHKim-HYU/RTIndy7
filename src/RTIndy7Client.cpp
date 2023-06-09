@@ -638,6 +638,14 @@ void readEcatData(){
 	info.act.F(3) = FTRawTx[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 	info.act.F(4) = FTRawTy[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 	info.act.F(5) = FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+
+	info.act.F_CB(0) = FTRawFxCB[0] / force_divider;
+	info.act.F_CB(1) = FTRawFyCB[0] / force_divider;
+	info.act.F_CB(2) = FTRawFzCB[0] / force_divider;
+	info.act.F_CB(3) = FTRawTxCB[0] / torque_divider;
+	info.act.F_CB(4) = FTRawTyCB[0] / torque_divider;
+	info.act.F_CB(5) = FTRawTzCB[0] / torque_divider;
+
 	// info.act.F<<(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
 	//           <<(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS];
 }
@@ -672,21 +680,12 @@ void RTIndy7_run(void *arg)
 	info.des.q_dot = JVec::Zero();
 	info.des.q_ddot = JVec::Zero();
 	info.des.F = Vector6f::Zero();
+	info.des.F_CB = Vector6f::Zero();
 
 	JVec eint = JVec::Zero();
 	JVec e = JVec::Zero();
 
-	// Robotus FT Sensor init
-	DeviceConfig DataConfig;
-	DataConfig.u8Param[0] = 0x00;
-	DataConfig.u8Param[1] = 0x00;
-	DataConfig.u8Param[2] = 0x00;
-	DataConfig.u8Param[3] = FT_START_DEVICE;
-	// DataConfig.u32Param = 0x0000000B;
-	FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=DataConfig.u32Param;
-	// std::cout<<DataConfig.u32Param<<std::endl;
-	nrmk_master.writeBuffer(0x70003, FTConfigParam);
-	nrmk_master.processRxDomain();
+	int ft_init_cnt = 0;
 
 	while (run)
 	{
@@ -740,8 +739,39 @@ void RTIndy7_run(void *arg)
 		periodCycle = (unsigned long) endCycle - beginCycle;
 		
 		if (nrmk_master.isSystemReady())
-		{
-			system_ready=1;	//all drives have been done
+		{	
+			if(ft_init_cnt==0)
+			{
+				// Set bias
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_BIAS;
+				FTOverloadStatusCB[0]=FT_SET_BIAS;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else if(ft_init_cnt==1)
+			{
+				// Set Filter 100Hz
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_FILTER_100;
+				FTOverloadStatusCB[0]=FT_SET_FILTER_100;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else if(ft_init_cnt==2)
+			{
+				// Start
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_START_DEVICE;
+				FTOverloadStatusCB[0]=FT_START_DEVICE;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else
+				system_ready=1;	//all drives have been done
 
 			gt+= period;
 			
@@ -872,6 +902,13 @@ void signal_handler(int signum)
 	rt_task_delete(&RTIndy7_task);
 	rt_task_delete(&safety_task);
 	rt_task_delete(&print_task);
+
+	FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
+	FTConfigParamCB[0]=FT_STOP_DEVICE;
+	nrmk_master.writeBuffer(0x70003, FTConfigParam);
+	nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+	nrmk_master.processRxDomain();
+
 	printf("\n\n");
 	if(signum==SIGINT)
 		printf("╔════════════════[SIGNAL INPUT SIGINT]═══════════════╗\n");

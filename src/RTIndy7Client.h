@@ -124,14 +124,22 @@ typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MassMat;
 ////////// LOGGING BUFFER ///////////////
 #define MAX_BUFF_SIZE 		1000
 
-#define FT_READ_ONCE 0x0A
-#define FT_START_DEVICE 0x0B
-#define FT_STOP_DEVICE 0x0C
-#define FT_SET_OUTPUT_RATE 0x0F
-#define FT_GET_OUTPUT_RATE 0x10
-#define FT_SET_BIAS 0x11
-#define FT_BIAS_SUB 0x01
-#define FT_UNBIAS_SUB 0x00
+#define FT_START_DEVICE 	0x0000000B
+#define FT_STOP_DEVICE 		0x0000000C
+
+#define FT_SET_FILTER_500 	0x00010108
+#define FT_SET_FILTER_300 	0x00020108
+#define FT_SET_FILTER_200 	0x00030108
+#define FT_SET_FILTER_150 	0x00040108
+#define FT_SET_FILTER_100 	0x00050108
+#define FT_SET_FILTER_50 	0x00060108
+#define FT_SET_FILTER_40 	0x00070108
+#define FT_SET_FILTER_30 	0x00080108
+#define FT_SET_FILTER_20 	0x00090108
+#define FT_SET_FILTER_10 	0x000A0108
+
+#define FT_SET_BIAS 		0x00000111
+#define FT_UNSET_BIAS 		0x00000011
 
 unsigned int frontIdx = 0, rearIdx = 0;
 /////////////////////////////////////////
@@ -281,6 +289,7 @@ typedef struct STATE{
 	Vector6d x_dot;
 	Vector6d x_ddot;
 	Vector6f F;
+	Vector6f F_CB;
     double s_time;
 }state;
 
