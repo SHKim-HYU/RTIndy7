@@ -883,9 +883,9 @@ void print_run(void *arg)
 			// indy7_M();
 		    // indy7_C();
 		    // indy7_G();
-		    indy7_J_b();
-		    indy7_J_s();
-            indy7_FK();
+		    // indy7_J_b();
+		    // indy7_J_s();
+            // indy7_FK();
 
 			rt_printf("\n");
 		}
