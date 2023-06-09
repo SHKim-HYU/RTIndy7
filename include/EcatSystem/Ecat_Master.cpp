@@ -1469,7 +1469,7 @@ void NRMK_Master::writeBuffer(int EntryID, void * const data)
             {
                 _NRMK_Indy_Tool[i].InParam.FTConfigParam = _fTConfigParam[_NRMK_Indy_Tool[i].Index];
             }
-            std::cout<<"FT Initialization done"<<_fTConfigParam[_NRMK_Indy_Tool[0].Index]<<std::endl;
+            // std::cout<<"FT Initialization done"<<_fTConfigParam[_NRMK_Indy_Tool[0].Index]<<std::endl;
 
         }
             break;                      

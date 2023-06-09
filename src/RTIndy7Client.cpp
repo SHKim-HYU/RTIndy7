@@ -744,7 +744,7 @@ void RTIndy7_run(void *arg)
 			{
 				// Set bias
 				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_BIAS;
-				FTOverloadStatusCB[0]=FT_SET_BIAS;
+				FTConfigParamCB[0]=FT_SET_BIAS;
 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
 				nrmk_master.processRxDomain();
@@ -753,8 +753,8 @@ void RTIndy7_run(void *arg)
 			else if(ft_init_cnt==1)
 			{
 				// Set Filter 100Hz
-				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_FILTER_100;
-				FTOverloadStatusCB[0]=FT_SET_FILTER_100;
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_FILTER_50;
+				FTConfigParamCB[0]=FT_SET_FILTER_50;
 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
 				nrmk_master.processRxDomain();
@@ -764,7 +764,7 @@ void RTIndy7_run(void *arg)
 			{
 				// Start
 				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_START_DEVICE;
-				FTOverloadStatusCB[0]=FT_START_DEVICE;
+				FTConfigParamCB[0]=FT_START_DEVICE;
 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
 				nrmk_master.processRxDomain();
@@ -802,11 +802,16 @@ void safety_run(void *arg)
 		
 		if (system_ready)
 		{
-			if (gt > 5000000000.0){
-				for(int i=0;i<NUM_SLAVES;i++)
-					nrmk_master.setServoOff(i);
-				rt_printf("Servo Off!!\n");
-			}	
+			for(int i=0;i<NUM_AXIS;i++)
+			{
+				if(Axis[i].isLimitReached())
+				{
+					for(int i=0;i<NUM_AXIS;i++)
+						nrmk_master.setServoOff(i+NUM_IO_MODULE);
+					rt_printf("Servo Off!!\n");
+					break;
+				}
+			}
 		}
 	}
 }
@@ -859,24 +864,25 @@ void print_run(void *arg)
 			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
 			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
 
-			for(int j=0; j<NUM_AXIS; ++j){
-				rt_printf("ID: %d", j);
-			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
-			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
-				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
-			}
+			// for(int j=0; j<NUM_AXIS; ++j){
+			// 	rt_printf("ID: %d", j);
+			// // 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// // 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			// //     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// // 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+			// 	rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
+			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+			// // 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
+			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
+			// 	rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
+			// }
 			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
+			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
 			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
 			
-			indy7_M();
-		    indy7_C();
-		    indy7_G();
+			// indy7_M();
+		    // indy7_C();
+		    // indy7_G();
 		    indy7_J_b();
 		    indy7_J_s();
             indy7_FK();
@@ -903,11 +909,11 @@ void signal_handler(int signum)
 	rt_task_delete(&safety_task);
 	rt_task_delete(&print_task);
 
-	FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
-	FTConfigParamCB[0]=FT_STOP_DEVICE;
-	nrmk_master.writeBuffer(0x70003, FTConfigParam);
-	nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
-	nrmk_master.processRxDomain();
+	// FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
+	// FTConfigParamCB[0]=FT_STOP_DEVICE;
+	// nrmk_master.writeBuffer(0x70003, FTConfigParam);
+	// nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+	// nrmk_master.processRxDomain();
 
 	printf("\n\n");
 	if(signum==SIGINT)
