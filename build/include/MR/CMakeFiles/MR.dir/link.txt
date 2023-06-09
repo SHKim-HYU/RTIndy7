@@ -1,2 +1,0 @@
-/usr/bin/ar qc libMR.a  CMakeFiles/MR.dir/MR_Indy7.cpp.o CMakeFiles/MR.dir/modern_robotics.cpp.o
-/usr/bin/ranlib libMR.a
