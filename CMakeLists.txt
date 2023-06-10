@@ -55,8 +55,8 @@ set(BUILD_SHARED_LIBS TRUE)
 # Build options
 #===============================================================================
 #option(BUILD_DOC "Build Documentation" off)
-option(Dualarm_VERBOSE "Whether print detailed information in CMake process" ON)
-option(Dualarm_SHARED_LIBS "Build shared libraries" ON)
+option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
+option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
 
 #===============================================================================
 # Build type settings
@@ -235,7 +235,7 @@ link_directories(
 #===============================================================================
 # Print build summary
 #===============================================================================
-if(Dualarm_VERBOSE)
+if(RTIndy7_VERBOSE)
     message(STATUS "")
     message(STATUS "[ Build summary ]")
     message(STATUS "CMAKE_GENERATOR  : ${CMAKE_GENERATOR}")
@@ -257,5 +257,5 @@ if(Dualarm_VERBOSE)
     message(STATUS "CMAKE_SOURCE_DIR : ${CMAKE_SOURCE_DIR}")
     message(STATUS "CMAKE_BINARY_DIR : ${CMAKE_BINARY_DIR}")
     message(STATUS "")
-endif(Dualarm_VERBOSE)
+endif(RTIndy7_VERBOSE)
 

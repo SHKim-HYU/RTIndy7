@@ -880,12 +880,12 @@ void print_run(void *arg)
 			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
 			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
 			
-			// indy7_M();
-		    // indy7_C();
-		    // indy7_G();
-		    // indy7_J_b();
-		    // indy7_J_s();
-            // indy7_FK();
+			indy7_M();
+		    indy7_C();
+		    indy7_G();
+		    indy7_J_b();
+		    indy7_J_s();
+            indy7_FK();
 
 			rt_printf("\n");
 		}

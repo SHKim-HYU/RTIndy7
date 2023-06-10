@@ -130,8 +130,8 @@ namespace NRMKHelper
 
 		bool isLimitReached()
 		{
-			if ((_q > _qLimit[0]) || (_q < _qLimit[1]))
-				return true;
+			// if ((_q > _qLimit[0]) || (_q < _qLimit[1]))
+			// 	return true;
 
 			if ((_qdot > _qdotLimit[0]) || (_qdot < _qdotLimit[1]))
 				return true;
