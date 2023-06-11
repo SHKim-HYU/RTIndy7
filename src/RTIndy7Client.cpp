@@ -478,9 +478,6 @@ RT_TASK print_task;
 #endif
 //////////////////////////////////////////////////////////////////
 
-
-
-
 void signal_handler(int signum);
 
 void saveLogData(){}
@@ -672,7 +669,6 @@ void RTIndy7_run(void *arg)
 	 *            start time,
 	 *            period
 	 */
-	
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
 
 	info.des.q = JVec::Zero();
@@ -875,6 +871,7 @@ void print_run(void *arg)
 			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
 			// 	rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
 			// }
+
 			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
 			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
 			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
@@ -887,6 +884,7 @@ void print_run(void *arg)
 		    indy7_J_s();
             indy7_FK();
 #endif
+
 			rt_printf("\n");
 		}
 		else
@@ -965,6 +963,7 @@ int main(int argc, char **argv)
 
 	// For trajectory interpolation
 	initAxes();
+
 	for(int i=0;i<NUM_SLAVES;i++)
 		nrmk_master.setServoOn(i);
 	

@@ -94,7 +94,8 @@
 #define ENC_CORE_200 65536
 #define ENC_CORE_100 65536
 
-// SN: DB45I17E0B007
+// SN: DB45I7E0B007
+
 #define ZERO_POS_1 -389838
 #define ZERO_POS_2 57701
 #define ZERO_POS_3 -199021
@@ -122,8 +123,9 @@
 #define TORQUE_ADC_200 96
 #define TORQUE_ADC_100 96
 
-#define EFFICIENCY 70.0
-
+#define EFFICIENCY 60.0
+#define JOINTNUM 6
+#define CONTROL_FREQ 1000
 
 
 

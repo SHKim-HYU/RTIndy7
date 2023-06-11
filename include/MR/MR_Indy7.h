@@ -1,5 +1,6 @@
 #ifndef MR_INDY7_H
 #define MR_INDY7_H
+
 #include "jsoncpp/json/json.h"
 #include "iostream"
 #include "modern_robotics.h"

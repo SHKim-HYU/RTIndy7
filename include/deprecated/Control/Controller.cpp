@@ -92,6 +92,8 @@ Controller::Controller(robot *pManipulator, int JointNum)
 
 	init_time_vsd=0;
     t_flag=0;
+
+
 }
 
 void Controller::SetPIDGain(double _Kp, double _Kd, double _Ki, int _JointNum){
@@ -198,28 +200,16 @@ void Controller::PD_Gravity(double * q, double * q_dot, double *dq_, double *dq_
         //For Simulation
         if(i==0)
             toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_1*GEAR_RATIO_121*EFFICIENCY)*100.0;
-            //toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*GEAR_RATIO_121)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
 		else if(i==1)
             toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_500)/(double)(TORQUE_CONST_2*GEAR_RATIO_121*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*GEAR_RATIO_121)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
         else if(i==2)
             toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_200)/(double)(TORQUE_CONST_3*GEAR_RATIO_121*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*GEAR_RATIO_121)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
         else if(i==3)
             toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_4*GEAR_RATIO_101*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*GEAR_RATIO_101)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
         else if(i==4)
             toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_5*GEAR_RATIO_101*EFFICIENCY)*100.0;
-            // toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
-        	//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
         else if(i==5)
             toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i))*(double)(TORQUE_ADC_100)/(double)(TORQUE_CONST_6*GEAR_RATIO_101*EFFICIENCY)*100.0;
-        	// toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i)+FrictionCompensation(dqdot[i],i))/(double)(TORQUE_CONST_5*MAX_CURRENT_5*GEAR_RATIO_101)*1000*1.66;
-			//toq[i] = (Kp(i)*e(i) + Kd(i)*e_dev(i)+G(i))/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
         else
             return;
     }
@@ -228,27 +218,7 @@ void Controller::PD_Gravity(double * q, double * q_dot, double *dq_, double *dq_
 
 void Controller::Gravity(double * q, double * q_dot, double * toq)
 {
-    G.resize(ROBOT_DOF,1);
-    G=pManipulator->pDyn->G_Matrix();
 
-    for(int i=0; i<m_Jnum; ++i) {
-
-        //For Simulation
-		if(i==0)
-			toq[i] = G(i)/(double)(TORQUE_CONST_1*MAX_CURRENT_1*HARMONIC_100)*1000*1.66;
-		else if(i==1)
-			toq[i] = G(i)/(double)(TORQUE_CONST_2*MAX_CURRENT_2*HARMONIC_100)*1000*1.66;
-		else if(i==2)
-			toq[i] = G(i)/(double)(TORQUE_CONST_3*MAX_CURRENT_3*HARMONIC_100)*1000*1.66;
-		else if(i==3)
-			toq[i] = G(i)/(double)(TORQUE_CONST_4*MAX_CURRENT_4*HARMONIC_100)*1000*1.66;
-		else if(i==4)
-			toq[i] = G(i)/(double)(TORQUE_CONST_5*MAX_CURRENT_5*HARMONIC_100)*1000*1.66;
-		else if(i==5)
-			toq[i] = G(i)/(double)(TORQUE_CONST_6*MAX_CURRENT_6*HARMONIC_100)*1000*1.66;
-		else
-            return;
-    }
 }
 
     void Controller::Inverse_Dynamics_Control(double *q_, double *q_dot, double *dq_, double *dq_dot, double *dq_ddot, double * toq)
@@ -383,7 +353,7 @@ void Controller::Gravity(double * q, double * q_dot, double * toq)
         x_dot=l_Jaco*qdot;
         M=pManipulator->pDyn->M_Matrix();
         G=pManipulator->pDyn->G_Matrix();
-        /////////////////////////// desired point°¡ ´Ù¸¥ °æ¿ì ½Ã°£ ÃÊ±âÈ­ ÄÚµå
+        /////////////////////////// desired pointï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½Ê±ï¿½È­ ï¿½Úµï¿½
         if(xd_buff(0)!=xd(0) || xd_buff(1)!=xd(1) || xd_buff(2)!=xd(2) || flag==0)
         	init_time_vsd=gt;
 

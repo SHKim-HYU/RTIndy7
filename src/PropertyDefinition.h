@@ -114,7 +114,6 @@
 #define ZERO_POS_5 656537
 #define ZERO_POS_6 -650739
 
-
 #define MAX_CURRENT_1 2.55
 #define MAX_CURRENT_2 2.55
 #define MAX_CURRENT_3 2.83

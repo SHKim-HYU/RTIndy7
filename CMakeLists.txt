@@ -262,4 +262,3 @@ if(RTIndy7_VERBOSE)
     message(STATUS "CMAKE_BINARY_DIR : ${CMAKE_BINARY_DIR}")
     message(STATUS "")
 endif(RTIndy7_VERBOSE)
-

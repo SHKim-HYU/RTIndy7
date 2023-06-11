@@ -257,5 +257,4 @@ void MR_Indy7::MRSetup(){
     cout<<"=================M================="<<endl;
     cout<<this->M<<endl;    
 	cout<<"END MRSetup"<<endl;
-    
 }

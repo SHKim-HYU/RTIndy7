@@ -129,7 +129,6 @@ typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MassMat;
 unsigned int frontIdx = 0, rearIdx = 0;
 /////////////////////////////////////////
 
-
 // EtherCAT System interface object
 NRMK_Master nrmk_master;
 
@@ -275,6 +274,7 @@ typedef struct STATE{
 	Vector6d x_ddot;
 	Vector6f F;
 	Vector6f F_CB;
+
     double s_time;
 }state;
 
@@ -293,6 +293,7 @@ typedef struct JOINT_INFO{
 	STATE act;
 	STATE des;
 	STATE nom;
+
 }JointInfo;
 
 JVec MAX_TORQUES;

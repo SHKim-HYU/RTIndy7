@@ -66,6 +66,12 @@ public:
 
 	int int_flag=0;
     robot *pManipulator;
+
+	MatrixXd Slist;
+	MatrixXd Blist;
+	vector<MatrixXd> Mlist;
+	vector<MatrixXd> Glist;
+	MatrixXd MR_M;	
 private:
 	Matrix<double,ROBOT_DOF,1> Kp;
 	Matrix<double,ROBOT_DOF,1> Kd;
@@ -89,6 +95,7 @@ private:
     VectorXd KiTask;
     MatrixXd G,Gx,M,C;
     MatrixXd _a_jaco, _pinv_jaco,_jaco_dot;
+	
 
     LinJaco l_Jaco, l_Jaco_dot;
     PinvLJaco DPI_l_jaco;
@@ -106,11 +113,12 @@ private:
 	int t_flag;
 	double init_time, init_time_vsd;
 
-
     Matrix<double,ROBOT_DOF,1> f_a, f_b, f_c, f_d, f_e, f_f;
 
 
     double m_KpBase, m_KdBase, m_KiBase;
+
+
 
 };
 
