@@ -1,12 +1,18 @@
 # RTIndy7 Task
 
-This source is built by cross compiler for Ubuntu14.04, 32bits
+This source is based on Ubuntu20.04, Xenomai-3.1.1, IgH EtherCAT Master
 
+
+## Prerequisite
+```
+$ sudo apt-get install libeigen3-dev libpoco-dev libjsoncpp-dev
+```
 
 ## build
 ```
 $ mkdir build && cd build
-$ cmake ../ && make
+$ cmake ../ && make -j($nproc)
 
-# Copy the release file to target PC
-$ sudo scp ./RTIndy7_01 {target_USER}@{target_IP}:{target_Location}
+$ sudo -s
+$ ./RTIndy7_01
+```

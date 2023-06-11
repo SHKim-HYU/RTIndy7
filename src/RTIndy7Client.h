@@ -1,17 +1,12 @@
 /*
- * RTRArmClient.h
+ * RTIndy7Client.h
  *
- *  Created on: 2018. 11. 28.
- *      Author: Administrator
+ *  Created on: 2023. 06. 06.
+ *      Author: Sunhong Kim
  */
 
-#ifndef RTRARMCLIENT_H_
-#define RTRARMCLIENT_H_
-
-//#define USE_MR
-//#define USE_MR_KDL
-//#define USE_NRMK_SDK
-#define USE_CASADI
+#ifndef RTINDY7CLIENT_H_
+#define RTINDY7CLIENT_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,37 +34,24 @@
 #include <rtdk.h>		//The rdtk real-time printing library
 /****************************************************************************/
 
-#include "EcatDataSocket/EcatDataSocket.h"
-#include "EcatDataSocket/EcatControlSocket.h"
-#include "EcatSystem/Ecat_Master.h"
+/////////////////////////////////////////////////////////////
+#ifdef __CASADI__
+#include <dlfcn.h>
+
+typedef long long int casadi_int;
+typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
+#endif
+////////////////////////////////////////////////////////////
+
+
+#include "Ecat_Master.h"
 
 #include "PropertyDefinition.h"
-#include "NRMKsercan_tp.h"
-#include "NRMKhw_tp.h"
 
-#include "Robot/ServoAxis_Core.h"  // For Indy7 interface
+#include "ServoAxis.h"  // For Indy7 interface
 
-// #include "casadi/casadi.hpp"
-
-// TCP-Server Communication
-//#include "TCP/RTTCP.h"
-#include "Poco/Net/TCPServer.h"
-#include "Poco/Net/TCPServerConnection.h"
-#include "Poco/Net/TCPServerConnectionFactory.h"
-#include "Poco/Thread.h"
-
-using Poco::Net::ServerSocket;
-using Poco::Net::StreamSocket;
-using Poco::Net::TCPServerConnection;
-using Poco::Net::TCPServerConnectionFactory;
-using Poco::Net::TCPServer;
-using Poco::Timestamp;
-using Poco::Thread;
-
-const Poco::UInt16 SERVER_PORT = 9911;
 
 using namespace std;
-// using namespace casadi;
 
 
 #define NUM_IO_MODULE 	1
@@ -97,11 +79,6 @@ typedef int8_t INT8;
 
 // For RT thread management
 static int run = 1;
-#define min_time	0
-#define max_time	100000
-#define hist_step	(100)
-unsigned int histdata[hist_step+1];
-unsigned int interval_size=350;
 
 unsigned long periodCycle = 0, worstCycle = 0;
 unsigned long periodCompute = 0, worstCompute = 0;
@@ -132,26 +109,28 @@ typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MassMat;
 ////////// LOGGING BUFFER ///////////////
 #define MAX_BUFF_SIZE 		1000
 
-#define FT_READ_ONCE 0x0A
-#define FT_START_DEVICE 0x0B
-#define FT_STOP_DEVICE 0x0C
-#define FT_SET_OUTPUT_RATE 0x0F
-#define FT_GET_OUTPUT_RATE 0x10
-#define FT_SET_BIAS 0x11
-#define FT_BIAS_SUB 0x01
-#define FT_UNBIAS_SUB 0x00
+#define FT_START_DEVICE 	0x0000000B
+#define FT_STOP_DEVICE 		0x0000000C
+
+#define FT_SET_FILTER_500 	0x00010108
+#define FT_SET_FILTER_300 	0x00020108
+#define FT_SET_FILTER_200 	0x00030108
+#define FT_SET_FILTER_150 	0x00040108
+#define FT_SET_FILTER_100 	0x00050108
+#define FT_SET_FILTER_50 	0x00060108
+#define FT_SET_FILTER_40 	0x00070108
+#define FT_SET_FILTER_30 	0x00080108
+#define FT_SET_FILTER_20 	0x00090108
+#define FT_SET_FILTER_10 	0x000A0108
+
+#define FT_SET_BIAS 		0x00000111
+#define FT_UNSET_BIAS 		0x00000011
 
 unsigned int frontIdx = 0, rearIdx = 0;
 /////////////////////////////////////////
 
-// NRMKDataSocket for plotting axes data in Data Scope
-EcatDataSocket datasocket;
-
 // EtherCAT System interface object
 NRMK_Master nrmk_master;
-
-// NRMK socket for online commands from NRMK EtherLab Configuration Tool
-NRMKHelper::EcatControlSocket<NUM_AXIS> guicontrolsocket;
 
 // When all slaves or drives reach OP mode,
 // system_ready becomes 1.
@@ -294,6 +273,8 @@ typedef struct STATE{
 	Vector6d x_dot;
 	Vector6d x_ddot;
 	Vector6f F;
+	Vector6f F_CB;
+
     double s_time;
 }state;
 
@@ -311,8 +292,10 @@ typedef struct JOINT_INFO{
 
 	STATE act;
 	STATE des;
+	STATE nom;
+
 }JointInfo;
 
 JVec MAX_TORQUES;
 
-#endif /* RTRARMCLIENT_H_ */
+#endif /* RTINDY7CLIENT_H_ */

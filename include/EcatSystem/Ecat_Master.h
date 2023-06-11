@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <memory>
 #include <iostream>
+#include <cstring>
 
 #define FT_START_DEVICE 0x0B
 #define FT_STOP_DEVICE 0x0C

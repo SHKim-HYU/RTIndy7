@@ -103,32 +103,32 @@ MR_Indy7::MR_Indy7() {
         switch(i)
         {
         case 0:
-            Kp(i,i) = 70.0;
-            Kv(i,i) = 55.0;
+            Kp(i,i) = 100.0;
+            Kv(i,i) = 5.0;
             Ki(i,i)=10.0;
             break;
         case 1:
-            Kp(i,i) = 70.0;
-            Kv(i,i) = 55.0;
+            Kp(i,i) = 100.0;
+            Kv(i,i) = 5.0;
             Ki(i,i)=10.0;
             break;
         case 2:
-            Kp(i,i) = 40.0;
-            Kv(i,i) = 30.0;
+            Kp(i,i) = 100.0;
+            Kv(i,i) = 5.0;
             Ki(i,i)=5.0;
             break;
         case 3:
-            Kp(i,i) = 25.0;
-            Kv(i,i) = 15.0;
+            Kp(i,i) = 60.0;
+            Kv(i,i) = 3.0;
             Ki(i,i)=3.0;
             break;
         case 4:
-            Kp(i,i) = 25.0;
-            Kv(i,i) = 15.0;
+            Kp(i,i) = 60.0;
+            Kv(i,i) = 3.0;
             Ki(i,i)=3.0;
             break;
         case 5:
-            Kp(i,i) = 18.0;
+            Kp(i,i) = 60.0;
             Kv(i,i) = 3.0;
             Ki(i,i)=1.0;
             break;
@@ -147,6 +147,42 @@ void MR_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES){
         }
     }
 }
+
+Matrix6xn MR_Indy7::Mmat(JVec q)
+{
+    return mr::MassMatrix(q,this->Mlist, this->Glist, this->Slist);
+}
+
+JVec MR_Indy7::Cvec(JVec q, JVec dq)
+{
+    return mr::VelQuadraticForces(q, dq,this->Mlist, this->Glist, this->Slist);
+}
+
+JVec MR_Indy7::Gvec(JVec q)
+{
+    return mr::GravityForces(q,this->g,this->Mlist, this->Glist, this->Slist) ; 
+}
+
+Jacobian MR_Indy7::J_s(JVec q)
+{
+    return mr::JacobianSpace(this->Slist, q);
+}
+
+Jacobian MR_Indy7::J_b(JVec q)
+{
+    return mr::JacobianBody(this->Blist, q);
+}
+
+SE3 MR_Indy7::T_s(JVec q)
+{
+    return mr::FKinSpace(this->M, this->Slist, q);
+}
+
+SE3 MR_Indy7::T_b(JVec q)
+{
+    return mr::FKinBody(this->M, this->Blist, q);
+}
+
 JVec MR_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des){
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
@@ -221,5 +257,4 @@ void MR_Indy7::MRSetup(){
     cout<<"=================M================="<<endl;
     cout<<this->M<<endl;    
 	cout<<"END MRSetup"<<endl;
-
 }

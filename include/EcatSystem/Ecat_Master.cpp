@@ -272,11 +272,11 @@ void NRMK_Master::_setMasterCycle(UINT32 DCCycle)
 
 int NRMK_Master::_initMaster()
 {
-    if (!_systemVars->_checkLicense())
-    {
-        fprintf(stderr, "License failed!\n");
-        return -1;
-    }
+    // if (!_systemVars->_checkLicense())
+    // {
+    //     fprintf(stderr, "License failed!\n");
+    //     return -1;
+    // }
     
     unsigned int id = 0;
     _systemVars->_master = ecrt_request_master(id);
@@ -300,7 +300,7 @@ int NRMK_Master::_activateMaster()
             fprintf(stderr,"Master Activation failed.\n");\
             return -1;
         }
-
+        
         usleep(1000);
 
 
@@ -316,7 +316,7 @@ int NRMK_Master::_activateMaster()
             return -1;
         }
         
-
+        
         return 0;
     }
 
@@ -634,11 +634,11 @@ void NRMK_Master::processRxDomain()
         
     }
 
-                for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; ++i)
-                {
-                    _systemReady[_NRMK_IO_Module[i].Index] = 1;
-                                        
-                    EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offControlCode, _NRMK_IO_Module[i].InParam.ControlCode);
+    for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; ++i)
+    {
+        _systemReady[_NRMK_IO_Module[i].Index] = 1;
+                            
+        EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offControlCode, _NRMK_IO_Module[i].InParam.ControlCode);
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offDO5V, _NRMK_IO_Module[i].InParam.DO5V);
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offTO, _NRMK_IO_Module[i].InParam.TO);
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offDO, _NRMK_IO_Module[i].InParam.DO);
@@ -659,13 +659,13 @@ void NRMK_Master::processRxDomain()
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offRS485TxD8, _NRMK_IO_Module[i].InParam.RS485TxD8);
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offRS485TxD9, _NRMK_IO_Module[i].InParam.RS485TxD9);
         
-                }
+    }
 
-                for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; ++i)
-                {
-                    _systemReady[_NRMK_Indy_Tool[i].Index] = 1;
-                                        
-                    EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_Indy_Tool[i].offILed, _NRMK_Indy_Tool[i].InParam.ILed);
+    for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; ++i)
+    {
+        _systemReady[_NRMK_Indy_Tool[i].Index] = 1;
+                            
+        EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_Indy_Tool[i].offILed, _NRMK_Indy_Tool[i].InParam.ILed);
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_Indy_Tool[i].offIGripper, _NRMK_Indy_Tool[i].InParam.IGripper);
         EC_WRITE_U32(_systemVars->_rxDomain_pd +  _NRMK_Indy_Tool[i].offFTConfigParam, _NRMK_Indy_Tool[i].InParam.FTConfigParam);
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_Indy_Tool[i].offLEDMode, _NRMK_Indy_Tool[i].InParam.LEDMode);
@@ -673,7 +673,7 @@ void NRMK_Master::processRxDomain()
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_Indy_Tool[i].offLEDR, _NRMK_Indy_Tool[i].InParam.LEDR);
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_Indy_Tool[i].offLEDB, _NRMK_Indy_Tool[i].InParam.LEDB);
         
-                }
+    }
                 
                     
     ecrt_domain_queue(_systemVars->_rxDomain);
@@ -1469,7 +1469,7 @@ void NRMK_Master::writeBuffer(int EntryID, void * const data)
             {
                 _NRMK_Indy_Tool[i].InParam.FTConfigParam = _fTConfigParam[_NRMK_Indy_Tool[i].Index];
             }
-            std::cout<<"FT Initialization done"<<_fTConfigParam[_NRMK_Indy_Tool[0].Index]<<std::endl;
+            // std::cout<<"FT Initialization done"<<_fTConfigParam[_NRMK_Indy_Tool[0].Index]<<std::endl;
 
         }
             break;                      

@@ -1,12 +1,11 @@
+/*
+ * RTIndy7Client.cpp
+ *
+ *  Created on: 2023. 06. 06.
+ *      Author: Sunhong Kim
+ */
 
-// Automatically generated realtime application source file for STEP platforms
-//
-// This file is part of NRMKPlatform SDK, Windows-based development tool and SDK
-// for Real-time Linux Embedded EtherCAT master controller (STEP).
-//
-// Copyright (C) 2013-2015 Neuromeka <http://www.neuromeka.com>
 
-//-system-/////////////////////////////////////////////////////////////////
 #ifndef __XENO__
 #define __XENO__
 #endif
@@ -20,13 +19,464 @@ MR_Indy7 mr_indy7;
 
 // Xenomai RT tasks
 RT_TASK RTIndy7_task;
+RT_TASK safety_task;
 RT_TASK print_task;
-RT_TASK plot_task;
 
 //For Trajectory management
 //Task
 
-int rtsercan_fd  = -1;
+//////////////////////////////////////////////////////////////////
+#ifdef __CASADI__
+	int indy7_G()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_G.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_G.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "generalized_gravity");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"generalized_gravity\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors dlrj
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[6];
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     printf("%g ", output_values[i]);
+	    // }
+	    // printf("\n");
+	    rt_printf("[cs]computation time for \"G\": %lius\n", (end-start)/1000);
+	    
+	    start = rt_timer_read();
+	    mr_indy7.Gvec(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"G\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+	int indy7_M()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_M.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_M.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "M");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"M\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"M\": %lius\n", (end-start)/1000);
+	    
+	    start = rt_timer_read();
+	    mr_indy7.Mmat(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"M\": %lius\n", (end-start)/1000);
+
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
+	int indy7_C()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_C.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_C.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "coriolis");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"C\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_pos[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+	    double input_vel[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_pos[i];
+	    }
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i+6] = &input_vel[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+		rt_printf("[cs]computation time for \"C\": %lius\n", (end-start)/1000);
+	    
+	    start = rt_timer_read();
+	    mr_indy7.Cvec(info.act.q, info.act.q_dot);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"C\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
+	int indy7_FK()
+	{
+	    RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_fk.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_fk.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "fk_T");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"fk_T\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"FK\": %lius\n", (end-start)/1000);
+	    start = rt_timer_read();
+	    mr_indy7.T_s(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"FK\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
+	int indy7_J_b()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_J_b.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_J_b.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "J_b");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"J_b\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
+
+	    start = rt_timer_read();
+	    mr_indy7.J_b(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"J_b\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+	int indy7_J_s()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_J_s.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_J_s.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "J_s");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"J_s\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"J_s\": %lius\n", (end-start)/1000);
+
+	    start = rt_timer_read();
+	    mr_indy7.J_s(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"J_s\": %lius\n", (end-start)/1000);
+
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+#endif
+//////////////////////////////////////////////////////////////////
 
 void signal_handler(int signum);
 
@@ -64,7 +514,7 @@ void trajectory_generation(){
 	    switch(motion)
 	    {
 	    case 1:
-	    	info.q_target(0)=1.5709; 	info.q_target(1)=-0.7071; 	info.q_target(2)=0.7071;
+	    	info.q_target(0)=1.5709; 	info.q_target(1)=-0.4071; 	info.q_target(2)=0.4071;
 	    	info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
 	    	traj_time = 3.0;
 	    	motion++;
@@ -76,7 +526,7 @@ void trajectory_generation(){
 	    	motion++;
 	        break;
 	    case 3:
-	    	info.q_target(0)=-1.5709; 	info.q_target(1)=0.7071; 	info.q_target(2)=-0.7071;
+	    	info.q_target(0)=-1.5709; 	info.q_target(1)=0.4071; 	info.q_target(2)=-0.4071;
 	    	info.q_target(3)=-1.5709; 	info.q_target(4)=-1.5709; 	info.q_target(5)=-1.5709;
 	    	traj_time = 3.0;
 	    	motion++;
@@ -126,31 +576,31 @@ void readEcatData(){
 	nrmk_master.readBuffer(0x60610, ModeOfOperationDisplay);
 	// IO Module
 	// [ToDo] 0x61001~0x610025 addition iteratively
-	// nrmk_master.readBuffer(0x61001, StatusCode);
-	// nrmk_master.readBuffer(0x61002, DI5V);
-	// nrmk_master.readBuffer(0x61003, DI1);
-	// nrmk_master.readBuffer(0x61004, DI2);
-	// nrmk_master.readBuffer(0x61005, AI1);
-	// nrmk_master.readBuffer(0x61006, AI2);
-	// nrmk_master.readBuffer(0x61007, FTRawFxCB);
-	// nrmk_master.readBuffer(0x61008, FTRawFyCB);
-	// nrmk_master.readBuffer(0x61009, FTRawFzCB);
-	// nrmk_master.readBuffer(0x610010, FTRawTxCB);
-	// nrmk_master.readBuffer(0x610011, FTRawTyCB);
-	// nrmk_master.readBuffer(0x610012, FTRawTzCB);
-	// nrmk_master.readBuffer(0x610013, FTOverloadStatusCB);
-	// nrmk_master.readBuffer(0x610014, FTErrorFlagCB);
-	// nrmk_master.readBuffer(0x610015, RS485RxCnt);
-	// nrmk_master.readBuffer(0x610016, RS485RxD0);
-	// nrmk_master.readBuffer(0x610017, RS485RxD1);
-	// nrmk_master.readBuffer(0x610018, RS485RxD2);
-	// nrmk_master.readBuffer(0x610019, RS485RxD3);
-	// nrmk_master.readBuffer(0x610020, RS485RxD4);
-	// nrmk_master.readBuffer(0x610021, RS485RxD5);
-	// nrmk_master.readBuffer(0x610022, RS485RxD6);
-	// nrmk_master.readBuffer(0x610023, RS485RxD7);
-	// nrmk_master.readBuffer(0x610024, RS485RxD8);
-	// nrmk_master.readBuffer(0x610025, RS485RxD9);
+	nrmk_master.readBuffer(0x61001, StatusCode);
+	nrmk_master.readBuffer(0x61002, DI5V);
+	nrmk_master.readBuffer(0x61003, DI1);
+	nrmk_master.readBuffer(0x61004, DI2);
+	nrmk_master.readBuffer(0x61005, AI1);
+	nrmk_master.readBuffer(0x61006, AI2);
+	nrmk_master.readBuffer(0x61007, FTRawFxCB);
+	nrmk_master.readBuffer(0x61008, FTRawFyCB);
+	nrmk_master.readBuffer(0x61009, FTRawFzCB);
+	nrmk_master.readBuffer(0x610010, FTRawTxCB);
+	nrmk_master.readBuffer(0x610011, FTRawTyCB);
+	nrmk_master.readBuffer(0x610012, FTRawTzCB);
+	nrmk_master.readBuffer(0x610013, FTOverloadStatusCB);
+	nrmk_master.readBuffer(0x610014, FTErrorFlagCB);
+	nrmk_master.readBuffer(0x610015, RS485RxCnt);
+	nrmk_master.readBuffer(0x610016, RS485RxD0);
+	nrmk_master.readBuffer(0x610017, RS485RxD1);
+	nrmk_master.readBuffer(0x610018, RS485RxD2);
+	nrmk_master.readBuffer(0x610019, RS485RxD3);
+	nrmk_master.readBuffer(0x610020, RS485RxD4);
+	nrmk_master.readBuffer(0x610021, RS485RxD5);
+	nrmk_master.readBuffer(0x610022, RS485RxD6);
+	nrmk_master.readBuffer(0x610023, RS485RxD7);
+	nrmk_master.readBuffer(0x610024, RS485RxD8);
+	nrmk_master.readBuffer(0x610025, RS485RxD9);
 	// Tool
 	// [ToDo] 0x61001~0x610025 addition iteratively
 	nrmk_master.readBuffer(0x60001, IStatus);
@@ -184,6 +634,14 @@ void readEcatData(){
 	info.act.F(3) = FTRawTx[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 	info.act.F(4) = FTRawTy[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 	info.act.F(5) = FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+
+	info.act.F_CB(0) = FTRawFxCB[0] / force_divider;
+	info.act.F_CB(1) = FTRawFyCB[0] / force_divider;
+	info.act.F_CB(2) = FTRawFzCB[0] / force_divider;
+	info.act.F_CB(3) = FTRawTxCB[0] / torque_divider;
+	info.act.F_CB(4) = FTRawTyCB[0] / torque_divider;
+	info.act.F_CB(5) = FTRawTzCB[0] / torque_divider;
+
 	// info.act.F<<(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
 	//           <<(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS];
 }
@@ -196,8 +654,6 @@ void writeEcatData(){
 	// TO DO: write data to actuators in EtherCAT system interface
 	nrmk_master.writeBuffer(0x60710, TargetTor);
 	// nrmk_master.writeBuffer(0x60600, ModeOfOperation);
-
-
 }
 
 // RTIndy7_task
@@ -219,21 +675,12 @@ void RTIndy7_run(void *arg)
 	info.des.q_dot = JVec::Zero();
 	info.des.q_ddot = JVec::Zero();
 	info.des.F = Vector6f::Zero();
+	info.des.F_CB = Vector6f::Zero();
 
 	JVec eint = JVec::Zero();
 	JVec e = JVec::Zero();
 
-	// Robotus FT Sensor init
-	DeviceConfig DataConfig;
-	DataConfig.u8Param[0] = 0x00;
-	DataConfig.u8Param[1] = 0x00;
-	DataConfig.u8Param[2] = 0x00;
-	DataConfig.u8Param[3] = FT_START_DEVICE;
-	// DataConfig.u32Param = 0x0000000B;
-	FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=DataConfig.u32Param;
-	// std::cout<<DataConfig.u32Param<<std::endl;
-	nrmk_master.writeBuffer(0x70003, FTConfigParam);
-	nrmk_master.processRxDomain();
+	int ft_init_cnt = 0;
 
 	while (run)
 	{
@@ -260,9 +707,10 @@ void RTIndy7_run(void *arg)
 
 			// Calculate Joint controller
 			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
-			//info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
+			// info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
 			e = info.des.q-info.act.q;
 			eint = eint+e*0.001;
+			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
 		
@@ -286,8 +734,39 @@ void RTIndy7_run(void *arg)
 		periodCycle = (unsigned long) endCycle - beginCycle;
 		
 		if (nrmk_master.isSystemReady())
-		{
-			system_ready=1;	//all drives have been done
+		{	
+			if(ft_init_cnt==0)
+			{
+				// Set bias
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_BIAS;
+				FTConfigParamCB[0]=FT_SET_BIAS;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else if(ft_init_cnt==1)
+			{
+				// Set Filter 100Hz
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_FILTER_50;
+				FTConfigParamCB[0]=FT_SET_FILTER_50;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else if(ft_init_cnt==2)
+			{
+				// Start
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_START_DEVICE;
+				FTConfigParamCB[0]=FT_START_DEVICE;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else
+				system_ready=1;	//all drives have been done
 
 			gt+= period;
 			
@@ -297,6 +776,38 @@ void RTIndy7_run(void *arg)
 			if (periodCycle > cycle_ns) overruns++;
 		}
 		rt_task_wait_period(NULL); 	//wait for next cycle
+	}
+}
+
+// Safety task
+void safety_run(void *arg)
+{
+	RTIME now, previous=0;
+	int i;
+	unsigned long itime=0, step;
+	long stick=0;
+	int count=0;
+	unsigned int NumSlaves=0, masterState=0, slaveState[NUM_AXIS]={0,};
+
+	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
+	
+	while (1)
+	{
+		rt_task_wait_period(NULL); //wait for next cycle
+		
+		if (system_ready)
+		{
+			for(int i=0;i<NUM_AXIS;i++)
+			{
+				if(Axis[i].isLimitReached())
+				{
+					for(int i=0;i<NUM_AXIS;i++)
+						nrmk_master.setServoOff(i+NUM_IO_MODULE);
+					rt_printf("Servo Off!!\n");
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -362,8 +873,18 @@ void print_run(void *arg)
 			// }
 
 			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
+			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
 			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
-			
+
+#ifdef __CASADI__
+			indy7_M();
+		    indy7_C();
+		    indy7_G();
+		    indy7_J_b();
+		    indy7_J_s();
+            indy7_FK();
+#endif
+
 			rt_printf("\n");
 		}
 		else
@@ -382,9 +903,16 @@ void print_run(void *arg)
 /****************************************************************************/
 void signal_handler(int signum)
 {
-	rt_task_delete(&plot_task);
 	rt_task_delete(&RTIndy7_task);
+	rt_task_delete(&safety_task);
 	rt_task_delete(&print_task);
+
+	// FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
+	// FTConfigParamCB[0]=FT_STOP_DEVICE;
+	// nrmk_master.writeBuffer(0x70003, FTConfigParam);
+	// nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+	// nrmk_master.processRxDomain();
+
 	printf("\n\n");
 	if(signum==SIGINT)
 		printf("╔════════════════[SIGNAL INPUT SIGINT]═══════════════╗\n");
@@ -435,26 +963,20 @@ int main(int argc, char **argv)
 
 	// For trajectory interpolation
 	initAxes();
-	for(int i=0;i<NUM_IO_MODULE+NUM_AXIS+NUM_TOOL;i++)
+
+	for(int i=0;i<NUM_SLAVES;i++)
 		nrmk_master.setServoOn(i);
 	
-
-	// TO DO: Create data socket server
-	datasocket.setPeriod(period);
-
-	if (datasocket.startServer(SOCK_TCP, NRMK_PORT_DATA))
-		printf("Data server started at IP of : %s on Port: %d\n", datasocket.getAddress(), NRMK_PORT_DATA);
-
-	printf("Waiting for Data Scope to connect...\n");
-	datasocket.waitForConnection(0);
-	
-
 	// RTIndy7_task: create and start
 	printf("Now running rt task ...\n");
-	rt_printf(" sercan_dev_open = %d\n", rtsercan_fd);
 
+	// RTIndy7 control
 	rt_task_create(&RTIndy7_task, "RTIndy7_task", 0, 99, 0);
 	rt_task_start(&RTIndy7_task, &RTIndy7_run, NULL);
+
+	// RTIndy7 safety
+	rt_task_create(&safety_task, "safety_task", 0, 90, 0);
+	rt_task_start(&safety_task, &safety_run, NULL);
 
 	// printing: create and start
 	rt_task_create(&print_task, "printing", 0, 70, 0);
