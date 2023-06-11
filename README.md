@@ -2,6 +2,7 @@
 
 This source is based on Ubuntu20.04, Xenomai-3.1.1, IgH EtherCAT Master
 
+If you installed CasADi library, you can set cmake option using "-DWITH_CASADI=ON"
 
 ## Prerequisite
 ```
