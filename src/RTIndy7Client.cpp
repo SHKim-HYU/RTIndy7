@@ -26,457 +26,456 @@ RT_TASK print_task;
 //Task
 
 //////////////////////////////////////////////////////////////////
-
-int indy7_G()
-{
-	RTIME start, end;
-// Load the shared library
-    void* handle = dlopen("../lib/URDF2CASADI/indy7_G.so", RTLD_LAZY);
-    if (handle == 0) {
-        printf("Cannot open indy7_G.so, error: %s\n", dlerror());
-        return 1;
-    }
-
-    // Reset error
-    dlerror();
-
-    // Function evaluation
-    eval_t eval = (eval_t)dlsym(handle, "generalized_gravity");
-    if (dlerror()) {
-        printf("Failed to retrieve \"generalized_gravity\" function.\n");
-        return 1;
-    }
-
-    // Allocate input/output buffers and work vectors dlrj
-    casadi_int sz_arg = 6;
-    casadi_int sz_res = 6;
-    casadi_int sz_iw = 0;
-    casadi_int sz_w = 0;
-
-    const double* arg[6];
-    double* res[6];
-    casadi_int iw[sz_iw];
-    double w[sz_w];
-
-    // Set input values
-    double input_values[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
-    for (casadi_int i = 0; i < sz_arg; ++i) {
-        arg[i] = &input_values[i];
-    }
-
-    // Set output buffers
-    double output_values[6];
-    for (casadi_int i = 0; i < sz_res; ++i) {
-        res[i] = &output_values[i];
-    }
-
-    // Evaluate the function
-    int mem = 0;  // No thread-local memory management
-    start = rt_timer_read();
-    if (eval(arg, res, iw, w, mem)) {
-        printf("Function evaluation failed.\n");
-        return 1;
-    }
-    end = rt_timer_read();
-
-    // Print the result
-    // printf("Result:\n");
-    // for (casadi_int i = 0; i < sz_res; ++i) {
-    //     printf("%g ", output_values[i]);
-    // }
-    // printf("\n");
-    rt_printf("[cs]computation time for \"G\": %lius\n", (end-start)/1000);
-    
-    start = rt_timer_read();
-    mr_indy7.Gvec(info.act.q);
-    end = rt_timer_read();
-    rt_printf("[mr]computation time for \"G\": %lius\n", (end-start)/1000);
-
-    // Free the handle
-    dlclose(handle);
-
-    return 0;
-}
-
-int indy7_M()
-{
-	RTIME start, end;
-// Load the shared library
-    void* handle = dlopen("../lib/URDF2CASADI/indy7_M.so", RTLD_LAZY);
-    if (handle == 0) {
-        printf("Cannot open indy7_M.so, error: %s\n", dlerror());
-        return 1;
-    }
-
-    // Reset error
-    dlerror();
-
-    // Function evaluation
-    eval_t eval = (eval_t)dlsym(handle, "M");
-    if (dlerror()) {
-        printf("Failed to retrieve \"M\" function.\n");
-        return 1;
-    }
-
-    // Allocate input/output buffers and work vectors
-    casadi_int sz_arg = 6;
-    casadi_int sz_res = 6;
-    casadi_int sz_iw = 0;
-    casadi_int sz_w = 0;
-
-    const double* arg[6];
-    double* res[6];
-    casadi_int iw[sz_iw];
-    double w[sz_w];
-
-    // Set input values
-    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    for (casadi_int i = 0; i < sz_arg; ++i) {
-        arg[i] = &input_values[i];
-    }
-
-    // Set output buffers
-    double output_values[36]; // 6x6 matrix
-    for (casadi_int i = 0; i < sz_res; ++i) {
-        res[i] = &output_values[i];
-    }
-
-    // Evaluate the function
-    int mem = 0;  // No thread-local memory management
-    
-    start = rt_timer_read();
-    if (eval(arg, res, iw, w, mem)) {
-        printf("Function evaluation failed.\n");
-        return 1;
-    }
-    end = rt_timer_read();
-    
-    
-    // Print the result
-    // printf("Result:\n");
-    // for (casadi_int i = 0; i < sz_res; ++i) {
-    //     for (casadi_int j = 0; j < sz_res; ++j) {
-    //         printf("%g ", output_values[i * sz_res + j]);
-    //     }
-    //     printf("\n");
-    // }
-    rt_printf("[cs]computation time for \"M\": %lius\n", (end-start)/1000);
-    
-    start = rt_timer_read();
-    mr_indy7.Mmat(info.act.q);
-    end = rt_timer_read();
-    rt_printf("[mr]computation time for \"M\": %lius\n", (end-start)/1000);
-
-
-    // Free the handle
-    dlclose(handle);
-
-    return 0;
-}
-
-int indy7_C()
-{
-	RTIME start, end;
-// Load the shared library
-    void* handle = dlopen("../lib/URDF2CASADI/indy7_C.so", RTLD_LAZY);
-    if (handle == 0) {
-        printf("Cannot open indy7_C.so, error: %s\n", dlerror());
-        return 1;
-    }
-
-    // Reset error
-    dlerror();
-
-    // Function evaluation
-    eval_t eval = (eval_t)dlsym(handle, "coriolis");
-    if (dlerror()) {
-        printf("Failed to retrieve \"C\" function.\n");
-        return 1;
-    }
-
-    // Allocate input/output buffers and work vectors
-    casadi_int sz_arg = 6;
-    casadi_int sz_res = 6;
-    casadi_int sz_iw = 0;
-    casadi_int sz_w = 0;
-
-    const double* arg[6];
-    double* res[6];
-    casadi_int iw[sz_iw];
-    double w[sz_w];
-
-    // Set input values
-    double input_pos[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
-    double input_vel[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
-
-    for (casadi_int i = 0; i < sz_arg; ++i) {
-        arg[i] = &input_pos[i];
-    }
-    for (casadi_int i = 0; i < sz_arg; ++i) {
-        arg[i+6] = &input_vel[i];
-    }
-
-    // Set output buffers
-    double output_values[36]; // 6x6 matrix
-    for (casadi_int i = 0; i < sz_res; ++i) {
-        res[i] = &output_values[i];
-    }
-
-    // Evaluate the function
-    int mem = 0;  // No thread-local memory management
-    
-    start = rt_timer_read();
-    if (eval(arg, res, iw, w, mem)) {
-        printf("Function evaluation failed.\n");
-        return 1;
-    }
-    end = rt_timer_read();
-
-    // Print the result
-    // printf("Result:\n");
-    // for (casadi_int i = 0; i < sz_res; ++i) {
-    //     for (casadi_int j = 0; j < sz_res; ++j) {
-    //         printf("%g ", output_values[i * sz_res + j]);
-    //     }
-    //     printf("\n");
-    // }
-	rt_printf("[cs]computation time for \"C\": %lius\n", (end-start)/1000);
-    
-    start = rt_timer_read();
-    mr_indy7.Cvec(info.act.q, info.act.q_dot);
-    end = rt_timer_read();
-    rt_printf("[mr]computation time for \"C\": %lius\n", (end-start)/1000);
-
-    // Free the handle
-    dlclose(handle);
-
-    return 0;
-}
-
-int indy7_FK()
-{
-    RTIME start, end;
-// Load the shared library
-    void* handle = dlopen("../lib/URDF2CASADI/indy7_fk.so", RTLD_LAZY);
-    if (handle == 0) {
-        printf("Cannot open indy7_fk.so, error: %s\n", dlerror());
-        return 1;
-    }
-
-    // Reset error
-    dlerror();
-
-    // Function evaluation
-    eval_t eval = (eval_t)dlsym(handle, "fk_T");
-    if (dlerror()) {
-        printf("Failed to retrieve \"fk_T\" function.\n");
-        return 1;
-    }
-
-    // Allocate input/output buffers and work vectors
-    casadi_int sz_arg = 6;
-    casadi_int sz_res = 6;
-    casadi_int sz_iw = 0;
-    casadi_int sz_w = 0;
-
-    const double* arg[6];
-    double* res[6];
-    casadi_int iw[sz_iw];
-    double w[sz_w];
-
-    // Set input values
-    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    for (casadi_int i = 0; i < sz_arg; ++i) {
-        arg[i] = &input_values[i];
-    }
-
-    // Set output buffers
-    double output_values[36]; // 6x6 matrix
-    for (casadi_int i = 0; i < sz_res; ++i) {
-        res[i] = &output_values[i];
-    }
-
-    // Evaluate the function
-    int mem = 0;  // No thread-local memory management
-    
-    start = rt_timer_read();
-    if (eval(arg, res, iw, w, mem)) {
-        printf("Function evaluation failed.\n");
-        return 1;
-    }
-    end = rt_timer_read();
-    
-    
-    // Print the result
-    // printf("Result:\n");
-    // for (casadi_int i = 0; i < sz_res; ++i) {
-    //     for (casadi_int j = 0; j < sz_res; ++j) {
-    //         printf("%g ", output_values[i * sz_res + j]);
-    //     }
-    //     printf("\n");
-    // }
-    rt_printf("[cs]computation time for \"FK\": %lius\n", (end-start)/1000);
-    start = rt_timer_read();
-    mr_indy7.T_s(info.act.q);
-    end = rt_timer_read();
-    rt_printf("[mr]computation time for \"FK\": %lius\n", (end-start)/1000);
-
-    // Free the handle
-    dlclose(handle);
-
-    return 0;
-}
-
-int indy7_J_b()
-{
-	RTIME start, end;
-// Load the shared library
-    void* handle = dlopen("../lib/URDF2CASADI/indy7_J_b.so", RTLD_LAZY);
-    if (handle == 0) {
-        printf("Cannot open indy7_J_b.so, error: %s\n", dlerror());
-        return 1;
-    }
-
-    // Reset error
-    dlerror();
-
-    // Function evaluation
-    eval_t eval = (eval_t)dlsym(handle, "J_b");
-    if (dlerror()) {
-        printf("Failed to retrieve \"J_b\" function.\n");
-        return 1;
-    }
-
-    // Allocate input/output buffers and work vectors
-    casadi_int sz_arg = 6;
-    casadi_int sz_res = 6;
-    casadi_int sz_iw = 0;
-    casadi_int sz_w = 0;
-
-    const double* arg[6];
-    double* res[6];
-    casadi_int iw[sz_iw];
-    double w[sz_w];
-
-    // Set input values
-    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    for (casadi_int i = 0; i < sz_arg; ++i) {
-        arg[i] = &input_values[i];
-    }
-
-    // Set output buffers
-    double output_values[36]; // 6x6 matrix
-    for (casadi_int i = 0; i < sz_res; ++i) {
-        res[i] = &output_values[i];
-    }
-
-    // Evaluate the function
-    int mem = 0;  // No thread-local memory management
-    
-    start = rt_timer_read();
-    if (eval(arg, res, iw, w, mem)) {
-        printf("Function evaluation failed.\n");
-        return 1;
-    }
-    end = rt_timer_read();
-    
-    
-    // Print the result
-    // printf("Result:\n");
-    // for (casadi_int i = 0; i < sz_res; ++i) {
-    //     for (casadi_int j = 0; j < sz_res; ++j) {
-    //         printf("%g ", output_values[i * sz_res + j]);
-    //     }
-    //     printf("\n");
-    // }
-    rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
-
-    start = rt_timer_read();
-    mr_indy7.J_b(info.act.q);
-    end = rt_timer_read();
-    rt_printf("[mr]computation time for \"J_b\": %lius\n", (end-start)/1000);
-
-    // Free the handle
-    dlclose(handle);
-
-    return 0;
-}
-int indy7_J_s()
-{
-	RTIME start, end;
-// Load the shared library
-    void* handle = dlopen("../lib/URDF2CASADI/indy7_J_s.so", RTLD_LAZY);
-    if (handle == 0) {
-        printf("Cannot open indy7_J_s.so, error: %s\n", dlerror());
-        return 1;
-    }
-
-    // Reset error
-    dlerror();
-
-    // Function evaluation
-    eval_t eval = (eval_t)dlsym(handle, "J_s");
-    if (dlerror()) {
-        printf("Failed to retrieve \"J_s\" function.\n");
-        return 1;
-    }
-
-    // Allocate input/output buffers and work vectors
-    casadi_int sz_arg = 6;
-    casadi_int sz_res = 6;
-    casadi_int sz_iw = 0;
-    casadi_int sz_w = 0;
-
-    const double* arg[6];
-    double* res[6];
-    casadi_int iw[sz_iw];
-    double w[sz_w];
-
-    // Set input values
-    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    for (casadi_int i = 0; i < sz_arg; ++i) {
-        arg[i] = &input_values[i];
-    }
-
-    // Set output buffers
-    double output_values[36]; // 6x6 matrix
-    for (casadi_int i = 0; i < sz_res; ++i) {
-        res[i] = &output_values[i];
-    }
-
-    // Evaluate the function
-    int mem = 0;  // No thread-local memory management
-    
-    start = rt_timer_read();
-    if (eval(arg, res, iw, w, mem)) {
-        printf("Function evaluation failed.\n");
-        return 1;
-    }
-    end = rt_timer_read();
-    
-    
-    // Print the result
-    // printf("Result:\n");
-    // for (casadi_int i = 0; i < sz_res; ++i) {
-    //     for (casadi_int j = 0; j < sz_res; ++j) {
-    //         printf("%g ", output_values[i * sz_res + j]);
-    //     }
-    //     printf("\n");
-    // }
-    rt_printf("[cs]computation time for \"J_s\": %lius\n", (end-start)/1000);
-
-    start = rt_timer_read();
-    mr_indy7.J_s(info.act.q);
-    end = rt_timer_read();
-    rt_printf("[mr]computation time for \"J_s\": %lius\n", (end-start)/1000);
-
-
-    // Free the handle
-    dlclose(handle);
-
-    return 0;
-}
-
+#ifdef __CASADI__
+	int indy7_G()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_G.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_G.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "generalized_gravity");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"generalized_gravity\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors dlrj
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[6];
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     printf("%g ", output_values[i]);
+	    // }
+	    // printf("\n");
+	    rt_printf("[cs]computation time for \"G\": %lius\n", (end-start)/1000);
+	    
+	    start = rt_timer_read();
+	    mr_indy7.Gvec(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"G\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+	int indy7_M()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_M.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_M.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "M");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"M\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"M\": %lius\n", (end-start)/1000);
+	    
+	    start = rt_timer_read();
+	    mr_indy7.Mmat(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"M\": %lius\n", (end-start)/1000);
+
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
+	int indy7_C()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_C.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_C.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "coriolis");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"C\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_pos[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+	    double input_vel[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_pos[i];
+	    }
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i+6] = &input_vel[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+		rt_printf("[cs]computation time for \"C\": %lius\n", (end-start)/1000);
+	    
+	    start = rt_timer_read();
+	    mr_indy7.Cvec(info.act.q, info.act.q_dot);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"C\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
+	int indy7_FK()
+	{
+	    RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_fk.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_fk.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "fk_T");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"fk_T\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"FK\": %lius\n", (end-start)/1000);
+	    start = rt_timer_read();
+	    mr_indy7.T_s(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"FK\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
+	int indy7_J_b()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_J_b.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_J_b.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "J_b");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"J_b\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
+
+	    start = rt_timer_read();
+	    mr_indy7.J_b(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"J_b\": %lius\n", (end-start)/1000);
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+	int indy7_J_s()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_J_s.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_J_s.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "J_s");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"J_s\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    // printf("Result:\n");
+	    // for (casadi_int i = 0; i < sz_res; ++i) {
+	    //     for (casadi_int j = 0; j < sz_res; ++j) {
+	    //         printf("%g ", output_values[i * sz_res + j]);
+	    //     }
+	    //     printf("\n");
+	    // }
+	    rt_printf("[cs]computation time for \"J_s\": %lius\n", (end-start)/1000);
+
+	    start = rt_timer_read();
+	    mr_indy7.J_s(info.act.q);
+	    end = rt_timer_read();
+	    rt_printf("[mr]computation time for \"J_s\": %lius\n", (end-start)/1000);
+
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+#endif
 //////////////////////////////////////////////////////////////////
 
 
@@ -879,14 +878,15 @@ void print_run(void *arg)
 			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
 			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
 			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
-			
+
+#ifdef __CASADI__
 			indy7_M();
 		    indy7_C();
 		    indy7_G();
 		    indy7_J_b();
 		    indy7_J_s();
             indy7_FK();
-
+#endif
 			rt_printf("\n");
 		}
 		else

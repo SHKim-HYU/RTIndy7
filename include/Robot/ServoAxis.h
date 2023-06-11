@@ -135,7 +135,8 @@ namespace NRMKHelper
 
 			if ((_qdot > _qdotLimit[0]) || (_qdot < _qdotLimit[1]))
 				return true;
-
+			if ((_tau > _tauLimit[0]) || (_tau < _tauLimit[1]))
+				return true;
 			return false;
 		}
 

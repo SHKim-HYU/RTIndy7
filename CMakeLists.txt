@@ -57,7 +57,7 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
-
+option(WITH_CASADI "import for CasADi function" OFF)
 #===============================================================================
 # Build type settings
 #===============================================================================
@@ -183,33 +183,37 @@ if(Xenomai_FOUND)
 endif(Xenomai_FOUND)
 
 # casadi
-find_package(CASADI REQUIRED)
-if (CASADI_FOUND)
-    MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
-    MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
-    target_include_directories(${PROJECT_NAME} PUBLIC ${CASADI_INCLUDE_DIR})
-    target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
-endif ()
+if(WITH_CASADI)
+    add_compile_definitions(__CASADI__)
+    find_package(CASADI REQUIRED)
+    if (CASADI_FOUND)
+        MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
+        MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
+        target_include_directories(${PROJECT_NAME} PUBLIC ${CASADI_INCLUDE_DIR})
+        target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
+    endif ()
 
-set( INDY7_CASADI
-  indy7_M
-  indy7_Minv
-  indy7_C
-  indy7_G
-  indy7_id
-  indy7_fd
-  indy7_fk
-  indy7_fk_ee
-  indy7_fkrot_ee
-  indy7_J_s
-  indy7_J_b
-  indy7_J_fd
-  indy7_J_id
-)
+    set( INDY7_CASADI
+      indy7_M
+      indy7_Minv
+      indy7_C
+      indy7_G
+      indy7_id
+      indy7_fd
+      indy7_fk
+      indy7_fk_ee
+      indy7_fkrot_ee
+      indy7_J_s
+      indy7_J_b
+      indy7_J_fd
+      indy7_J_id
+    )
 
-link_directories(
-  "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
-)
+    link_directories(
+      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
+    )
+    # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
+endif()
 
 # check if Doxygen is installed
 #find_package(Doxygen)

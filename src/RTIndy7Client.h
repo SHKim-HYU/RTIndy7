@@ -8,29 +8,6 @@
 #ifndef RTINDY7CLIENT_H_
 #define RTINDY7CLIENT_H_
 
-//#define USE_MR
-//#define USE_MR_KDL
-//#define USE_NRMK_SDK
-//#define USE_CASADI
-
-/////////////////////////////////////////////////////////////
-
-#include <stdio.h>
-#include <dlfcn.h>
-#include <iostream>
-#include <chrono>
-
-
-using namespace std;
-using namespace chrono;
-
-typedef long long int casadi_int;
-typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
-
-
-////////////////////////////////////////////////////////////
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -57,16 +34,24 @@ typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
 #include <rtdk.h>		//The rdtk real-time printing library
 /****************************************************************************/
 
+/////////////////////////////////////////////////////////////
+#ifdef __CASADI__
+#include <dlfcn.h>
+
+typedef long long int casadi_int;
+typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
+#endif
+////////////////////////////////////////////////////////////
+
+
 #include "Ecat_Master.h"
 
 #include "PropertyDefinition.h"
 
 #include "ServoAxis.h"  // For Indy7 interface
 
-// #include "casadi/casadi.hpp"
 
 using namespace std;
-// using namespace casadi;
 
 
 #define NUM_IO_MODULE 	1
