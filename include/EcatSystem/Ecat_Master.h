@@ -334,11 +334,12 @@ class NRMK_Master
 		NRMK_Master();
 		~NRMK_Master();
 		
-		int init(INT8 ModeOp, UINT32 CycleNano, int idx_offset)
+		int init(INT8 ModeOp, UINT32 CycleNano)
 		{
 			_setMasterCycle(CycleNano);
 				
 			// TODO: Initiate Axes' parameters here
+			
 			for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
 			{
 				_systemReady[_NRMK_Drive[i].Index]=0;
@@ -346,13 +347,14 @@ class NRMK_Master
 				// TODO: Init params here. 
 				_NRMK_Drive[i].InParam.Modesofoperation = ModeOp;															
 			}
-
+			
 		for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
 			{
 				_systemReady[_NRMK_IO_Module[i].Index]=0;
 				_servoOn[_NRMK_IO_Module[i].Index] = false;
 				// TODO: Init params here. 														
 			}
+		
 
 		for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
 			{
@@ -361,7 +363,7 @@ class NRMK_Master
 				// TODO: Init params here. 														
 			}
 			
-			
+					
 			if (_initMaster() < 0)
 			{
 				printf("Init Master Failed.\n");
@@ -374,19 +376,20 @@ class NRMK_Master
 				deinit();
 				return -1;
 			}
-
+					
 			if (_initDomains() == -1)
 			{
 				printf("Init Domains Failed.\n");
 				deinit();
 				return -1;
 			}
-
+					
 			if (_activateMaster() == -1)
 			{
 				deinit();
 				return -1;
 			}
+					
 
 			return 0;
 		}

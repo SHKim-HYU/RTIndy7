@@ -10,12 +10,12 @@
 #define __XENO__
 #endif
 #include "RTIndy7Client.h"
-#include "MR_Indy7.h"
+//#include "//mr_indy7.h"
 
 
 JointInfo info;
 
-MR_Indy7 mr_indy7;
+////mr_indy7 //mr_indy7;
 
 // Xenomai RT tasks
 RT_TASK RTIndy7_task;
@@ -88,7 +88,7 @@ RT_TASK print_task;
 	    rt_printf("[cs]computation time for \"G\": %lius\n", (end-start)/1000);
 	    
 	    start = rt_timer_read();
-	    mr_indy7.Gvec(info.act.q);
+	    ////mr_indy7.Gvec(info.act.q);
 	    end = rt_timer_read();
 	    rt_printf("[mr]computation time for \"G\": %lius\n", (end-start)/1000);
 
@@ -162,7 +162,7 @@ RT_TASK print_task;
 	    rt_printf("[cs]computation time for \"M\": %lius\n", (end-start)/1000);
 	    
 	    start = rt_timer_read();
-	    mr_indy7.Mmat(info.act.q);
+	    ////mr_indy7.Mmat(info.act.q);
 	    end = rt_timer_read();
 	    rt_printf("[mr]computation time for \"M\": %lius\n", (end-start)/1000);
 
@@ -242,7 +242,7 @@ RT_TASK print_task;
 		rt_printf("[cs]computation time for \"C\": %lius\n", (end-start)/1000);
 	    
 	    start = rt_timer_read();
-	    mr_indy7.Cvec(info.act.q, info.act.q_dot);
+	    //mr_indy7.Cvec(info.act.q, info.act.q_dot);
 	    end = rt_timer_read();
 	    rt_printf("[mr]computation time for \"C\": %lius\n", (end-start)/1000);
 
@@ -316,7 +316,7 @@ RT_TASK print_task;
 	    // }
 	    rt_printf("[cs]computation time for \"FK\": %lius\n", (end-start)/1000);
 	    start = rt_timer_read();
-	    mr_indy7.T_s(info.act.q);
+	    //mr_indy7.T_s(info.act.q);
 	    end = rt_timer_read();
 	    rt_printf("[mr]computation time for \"FK\": %lius\n", (end-start)/1000);
 
@@ -391,7 +391,7 @@ RT_TASK print_task;
 	    rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
 
 	    start = rt_timer_read();
-	    mr_indy7.J_b(info.act.q);
+	    //mr_indy7.J_b(info.act.q);
 	    end = rt_timer_read();
 	    rt_printf("[mr]computation time for \"J_b\": %lius\n", (end-start)/1000);
 
@@ -465,7 +465,7 @@ RT_TASK print_task;
 	    rt_printf("[cs]computation time for \"J_s\": %lius\n", (end-start)/1000);
 
 	    start = rt_timer_read();
-	    mr_indy7.J_s(info.act.q);
+	    //mr_indy7.J_s(info.act.q);
 	    end = rt_timer_read();
 	    rt_printf("[mr]computation time for \"J_s\": %lius\n", (end-start)/1000);
 
@@ -715,24 +715,25 @@ void RTIndy7_run(void *arg)
 			compute();	
 
 			// Calculate Joint controller
-			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
-			// info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
+			//info.des.tau = //mr_indy7.Gravity( info.act.q ); // calcTorque
+			// info.des.tau = //mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
 			e = info.des.q-info.act.q;
 			eint = eint+e*0.001;
-			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
-			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
-			// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
+			// info.des.tau = //mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			// info.des.tau = //mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			// //mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
 		
 		}
 		else
 		{
-			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
+			
+			//info.des.tau = //mr_indy7.Gravity( info.act.q ); // calcTorque
 		}
 		periodCompute  = (unsigned long) rt_timer_read() - beginCompute;
 		
 		// Write data in EtherCAT Buffer
 		beginWritebuf = rt_timer_read();
-		writeEcatData();
+		//writeEcatData();
 		periodBuffer += (unsigned long) rt_timer_read() - beginWritebuf;
 
 		beginWrite = rt_timer_read();
@@ -943,6 +944,7 @@ void signal_handler(int signum)
 int main(int argc, char **argv)
 {
 	// Perform auto-init of rt_print buffers if the task doesn't do so
+	std::cout<<"start<"<<std::endl;
     rt_print_auto_init(1);
 
 	signal(SIGINT, signal_handler);
@@ -957,22 +959,20 @@ int main(int argc, char **argv)
 	cycle_ns = 1000000; // nanosecond -> 1kHz
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
-	mr_indy7=MR_Indy7();
-	mr_indy7.MRSetup();
-	MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
-
+	////mr_indy7=//mr_indy7();
+//	//mr_indy7.MRSetup();
+	//MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
 	// For CST (cyclic synchronous torque) control
 	if (nrmk_master.init(OP_MODE_CYCLIC_SYNC_TORQUE, cycle_ns) == -1)
 	{
 		printf("System Initialization Failed\n");
 	    return 0;
 	}
+	std::cout<<"start<2"<<std::endl;	
 	for (int i = 0; i < NUM_AXIS; ++i)
 		ModeOfOperation[i] = OP_MODE_CYCLIC_SYNC_TORQUE;
-
 	// For trajectory interpolation
 	initAxes();
-
 	for(int i=0;i<NUM_SLAVES;i++)
 		nrmk_master.setServoOn(i);
 	

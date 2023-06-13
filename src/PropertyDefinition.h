@@ -113,6 +113,13 @@
 #define ZERO_POS_4 9040
 #define ZERO_POS_5 656537
 #define ZERO_POS_6 -650739
+#define ZERO_POS_7 -389838
+#define ZERO_POS_8 57701
+#define ZERO_POS_9 -199021
+#define ZERO_POS_10 9040
+#define ZERO_POS_11 656537
+#define ZERO_POS_12 -650739
+
 
 #define MAX_CURRENT_1 2.55
 #define MAX_CURRENT_2 2.55
@@ -138,7 +145,7 @@
 #define TORQUE_ADC_100 96
 
 #define EFFICIENCY 60.0
-#define JOINTNUM 6
+#define JOINTNUM 12
 #define CONTROL_FREQ 1000
 
 #define MAX_TORQUE_1 431.97
