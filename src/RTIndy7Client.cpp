@@ -696,7 +696,16 @@ void RTIndy7_run(void *arg)
 		beginReadbuf = rt_timer_read();
 		readEcatData();	
 		periodBuffer += (unsigned long) rt_timer_read() - beginReadbuf;
-	
+		for(int i=0;i<NUM_AXIS;i++)
+			{
+				if(Axis[i].isLimitReached())
+				{
+					for(int i=0;i<NUM_AXIS;i++)
+						nrmk_master.setServoOff(i+NUM_IO_MODULE);
+					rt_printf("Servo Off!!\n");
+					break;
+				}
+			}
 		beginCompute = rt_timer_read();
 		if(system_ready){
 			// Trajectory Generation
@@ -859,18 +868,18 @@ void print_run(void *arg)
 			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
 			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
 
-			// for(int j=0; j<NUM_AXIS; ++j){
-			// 	rt_printf("ID: %d", j);
-			// // 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-			// // 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			// //     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-			// // 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-			// 	rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
-			// // 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
-			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-			// 	rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
-			// }
+			for(int j=0; j<NUM_AXIS; ++j){
+				rt_printf("ID: %d", j);
+			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
+				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
+				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
+			}
 
 			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
 			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));

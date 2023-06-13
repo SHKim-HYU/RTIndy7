@@ -36,9 +36,9 @@ class NRMK_Master
 	public:
 		enum
 		{
-			NUM_NRMK_DRIVE_AXES = 6,
-				NUM_NRMK_IO_MODULE_AXES = 1,
-				NUM_NRMK_INDY_TOOL_AXES = 1,
+			NUM_NRMK_DRIVE_AXES = 12,
+				NUM_NRMK_IO_MODULE_AXES = 2,
+				NUM_NRMK_INDY_TOOL_AXES = 2,
 		};
 		enum
 			{
@@ -334,7 +334,7 @@ class NRMK_Master
 		NRMK_Master();
 		~NRMK_Master();
 		
-		int init(INT8 ModeOp, UINT32 CycleNano)
+		int init(INT8 ModeOp, UINT32 CycleNano, int idx_offset)
 		{
 			_setMasterCycle(CycleNano);
 				
