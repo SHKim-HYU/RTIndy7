@@ -11,6 +11,7 @@
 #endif
 #include "RTIndy7Client.h"
 #include "MR_Indy7.h"
+#include "MR_DualArm.h"
 //
 JointInfo right_info;
 JointInfo left_info;
@@ -20,15 +21,19 @@ JointInfo info;
 MR_Indy7 mr_indy7;
 MR_Indy7 mr_indy7_l;
 MR_Indy7 mr_indy7_r;
+MR_DualArm mr_dualarm;
 
 // Xenomai RT tasks
 RT_TASK RTIndy7_task;
 RT_TASK safety_task;
 RT_TASK print_task;
-
+int traj_flag = 0;
 //For Trajectory management
 //Task
-
+JVec eint_r;
+JVec e_r ;
+JVec eint_l ;
+JVec e_l ;
 //////////////////////////////////////////////////////////////////
 #ifdef __CASADI__
 	int indy7_G()
@@ -511,6 +516,30 @@ int initAxes()
 	return 1;
 }
 /****************************************************************************/
+void setTraj(JVec& q0_r, JVec& qT_r,JVec& q0_l, JVec& qT_l, double Tf, double gt, int method){
+	if(traj_flag ==0){
+		q0_r = right_info.act.q;
+		q0_l = left_info.act.q;
+		traj_flag =1;
+	}
+	if(traj_flag == 1){
+		if (gt <=Tf){
+			JointTrajectory(q0_r, qT_r, Tf, gt , method , right_info.des.q, right_info.des.q_dot, right_info.des.q_ddot) ;
+			JointTrajectory(q0_l, qT_l, Tf, gt , method , left_info.des.q, left_info.des.q_dot, left_info.des.q_ddot) ;
+		}else if(gt > Tf){
+			//q0_r = right_info.act.q;
+			//q0_l = left_info.act.q;
+			right_info.des.q = qT_r;
+			left_info.des.q = qT_l;
+			right_info.des.q_dot = JVec::Zero();
+			left_info.des.q_dot = JVec::Zero();
+			right_info.des.q_ddot = JVec::Zero();
+			left_info.des.q_ddot = JVec::Zero();
+		}
+		
+	}
+
+}
 void trajectory_generation(){
 	/////////////Trajectory for Joint Space//////////////
     if(!Axis[0].trajInitialized())
@@ -716,12 +745,20 @@ void RTIndy7_run(void *arg)
 	left_info.des.q = JVec::Zero();
 	left_info.des.q_dot = JVec::Zero();
 	left_info.des.q_ddot = JVec::Zero();
-	JVec eint_r = JVec::Zero();
-	JVec e_r = JVec::Zero();
-	JVec eint_l = JVec::Zero();
-	JVec e_l = JVec::Zero();
+	 eint_r = JVec::Zero();
+	 e_r = JVec::Zero();
+	 eint_l = JVec::Zero();
+	 e_l = JVec::Zero();
 	int ft_init_cnt = 0;
 
+
+	JVec q0_r =right_info.act.q;
+	JVec q0_l =left_info.act.q;
+
+	JVec qT_r =JVec::Zero();
+	qT_r<<0.14558084, 0.813371 ,1.3075236,0.614656,1.03065,-0.0693011;
+	JVec qT_l =JVec::Zero();
+	qT_l<<-0.14558084, -0.813371 ,-1.3075236,-0.614656,-1.03065,0.0693011;
 	while (run)
 	{
 		beginCycle = rt_timer_read();
@@ -750,7 +787,7 @@ void RTIndy7_run(void *arg)
 		if(system_ready){
 			// Trajectory Generation
 			//trajectory_generation();
-
+			setTraj(q0_r, qT_r, q0_l, qT_l,5, gt, 5);
 			//[ToDo] Add MPC Function 
 			compute();	
 
@@ -935,11 +972,13 @@ void print_run(void *arg)
 			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
 			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
 			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				rt_printf("\t ActPos: %lf, ActVel: %lf \n",right_info.act.q(j), right_info.act.q_dot(j));
+				//rt_printf("\t ActPos: %lf, ActVel: %lf \n",right_info.act.q(j), right_info.act.q_dot(j));
+				rt_printf("\t error: %lf \n",e_r(j));
+				
 				//rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
 			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf , \n", right_info.des.tau(j), right_info.act.tau(j));
+				//rt_printf("\t TarTor: %f, ActTor: %lf , \n", right_info.des.tau(j), right_info.act.tau(j));
 				//rt_printf("\t mr_indy7_r.g %f %f %f ",mr_indy7_r.g(0),mr_indy7_r.g(1),mr_indy7_r.g(2));
 			}
 			for(int j=0; j<6; ++j){
@@ -948,11 +987,12 @@ void print_run(void *arg)
 			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
 			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
 			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				rt_printf("\t ActPos: %lf, ActVel: %lf \n",left_info.act.q(j), left_info.act.q_dot(j));
+				//rt_printf("\t ActPos: %lf, ActVel: %lf \n",left_info.act.q(j), left_info.act.q_dot(j));
 				//rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
 			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf,  \n", left_info.des.tau(j), left_info.act.tau(j));
+				rt_printf("\t error: %lf \n",e_l(j));
+				//rt_printf("\t TarTor: %f, ActTor: %lf,  \n", left_info.des.tau(j), left_info.act.tau(j));
 				//rt_printf("\t mr_indy7_l.g %f %f %f ",mr_indy7_l.g(0),mr_indy7_l.g(1),mr_indy7_l.g(2));
 			}			
 			//rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
@@ -1040,6 +1080,9 @@ int main(int argc, char **argv)
 	mr_indy7_r=MR_Indy7();
     mr_indy7_r.MRSetup();
 	mr_indy7_r.g<<0,8.487,-4.9;
+
+	mr_dualarm = MR_DualArm();
+	mr_dualarm.MRSetup();
 	//MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
 	// For CST (cyclic synchronous torque) control
 	if (nrmk_master.init(OP_MODE_CYCLIC_SYNC_TORQUE, cycle_ns) == -1)
