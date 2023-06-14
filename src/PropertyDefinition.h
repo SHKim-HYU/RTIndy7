@@ -105,20 +105,20 @@
 // #define ZERO_POS_5 -1058082
 // #define ZERO_POS_6 -88988
 
-// SN: DB45I17E0B007
+// SN: DUAL ARM
 
-#define ZERO_POS_1 -389838
-#define ZERO_POS_2 57701
-#define ZERO_POS_3 -199021
-#define ZERO_POS_4 9040
-#define ZERO_POS_5 656537
-#define ZERO_POS_6 -650739
-#define ZERO_POS_7 -389838
-#define ZERO_POS_8 57701
-#define ZERO_POS_9 -199021
-#define ZERO_POS_10 9040
-#define ZERO_POS_11 656537
-#define ZERO_POS_12 -650739
+#define ZERO_POS_1 60787
+#define ZERO_POS_2 17522
+#define ZERO_POS_3 74922
+#define ZERO_POS_4 161092
+#define ZERO_POS_5 58936
+#define ZERO_POS_6 14358
+#define ZERO_POS_7 448713
+#define ZERO_POS_8 -25024
+#define ZERO_POS_9 138717
+#define ZERO_POS_10 -713436
+#define ZERO_POS_11 -1058082
+#define ZERO_POS_12 -88988
 
 
 #define MAX_CURRENT_1 2.55
@@ -145,7 +145,7 @@
 #define TORQUE_ADC_100 96
 
 #define EFFICIENCY 60.0
-#define JOINTNUM 12
+#define JOINTNUM 6
 #define CONTROL_FREQ 1000
 
 #define MAX_TORQUE_1 431.97

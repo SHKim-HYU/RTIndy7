@@ -41,21 +41,21 @@ public:
     mr::Matrix6d Hinf_K_gamma;
 
     void MRSetup();
-    JVec Gravity( JVec q);
+    mr::JVec Gravity( JVec q);
 
-    Matrix6xn Mmat(JVec q);
-    JVec Cvec(JVec q, JVec dq);
-    JVec Gvec(JVec q);
-    Jacobian J_s(JVec q);
-    Jacobian J_b(JVec q);
+    mr::Matrix6xn Mmat(JVec q);
+    mr::JVec Cvec(JVec q, JVec dq);
+    mr::JVec Gvec(JVec q);
+    mr::Jacobian J_s(JVec q);
+    mr::Jacobian J_b(JVec q);
 
-    SE3 T_s(JVec q);
-    SE3 T_b(JVec q);
+    mr::SE3 T_s(JVec q);
+    mr::SE3 T_b(JVec q);
 
-    JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
+    mr::JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
     void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
-    JVec ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint);
-    JVec HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec& eint);
+    mr::JVec ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint);
+    mr::JVec HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec& eint);
 };
 
 #endif // MR_INDY7_H

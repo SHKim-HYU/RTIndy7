@@ -10,12 +10,16 @@
 #define __XENO__
 #endif
 #include "RTIndy7Client.h"
-//#include "//mr_indy7.h"
-
-
+#include "MR_Indy7.h"
+//
+JointInfo right_info;
+JointInfo left_info;
 JointInfo info;
 
-////mr_indy7 //mr_indy7;
+
+MR_Indy7 mr_indy7;
+MR_Indy7 mr_indy7_l;
+MR_Indy7 mr_indy7_r;
 
 // Xenomai RT tasks
 RT_TASK RTIndy7_task;
@@ -614,19 +618,34 @@ void readEcatData(){
 	nrmk_master.readBuffer(0x60009, FTOverloadStatus);
 	nrmk_master.readBuffer(0x600010, FTErrorFlag);	
 	
-	for(int i=0; i<NUM_AXIS;i++)
+	int i_ = 0;
+	for(int i=RIGHT_AXIS_START_NUM; i<=RIGHT_AXIS_END_NUM;i++)
 	{
-		Axis[i].setCurrentPosInCnt(ActualPos[i+NUM_IO_MODULE]);
-		Axis[i].setCurrentVelInCnt(ActualVel[i+NUM_IO_MODULE]);
-		Axis[i].setCurrentTorInCnt(ActualTor[i+NUM_IO_MODULE]);
+		Axis[i_].setCurrentPosInCnt(ActualPos[i]);
+		Axis[i_].setCurrentVelInCnt(ActualVel[i]);
+		Axis[i_].setCurrentTorInCnt(ActualTor[i]);
 		
-		Axis[i].setCurrentTime(gt);
+		Axis[i_].setCurrentTime(gt);
 
-		info.act.q(i) = Axis[i].getCurrPosInRad();
-		info.act.q_dot(i) = Axis[i].getCurrVelInRad();
-		info.act.tau(i) = Axis[i].getCurrTorInNm();
+		right_info.act.q(i_) = Axis[i_].getCurrPosInRad();
+		right_info.act.q_dot(i_) = Axis[i_].getCurrVelInRad();
+		right_info.act.tau(i_) = Axis[i_].getCurrTorInNm();
+
+		i_++;
 	}
+	for(int i=LEFT_AXIS_START_NUM; i<=LEFT_AXIS_END_NUM;i++)
+	{
+		Axis[i_].setCurrentPosInCnt(ActualPos[i]);
+		Axis[i_].setCurrentVelInCnt(ActualVel[i]);
+		Axis[i_].setCurrentTorInCnt(ActualTor[i]);
+		
+		Axis[i_].setCurrentTime(gt);
 
+		left_info.act.q(i_-6) = Axis[i_].getCurrPosInRad();
+		left_info.act.q_dot(i_-6) = Axis[i_].getCurrVelInRad();
+		left_info.act.tau(i_-6) = Axis[i_].getCurrTorInNm();
+		i_++;
+	}
 	// Update RFT data
 	info.act.F(0) = FTRawFx[NUM_IO_MODULE+NUM_AXIS] / force_divider;
 	info.act.F(1) = FTRawFy[NUM_IO_MODULE+NUM_AXIS] / force_divider;
@@ -647,9 +666,23 @@ void readEcatData(){
 }
 
 void writeEcatData(){
-	for(int i=0;i<NUM_AXIS;i++){
-		Axis[i].setDesTorInNm(info.des.tau(i));
-		TargetTor[i+NUM_IO_MODULE]=Axis[i].getDesTorInCnt();
+	// for(int i=0;i<NUM_AXIS;i++){
+	// 	Axis[i].setDesTorInNm(info.des.tau(i));
+	// 	TargetTor[i+NUM_IO_MODULE]=Axis[i].getDesTorInCnt();
+	// }
+
+	int i_=0;
+	for(int i=RIGHT_AXIS_START_NUM; i<=RIGHT_AXIS_END_NUM;i++)
+	{
+		Axis[i_].setDesTorInNm(right_info.des.tau(i_));
+		TargetTor[i]=Axis[i_].getDesTorInCnt();
+		i_++;
+	}
+	for(int i=LEFT_AXIS_START_NUM; i<=LEFT_AXIS_END_NUM;i++)
+	{
+		Axis[i_].setDesTorInNm(left_info.des.tau(i_-6));
+		TargetTor[i]=Axis[i_].getDesTorInCnt();
+		i_++;
 	}
 	// TO DO: write data to actuators in EtherCAT system interface
 	nrmk_master.writeBuffer(0x60710, TargetTor);
@@ -677,9 +710,16 @@ void RTIndy7_run(void *arg)
 	info.des.F = Vector6f::Zero();
 	info.des.F_CB = Vector6f::Zero();
 
-	JVec eint = JVec::Zero();
-	JVec e = JVec::Zero();
-
+	right_info.des.q = JVec::Zero();
+	right_info.des.q_dot = JVec::Zero();
+	right_info.des.q_ddot = JVec::Zero();
+	left_info.des.q = JVec::Zero();
+	left_info.des.q_dot = JVec::Zero();
+	left_info.des.q_ddot = JVec::Zero();
+	JVec eint_r = JVec::Zero();
+	JVec e_r = JVec::Zero();
+	JVec eint_l = JVec::Zero();
+	JVec e_l = JVec::Zero();
 	int ft_init_cnt = 0;
 
 	while (run)
@@ -709,7 +749,7 @@ void RTIndy7_run(void *arg)
 		beginCompute = rt_timer_read();
 		if(system_ready){
 			// Trajectory Generation
-			trajectory_generation();
+			//trajectory_generation();
 
 			//[ToDo] Add MPC Function 
 			compute();	
@@ -717,10 +757,18 @@ void RTIndy7_run(void *arg)
 			// Calculate Joint controller
 			//info.des.tau = //mr_indy7.Gravity( info.act.q ); // calcTorque
 			// info.des.tau = //mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
-			e = info.des.q-info.act.q;
-			eint = eint+e*0.001;
-			// info.des.tau = //mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
-			// info.des.tau = //mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			e_r = right_info.des.q-right_info.act.q;
+			eint_r = eint_r+e_r*0.001;
+			e_l = left_info.des.q-left_info.act.q;
+			eint_l = eint_l+e_l*0.001;
+			
+			JVec tauVec_r =mr_indy7_r.Gravity( right_info.act.q );
+			JVec tauVec_l =mr_indy7_l.Gravity( left_info.act.q );
+			
+			//right_info.des.tau = tauVec_r;
+			//left_info.des.tau = tauVec_l;
+			right_info.des.tau = mr_indy7_r.HinfControl( right_info.act.q , right_info.act.q_dot, right_info.des.q, right_info.des.q_dot,right_info.des.q_ddot,eint_r);
+			left_info.des.tau = mr_indy7_l.HinfControl( left_info.act.q , left_info.act.q_dot, left_info.des.q, left_info.des.q_dot,left_info.des.q_ddot,eint_l);
 			// //mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
 		
 		}
@@ -733,7 +781,7 @@ void RTIndy7_run(void *arg)
 		
 		// Write data in EtherCAT Buffer
 		beginWritebuf = rt_timer_read();
-		//writeEcatData();
+		writeEcatData();
 		periodBuffer += (unsigned long) rt_timer_read() - beginWritebuf;
 
 		beginWrite = rt_timer_read();
@@ -869,22 +917,47 @@ void print_run(void *arg)
 			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
 			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
 
-			for(int j=0; j<NUM_AXIS; ++j){
-				rt_printf("ID: %d", j);
+			// for(int j=0; j<NUM_AXIS; ++j){
+			// 	rt_printf("ID: %d", j);
+			// // 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// // 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			// //     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// // 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+			// 	rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
+			// 	//rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+			// // 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
+			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
+			// 	rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
+			// }
+			for(int j=0; j<6; ++j){
+				rt_printf("R-ID: %d", j);
 			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
 			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
 			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
 			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+				rt_printf("\t ActPos: %lf, ActVel: %lf \n",right_info.act.q(j), right_info.act.q_dot(j));
+				//rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
 			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
+				rt_printf("\t TarTor: %f, ActTor: %lf , \n", right_info.des.tau(j), right_info.act.tau(j));
+				//rt_printf("\t mr_indy7_r.g %f %f %f ",mr_indy7_r.g(0),mr_indy7_r.g(1),mr_indy7_r.g(2));
 			}
-
-			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
-			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
-			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
+			for(int j=0; j<6; ++j){
+				rt_printf("L-ID: %d", j);
+			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+				rt_printf("\t ActPos: %lf, ActVel: %lf \n",left_info.act.q(j), left_info.act.q_dot(j));
+				//rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
+				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
+				rt_printf("\t TarTor: %f, ActTor: %lf,  \n", left_info.des.tau(j), left_info.act.tau(j));
+				//rt_printf("\t mr_indy7_l.g %f %f %f ",mr_indy7_l.g(0),mr_indy7_l.g(1),mr_indy7_l.g(2));
+			}			
+			//rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
+			//rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
+			//rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
 
 #ifdef __CASADI__
 			indy7_M();
@@ -959,8 +1032,14 @@ int main(int argc, char **argv)
 	cycle_ns = 1000000; // nanosecond -> 1kHz
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
-	////mr_indy7=//mr_indy7();
-//	//mr_indy7.MRSetup();
+	mr_indy7=MR_Indy7();
+    mr_indy7.MRSetup();
+	mr_indy7_l=MR_Indy7();
+    mr_indy7_l.MRSetup();
+	mr_indy7_l.g<<0,8.487,-4.9;
+	mr_indy7_r=MR_Indy7();
+    mr_indy7_r.MRSetup();
+	mr_indy7_r.g<<0,8.487,-4.9;
 	//MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
 	// For CST (cyclic synchronous torque) control
 	if (nrmk_master.init(OP_MODE_CYCLIC_SYNC_TORQUE, cycle_ns) == -1)

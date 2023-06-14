@@ -57,6 +57,10 @@ using namespace std;
 #define NUM_IO_MODULE 	2
 #define NUM_TOOL 		2
 #define NUM_AXIS		12
+#define RIGHT_AXIS_START_NUM 1
+#define RIGHT_AXIS_END_NUM 6
+#define LEFT_AXIS_START_NUM 9
+#define LEFT_AXIS_END_NUM 14
 #define NUM_SLAVES (NUM_IO_MODULE+NUM_AXIS+NUM_TOOL)		//Modify this number to indicate the actual number of motor on the network
 
 #ifndef PI
