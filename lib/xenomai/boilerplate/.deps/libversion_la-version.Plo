@@ -1,0 +1,8 @@
+libversion_la-version.lo: version.c /usr/include/stdc-predef.h \
+ ../../include/xeno_config.h git-stamp.h
+
+/usr/include/stdc-predef.h:
+
+../../include/xeno_config.h:
+
+git-stamp.h:
