@@ -38,7 +38,9 @@ if(Xenomai_FOUND)
         set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS ${Xenomai_${comp_lists}_DEFINITIONS})
     endforeach(comp_lists ${Xenomai_SKINS})
 endif(Xenomai_FOUND)
-
+if(Xenomai_NOT_FOUND)
+	message("MCMCMCMC")
+endif(Xenomai_NOT_FOUND)
 install(TARGETS ${PROJECT_MANE}
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib

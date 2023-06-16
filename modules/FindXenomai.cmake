@@ -157,6 +157,7 @@ if(DEFINED ENV{SDKTARGETSYSROOT} AND NOT DEFINED Xenomai_ROOT_DIR)
 endif()
 # set the search paths
 set( Xenomai_SEARCH_PATH /usr/xenomai $ENV{XENOMAI_ROOT_DIR} ${Xenomai_ROOT_DIR} )
+#set( Xenomai_SEARCH_PATH /home/sung/workspace/RTIndy7/xenomai $ENV{XENOMAI_ROOT_DIR} ${Xenomai_ROOT_DIR} )
 
 # searching kernel headers
 # Find kernel headers
@@ -245,5 +246,5 @@ if(Xenomai_XENO_CONFIG)
             VERSION_VAR Xenomai_VERSION
             HANDLE_COMPONENTS )
 else(Xenomai_XENO_CONFIG)
-    message(FATAL_ERROR "This program needs xeno-config")
+    #message(FATAL_ERROR "This program needs xeno-config")
 endif()

@@ -51,6 +51,7 @@ set(CMAKE_DEBUG_POSTFIX "d")
 set(CMAKE_MODULE_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 set(BUILD_SHARED_LIBS TRUE)
 
+set(Etherlab_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/etherlab)
 #===============================================================================
 # Build options
 #===============================================================================
@@ -124,7 +125,6 @@ set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 
 include_directories(${PROJ_INSTALL_INCLUDE_DIR})
 include_directories(
-        ${KERNELHEADERS_DIR}
         # ${CTRL_HEADERS_DIR}
         # ${KDL_HEADERS_DIR}
         ${ECAT_HEADERS_DIR}
@@ -132,6 +132,7 @@ include_directories(
         ${MR_HEADERS_DIR}
         ${NET_HEADERS_DIR}
         ${ROBOT_HEADERS_DIR}
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/xenomai"
 )
 
 # add_subdirectory(include/Control)
@@ -166,6 +167,7 @@ list(APPEND INCLUDE_DIRS_FOR_DYNAMIC_VIEW ${jSONCPP_INCLUDE_DIRS})
 find_package(Xenomai 3.1.1 REQUIRED NATIVE)
 message(STATUS "Xenomai found with theses skins: ${Xenomai_SKINS}")
 if(Xenomai_FOUND)
+
     target_include_directories(${PROJECT_NAME} PUBLIC ${KERNELHEADERS_DIR})
     foreach(comp_lists ${Xenomai_FOUND_COMP})
         #message(STATUS "Xenomai ${comp_lists} includes : ${Xenomai_${comp_lists}_INCLUDE_DIRS}" )
@@ -181,6 +183,27 @@ if(Xenomai_FOUND)
         set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS ${Xenomai_${comp_lists}_DEFINITIONS})
     endforeach(comp_lists ${Xenomai_SKINS})
 endif(Xenomai_FOUND)
+if(NOT Xenomai_FOUND)
+message(STATUS "Xenomai NOT FOUND")
+link_directories(
+	"${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai")
+set( LIBS
+	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libxenomai.so"
+ 	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libnative.so"
+	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libanalogy.so"
+	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libpthread_rt.so"	  	 
+	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libpsos.so"	  
+ 	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/librtdm.so"	  	 	 
+ 	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libvrtx.so"	  	 	 
+ 	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libvxworks.so"	  	 	 
+ 	 "${CMAKE_CURRENT_SOURCE_DIR}/lib/xenomai/libuitron.so"	  	 	  	  	  	 
+)
+target_link_libraries(${PROJECT_NAME}
+        # sub::CTRL
+        # sub::KDL
+	${LIBS}
+)
+endif(NOT Xenomai_FOUND)
 
 # casadi
 if(WITH_CASADI)
