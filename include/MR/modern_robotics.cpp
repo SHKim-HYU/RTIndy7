@@ -372,9 +372,11 @@ namespace mr {
 		Vector3d linear(Vb(3), Vb(4), Vb(5));
 
 		bool err = (angular.norm() > eomg || linear.norm() > ev);
-		Jacobian Jb;
+		Jacobian Jb_;
+		Eigen::MatrixXd Jb;
 		while (err && i < maxiterations) {
-			Jb = JacobianBody(Blist, thetalist);
+			Jb_ = JacobianBody(Blist, thetalist);
+			Jb = Eigen::Map<Eigen::MatrixXd>(Jb_.data(),6,JOINTNUM);
 			thetalist += Jb.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Vb);
 			i += 1;
 			// iterate
@@ -398,9 +400,11 @@ namespace mr {
 		Vector3d linear(Vs(3), Vs(4), Vs(5));
 
 		bool err = (angular.norm() > eomg || linear.norm() > ev);
-		Jacobian Js;
+		Jacobian Js_;
+		Eigen::MatrixXd Js;
 		while (err && i < maxiterations) {
-			Js = JacobianSpace(Slist, thetalist);
+			Js_ = JacobianSpace(Slist, thetalist);
+			Js = Eigen::Map<Eigen::MatrixXd>(Js_.data(),6,JOINTNUM);
 			thetalist += Js.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Vs);
 			i += 1;
 			// iterate
@@ -439,10 +443,8 @@ namespace mr {
 		for (int i = 0; i < n; i++) {
 			Mi = Mi * Mlist[i];
 			Ai.col(i) = Adjoint(TransInv(Mi))*Slist.col(i);
-
 			AdTi[i] = Adjoint(MatrixExp6(VecTose3(Ai.col(i)*-thetalist(i)))
 			          * TransInv(Mlist[i]));
-
 			Vi.col(i+1) = AdTi[i] * Vi.col(i) + Ai.col(i) * dthetalist(i);
 			Vdi.col(i+1) = AdTi[i] * Vdi.col(i) + Ai.col(i) * ddthetalist(i)
 						   + ad(Vi.col(i+1)) * Ai.col(i) * dthetalist(i); // this index is different from book!
@@ -515,6 +517,35 @@ namespace mr {
 		ddq_des =ddst * qT  - ddst*q0;
 		
 	}
+	void JointTrajectoryList(const JVec q0, const JVec qT, double Tf,int N, int method , 
+	 vector<JVec>& q_des_list,  vector<JVec>& dq_des_list,   vector<JVec>& ddq_des_list) {
+		
+		double timegap = Tf /(N/1.0 - 1.0);
+		for (int i = 0;i<N;i++){
+			double st;
+			double dst;
+			double ddst;
+			double t= timegap*(i-1);
+			if (method == 3){
+				st = CubicTimeScaling(Tf, t);
+				dst = CubicTimeScalingDot(Tf, t);
+				ddst = CubicTimeScalingDdot(Tf, t);
+			}
+				
+			else{
+				st = QuinticTimeScaling(Tf, t);
+				dst = QuinticTimeScalingDot(Tf, t);
+				ddst = QuinticTimeScalingDdot(Tf, t);
+			}
+				
+			JVec q_des =st * qT + (1 - st)*q0;
+			JVec dq_des =dst * qT  - dst*q0;
+			JVec ddq_des =ddst * qT  - ddst*q0;
+			q_des_list.push_back(q_des);
+			dq_des_list.push_back(dq_des);
+			ddq_des_list.push_back(ddq_des);
+		}
+	}	
 	JVec EndEffectorForces(const JVec& thetalist, const Vector6d& Ftip,const vector<SE3>& Mlist, const vector<Matrix6d>& Glist, const ScrewList& Slist) {
 		int n = JOINTNUM;
 		JVec dummylist = JVec::Zero();
@@ -884,7 +915,7 @@ namespace mr {
 		return vecq;
 	}
 
-	void FkinBody(SE3 M,ScrewList Blist, const JVec& q ,const JVec& dq, SE3 &T, Jacobian &Jb,Jacobian& dJb){
+	void FKinBody(const SE3& M,const ScrewList& Blist, const JVec& q ,const JVec& dq, SE3 &T, Jacobian &Jb,Jacobian& dJb){
 		Jb = Blist;
 		dJb = Jacobian::Zero();
 		T = SE3::Identity();
@@ -897,7 +928,9 @@ namespace mr {
 				dJb.col(i) = ad(Jbi)*prev_dJidt;
 				prev_dJidt += Jbi*dq(i);			   
 		}
+		T_*= MatrixExp6(VecTose3(-1 * Blist.col(0) * q(0)));
 		T = M*TransInv(T_);
+		
 	}
 	Matrix3d skew3(const Vector3d& xi) {
 		Matrix3d skew;
@@ -1183,9 +1216,9 @@ void LieScrewTrajectory(const SE3 X0,const SE3 XT,const Vector6d V0,const Vector
 		Vector6d V = dexp6(-lambda_t)*dlambda_t;
 		Vector6d dV = dexp6(-lambda_t)*ddlambda_t+ddexp6(-lambda_t,-dlambda_t)*dlambda_t;
 		SE3 T = X0*MatrixExp6(VecTose3(flip(lambda_t)));
-		Xd_list.at(i) = T;
-		Vd_list.at(i) = flip(V);
-		dVd_list.at(i) = flip(dV);
+		Xd_list.push_back(T);
+		Vd_list.push_back(flip(V));
+		dVd_list.push_back(flip(dV));
 	}
 	
 	

@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <signal.h>
 #include <unistd.h>
+#include <assert.h>
 #include <sys/mman.h>
 #include <string.h>		// string function definitions
 #include <fcntl.h>		// File control definitions
@@ -42,6 +43,17 @@ typedef long long int casadi_int;
 typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
 #endif
 ////////////////////////////////////////////////////////////
+#ifdef __BULLET__
+#include "SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h"
+#include "SharedMemory/PhysicsClientSharedMemory_C_API.h"
+#include "SharedMemory/b3RobotSimulatorClientAPI_InternalData.h"
+#include "Bullet3Common/b3Vector3.h"
+#include "Bullet3Common/b3Quaternion.h"
+#include "Bullet3Common/b3HashMap.h"
+#include "Utils/b3Clock.h"
+#include "bullet_Indy7.h"
+#endif
+////////////////////////////////////////////////////////////
 
 
 #include "Ecat_Master.h"
@@ -49,7 +61,7 @@ typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
 #include "PropertyDefinition.h"
 
 #include "ServoAxis.h"  // For Indy7 interface
-
+#include "MR_Indy7.h"
 
 using namespace std;
 
@@ -85,6 +97,9 @@ unsigned long periodCompute = 0, worstCompute = 0;
 unsigned long periodEcat = 0, worstEcat = 0;
 unsigned long periodBuffer = 0, worstBuffer = 0;
 unsigned int overruns = 0;
+#ifdef __BULLET__
+unsigned long periodBullet = 0;
+#endif
 
 
 typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
@@ -141,7 +156,7 @@ double gt=0;
 
 // Trajectory parameers
 double traj_time=0;
-int motion=1;
+int motion=2;
 
 /// TO DO: This is user-code.
 double sine_amp=50000, f=0.2, period;
@@ -297,5 +312,13 @@ typedef struct JOINT_INFO{
 }JointInfo;
 
 JVec MAX_TORQUES;
+
+#ifdef __BULLET__
+extern const int CONTROL_RATE;
+const int CONTROL_RATE = 1000;
+const b3Scalar FIXED_TIMESTEP = 1.0 / ((b3Scalar)CONTROL_RATE);
+int statusType, ret;
+b3SharedMemoryCommandHandle b3command;
+#endif
 
 #endif /* RTINDY7CLIENT_H_ */

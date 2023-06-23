@@ -58,6 +58,8 @@ set(BUILD_SHARED_LIBS TRUE)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
 option(WITH_CASADI "import for CasADi function" OFF)
+option(WITH_BULLET "with Bullet Simulation" OFF)
+option(WITH_RAISIM "with RAISIM Simulation" OFF)
 #===============================================================================
 # Build type settings
 #===============================================================================
@@ -121,6 +123,8 @@ set(INTP_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Interpolator)
 set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
 set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
 set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
+#[ToDo] will be replaced from the installed bullet3 SDK
+# set(BULLET_HEADER_DIR ${PROJECT_SOURCE_DIR}/include/bullet3) 
 
 include_directories(${PROJ_INSTALL_INCLUDE_DIR})
 include_directories(
@@ -132,6 +136,8 @@ include_directories(
         ${MR_HEADERS_DIR}
         ${NET_HEADERS_DIR}
         ${ROBOT_HEADERS_DIR}
+        #[ToDo] will be replaced from the installed bullet3 SDK
+        # ${BULLET_HEADER_DIR}
 )
 
 # add_subdirectory(include/Control)
@@ -141,6 +147,8 @@ add_subdirectory(include/Interpolator)
 add_subdirectory(include/MR)
 add_subdirectory(include/Network)
 add_subdirectory(include/Robot)
+#[ToDo] will be replaced from the installed bullet3 SDK
+# add_subdirectory(include/bullet3)
 
 add_executable(${PROJECT_NAME}
         src/RTIndy7Client.cpp
@@ -154,6 +162,7 @@ target_link_libraries(${PROJECT_NAME}
         sub::MR
         sub::NETWORK
         sub::Robot
+        # sub::bullet3
         dl
 )
 
@@ -213,6 +222,24 @@ if(WITH_CASADI)
       "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
     )
     # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
+endif()
+
+# Bullet
+if(WITH_BULLET)
+    add_compile_definitions(__BULLET__)
+    find_package(Bullet REQUIRED)
+    if (BULLET_FOUND)
+        MESSAGE(STATUS "BULLET_INCLUDE_DIRS = ${BULLET_INCLUDE_DIRS}")
+        MESSAGE(STATUS "BULLET_LIBRARIES = ${BULLET_LIBRARIES}")
+        target_include_directories(${PROJECT_NAME} PUBLIC ${BULLET_INCLUDE_DIRS})
+        target_link_libraries(${PROJECT_NAME} ${BULLET_LIBRARIES})
+    endif()
+endif()
+
+# RAISIM
+if(WITH_RAISIM)
+    add_compile_definitions(__RAISIM__)
+    find_package(Raisim REQUIRED)
 endif()
 
 # check if Doxygen is installed

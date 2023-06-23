@@ -10,7 +10,6 @@
 #define __XENO__
 #endif
 #include "RTIndy7Client.h"
-#include "MR_Indy7.h"
 
 
 JointInfo info;
@@ -19,8 +18,15 @@ MR_Indy7 mr_indy7;
 
 // Xenomai RT tasks
 RT_TASK RTIndy7_task;
+#ifdef __BULLET__
+RT_TASK bullet_task;
+#endif
 RT_TASK safety_task;
 RT_TASK print_task;
+
+// #ifdef __BULLET__
+// b3RobotSimulatorClientAPI* sim;
+// #endif
 
 //For Trajectory management
 //Task
@@ -523,7 +529,7 @@ void trajectory_generation(){
 	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
 	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
 	    	traj_time = 3.0;
-	    	motion++;
+	    	// motion++;
 	        break;
 	    case 3:
 	    	info.q_target(0)=-1.5709; 	info.q_target(1)=0.4071; 	info.q_target(2)=-0.4071;
@@ -713,7 +719,6 @@ void RTIndy7_run(void *arg)
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
-		
 		}
 		else
 		{
@@ -778,6 +783,67 @@ void RTIndy7_run(void *arg)
 		rt_task_wait_period(NULL); 	//wait for next cycle
 	}
 }
+
+#ifdef __BULLET__
+// Bullet task
+void bullet_run(void *arg)
+{
+	RTIME now, previous=0;
+	RTIME beginCycle, endCycle;
+	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
+
+	//---------BULLET SETUP START------------------
+	b3PhysicsClientHandle b3client = b3ConnectSharedMemory(SHARED_MEMORY_KEY);
+	if (!b3CanSubmitCommand(b3client))
+	{
+		printf("Not connected, start a PyBullet server first, using python -m pybullet_utils.runServer\n");
+		exit(0);
+	}
+	b3RobotSimulatorClientAPI_InternalData b3data;
+	b3data.m_physicsClientHandle = b3client;
+	b3data.m_guiHelper = 0;
+	b3RobotSimulatorClientAPI_NoDirect b3sim;
+	b3sim.setInternalData(&b3data);
+	b3sim.setTimeStep(FIXED_TIMESTEP);
+	b3sim.resetSimulation();
+	b3sim.setGravity( btVector3(0 , 0 ,-9.8));
+
+	int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
+	// int robotId = b3sim.loadURDF("quadruped/minitaur.urdf");
+	b3sim.setRealTimeSimulation(false);
+	Bullet_Indy7 bt3indy7(&b3sim,robotId);
+	// indy7.reset_q(&b3sim, info.act.q);
+
+	info.nom.q = JVec::Zero();
+	info.nom.q_dot = JVec::Zero();
+	info.nom.q_ddot = JVec::Zero();
+	info.nom.F = Vector6f::Zero();
+	info.nom.F_CB = Vector6f::Zero();
+
+	rt_printf("Start Bullet\n");
+	while (1)
+	{
+		beginCycle = rt_timer_read();
+		if(!system_ready)
+		{
+			bt3indy7.reset_q(&b3sim, info.act.q);
+		}
+		else
+		{
+			info.nom.q = bt3indy7.get_q(&b3sim);
+			info.nom.q_dot = bt3indy7.get_qdot(&b3sim);
+			// bt3indy7.reset_q(&b3sim, info.act.q);
+			bt3indy7.set_torque(&b3sim,  info.des.tau , MAX_TORQUES);
+			b3sim.stepSimulation();
+
+			// rt_printf("q_sim: %f, %f, %f, %f, %f, %f, \n", info.nom.q(0),info.nom.q(1),info.nom.q(2),info.nom.q(3),info.nom.q(4),info.nom.q(5));
+		}
+		endCycle = rt_timer_read();
+		periodBullet = (unsigned long) endCycle - beginCycle;
+		rt_task_wait_period(NULL); //wait for next cycle
+	}
+}
+#endif
 
 // Safety task
 void safety_run(void *arg)
@@ -858,19 +924,22 @@ void print_run(void *arg)
 			
 			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
 			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
-
-			// for(int j=0; j<NUM_AXIS; ++j){
-			// 	rt_printf("ID: %d", j);
-			// // 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-			// // 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			// //     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-			// // 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-			// 	rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
-			// // 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
-			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-			// 	rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
-			// }
+			#ifdef __BULLET__
+			rt_printf("Bullet_dt=%lius\n",periodBullet/1000);
+			#endif
+			for(int j=0; j<NUM_AXIS; ++j){
+				rt_printf("ID: %d", j);
+			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
+				rt_printf("\t NomPos: %lf, NomVel: %lf \n",info.nom.q(j), info.nom.q_dot(j));
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
+				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
+				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
+			}
 
 			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
 			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
@@ -904,6 +973,7 @@ void print_run(void *arg)
 void signal_handler(int signum)
 {
 	rt_task_delete(&RTIndy7_task);
+	rt_task_delete(&bullet_task);
 	rt_task_delete(&safety_task);
 	rt_task_delete(&print_task);
 
@@ -973,6 +1043,12 @@ int main(int argc, char **argv)
 	// RTIndy7 control
 	rt_task_create(&RTIndy7_task, "RTIndy7_task", 0, 99, 0);
 	rt_task_start(&RTIndy7_task, &RTIndy7_run, NULL);
+
+#ifdef __BULLET__
+	// RTIndy7 simulation
+	rt_task_create(&bullet_task, "bullet_task", 0, 95, 0);
+	rt_task_start(&bullet_task, &bullet_run, NULL);
+#endif
 
 	// RTIndy7 safety
 	rt_task_create(&safety_task, "safety_task", 0, 90, 0);

@@ -1,8 +1,12 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <cmath>
 #include <vector>
+#include <iostream>
+#include <chrono>
 #define JOINTNUM 6
+
 namespace mr {
     typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
     typedef Eigen::Matrix<double, 4, 4> SE3;
@@ -50,27 +54,27 @@ namespace mr {
     SE3 FKinBody(const SE3& M, const ScrewList& Blist, const JVec& thetaList);
     SO3 RotInv(const SO3& rotMatrix) ;
     bool IKinBody(const ScrewList& Blist, const SE3& M, const SE3& T,
-		JVec& thetalist, double eomg, double ev);
+        JVec& thetalist, double eomg, double ev);
     bool IKinSpace(const ScrewList& Slist, const SE3& M, const SE3& T,
-		JVec& thetalist, double eomg, double ev);
+        JVec& thetalist, double eomg, double ev);
     JVec InverseDynamics(const JVec& thetalist, const JVec& dthetalist, const JVec& ddthetalist,
-									const Vector3d& g, const Vector6d& Ftip, const std::vector<SE3>& Mlist,
-									const std::vector<Matrix6d>& Glist, const ScrewList& Slist);
+                                    const Vector3d& g, const Vector6d& Ftip, const std::vector<SE3>& Mlist,
+                                    const std::vector<Matrix6d>& Glist, const ScrewList& Slist);
     JVec GravityForces(const JVec& thetalist, const Vector3d& g,
-									const std::vector<SE3>& Mlist, const std::vector<Matrix6d>& Glist, const ScrewList& Slist) ;                                    
+                                    const std::vector<SE3>& Mlist, const std::vector<Matrix6d>& Glist, const ScrewList& Slist) ;                                    
     MassMat MassMatrix(const JVec& thetalist, const std::vector<SE3>& Mlist, const std::vector<Matrix6d>& Glist, const ScrewList& Slist) ;                                    
     JVec VelQuadraticForces(const JVec& thetalist, const JVec& dthetalist,const std::vector<SE3>& Mlist, const std::vector<Matrix6d>& Glist, const ScrewList& Slist) ;
     JVec EndEffectorForces(const JVec& thetalist, const Vector6d& Ftip,const std::vector<SE3>& Mlist, const std::vector<Matrix6d>& Glist, const ScrewList& Slist);
-	JVec ForwardDynamics(const JVec& thetalist, const JVec& dthetalist, const JVec& taulist,
-									const Vector3d& g, const Vector6d& Ftip, const std::vector<SE3>& Mlist,
-									const std::vector<Matrix6d>& Glist, const ScrewList& Slist);    
+    JVec ForwardDynamics(const JVec& thetalist, const JVec& dthetalist, const JVec& taulist,
+                                    const Vector3d& g, const Vector6d& Ftip, const std::vector<SE3>& Mlist,
+                                    const std::vector<Matrix6d>& Glist, const ScrewList& Slist);    
     void EulerStep(JVec& thetalist, JVec& dthetalist, const JVec& ddthetalist, double dt);                                    
     JVec ComputedTorque(const JVec& thetalist, const JVec& dthetalist, const JVec& eint,
-		const Vector3d& g, const std::vector<SE3>& Mlist, const std::vector<Matrix6d>& Glist,
-		const ScrewList& Slist, const JVec& thetalistd, const JVec& dthetalistd, const JVec& ddthetalistd,
-		double Kp, double Ki, double Kd);
+        const Vector3d& g, const std::vector<SE3>& Mlist, const std::vector<Matrix6d>& Glist,
+        const ScrewList& Slist, const JVec& thetalistd, const JVec& dthetalistd, const JVec& ddthetalistd,
+        double Kp, double Ki, double Kd);
     double CubicTimeScaling(double Tf, double t);
-	  double CubicTimeScalingDot(double Tf, double t);   
+      double CubicTimeScalingDot(double Tf, double t);   
     double CubicTimeScalingDdot(double Tf, double t);   
     double QuinticTimeScaling(double Tf, double t);
     double QuinticTimeScalingDot(double Tf, double t);
@@ -96,13 +100,14 @@ namespace mr {
     Jacobian dJacobianBody(const Jacobian& Jb ,const JVec& dthetaList);
     Jacobian dAnalyticJacobianBody(const SE3&M, const ScrewList& Blist, const JVec& thetaList ,const JVec& dthetaList);
     void JointTrajectory(const JVec q0, const JVec qT, double Tf, double t , int method , JVec& q_des, JVec& dq_des, JVec& ddq_des);
+    void JointTrajectoryList(const JVec q0, const JVec qT, double Tf,int N, int method ,  std::vector<JVec>& q_des_list,  std::vector<JVec>& dq_des_list,  std::vector<JVec>& ddq_des_list);
     double wrapTo2PI(double angle);
     double wrapToPI(double angle);
     JVec wrapTo2PI(const JVec& angles);
     JVec wrapToPI(const JVec& angles);
     Vector6d CartesianError(const SE3& X,const SE3& Xd );
     pinvJacobian pinvAnalyticJacobianBody(SE3 M, const ScrewList& Blist, const JVec& thetaList) ;
-  void FkinBody(SE3 M,ScrewList Blist, const JVec& q ,const JVec& dq, SE3 &T, Jacobian &Jb,Jacobian& dJb);
+  void FKinBody(const SE3& M,const ScrewList& Blist, const JVec& q ,const JVec& dq, SE3 &T, Jacobian &Jb,Jacobian& dJb);
   Matrix3d dexp3(const Vector3d& xi);
   Matrix3d dlog3(const Vector3d& xi);
   Matrix3d skew3(const Vector3d& xi) ;
