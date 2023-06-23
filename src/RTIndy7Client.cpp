@@ -806,7 +806,7 @@ void bullet_run(void *arg)
 	b3sim.setInternalData(&b3data);
 	b3sim.setTimeStep(FIXED_TIMESTEP);
 	b3sim.resetSimulation();
-	b3sim.setGravity( btVector3(0 , 0 ,-9.8));
+	b3sim.setGravity( btVector3(0 , 0 ,0));
 
 	int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
 	// int robotId = b3sim.loadURDF("quadruped/minitaur.urdf");
