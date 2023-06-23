@@ -1,0 +1,2 @@
+/usr/bin/ar qc libRobot.a  CMakeFiles/Robot.dir/bullet_Indy7.cpp.o
+/usr/bin/ranlib libRobot.a
