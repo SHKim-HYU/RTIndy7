@@ -59,7 +59,6 @@ all: include/Interpolator/all
 all: include/MR/all
 all: include/Network/all
 all: include/Robot/all
-all: include/bullet3/all
 
 .PHONY : all
 
@@ -69,7 +68,6 @@ preinstall: include/Interpolator/preinstall
 preinstall: include/MR/preinstall
 preinstall: include/Network/preinstall
 preinstall: include/Robot/preinstall
-preinstall: include/bullet3/preinstall
 
 .PHONY : preinstall
 
@@ -80,7 +78,6 @@ clean: include/Interpolator/clean
 clean: include/MR/clean
 clean: include/Network/clean
 clean: include/Robot/clean
-clean: include/bullet3/clean
 
 .PHONY : clean
 
@@ -175,24 +172,6 @@ include/Robot/clean: include/Robot/CMakeFiles/Robot.dir/clean
 .PHONY : include/Robot/clean
 
 #=============================================================================
-# Directory level rules for directory include/bullet3
-
-# Recursive "all" directory target.
-include/bullet3/all: include/bullet3/CMakeFiles/pybullet_cpp.dir/all
-
-.PHONY : include/bullet3/all
-
-# Recursive "preinstall" directory target.
-include/bullet3/preinstall:
-
-.PHONY : include/bullet3/preinstall
-
-# Recursive "clean" directory target.
-include/bullet3/clean: include/bullet3/CMakeFiles/pybullet_cpp.dir/clean
-
-.PHONY : include/bullet3/clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/RTIndy7_01.dir
 
 # All Build rule for target.
@@ -201,7 +180,6 @@ CMakeFiles/RTIndy7_01.dir/all: include/Interpolator/CMakeFiles/Interpolator.dir/
 CMakeFiles/RTIndy7_01.dir/all: include/MR/CMakeFiles/MR.dir/all
 CMakeFiles/RTIndy7_01.dir/all: include/Network/CMakeFiles/Network.dir/all
 CMakeFiles/RTIndy7_01.dir/all: include/Robot/CMakeFiles/Robot.dir/all
-CMakeFiles/RTIndy7_01.dir/all: include/bullet3/CMakeFiles/pybullet_cpp.dir/all
 	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/depend
 	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=9,10 "Built target RTIndy7_01"
@@ -209,7 +187,7 @@ CMakeFiles/RTIndy7_01.dir/all: include/bullet3/CMakeFiles/pybullet_cpp.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/RTIndy7_01.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 49
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 12
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/RTIndy7_01.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 0
 .PHONY : CMakeFiles/RTIndy7_01.dir/rule
@@ -360,40 +338,12 @@ include/Robot/CMakeFiles/Robot.dir/clean:
 .PHONY : include/Robot/CMakeFiles/Robot.dir/clean
 
 #=============================================================================
-# Target rules for target include/bullet3/CMakeFiles/pybullet_cpp.dir
-
-# All Build rule for target.
-include/bullet3/CMakeFiles/pybullet_cpp.dir/all:
-	$(MAKE) -f include/bullet3/CMakeFiles/pybullet_cpp.dir/build.make include/bullet3/CMakeFiles/pybullet_cpp.dir/depend
-	$(MAKE) -f include/bullet3/CMakeFiles/pybullet_cpp.dir/build.make include/bullet3/CMakeFiles/pybullet_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49 "Built target pybullet_cpp"
-.PHONY : include/bullet3/CMakeFiles/pybullet_cpp.dir/all
-
-# Build rule for subdir invocation for target.
-include/bullet3/CMakeFiles/pybullet_cpp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 37
-	$(MAKE) -f CMakeFiles/Makefile2 include/bullet3/CMakeFiles/pybullet_cpp.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 0
-.PHONY : include/bullet3/CMakeFiles/pybullet_cpp.dir/rule
-
-# Convenience name for target.
-pybullet_cpp: include/bullet3/CMakeFiles/pybullet_cpp.dir/rule
-
-.PHONY : pybullet_cpp
-
-# clean rule for target.
-include/bullet3/CMakeFiles/pybullet_cpp.dir/clean:
-	$(MAKE) -f include/bullet3/CMakeFiles/pybullet_cpp.dir/build.make include/bullet3/CMakeFiles/pybullet_cpp.dir/clean
-.PHONY : include/bullet3/CMakeFiles/pybullet_cpp.dir/clean
-
-#=============================================================================
 # Special targets to cleanup operation of make.
 
 # Special rule to run CMake to check the build system integrity.
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -P /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles/VerifyGlobs.cmake
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -793,55 +793,165 @@ void bullet_run(void *arg)
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
 
 	//---------BULLET SETUP START------------------
-	b3PhysicsClientHandle b3client = b3ConnectSharedMemory(SHARED_MEMORY_KEY);
-	if (!b3CanSubmitCommand(b3client))
+	kPhysClient = b3ConnectSharedMemory(SHARED_MEMORY_KEY);
+	if (!kPhysClient)
 	{
 		printf("Not connected, start a PyBullet server first, using python -m pybullet_utils.runServer\n");
 		exit(0);
 	}
-	b3RobotSimulatorClientAPI_InternalData b3data;
-	b3data.m_physicsClientHandle = b3client;
-	b3data.m_guiHelper = 0;
-	b3RobotSimulatorClientAPI_NoDirect b3sim;
-	b3sim.setInternalData(&b3data);
-	b3sim.setTimeStep(FIXED_TIMESTEP);
-	b3sim.resetSimulation();
-	b3sim.setGravity( btVector3(0 , 0 ,0));
+	
+	command = b3InitConfigureOpenGLVisualizer(kPhysClient);
+	b3ConfigureOpenGLVisualizerSetVisualizationFlags(command, COV_ENABLE_GUI, 0);
+	b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+	b3ConfigureOpenGLVisualizerSetVisualizationFlags(command, COV_ENABLE_SHADOWS, 0);
+	b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
 
-	int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
-	// int robotId = b3sim.loadURDF("quadruped/minitaur.urdf");
-	b3sim.setRealTimeSimulation(false);
-	Bullet_Indy7 bt3indy7(&b3sim,robotId);
-	// indy7.reset_q(&b3sim, info.act.q);
+	b3SetTimeOut(kPhysClient, 10);
 
-	info.nom.q = JVec::Zero();
-	info.nom.q_dot = JVec::Zero();
-	info.nom.q_ddot = JVec::Zero();
-	info.nom.F = Vector6f::Zero();
-	info.nom.F_CB = Vector6f::Zero();
+	//syncBodies is only needed when connecting to an existing physics server that has already some bodies
+	command = b3InitSyncBodyInfoCommand(kPhysClient);
+	statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+	statusType = b3GetStatusType(statusHandle);
 
-	rt_printf("Start Bullet\n");
-	while (1)
+	// set fixed time step
+	command = b3InitPhysicsParamCommand(kPhysClient);
+	ret = b3PhysicsParamSetTimeStep(command, FIXED_TIMESTEP);
+	statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+	b3InitResetSimulationCommand(kPhysClient);
+	ret = b3PhysicsParamSetRealTimeSimulation(command, false);
+	statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+	ret = b3PhysicsParamSetGravity(command,0,0,-9.8);
+	statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+
+	b3Assert(b3GetStatusType(statusHandle) == CMD_CLIENT_COMMAND_COMPLETED);
+
+	// load test
+	// command = b3LoadUrdfCommandInit(kPhysClient, "TwoJointRobot_wo_fixedJoints.urdf");
+	command = b3LoadUrdfCommandInit(kPhysClient, "/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
+	int flags = URDF_USE_INERTIA_FROM_FILE;
+	b3LoadUrdfCommandSetFlags(command, flags);
+	b3LoadUrdfCommandSetUseFixedBase(command, true);
+	// q.setEulerZYX(0, 0, 0);
+	// b3LoadUrdfCommandSetStartOrientation(command, q[0], q[1], q[2], q[3]);
+	b3LoadUrdfCommandSetUseMultiBody(command, true);
+	statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+	statusType = b3GetStatusType(statusHandle);
+	b3Assert(statusType == CMD_URDF_LOADING_COMPLETED);
+	if (statusType == CMD_URDF_LOADING_COMPLETED)
 	{
-		beginCycle = rt_timer_read();
-		if(!system_ready)
+		twojoint = b3GetStatusBodyIndex(statusHandle);
+	}
+
+	//disable default linear/angular damping
+	b3SharedMemoryCommandHandle command = b3InitChangeDynamicsInfo(kPhysClient);
+	double linearDamping = 0;
+	double angularDamping = 0;
+	b3ChangeDynamicsInfoSetLinearDamping(command, twojoint, linearDamping);
+	b3ChangeDynamicsInfoSetAngularDamping(command, twojoint, angularDamping);
+	statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+
+	int numJoints = b3GetNumJoints(kPhysClient, twojoint);
+	printf("twojoint numjoints = %d\n", numJoints);
+	// Loop through all joints
+	for (int i = 0; i < numJoints; ++i)
+	{
+		b3GetJointInfo(kPhysClient, twojoint, i, &jointInfo[i]);
+		if (jointInfo[i].m_jointName[0] && jointInfo[i].m_jointType!=eFixedType)
 		{
-			bt3indy7.reset_q(&b3sim, info.act.q);
+			jointNameToId[std::string(jointInfo[i].m_jointName)] = i;
+			actuated_joint_name.push_back(jointInfo[i].m_jointName);
+			actuated_joint_id.push_back(i);	
+			actuated_joint_num++;
 		}
 		else
 		{
-			info.nom.q = bt3indy7.get_q(&b3sim);
-			info.nom.q_dot = bt3indy7.get_qdot(&b3sim);
-			// bt3indy7.reset_q(&b3sim, info.act.q);
-			bt3indy7.set_torque(&b3sim,  info.des.tau , MAX_TORQUES);
-			b3sim.stepSimulation();
-
-			// rt_printf("q_sim: %f, %f, %f, %f, %f, %f, \n", info.nom.q(0),info.nom.q(1),info.nom.q(2),info.nom.q(3),info.nom.q(4),info.nom.q(5));
+			jointNameToId[std::string(jointInfo[i].m_jointName)] = i;
 		}
+		// Reset before torque control - see #1459
+		command = b3JointControlCommandInit2(kPhysClient, twojoint, CONTROL_MODE_VELOCITY);
+		b3JointControlSetDesiredVelocity(command, jointInfo[i].m_uIndex, 0);
+		b3JointControlSetMaximumForce(command, jointInfo[i].m_uIndex, 0);
+		statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+	}
+
+	// loop
+	while (1)
+	{
+		beginCycle = rt_timer_read();
+
+		// get joint values
+		command = b3RequestActualStateCommandInit(kPhysClient, twojoint);
+		statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+		for (int i = 0; i < actuated_joint_num; ++i)
+        {
+            int jointIndex = actuated_joint_id[i];
+            b3GetJointState(kPhysClient, statusHandle, jointIndex, &b3state);
+            info.nom.q(i) = b3state.m_jointPosition;
+            info.nom.q_dot(i) = b3state.m_jointVelocity;
+            info.nom.tau(i) = b3state.m_jointMotorTorque;
+        }
+
+		// apply some torque
+        for (int i = 0; i < actuated_joint_num; ++i)
+        {
+            int jointIndex = actuated_joint_id[i];
+            b3GetJointInfo(kPhysClient, twojoint, jointIndex, &jointInfo[jointIndex]);
+            command = b3JointControlCommandInit2(kPhysClient, twojoint, CONTROL_MODE_TORQUE);
+            b3JointControlSetDesiredForceTorque(command, jointInfo[jointIndex].m_uIndex, info.des.tau(i));
+            statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, command);
+        }
+
+		statusHandle = b3SubmitClientCommandAndWaitStatus(kPhysClient, b3InitStepSimulationCommand(kPhysClient));
+
 		endCycle = rt_timer_read();
 		periodBullet = (unsigned long) endCycle - beginCycle;
 		rt_task_wait_period(NULL); //wait for next cycle
+
 	}
+
+	// b3RobotSimulatorClientAPI_InternalData b3data;
+	// b3data.m_physicsClientHandle = b3client;
+	// b3data.m_guiHelper = 0;
+	// b3RobotSimulatorClientAPI_NoDirect b3sim;
+	// b3sim.setInternalData(&b3data);
+	// b3sim.setTimeStep(FIXED_TIMESTEP);
+	// b3sim.resetSimulation();
+	// b3sim.setGravity( btVector3(0 , 0 ,0));
+
+	// int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
+	// // int robotId = b3sim.loadURDF("quadruped/minitaur.urdf");
+	// b3sim.setRealTimeSimulation(false);
+	// Bullet_Indy7 bt3indy7(&b3sim,robotId);
+	// // indy7.reset_q(&b3sim, info.act.q);
+
+	// info.nom.q = JVec::Zero();
+	// info.nom.q_dot = JVec::Zero();
+	// info.nom.q_ddot = JVec::Zero();
+	// info.nom.F = Vector6f::Zero();
+	// info.nom.F_CB = Vector6f::Zero();
+
+	// rt_printf("Start Bullet\n");
+	// while (1)
+	// {
+	// 	beginCycle = rt_timer_read();
+	// 	if(!system_ready)
+	// 	{
+	// 		bt3indy7.reset_q(&b3sim, info.act.q);
+	// 	}
+	// 	else
+	// 	{
+	// 		info.nom.q = bt3indy7.get_q(&b3sim);
+	// 		info.nom.q_dot = bt3indy7.get_qdot(&b3sim);
+	// 		// bt3indy7.reset_q(&b3sim, info.act.q);
+	// 		bt3indy7.set_torque(&b3sim,  info.des.tau , MAX_TORQUES);
+	// 		b3sim.stepSimulation();
+
+	// 		// rt_printf("q_sim: %f, %f, %f, %f, %f, %f, \n", info.nom.q(0),info.nom.q(1),info.nom.q(2),info.nom.q(3),info.nom.q(4),info.nom.q(5));
+	// 	}
+	// 	endCycle = rt_timer_read();
+	// 	periodBullet = (unsigned long) endCycle - beginCycle;
+	// 	rt_task_wait_period(NULL); //wait for next cycle
+	// }
 }
 #endif
 
@@ -938,7 +1048,7 @@ void print_run(void *arg)
 				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
 			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf,\n", info.des.tau(j), info.act.tau(j));
+				rt_printf("\t TarTor: %f, ActTor: %lf, NomTor: %lf\n", info.des.tau(j), info.act.tau(j), info.nom.tau(j));
 			}
 
 			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
@@ -977,6 +1087,8 @@ void signal_handler(int signum)
 	rt_task_delete(&safety_task);
 	rt_task_delete(&print_task);
 
+
+	b3DisconnectSharedMemory(kPhysClient);
 	// FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
 	// FTConfigParamCB[0]=FT_STOP_DEVICE;
 	// nrmk_master.writeBuffer(0x70003, FTConfigParam);

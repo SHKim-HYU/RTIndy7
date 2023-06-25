@@ -40,10 +40,3 @@
 /home/xeno/Indy_ws/RTIndy7/build/include/Robot/CMakeFiles/rebuild_cache.dir
 /home/xeno/Indy_ws/RTIndy7/build/include/Robot/CMakeFiles/edit_cache.dir
 /home/xeno/Indy_ws/RTIndy7/build/include/Robot/CMakeFiles/Robot.dir
-/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/CMakeFiles/install/strip.dir
-/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/CMakeFiles/install/local.dir
-/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/CMakeFiles/install.dir
-/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/CMakeFiles/list_install_components.dir
-/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/CMakeFiles/rebuild_cache.dir
-/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/CMakeFiles/edit_cache.dir
-/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/CMakeFiles/pybullet_cpp.dir

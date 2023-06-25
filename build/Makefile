@@ -153,7 +153,6 @@ preinstall/fast:
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -P /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles/VerifyGlobs.cmake
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
@@ -235,19 +234,6 @@ Robot/fast:
 	$(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/build
 .PHONY : Robot/fast
 
-#=============================================================================
-# Target rules for targets named pybullet_cpp
-
-# Build rule for target.
-pybullet_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pybullet_cpp
-.PHONY : pybullet_cpp
-
-# fast build rule for target.
-pybullet_cpp/fast:
-	$(MAKE) -f include/bullet3/CMakeFiles/pybullet_cpp.dir/build.make include/bullet3/CMakeFiles/pybullet_cpp.dir/build
-.PHONY : pybullet_cpp/fast
-
 src/RTIndy7Client.o: src/RTIndy7Client.cpp.o
 
 .PHONY : src/RTIndy7Client.o
@@ -293,7 +279,6 @@ help:
 	@echo "... MR"
 	@echo "... Network"
 	@echo "... Robot"
-	@echo "... pybullet_cpp"
 	@echo "... src/RTIndy7Client.o"
 	@echo "... src/RTIndy7Client.i"
 	@echo "... src/RTIndy7Client.s"
@@ -308,7 +293,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -P /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles/VerifyGlobs.cmake
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

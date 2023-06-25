@@ -15,49 +15,55 @@
 ########################
 
 //Path to a library.
-BULLET_COLLISION_LIBRARY:FILEPATH=BULLET_COLLISION_LIBRARY-NOTFOUND
+BULLET_COLLISION_LIBRARY:FILEPATH=/usr/local/lib/libBulletCollision.so
 
 //Path to a library.
-BULLET_COMMON_LIBRARY:FILEPATH=BULLET_COMMON_LIBRARY-NOTFOUND
+BULLET_COMMON_LIBRARY:FILEPATH=/usr/local/lib/libBullet3Common.so
 
 //Path to a library.
-BULLET_DYNAMICS_LIBRARY:FILEPATH=BULLET_DYNAMICS_LIBRARY-NOTFOUND
+BULLET_DYNAMICS_LIBRARY:FILEPATH=/usr/local/lib/libBulletDynamics.so
 
 //Path to a library.
-BULLET_EXAMPLE_LIBRARY:FILEPATH=BULLET_EXAMPLE_LIBRARY-NOTFOUND
+BULLET_EXAMPLE_LIBRARY:FILEPATH=/usr/local/lib/libBulletExampleBrowserLib.so
 
 //Path to a library.
-BULLET_FILELOADER_LIBRARY:FILEPATH=BULLET_FILELOADER_LIBRARY-NOTFOUND
+BULLET_FILELOADER_LIBRARY:FILEPATH=/usr/local/lib/libBulletFileLoader.so
 
 //Path to a library.
-BULLET_GWEN_LIBRARY:FILEPATH=BULLET_GWEN_LIBRARY-NOTFOUND
+BULLET_GWEN_LIBRARY:FILEPATH=/usr/local/lib/libgwen.so
 
 //Path to a library.
-BULLET_IDUTILS_LIBRARY:FILEPATH=BULLET_IDUTILS_LIBRARY-NOTFOUND
+BULLET_IDUTILS_LIBRARY:FILEPATH=/usr/local/lib/libBulletInverseDynamicsUtils.so
 
 //Path to a file.
-BULLET_INCLUDE_DIR:PATH=BULLET_INCLUDE_DIR-NOTFOUND
+BULLET_INCLUDE_DIR:PATH=/usr/local/include/bullet
 
 //Path to a library.
-BULLET_INVDYNAMICS_LIBRARY:FILEPATH=BULLET_INVDYNAMICS_LIBRARY-NOTFOUND
+BULLET_INVDYNAMICS_LIBRARY:FILEPATH=/usr/local/lib/libBulletInverseDynamics.so
 
 //Path to a library.
-BULLET_MATH_LIBRARY:FILEPATH=BULLET_MATH_LIBRARY-NOTFOUND
+BULLET_MATH_LIBRARY:FILEPATH=/usr/local/lib/libLinearMath.so
 
 //Path to a library.
-BULLET_OPENGL_LIBRARY:FILEPATH=BULLET_OPENGL_LIBRARY-NOTFOUND
+BULLET_OPENGL_LIBRARY:FILEPATH=/usr/local/lib/libOpenGLWindow.so
 
 //Path to a library.
-BULLET_ROBOTICSGUI_LIBRARY:FILEPATH=BULLET_ROBOTICSGUI_LIBRARY-NOTFOUND
+BULLET_ROBOTICSGUI_LIBRARY:FILEPATH=/usr/local/lib/libBulletRoboticsGUI.so
 
 //Path to a library.
-BULLET_ROBOTICS_LIBRARY:FILEPATH=BULLET_ROBOTICS_LIBRARY-NOTFOUND
+BULLET_ROBOTICS_LIBRARY:FILEPATH=/usr/local/lib/libBulletRobotics.so
 
 //Path to a library.
-BULLET_SOFTBODY_LIBRARY:FILEPATH=BULLET_SOFTBODY_LIBRARY-NOTFOUND
+BULLET_SOFTBODY_LIBRARY:FILEPATH=/usr/local/lib/libBulletSoftBody.so
 
 //Path to a library.
-BULLET_WORLDIMPORTER_LIBRARY:FILEPATH=BULLET_WORLDIMPORTER_LIBRARY-NOTFOUND
+BULLET_WORLDIMPORTER_LIBRARY:FILEPATH=/usr/local/lib/libBulletWorldImporter.so
+
+//Path to a file.
+CASADI_INCLUDE_DIR:PATH=/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/include
+
+//Path to a library.
+CASADI_LIBRARY:FILEPATH=/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -351,13 +357,13 @@ Interpolator_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/Interpol
 Interpolator_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Interpolator
 
 //Path to a file.
-KERNELHEADERS_DIR:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+
+KERNELHEADERS_DIR:PATH=/usr/src/linux-headers-5.4.124-xenomai-3.1.1+
 
 //Set to 1 if kernel headers were found
 KERNELHEADERS_FOUND:STRING=1
 
 //Kernel headers include dirs
-KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include;/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/arch/x86/include
+KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.4.124-xenomai-3.1.1+/include;/usr/src/linux-headers-5.4.124-xenomai-3.1.1+/arch/x86/include
 
 //Value Computed by CMake
 MR_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/MR
@@ -435,7 +441,7 @@ RTIndy7_VERBOSE:BOOL=ON
 Robot_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/Robot
 
 //Dependencies for the target
-Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;
+Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/usr/local/lib/libBulletDynamics.so;general;/usr/local/lib/libBulletInverseDynamics.so;general;/usr/local/lib/libBulletInverseDynamicsUtils.so;general;/usr/local/lib/libBullet3Common.so;general;/usr/local/lib/libBulletCollision.so;general;/usr/local/lib/libLinearMath.so;general;/usr/local/lib/libBulletSoftBody.so;general;/usr/local/lib/libBulletExampleBrowserLib.so;general;/usr/local/lib/libBulletRobotics.so;general;/usr/local/lib/libBulletRoboticsGUI.so;general;/usr/local/lib/libOpenGLWindow.so;general;/usr/local/lib/libgwen.so;general;/usr/local/lib/libBulletWorldImporter.so;general;/usr/local/lib/libBulletFileLoader.so;
 
 //Value Computed by CMake
 Robot_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Robot
@@ -444,7 +450,7 @@ Robot_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Robot
 WITH_BULLET:BOOL=ON
 
 //import for CasADi function
-WITH_CASADI:BOOL=OFF
+WITH_CASADI:BOOL=ON
 
 //with RAISIM Simulation
 WITH_RAISIM:BOOL=OFF
@@ -508,7 +514,7 @@ Xenomai_COBALT_LIBRARIES:STRING=cobalt;modechk;pthread;rt
 Xenomai_COBALT_LIBRARY_DIRS:STRING=-L/usr/xenomai/lib
 
 //Xenomai Kernel Headers directory 
-Xenomai_KERNEL_INCLUDE_DIR:STRING=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include/xenomai
+Xenomai_KERNEL_INCLUDE_DIR:STRING=/usr/src/linux-headers-5.4.124-xenomai-3.1.1+/include/xenomai
 
 //Path to a library.
 Xenomai_LIBRARY_NATIVE:FILEPATH=Xenomai_LIBRARY_NATIVE-NOTFOUND
@@ -855,7 +861,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -904,10 +910,12 @@ CXX17_SUPPORT:INTERNAL=1
 Etherlab_ethercat_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Etherlab_ethercat_rtdm_LIBRARY
 Etherlab_ethercat_rtdm_LIBRARY-ADVANCED:INTERNAL=1
+//Details about finding Bullet
+FIND_PACKAGE_MESSAGE_DETAILS_Bullet:INTERNAL=[/usr/local/lib/libBulletDynamics.so][/usr/local/lib/libBullet3Common.so][/usr/local/lib/libBulletCollision.so][/usr/local/lib/libLinearMath.so][/usr/local/lib/libBulletSoftBody.so][/usr/local/lib/libBulletExampleBrowserLib.so][/usr/local/lib/libBulletRobotics.so][/usr/local/lib/libOpenGLWindow.so][/usr/local/lib/libgwen.so][/usr/local/lib/libBulletInverseDynamics.so][/usr/local/lib/libBulletInverseDynamicsUtils.so][/usr/local/lib/libBulletWorldImporter.so][/usr/local/lib/libBulletFileLoader.so][/usr/local/lib/libBulletRoboticsGUI.so][/usr/local/include/bullet][v()]
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v0.29.1()]
 //Details about finding Xenomai
-FIND_PACKAGE_MESSAGE_DETAILS_Xenomai:INTERNAL=[/usr/xenomai/include/trank;/usr/xenomai/include/cobalt;/usr/xenomai/include;/usr/xenomai/include/alchemy][trank;alchemy;copperplate;cobalt;modechk;pthread;rt][cfound components: NATIVE ][v3.2.3(3.1.1)]
+FIND_PACKAGE_MESSAGE_DETAILS_Xenomai:INTERNAL=[/usr/xenomai/include/trank;/usr/xenomai/include/cobalt;/usr/xenomai/include;/usr/xenomai/include/alchemy][trank;alchemy;copperplate;cobalt;modechk;pthread;rt][cfound components: NATIVE ][v3.1.1(3.1.1)]
 //ADVANCED property for variable: KERNELHEADERS_FOUND
 KERNELHEADERS_FOUND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE

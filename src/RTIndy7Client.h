@@ -44,13 +44,14 @@ typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
 #endif
 ////////////////////////////////////////////////////////////
 #ifdef __BULLET__
-#include "SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h"
-#include "SharedMemory/PhysicsClientSharedMemory_C_API.h"
-#include "SharedMemory/b3RobotSimulatorClientAPI_InternalData.h"
+#include "SharedMemory/SharedMemoryInProcessPhysicsC_API.h"
+#include "SharedMemory/PhysicsClientC_API.h"
 #include "Bullet3Common/b3Vector3.h"
 #include "Bullet3Common/b3Quaternion.h"
 #include "Bullet3Common/b3HashMap.h"
 #include "Utils/b3Clock.h"
+#include <map>
+#include <vector>
 #include "bullet_Indy7.h"
 #endif
 ////////////////////////////////////////////////////////////
@@ -316,9 +317,27 @@ JVec MAX_TORQUES;
 #ifdef __BULLET__
 extern const int CONTROL_RATE;
 const int CONTROL_RATE = 1000;
+
+// Bullet globals
+b3PhysicsClientHandle kPhysClient = 0;
 const b3Scalar FIXED_TIMESTEP = 1.0 / ((b3Scalar)CONTROL_RATE);
+// temp vars used a lot
+b3SharedMemoryCommandHandle command;
+b3SharedMemoryStatusHandle statusHandle;
 int statusType, ret;
-b3SharedMemoryCommandHandle b3command;
+b3JointInfo jointInfo[8];
+b3JointSensorState b3state;
+// test
+int twojoint;
+
+using namespace std;
+
+map<string, int> jointNameToId;
+
+int actuated_joint_num;
+int eef_num;
+vector<int> actuated_joint_id;
+vector<string> actuated_joint_name;
 #endif
 
 #endif /* RTINDY7CLIENT_H_ */

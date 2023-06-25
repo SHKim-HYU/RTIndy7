@@ -124,7 +124,7 @@ set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
 set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
 set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 #[ToDo] will be replaced from the installed bullet3 SDK
-set(BULLET_HEADER_DIR ${PROJECT_SOURCE_DIR}/include/bullet3) 
+# set(BULLET_HEADER_DIR ${PROJECT_SOURCE_DIR}/include/bullet3) 
 
 include_directories(${PROJ_INSTALL_INCLUDE_DIR})
 include_directories(
@@ -137,7 +137,7 @@ include_directories(
         ${NET_HEADERS_DIR}
         ${ROBOT_HEADERS_DIR}
         #[ToDo] will be replaced from the installed bullet3 SDK
-        ${BULLET_HEADER_DIR}
+        # ${BULLET_HEADER_DIR}
 )
 
 # add_subdirectory(include/Control)
@@ -148,7 +148,7 @@ add_subdirectory(include/MR)
 add_subdirectory(include/Network)
 add_subdirectory(include/Robot)
 #[ToDo] will be replaced from the installed bullet3 SDK
-add_subdirectory(include/bullet3)
+# add_subdirectory(include/bullet3)
 
 add_executable(${PROJECT_NAME}
         src/RTIndy7Client.cpp
@@ -163,7 +163,7 @@ target_link_libraries(${PROJECT_NAME}
         sub::NETWORK
         sub::Robot
         # sub::bullet3
-        pybullet_cpp
+        # pybullet_cpp
         dl
 )
 
@@ -228,13 +228,13 @@ endif()
 # Bullet
 if(WITH_BULLET)
     add_compile_definitions(__BULLET__)
-    # find_package(Bullet REQUIRED)
-    # if (BULLET_FOUND)
-    #     MESSAGE(STATUS "BULLET_INCLUDE_DIRS = ${BULLET_INCLUDE_DIRS}")
-    #     MESSAGE(STATUS "BULLET_LIBRARIES = ${BULLET_LIBRARIES}")
-    #     target_include_directories(${PROJECT_NAME} PUBLIC ${BULLET_INCLUDE_DIRS})
-    #     target_link_libraries(${PROJECT_NAME} ${BULLET_LIBRARIES})
-    # endif()
+    find_package(Bullet REQUIRED)
+    if (BULLET_FOUND)
+        MESSAGE(STATUS "BULLET_INCLUDE_DIRS = ${BULLET_INCLUDE_DIRS}")
+        MESSAGE(STATUS "BULLET_LIBRARIES = ${BULLET_LIBRARIES}")
+        target_include_directories(${PROJECT_NAME} PUBLIC ${BULLET_INCLUDE_DIRS})
+        target_link_libraries(${PROJECT_NAME} ${BULLET_LIBRARIES})
+    endif()
 endif()
 
 # RAISIM

@@ -44,7 +44,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/xeno/Indy_ws/RTIndy7/build/include/MR/cmake_install.cmake")
   include("/home/xeno/Indy_ws/RTIndy7/build/include/Network/cmake_install.cmake")
   include("/home/xeno/Indy_ws/RTIndy7/build/include/Robot/cmake_install.cmake")
-  include("/home/xeno/Indy_ws/RTIndy7/build/include/bullet3/cmake_install.cmake")
 
 endif()
 
