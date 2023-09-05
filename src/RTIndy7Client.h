@@ -27,6 +27,7 @@
 #include <fstream>
 #include <sstream>
 #include <Eigen/Dense>
+#include <stdexcept>
 
 //-xenomai-///////////////////////////////////////////////////////////////
 #include <native/task.h>
@@ -101,6 +102,10 @@ unsigned int overruns = 0;
 #ifdef __BULLET__
 unsigned long periodBullet = 0;
 #endif
+#ifdef __CASADI__
+unsigned long periodIndysim = 0;
+
+#endif
 
 
 typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
@@ -157,7 +162,7 @@ double gt=0;
 
 // Trajectory parameers
 double traj_time=0;
-int motion=2;
+int motion=1;
 
 /// TO DO: This is user-code.
 double sine_amp=50000, f=0.2, period;
@@ -255,8 +260,8 @@ union DeviceConfig
 	uint8_t u8Param[4];
 	uint32_t u32Param;
 };
-float force_divider =50.0;
-float torque_divider = 2000.0;
+double force_divider =50.0;
+double torque_divider = 2000.0;
 
 // Axis for CORE
 const int 	 zeroPos[NUM_AXIS] = {ZERO_POS_1,ZERO_POS_2,ZERO_POS_3,ZERO_POS_4,ZERO_POS_5,ZERO_POS_6};
@@ -284,12 +289,13 @@ typedef struct STATE{
 	JVec q_dot;
 	JVec q_ddot;
 	JVec tau;
+	JVec tau_ext;
 
 	Vector6d x;                           //Task space
 	Vector6d x_dot;
 	Vector6d x_ddot;
-	Vector6f F;
-	Vector6f F_CB;
+	Vector6d F;
+	Vector6d F_CB;
 
     double s_time;
 }state;

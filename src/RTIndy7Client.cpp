@@ -21,6 +21,9 @@ RT_TASK RTIndy7_task;
 #ifdef __BULLET__
 RT_TASK bullet_task;
 #endif
+#ifdef __CASADI__
+RT_TASK indysim_task;
+#endif
 RT_TASK safety_task;
 RT_TASK print_task;
 
@@ -33,6 +36,226 @@ RT_TASK print_task;
 
 //////////////////////////////////////////////////////////////////
 #ifdef __CASADI__
+
+	JVec indy7_FD()
+	{
+		RTIME start, end;
+		// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_fd.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        throw std::runtime_error("Cannot open indy7_fd.so");
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "aba");
+	    if (dlerror()) {
+	        throw std::runtime_error("Function evaluation failed.");
+	    }
+
+	    // Allocate input/output buffers and work vectors dlrj
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[18];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    // double input_pos[] = {info.act.q(0),info.act.q(1),info.act.q(2),info.act.q(3),info.act.q(4),info.act.q(5)};
+	    // double input_vel[] = {info.act.q_dot(0),info.act.q_dot(1),info.act.q_dot(2),info.act.q_dot(3),info.act.q_dot(4),info.act.q_dot(5)};
+	    // double input_tau[] = {info.act.tau(0),info.act.tau(1),info.act.tau(2),info.act.tau(3),info.act.tau(4),info.act.tau(5)};
+
+	    double input_pos[sz_arg] = {-0.128198, -0.059945, 1.243974, 3.058833, -2.110628, 0.131757};
+	    double input_vel[sz_arg] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    double input_tau[sz_arg] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[3*i] = &input_pos[i];
+	        arg[3*i+1] = &input_vel[i];
+	        arg[3*i+2] = &input_tau[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[6];
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        throw std::runtime_error("Function evaluation failed.");
+	    }
+	    end = rt_timer_read();
+
+	    // Print the result
+	    rt_printf("Result:\n");
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        rt_printf("%lf ", output_values[i]);
+	    }
+	    rt_printf("\n");
+	    rt_printf("[cs]computation time for \"FD\": %lius\n", (end-start)/1000);
+	    
+	    JVec result_vector;
+
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+        	result_vector(i) = output_values[i];
+    	}
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return result_vector;
+	}
+
+	int indy7_FD_rk()
+	{
+		RTIME start, end;
+		double dt=((double) cycle_ns)/((double) NSEC_PER_SEC);
+		// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_fd.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        throw std::runtime_error("Cannot open indy7_fd.so");
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "aba");
+	    if (dlerror()) {
+	        throw std::runtime_error("Function evaluation failed.");
+	    }
+
+	    // Allocate input/output buffers and work vectors dlrj
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+	    double temp_q[6], temp_q_dot[6], temp_tau[6];
+
+	    int mem = 0;  // No thread-local memory management
+	    JVec k1, k2, k3, k4;
+
+	    // Set output buffers
+	    double output_values[6];
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    start = rt_timer_read();
+	    
+	    // 1st stage
+	    // Set input values
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+		    temp_q[i] = info.act.q(i);
+		    temp_q_dot[i] = info.act.q_dot(i);
+		    temp_tau[i] = info.act.tau(i);
+		    // temp_tau[i] = 0.0;
+
+		    arg[i] = &temp_q[i];
+		    arg[i + 6] = &temp_q_dot[i];
+		    arg[i + 12] = &temp_tau[i];
+		}
+
+	    // Evaluate the function	    
+	    if (eval(arg, res, iw, w, mem)) {
+	        throw std::runtime_error("Function evaluation failed.");
+	    }
+
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+        	k1(i) = output_values[i];
+    	}
+
+    	JVec _q1 = info.act.q + 0.5 * dt * info.act.q_dot;
+    	JVec _q_dot1 = info.act.q_dot + 0.5 * dt * k1;
+    	JVec _q_dot_tmp = 0.5 * dt * k1;
+
+	    // 2nd stage
+	    // Set input values
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+		    temp_q[i] = _q1(i);
+		    temp_q_dot[i] = _q_dot1(i);
+
+		    arg[i] = &temp_q[i];
+		    arg[i + 6] = &temp_q_dot[i];
+		}
+
+	    // Evaluate the function	    
+	    if (eval(arg, res, iw, w, mem)) {
+	        throw std::runtime_error("Function evaluation failed.");
+	    }
+
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+        	k2(i) = output_values[i];
+    	}
+    	JVec _q2 = info.act.q + 0.5 * dt * _q_dot1;
+    	JVec _q_dot2 = info.act.q_dot + 0.5 * dt * k2;
+
+    	// 3th stage
+	    // Set input values
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+		    temp_q[i] = _q2(i);
+		    temp_q_dot[i] = _q_dot2(i);
+
+		    arg[i] = &temp_q[i];
+		    arg[i + 6] = &temp_q_dot[i];
+		}
+
+	    // Evaluate the function	    
+	    if (eval(arg, res, iw, w, mem)) {
+	        throw std::runtime_error("Function evaluation failed.");
+	    }
+
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+        	k3(i) = output_values[i];
+    	}
+    	JVec _q3 = info.act.q + dt * _q_dot2;
+    	JVec _q_dot3 = info.act.q_dot + dt * k3;
+
+	   	// 4th stage
+	    // Set input values
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+		    temp_q[i] = _q3(i);
+		    temp_q_dot[i] = _q_dot3(i);
+
+		    arg[i] = &temp_q[i];
+		    arg[i + 6] = &temp_q_dot[i];
+		}
+
+	    // Evaluate the function	    
+	    if (eval(arg, res, iw, w, mem)) {
+	        throw std::runtime_error("Function evaluation failed.");
+	    }
+
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+        	k4(i) = output_values[i];
+    	}
+
+    	info.nom.q = info.act.q + (dt / 6.0) * (info.act.q_dot + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
+    	info.nom.q_dot = info.act.q_dot + (dt / 6.0) * (k1 + 2 * (k2 + k3) + k4);
+
+	    end = rt_timer_read();
+
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
+
 	int indy7_G()
 	{
 		RTIME start, end;
@@ -65,7 +288,8 @@ RT_TASK print_task;
 	    double w[sz_w];
 
 	    // Set input values
-	    double input_values[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+	    // double input_values[] = {info.act.q(0),info.act.q(1),info.act.q(2),info.act.q(3),info.act.q(4),info.act.q(5)};
+	    double input_values[] = {-0.128198, -0.059945, 1.243974, 3.058833, -2.110628, 0.131757};
 	    for (casadi_int i = 0; i < sz_arg; ++i) {
 	        arg[i] = &input_values[i];
 	    }
@@ -86,16 +310,17 @@ RT_TASK print_task;
 	    end = rt_timer_read();
 
 	    // Print the result
-	    // printf("Result:\n");
-	    // for (casadi_int i = 0; i < sz_res; ++i) {
-	    //     printf("%g ", output_values[i]);
-	    // }
-	    // printf("\n");
+	    rt_printf("Result:\n");
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        rt_printf("%lf ", output_values[i]);
+	    }
+	    rt_printf("\n");
 	    rt_printf("[cs]computation time for \"G\": %lius\n", (end-start)/1000);
 	    
 	    start = rt_timer_read();
-	    mr_indy7.Gvec(info.act.q);
+	    JVec G = mr_indy7.Gvec(info.act.q);
 	    end = rt_timer_read();
+	    rt_printf("%lf, %lf, %lf, %lf, %lf, %lf \n", G(0),G(1),G(2),G(3),G(4),G(5));
 	    rt_printf("[mr]computation time for \"G\": %lius\n", (end-start)/1000);
 
 	    // Free the handle
@@ -179,6 +404,76 @@ RT_TASK print_task;
 	    return 0;
 	}
 
+	int indy7_Minv()
+	{
+		RTIME start, end;
+	// Load the shared library
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7_Minv.so", RTLD_LAZY);
+	    if (handle == 0) {
+	        printf("Cannot open indy7_Minv.so, error: %s\n", dlerror());
+	        return 1;
+	    }
+
+	    // Reset error
+	    dlerror();
+
+	    // Function evaluation
+	    eval_t eval = (eval_t)dlsym(handle, "Minv");
+	    if (dlerror()) {
+	        printf("Failed to retrieve \"Minv\" function.\n");
+	        return 1;
+	    }
+
+	    // Allocate input/output buffers and work vectors
+	    casadi_int sz_arg = 6;
+	    casadi_int sz_res = 6;
+	    casadi_int sz_iw = 0;
+	    casadi_int sz_w = 0;
+
+	    const double* arg[6];
+	    double* res[6];
+	    casadi_int iw[sz_iw];
+	    double w[sz_w];
+
+	    // Set input values
+	    double input_values[] = {-0.128198, -0.059945, 1.243974, 3.058833, -2.110628, 0.131757};
+	    for (casadi_int i = 0; i < sz_arg; ++i) {
+	        arg[i] = &input_values[i];
+	    }
+
+	    // Set output buffers
+	    double output_values[36]; // 6x6 matrix
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        res[i] = &output_values[i];
+	    }
+
+	    // Evaluate the function
+	    int mem = 0;  // No thread-local memory management
+	    
+	    start = rt_timer_read();
+	    if (eval(arg, res, iw, w, mem)) {
+	        printf("Function evaluation failed.\n");
+	        return 1;
+	    }
+	    end = rt_timer_read();
+	    
+	    
+	    // Print the result
+	    printf("Result:\n");
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        for (casadi_int j = 0; j < sz_res; ++j) {
+	            printf("%lf ", output_values[i * sz_res + j]);
+	        }
+	        printf("\n");
+	    }
+	    rt_printf("[cs]computation time for \"Minv\": %lius\n", (end-start)/1000);
+	    
+	    // Free the handle
+	    dlclose(handle);
+
+	    return 0;
+	}
+
 	int indy7_C()
 	{
 		RTIME start, end;
@@ -205,20 +500,18 @@ RT_TASK print_task;
 	    casadi_int sz_iw = 0;
 	    casadi_int sz_w = 0;
 
-	    const double* arg[6];
+	    const double* arg[12];
 	    double* res[6];
 	    casadi_int iw[sz_iw];
 	    double w[sz_w];
 
 	    // Set input values
-	    double input_pos[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
-	    double input_vel[] = {0.0, 0.7, 0.0, 0.0, 0.0, 0.0};
+	    double input_pos[] = {-0.128198, -0.059945, 1.243974, 3.058833, -2.110628, 0.131757};
+	    double input_vel[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 	    for (casadi_int i = 0; i < sz_arg; ++i) {
-	        arg[i] = &input_pos[i];
-	    }
-	    for (casadi_int i = 0; i < sz_arg; ++i) {
-	        arg[i+6] = &input_vel[i];
+	        arg[2*i] = &input_pos[i];
+	        arg[2*i+1] = &input_vel[i];
 	    }
 
 	    // Set output buffers
@@ -238,13 +531,13 @@ RT_TASK print_task;
 	    end = rt_timer_read();
 
 	    // Print the result
-	    // printf("Result:\n");
-	    // for (casadi_int i = 0; i < sz_res; ++i) {
-	    //     for (casadi_int j = 0; j < sz_res; ++j) {
-	    //         printf("%g ", output_values[i * sz_res + j]);
-	    //     }
-	    //     printf("\n");
-	    // }
+	    printf("C Result:\n");
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        for (casadi_int j = 0; j < sz_res; ++j) {
+	            printf("%lf ", output_values[i * sz_res + j]);
+	        }
+	        printf("\n");
+	    }
 		rt_printf("[cs]computation time for \"C\": %lius\n", (end-start)/1000);
 	    
 	    start = rt_timer_read();
@@ -332,14 +625,13 @@ RT_TASK print_task;
 	    return 0;
 	}
 
-	int indy7_J_b()
+	Jacobian indy7_J_b()
 	{
 		RTIME start, end;
-	// Load the shared library
+		// Load the shared library
 	    void* handle = dlopen("../lib/URDF2CASADI/indy7_J_b.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        printf("Cannot open indy7_J_b.so, error: %s\n", dlerror());
-	        return 1;
+	        throw std::runtime_error("Cannot open indy7_J_b.so");
 	    }
 
 	    // Reset error
@@ -348,8 +640,7 @@ RT_TASK print_task;
 	    // Function evaluation
 	    eval_t eval = (eval_t)dlsym(handle, "J_b");
 	    if (dlerror()) {
-	        printf("Failed to retrieve \"J_b\" function.\n");
-	        return 1;
+	        throw std::runtime_error("Failed to retrieve \"J_b\" function.\n");
 	    }
 
 	    // Allocate input/output buffers and work vectors
@@ -364,7 +655,7 @@ RT_TASK print_task;
 	    double w[sz_w];
 
 	    // Set input values
-	    double input_values[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	    double input_values[] = {info.act.q(0),info.act.q(1),info.act.q(2),info.act.q(3),info.act.q(4),info.act.q(5)};
 	    for (casadi_int i = 0; i < sz_arg; ++i) {
 	        arg[i] = &input_values[i];
 	    }
@@ -380,31 +671,33 @@ RT_TASK print_task;
 	    
 	    start = rt_timer_read();
 	    if (eval(arg, res, iw, w, mem)) {
-	        printf("Function evaluation failed.\n");
-	        return 1;
+	        throw std::runtime_error("Function evaluation failed.\n");
 	    }
 	    end = rt_timer_read();
 	    
-	    
+	    Jacobian J_b;
+
 	    // Print the result
-	    // printf("Result:\n");
-	    // for (casadi_int i = 0; i < sz_res; ++i) {
-	    //     for (casadi_int j = 0; j < sz_res; ++j) {
-	    //         printf("%g ", output_values[i * sz_res + j]);
-	    //     }
-	    //     printf("\n");
-	    // }
-	    rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
+	    for (casadi_int i = 0; i < sz_res; ++i) {
+	        for (casadi_int j = 0; j < sz_res; ++j) {   
+	        	J_b(j,i) = output_values[i * sz_res + j];
+	        }
+	    }
+	    // rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
 
 	    start = rt_timer_read();
 	    mr_indy7.J_b(info.act.q);
 	    end = rt_timer_read();
-	    rt_printf("[mr]computation time for \"J_b\": %lius\n", (end-start)/1000);
-
+	    // rt_printf("[mr]computation time for \"J_b\": %lius\n", (end-start)/1000);
+	    Jacobian J_b_MR = mr_indy7.J_b(info.act.q);
+	    
+	    // cout<<"CS:"<<J_b<<endl;
+	    // cout<<"MR:"<<J_b_MR<<endl;
+	    
 	    // Free the handle
 	    dlclose(handle);
 
-	    return 0;
+	    return J_b;
 	}
 	int indy7_J_s()
 	{
@@ -529,7 +822,7 @@ void trajectory_generation(){
 	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
 	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
 	    	traj_time = 3.0;
-	    	// motion++;
+	    	motion++;
 	        break;
 	    case 3:
 	    	info.q_target(0)=-1.5709; 	info.q_target(1)=0.4071; 	info.q_target(2)=-0.4071;
@@ -570,7 +863,9 @@ void trajectory_generation(){
 
 int compute()
 {
-		
+	Jacobian J_b = indy7_J_b();
+	info.act.tau_ext = J_b.transpose()*info.act.F;
+
 	return 0;
 }
 void readEcatData(){
@@ -634,19 +929,19 @@ void readEcatData(){
 	}
 
 	// Update RFT data
-	info.act.F(0) = FTRawFx[NUM_IO_MODULE+NUM_AXIS] / force_divider;
-	info.act.F(1) = FTRawFy[NUM_IO_MODULE+NUM_AXIS] / force_divider;
-	info.act.F(2) = FTRawFz[NUM_IO_MODULE+NUM_AXIS] / force_divider;
-	info.act.F(3) = FTRawTx[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
-	info.act.F(4) = FTRawTy[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
-	info.act.F(5) = FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+	info.act.F(0) = (double)FTRawFx[NUM_IO_MODULE+NUM_AXIS] / force_divider;
+	info.act.F(1) = (double)FTRawFy[NUM_IO_MODULE+NUM_AXIS] / force_divider;
+	info.act.F(2) = (double)FTRawFz[NUM_IO_MODULE+NUM_AXIS] / force_divider;
+	info.act.F(3) = (double)FTRawTx[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+	info.act.F(4) = (double)FTRawTy[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+	info.act.F(5) = (double)FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 
-	info.act.F_CB(0) = FTRawFxCB[0] / force_divider;
-	info.act.F_CB(1) = FTRawFyCB[0] / force_divider;
-	info.act.F_CB(2) = FTRawFzCB[0] / force_divider;
-	info.act.F_CB(3) = FTRawTxCB[0] / torque_divider;
-	info.act.F_CB(4) = FTRawTyCB[0] / torque_divider;
-	info.act.F_CB(5) = FTRawTzCB[0] / torque_divider;
+	info.act.F_CB(0) = (double)FTRawFxCB[0] / force_divider;
+	info.act.F_CB(1) = (double)FTRawFyCB[0] / force_divider;
+	info.act.F_CB(2) = (double)FTRawFzCB[0] / force_divider;
+	info.act.F_CB(3) = (double)FTRawTxCB[0] / torque_divider;
+	info.act.F_CB(4) = (double)FTRawTyCB[0] / torque_divider;
+	info.act.F_CB(5) = (double)FTRawTzCB[0] / torque_divider;
 
 	// info.act.F<<(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
 	//           <<(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS];
@@ -680,8 +975,8 @@ void RTIndy7_run(void *arg)
 	info.des.q = JVec::Zero();
 	info.des.q_dot = JVec::Zero();
 	info.des.q_ddot = JVec::Zero();
-	info.des.F = Vector6f::Zero();
-	info.des.F_CB = Vector6f::Zero();
+	info.des.F = Vector6d::Zero();
+	info.des.F_CB = Vector6d::Zero();
 
 	JVec eint = JVec::Zero();
 	JVec e = JVec::Zero();
@@ -712,11 +1007,15 @@ void RTIndy7_run(void *arg)
 			compute();	
 
 			// Calculate Joint controller
-			info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
+			// info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot) + info.act.tau_ext; // calcTorque
 			// info.des.tau = mr_indy7.ComputedTorqueControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot); // calcTorque
+			// info.des.tau = mr_indy7.Gravity( info.act.q ) + info.act.tau_ext; // calcTorque
+			// info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
 			e = info.des.q-info.act.q;
-			eint = eint+e*0.001;
-			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			eint = eint + e*(double)0.001;
+			
+			info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint) + info.act.tau_ext;
+			
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// mr_indy7.saturationMaxTorque(info.des.tau,MAX_TORQUES);
 		}
@@ -783,6 +1082,374 @@ void RTIndy7_run(void *arg)
 		rt_task_wait_period(NULL); 	//wait for next cycle
 	}
 }
+
+#ifdef __CASADI__
+// IndySim task
+void indysim_run(void *arg)
+{
+	RTIME now, previous=0;
+	RTIME beginCycle, endCycle;
+	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
+
+	double dt=((double) cycle_ns)/((double) NSEC_PER_SEC);
+	// Load the shared library
+    void* fd_handle = dlopen("../lib/URDF2CASADI/indy7_fd.so", RTLD_LAZY);
+    if (fd_handle == 0) {
+        throw std::runtime_error("Cannot open indy7_fd.so");
+    }
+    void* G_handle = dlopen("../lib/URDF2CASADI/indy7_G.so", RTLD_LAZY);
+    if (G_handle == 0) {
+        throw std::runtime_error("Cannot open indy7_G.so");
+    }
+    void* J_handle = dlopen("../lib/URDF2CASADI/indy7_J_b.so", RTLD_LAZY);
+    if (J_handle == 0) {
+        throw std::runtime_error("Cannot open indy7_J_b.so");
+    }
+
+    // Reset error
+    dlerror();
+
+    // Function evaluation
+    eval_t fd_eval = (eval_t)dlsym(fd_handle, "aba");
+    if (dlerror()) {
+        throw std::runtime_error("Function evaluation failed.");
+    }
+    eval_t G_eval = (eval_t)dlsym(G_handle, "generalized_gravity");
+    if (dlerror()) {
+        throw std::runtime_error("Function evaluation failed.");
+    }
+    eval_t J_eval = (eval_t)dlsym(J_handle, "J_b");
+    if (dlerror()) {
+        throw std::runtime_error("Function evaluation failed.");
+    }
+   
+    // Allocate input/output buffers and work vectors dlrj
+    casadi_int sz_arg = 6;
+    casadi_int sz_res = 6;
+    casadi_int sz_iw = 0;
+    casadi_int sz_w = 0;
+
+    const double* fd_arg[18];
+    const double* G_arg[6];
+    const double* J_arg[6];
+    double* fd_res[6];
+    double* G_res[6];
+    double* J_res[36];
+    casadi_int fd_iw[sz_iw], G_iw[sz_iw], J_iw[sz_iw];
+    double fd_w[sz_w], G_w[sz_w], J_w[sz_w];
+    int fd_mem = 0;  // No thread-local memory management
+    int G_mem = 0;  // No thread-local memory management
+    int J_mem = 0;  // No thread-local memory management
+    
+
+    double temp_q[6], temp_q_dot[6], temp_tau[6];
+    
+    JVec k1, k2, k3, k4;
+    Jacobian J_b;
+
+    // Set output buffers
+    double fd_values[6], G_values[6], J_values[36];
+    for (casadi_int i = 0; i < 6; ++i) {
+        fd_res[i] = &fd_values[i];
+        G_res[i] = &G_values[i];
+    }
+    for (casadi_int i = 0; i < 36; ++i) {
+        J_res[i] = &J_values[i];
+    }
+
+	int cnt = 0;    
+
+    // // Free the handle
+    // dlclose(handle);
+
+	// loop
+	while(1)
+	{
+		if(system_ready)
+		{
+			beginCycle = rt_timer_read();
+
+			////////////////   Implicit Euler method   /////////////////
+			
+
+
+			/////////////////  RK4   //////////////////
+			// if(cnt == 0)
+			// {
+			// 	// state update
+			// 	JVec _q = info.act.q;
+			// 	JVec _q_dot = info.act.q_dot;
+			// 	JVec _tau = info.act.tau;
+
+			// 	// 1st stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = _q(i);
+			// 	    temp_q_dot[i] = _q_dot(i);
+			// 	    temp_tau[i] = _tau(i);
+			// 	    // temp_tau[i] = 0.0;
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i + 1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i + 2] = &temp_tau[i];
+			// 	}
+				
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k1(i) = fd_values[i];
+		    // 	}
+		    	
+		    // 	JVec _q1 = info.act.q + 0.5 * dt * info.act.q_dot;
+		    // 	JVec _q_dot1 = info.act.q_dot + 0.5 * dt * k1;
+
+			//     // 2nd stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = _q1(i);
+			// 	    temp_q_dot[i] = _q_dot1(i);
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i+1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i+2] = &temp_tau[i];
+			// 	}
+
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k2(i) = fd_values[i];
+		    // 	}
+		    // 	JVec _q2 = info.act.q + 0.5 * dt * _q_dot1;
+		    // 	JVec _q_dot2 = info.act.q_dot + 0.5 * dt * k2;
+
+		    // 	// 3th stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = _q2(i);
+			// 	    temp_q_dot[i] = _q_dot2(i);
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i + 1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i + 2] = &temp_tau[i];
+			// 	}
+
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k3(i) = fd_values[i];
+		    // 	}
+		    // 	JVec _q3 = info.act.q + dt * _q_dot2;
+		    // 	JVec _q_dot3 = info.act.q_dot + dt * k3;
+
+			//    	// 4th stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = _q3(i);
+			// 	    temp_q_dot[i] = _q_dot3(i);
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i + 1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i + 2] = &temp_tau[i];
+			// 	}
+
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k4(i) = fd_values[i];
+		    // 	}
+
+		    // 	info.nom.q = info.act.q + (dt / 6.0) * (info.act.q_dot + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
+		    // 	info.nom.q_dot = info.act.q_dot + (dt / 6.0) * (k1 + 2 * (k2 + k3) + k4);
+				
+
+		    // 	// Compute body jacobian
+		    // 	for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = info.nom.q(i);
+			// 	    J_arg[i] = &temp_q[i];				    
+			// 	}
+			// 	// Evaluate the function	    
+			//     if (J_eval(J_arg, J_res, J_iw, J_w, J_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	for (casadi_int j = 0; j < sz_res; ++j){
+		    //     		J_b(j,i) = J_values[i * sz_res + j];
+		    //     	}
+		    //     	rt_printf("J: %lf, %lf, %lf, %lf, %lf, %lf \n", J_b(0,i), J_b(1,i), J_b(2,i), J_b(3,i), J_b(4,i), J_b(5,i));
+		    // 	}
+
+
+			// 	// Gravity Comp.
+		    // 	for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = info.nom.q(i);
+			// 	    G_arg[i] = &temp_q[i];				    
+			// 	}
+			// 	// Evaluate the function	    
+			//     if (G_eval(G_arg, G_res, G_iw, G_w, G_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	info.nom.tau(i) = G_values[i];
+		    // 	}
+
+			// 	cnt++;
+			// }
+			// else
+			// {
+			// 	// 1st stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = info.nom.q(i);
+			// 	    temp_q_dot[i] = info.nom.q_dot(i);
+			// 	    temp_tau[i] = info.nom.tau(i);
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i + 1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i + 2] = &temp_tau[i];
+			// 	}
+
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k1(i) = fd_values[i];
+		    // 	}
+
+		    // 	JVec _q1 = info.nom.q + 0.5 * dt * info.nom.q_dot;
+		    // 	JVec _q_dot1 = info.nom.q_dot + 0.5 * dt * k1;
+		    // 	JVec _q_dot_tmp = 0.5 * dt * k1;
+
+			//     // 2nd stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = _q1(i);
+			// 	    temp_q_dot[i] = _q_dot1(i);
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i + 1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i + 2] = &temp_tau[i];
+			// 	}
+
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k2(i) = fd_values[i];
+		    // 	}
+
+		    // 	JVec _q2 = info.nom.q + 0.5 * dt * _q_dot1;
+		    // 	JVec _q_dot2 = info.nom.q_dot + 0.5 * dt * k2;
+
+		    // 	// 3th stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = _q2(i);
+			// 	    temp_q_dot[i] = _q_dot2(i);
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i + 1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i + 2] = &temp_tau[i];
+			// 	}
+
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k3(i) = fd_values[i];
+		    // 	}
+
+		    // 	JVec _q3 = info.nom.q + dt * _q_dot2;
+		    // 	JVec _q_dot3 = info.nom.q_dot + dt * k3;
+
+			//    	// 4th stage
+			//     // Set input values
+			//     for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = _q3(i);
+			// 	    temp_q_dot[i] = _q_dot3(i);
+
+			// 	    fd_arg[3*i] = &temp_q[i];
+			// 	    fd_arg[3*i + 1] = &temp_q_dot[i];
+			// 	    fd_arg[3*i + 2] = &temp_tau[i];
+			// 	}
+
+			//     // Evaluate the function	    
+			//     if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	k4(i) = fd_values[i];
+		    // 	}
+
+		    // 	info.nom.q = info.nom.q + (dt / 6.0) * (info.nom.q_dot + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
+		    // 	info.nom.q_dot = info.nom.q_dot + (dt / 6.0) * (k1 + 2 * (k2 + k3) + k4);
+
+		    // 	// Compute body jacobian
+		    // 	for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = info.nom.q(i);
+			// 	    J_arg[i] = &temp_q[i];				    
+			// 	}
+			// 	// Evaluate the function	    
+			//     if (J_eval(J_arg, J_res, J_iw, J_w, J_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	for (casadi_int j = 0; j < sz_res; ++j){
+		    //     		J_b(j,i) = J_values[i * sz_res + j];
+		    //     	}
+		    // 	}
+
+		    // 	info.nom.tau_ext = J_b.transpose()*info.act.F;
+		    // 	// rt_printf("tau_ext: %lf, %lf, %lf, %lf, %lf, %lf \n", tau_ext(0),tau_ext(1),tau_ext(2),tau_ext(3),tau_ext(4),tau_ext(5));
+
+		    // 	// Gravity Comp.
+		    // 	for (casadi_int i = 0; i < sz_arg; ++i) {
+			// 	    temp_q[i] = info.nom.q(i);
+			// 	    G_arg[i] = &temp_q[i];				    
+			// 	}
+			// 	// Evaluate the function	    
+			//     if (G_eval(G_arg, G_res, G_iw, G_w, G_mem)) {
+			//         throw std::runtime_error("Function evaluation failed.");
+			//     }
+
+			//     for (casadi_int i = 0; i < sz_res; ++i) {
+		    //     	info.nom.tau(i) = G_values[i] - info.nom.tau_ext(i);
+		    // 	}
+		    // 	// rt_printf("G: %lf, %lf, %lf, %lf, %lf, %lf \n", info.nom.tau(0),info.nom.tau(1),info.nom.tau(2),info.nom.tau(3),info.nom.tau(4),info.nom.tau(5));
+			// }
+			
+
+
+			endCycle = rt_timer_read();
+			periodIndysim = (unsigned long) endCycle - beginCycle;
+		
+		}
+		rt_task_wait_period(NULL); //wait for next cycle
+	}
+}
+#endif
+
 
 #ifdef __BULLET__
 // Bullet task
@@ -927,8 +1594,8 @@ void bullet_run(void *arg)
 	// info.nom.q = JVec::Zero();
 	// info.nom.q_dot = JVec::Zero();
 	// info.nom.q_ddot = JVec::Zero();
-	// info.nom.F = Vector6f::Zero();
-	// info.nom.F_CB = Vector6f::Zero();
+	// info.nom.F = Vector6d::Zero();
+	// info.nom.F_CB = Vector6d::Zero();
 
 	// rt_printf("Start Bullet\n");
 	// while (1)
@@ -1037,6 +1704,9 @@ void print_run(void *arg)
 			#ifdef __BULLET__
 			rt_printf("Bullet_dt=%lius\n",periodBullet/1000);
 			#endif
+			#ifdef __CASADI__
+			rt_printf("IndySim_dt=%lius\n",periodIndysim/1000);
+			#endif
 			for(int j=0; j<NUM_AXIS; ++j){
 				rt_printf("ID: %d", j);
 			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
@@ -1048,20 +1718,23 @@ void print_run(void *arg)
 				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
 			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf, NomTor: %lf\n", info.des.tau(j), info.act.tau(j), info.nom.tau(j));
+				rt_printf("\t TarTor: %f, ActTor: %lf, NomTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j), info.act.tau_ext(j));
 			}
 
-			rt_printf("ReadFT: %f, %f, %f, %f, %f, %f\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
-			rt_printf("ReadFT_CB: %f, %f, %f, %f, %f, %f\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
+			rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
+			rt_printf("ReadFT_CB: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
 			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
 
 #ifdef __CASADI__
-			indy7_M();
-		    indy7_C();
-		    indy7_G();
-		    indy7_J_b();
-		    indy7_J_s();
-            indy7_FK();
+			// indy7_M();
+			// indy7_Minv();
+		    // indy7_C();
+		    // indy7_G();
+		    // indy7_J_b();
+		    // indy7_J_s();
+            // indy7_FK();
+            // indy7_FD();
+            // indy7_FD_rk();
 #endif
 
 			rt_printf("\n");
@@ -1083,12 +1756,16 @@ void print_run(void *arg)
 void signal_handler(int signum)
 {
 	rt_task_delete(&RTIndy7_task);
-	rt_task_delete(&bullet_task);
+	
 	rt_task_delete(&safety_task);
 	rt_task_delete(&print_task);
-
-
+#ifdef __CASADI__
+	rt_task_delete(&indysim_task);
+#endif
+#ifdef __BULLET__
+	rt_task_delete(&bullet_task);
 	b3DisconnectSharedMemory(kPhysClient);
+#endif
 	// FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
 	// FTConfigParamCB[0]=FT_STOP_DEVICE;
 	// nrmk_master.writeBuffer(0x70003, FTConfigParam);
@@ -1160,6 +1837,12 @@ int main(int argc, char **argv)
 	// RTIndy7 simulation
 	rt_task_create(&bullet_task, "bullet_task", 0, 95, 0);
 	rt_task_start(&bullet_task, &bullet_run, NULL);
+#endif
+
+#ifdef __CASADI__
+	// RTIndy7 simulation
+	rt_task_create(&indysim_task, "indysim_task", 0, 96, 0);
+	rt_task_start(&indysim_task, &indysim_run, NULL);
 #endif
 
 	// RTIndy7 safety

@@ -22,20 +22,6 @@ modern_robotics.h
 Eigen/Dense
 -
 
-/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.cpp
-modern_robotics.h
-/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.h
-Eigen/Dense
--
-cmath
--
-vector
--
-iostream
--
-chrono
--
-
 /home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.h
 Eigen/Dense
 -

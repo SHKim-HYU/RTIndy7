@@ -17,7 +17,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../include/Network/CMakeLists.txt"
   "../include/Robot/CMakeLists.txt"
   "../modules/CMakeFunctions.cmake"
-  "../modules/FindBullet.cmake"
   "../modules/FindCASADI.cmake"
   "../modules/FindEtherlab.cmake"
   "../modules/FindKernelHeaders.cmake"

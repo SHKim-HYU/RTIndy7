@@ -10,7 +10,6 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_CXX
-  "__BULLET__"
   "__CASADI__"
   )
 
@@ -22,14 +21,13 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include/MR"
   "../include/Network"
   "../include/Robot"
-  "/usr/src/linux-headers-5.4.124-xenomai-3.1.1+"
+  "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
   "/usr/xenomai/include/trank"
   "/usr/xenomai/include/cobalt"
   "/usr/xenomai/include"
   "/usr/xenomai/include/alchemy"
   "/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/include"
   "/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/include/casadi"
-  "/usr/local/include/bullet"
   "/opt/etherlab/include"
   "/usr/include/eigen3"
   "/usr/include/jsoncpp"

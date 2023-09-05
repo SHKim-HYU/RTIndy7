@@ -103,32 +103,32 @@ MR_Indy7::MR_Indy7() {
         switch(i)
         {
         case 0:
-            Kp(i,i) = 100.0;
-            Kv(i,i) = 5.0;
+            Kp(i,i) = 70.0;
+            Kv(i,i) = 55.0;
             Ki(i,i)=10.0;
             break;
         case 1:
-            Kp(i,i) = 100.0;
-            Kv(i,i) = 5.0;
+            Kp(i,i) = 75.0;
+            Kv(i,i) = 55.0;
             Ki(i,i)=10.0;
             break;
         case 2:
-            Kp(i,i) = 100.0;
-            Kv(i,i) = 5.0;
+            Kp(i,i) = 40.0;
+            Kv(i,i) = 30.0;
             Ki(i,i)=5.0;
             break;
         case 3:
-            Kp(i,i) = 60.0;
-            Kv(i,i) = 3.0;
+            Kp(i,i) = 25.0;
+            Kv(i,i) = 15.0;
             Ki(i,i)=3.0;
             break;
         case 4:
-            Kp(i,i) = 60.0;
-            Kv(i,i) = 3.0;
+            Kp(i,i) = 25.0;
+            Kv(i,i) = 15.0;
             Ki(i,i)=3.0;
             break;
         case 5:
-            Kp(i,i) = 60.0;
+            Kp(i,i) = 18.0;
             Kv(i,i) = 3.0;
             Ki(i,i)=1.0;
             break;
@@ -192,7 +192,7 @@ JVec MR_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des){
     JVec torq = Mmat*ddq_ref+H;
     return torq;
 }
-JVec MR_Indy7::ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec& eint){
+JVec MR_Indy7::ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec eint){
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
     MassMat Mmat = mr::MassMatrix(q,this->Mlist, this->Glist, this->Slist);
@@ -201,7 +201,7 @@ JVec MR_Indy7::ComputedTorquePIDControl( JVec q,JVec dq,JVec q_des,JVec dq_des,J
     JVec torq = Mmat*ddq_ref+H;
     return torq;
 }
-JVec MR_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec& eint){
+JVec MR_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec eint){
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
     MassMat Mmat = mr::MassMatrix(q,this->Mlist, this->Glist, this->Slist);
@@ -209,6 +209,7 @@ JVec MR_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,J
     JVec G = mr::GravityForces(q,this->g,this->Mlist, this->Glist, this->Slist) ; 
     JVec ddq_ref = ddq_des+Hinf_Kv*edot+Hinf_Kp*e;
     JVec torq = Mmat*ddq_ref+C+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
+
     return torq;
 }
 

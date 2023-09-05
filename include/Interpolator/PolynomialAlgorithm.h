@@ -727,6 +727,9 @@ public:
 		double T = t - _t0;
 		if (T>_duration)
 		{
+			pd = _pf;
+			vd = _vf;
+			ad = _af;
 			_isArrived = true;
 		}
 		else
