@@ -26,6 +26,11 @@ if(WITH_CB)
     add_compile_definitions(__CB__)
 endif()
 
+# IndyRP Option
+if(WITH_RP)
+    add_compile_definitions(__RP__)
+endif()
+
 
 find_package(Xenomai 3.1.1 REQUIRED NATIVE)
 if(Xenomai_FOUND)

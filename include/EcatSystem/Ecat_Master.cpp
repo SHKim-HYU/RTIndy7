@@ -71,12 +71,21 @@ struct ecat_variables
     enum
     {
 #ifdef __CB__
+#ifdef __RP__
+        NUM_RXDOMAIN_ENTRIES = 62,
+        NUM_TXDOMAIN_ENTRIES = 70,      
+#else
         NUM_RXDOMAIN_ENTRIES = 57,
         NUM_TXDOMAIN_ENTRIES = 65,      
 #endif
-#ifndef __CB__
+#else
+#ifdef __RP__
+        NUM_RXDOMAIN_ENTRIES = 42,
+        NUM_TXDOMAIN_ENTRIES = 45,         
+#else
         NUM_RXDOMAIN_ENTRIES = 37,
         NUM_TXDOMAIN_ENTRIES = 40,         
+#endif
 #endif
     };
 

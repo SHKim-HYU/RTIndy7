@@ -36,11 +36,15 @@ class NRMK_Master
 	public:
 		enum
 		{
+#ifndef __RP__
 			NUM_NRMK_DRIVE_AXES = 6,
+#else
+			NUM_NRMK_DRIVE_AXES = 7,	
+#endif	
+
 #ifdef __CB__
 			NUM_NRMK_IO_MODULE_AXES = 1,
-#endif
-#ifndef __CB__
+#else
 			NUM_NRMK_IO_MODULE_AXES = 0,
 #endif
 			NUM_NRMK_INDY_TOOL_AXES = 1,

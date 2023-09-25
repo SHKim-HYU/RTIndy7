@@ -226,7 +226,8 @@ if(WITH_CASADI)
     )
 
     link_directories(
-      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
+      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indy7"
+      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indyRP"
     )
     # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
 endif()

@@ -71,8 +71,7 @@ using namespace std;
 
 #ifdef __CB__
 #define NUM_IO_MODULE 	1
-#endif
-#ifndef __CB__
+#else
 #define NUM_IO_MODULE 	0
 #endif
 #define NUM_TOOL 		1
