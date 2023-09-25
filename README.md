@@ -23,7 +23,7 @@ All options are off as a default
 - WITH_RP: Sellect robot model IndyRP, NRMK(default: Indy7)
 - WITH_CB: Add I/O control box Ethercat slave 
 
-````
+```
 $ sudo -s
 $ ./RTIndy7_01
 ```
