@@ -458,6 +458,9 @@ WITH_CB:BOOL=OFF
 //with RAISIM Simulation
 WITH_RAISIM:BOOL=OFF
 
+//with Indy RP option
+WITH_RP:BOOL=OFF
+
 //Xenomai base directory location (optional, used for nonstandard
 // installation paths)
 XENOMAI_ROOT_DIR:PATH=/usr/xenomai

@@ -42,9 +42,9 @@ RT_TASK print_task;
 	{
 		RTIME start, end;
 		// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_fd.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_fd.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_fd.so");
+	        throw std::runtime_error("Cannot open indy7_fd.so");
 	    }
 
 	    // Reset error
@@ -56,7 +56,7 @@ RT_TASK print_task;
 	        throw std::runtime_error("Function evaluation failed.");
 	    }
 
-	    // Allocate input/output buffers and work vectors dlrj
+	    // Allocate input/output buffers and work vectors
 	    casadi_int sz_arg = 6;
 	    casadi_int sz_res = 6;
 	    casadi_int sz_iw = 0;
@@ -121,9 +121,9 @@ RT_TASK print_task;
 		RTIME start, end;
 		double dt=((double) cycle_ns)/((double) NSEC_PER_SEC);
 		// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_fd.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_fd.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_fd.so");
+	        throw std::runtime_error("Cannot open indy7_fd.so");
 	    }
 
 	    // Reset error
@@ -261,9 +261,9 @@ RT_TASK print_task;
 	{
 		RTIME start, end;
 	// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_G.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_G.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_G.so, error: %s\n");
+	        throw std::runtime_error("Cannot open indy7_G.so, error: %s\n");
 	    }
 
 	    // Reset error
@@ -318,7 +318,7 @@ RT_TASK print_task;
 	        G(i) = output_values[i];
 	    }
 
-	    rt_printf("[cs]computation time for \"G\": %lius\n", (end-start)/1000);
+	    // rt_printf("[cs]computation time for \"G\": %lius\n", (end-start)/1000);
 
 	    // Free the handle
 	    dlclose(handle);
@@ -329,9 +329,9 @@ RT_TASK print_task;
 	{
 		RTIME start, end;
 	// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_M.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_M.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_M.so, error: %s\n");
+	        throw std::runtime_error("Cannot open indy7_M.so, error: %s\n");
 	    }
 
 	    // Reset error
@@ -394,7 +394,7 @@ RT_TASK print_task;
 	        }
 	    }
 
-	    rt_printf("[cs]computation time for \"M\": %lius\n", (end-start)/1000);
+	    // rt_printf("[cs]computation time for \"M\": %lius\n", (end-start)/1000);
 	    
 	    // Free the handle
 	    dlclose(handle);
@@ -406,9 +406,9 @@ RT_TASK print_task;
 	{
 		RTIME start, end;
 	// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_Minv.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_Minv.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_Minv.so, error: %s\n");
+	        throw std::runtime_error("Cannot open indy7_Minv.so, error: %s\n");
 	    }
 
 	    // Reset error
@@ -470,7 +470,7 @@ RT_TASK print_task;
 	        }
 	    }
 
-	    rt_printf("[cs]computation time for \"Minv\": %lius\n", (end-start)/1000);
+	    // rt_printf("[cs]computation time for \"Minv\": %lius\n", (end-start)/1000);
 	    
 	    // Free the handle
 	    dlclose(handle);
@@ -482,9 +482,9 @@ RT_TASK print_task;
 	{
 		RTIME start, end;
 	// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_C.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_C.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_C.so, error: %s\n");
+	        throw std::runtime_error("Cannot open indy7_C.so, error: %s\n");
 	    }
 
 	    // Reset error
@@ -548,7 +548,7 @@ RT_TASK print_task;
 	        }
 	    }
 
-		rt_printf("[cs]computation time for \"C\": %lius\n", (end-start)/1000);
+		// rt_printf("[cs]computation time for \"C\": %lius\n", (end-start)/1000);
 
 	    // Free the handle
 	    dlclose(handle);
@@ -560,9 +560,9 @@ RT_TASK print_task;
 	{
 	    RTIME start, end;
 	// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_fk_ee.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_fk_ee.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_fk_ee.so, error: %s\n");
+	        throw std::runtime_error("Cannot open indy7_fk_ee.so, error: %s\n");
 	    }
 
 	    // Reset error
@@ -617,7 +617,7 @@ RT_TASK print_task;
 	    //     }
 	    // }
 	    // cout<<T_ee<<endl;
-	    rt_printf("[cs]computation time for \"FK\": %lius\n", (end-start)/1000);
+	    // rt_printf("[cs]computation time for \"FK\": %lius\n", (end-start)/1000);
 
 	    // Free the handle
 	    dlclose(handle);
@@ -629,9 +629,9 @@ RT_TASK print_task;
 	{
 		RTIME start, end;
 		// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_J_b.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_J_b.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        throw std::runtime_error("Cannot open indyrp2_J_b.so");
+	        throw std::runtime_error("Cannot open indy7_J_b.so");
 	    }
 
 	    // Reset error
@@ -683,7 +683,7 @@ RT_TASK print_task;
 	        	J_b(j,i) = output_values[i * sz_res + j];
 	        }
 	    }
-	    rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
+	    // rt_printf("[cs]computation time for \"J_b\": %lius\n", (end-start)/1000);
 	    
 	    // Free the handle
 	    dlclose(handle);
@@ -694,9 +694,9 @@ RT_TASK print_task;
 	{
 		RTIME start, end;
 	// Load the shared library
-	    void* handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_J_s.so", RTLD_LAZY);
+	    void* handle = dlopen("../lib/URDF2CASADI/indy7/indy7_J_s.so", RTLD_LAZY);
 	    if (handle == 0) {
-	        printf("Cannot open indyrp2_J_s.so, error: %s\n", dlerror());
+	        printf("Cannot open indy7_J_s.so, error: %s\n", dlerror());
 	        return 1;
 	    }
 
@@ -752,7 +752,7 @@ RT_TASK print_task;
 	    //     }
 	    //     printf("\n");
 	    // }
-	    rt_printf("[cs]computation time for \"J_s\": %lius\n", (end-start)/1000);
+	    // rt_printf("[cs]computation time for \"J_s\": %lius\n", (end-start)/1000);
 
 	    // Free the handle
 	    dlclose(handle);
@@ -1117,27 +1117,27 @@ void indysim_run(void *arg)
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
 
 	// Load the shared library
-    void* fd_handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_fd.so", RTLD_LAZY);
+    void* fd_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_fd.so", RTLD_LAZY);
     if (fd_handle == 0) {
-        throw std::runtime_error("Cannot open indyrp2_fd.so");
+        throw std::runtime_error("Cannot open indy7_fd.so");
     }
     
-    void* G_handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_G.so", RTLD_LAZY);
+    void* G_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_G.so", RTLD_LAZY);
     if (G_handle == 0) {
-        throw std::runtime_error("Cannot open indyrp2_G.so");
+        throw std::runtime_error("Cannot open indy7_G.so");
     }
-    void* M_handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_M.so", RTLD_LAZY);
+    void* M_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_M.so", RTLD_LAZY);
     if (M_handle == 0) {
-        throw std::runtime_error("Cannot open indyrp2_M.so");
+        throw std::runtime_error("Cannot open indy7_M.so");
     }
-    void* C_handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_C.so", RTLD_LAZY);
+    void* C_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_C.so", RTLD_LAZY);
     if (C_handle == 0) {
-        throw std::runtime_error("Cannot open indyrp2_C.so");
+        throw std::runtime_error("Cannot open indy7_C.so");
     }
 
-    void* J_handle = dlopen("../lib/URDF2CASADI/indyrp2/indyrp2_J_b.so", RTLD_LAZY);
+    void* J_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_J_b.so", RTLD_LAZY);
     if (J_handle == 0) {
-        throw std::runtime_error("Cannot open indyrp2_J_b.so");
+        throw std::runtime_error("Cannot open indy7_J_b.so");
     }
 
 

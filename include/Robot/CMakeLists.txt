@@ -18,7 +18,10 @@ else()
         add_library(${PROJECT_NAME} SHARED STATIC ${SOURCE_FILES})
 endif()
 
-
+if(WITH_CASADI)
+        file(GLOB CSINDY_SRC_FILES "CS_Indy7.cpp" "CS_Indy7.h")
+        add_library(${PROJECT_NAME} SHARED STATIC ${SOURCE_FILES} ${BULLET_SRC_FILES})
+endif()
 
 add_library(sub::Robot ALIAS ${PROJECT_NAME})
 
@@ -52,6 +55,17 @@ if(WITH_BULLET)
         target_link_libraries(${PROJECT_NAME} ${BULLET_LIBRARIES})
     endif()
 endif()
+
+if(WITH_CASADI)
+    add_compile_definitions(__CASADI__)
+    find_package(CASADI REQUIRED)
+    if (CASADI_FOUND)
+        MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
+        MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
+        target_include_directories(${PROJECT_NAME} PUBLIC ${CASADI_INCLUDE_DIR})
+        target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
+    endif ()
+endif ()
 
 install(TARGETS ${PROJECT_MANE}
         ARCHIVE DESTINATION lib
