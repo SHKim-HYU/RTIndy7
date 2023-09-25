@@ -1568,6 +1568,25 @@ void NRMK_Master::writeSDO(int EntryID, void * const data)
 int NRMK_Master::_initSlaves()
 {
 #ifdef __CB__
+#ifdef __RP__
+    _NRMK_Drive[0].Index = 1; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 1;
+
+    _NRMK_Drive[1].Index = 2; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 2;
+
+    _NRMK_Drive[2].Index = 3; _NRMK_Drive[2].Alias = 0; _NRMK_Drive[2].Position = 3;
+
+    _NRMK_Drive[3].Index = 4; _NRMK_Drive[3].Alias = 0; _NRMK_Drive[3].Position = 4;
+
+    _NRMK_Drive[4].Index = 5; _NRMK_Drive[4].Alias = 0; _NRMK_Drive[4].Position = 5;
+
+    _NRMK_Drive[5].Index = 6; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[5].Position = 6;
+
+    _NRMK_Drive[6].Index = 7; _NRMK_Drive[6].Alias = 0; _NRMK_Drive[6].Position = 7;
+
+    _NRMK_IO_Module[0].Index = 0; _NRMK_IO_Module[0].Alias = 0; _NRMK_IO_Module[0].Position = 0;
+
+    _NRMK_Indy_Tool[0].Index = 8; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 8;
+#else
     _NRMK_Drive[0].Index = 1; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 1;
 
     _NRMK_Drive[1].Index = 2; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 2;
@@ -1584,7 +1603,24 @@ int NRMK_Master::_initSlaves()
 
     _NRMK_Indy_Tool[0].Index = 7; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 7;
 #endif
-#ifndef __CB__
+#else
+#ifdef __RP__
+    _NRMK_Drive[0].Index = 0; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 0;
+
+    _NRMK_Drive[1].Index = 1; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 1;
+
+    _NRMK_Drive[2].Index = 2; _NRMK_Drive[2].Alias = 0; _NRMK_Drive[2].Position = 2;
+
+    _NRMK_Drive[3].Index = 3; _NRMK_Drive[3].Alias = 0; _NRMK_Drive[3].Position = 3;
+
+    _NRMK_Drive[4].Index = 4; _NRMK_Drive[4].Alias = 0; _NRMK_Drive[4].Position = 4;
+
+    _NRMK_Drive[5].Index = 5; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[5].Position = 5;
+
+    _NRMK_Drive[6].Index = 6; _NRMK_Drive[6].Alias = 0; _NRMK_Drive[6].Position = 6;
+
+    _NRMK_Indy_Tool[0].Index = 7; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 7;
+#else
     _NRMK_Drive[0].Index = 0; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 0;
 
     _NRMK_Drive[1].Index = 1; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 1;
@@ -1598,6 +1634,7 @@ int NRMK_Master::_initSlaves()
     _NRMK_Drive[5].Index = 5; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[5].Position = 5;
 
     _NRMK_Indy_Tool[0].Index = 6; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 6;
+#endif
 #endif
     
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
