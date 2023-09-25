@@ -291,7 +291,7 @@ namespace NRMKHelper
 		// Quintic Trajectory
 		void setTrajInitialQuintic()
 		{
-			_quintic.setInitialTraj(_t, _q, _qdot, 0);
+			_quintic.setInitialTraj(_t, _qdes, _qdotdes, 0);
 		}
 		void setTrajTargetQuintic(double duration)
 		{

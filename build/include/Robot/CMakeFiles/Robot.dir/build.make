@@ -57,15 +57,30 @@ include include/Robot/CMakeFiles/Robot.dir/progress.make
 # Include the compile flags for this target's objects.
 include include/Robot/CMakeFiles/Robot.dir/flags.make
 
+include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.o: include/Robot/CMakeFiles/Robot.dir/flags.make
+include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.o: ../include/Robot/bullet_Indy7.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.o"
+	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Robot.dir/bullet_Indy7.cpp.o -c /home/xeno/Indy_ws/RTIndy7/include/Robot/bullet_Indy7.cpp
+
+include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Robot.dir/bullet_Indy7.cpp.i"
+	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xeno/Indy_ws/RTIndy7/include/Robot/bullet_Indy7.cpp > CMakeFiles/Robot.dir/bullet_Indy7.cpp.i
+
+include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Robot.dir/bullet_Indy7.cpp.s"
+	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xeno/Indy_ws/RTIndy7/include/Robot/bullet_Indy7.cpp -o CMakeFiles/Robot.dir/bullet_Indy7.cpp.s
+
 # Object files for target Robot
-Robot_OBJECTS =
+Robot_OBJECTS = \
+"CMakeFiles/Robot.dir/bullet_Indy7.cpp.o"
 
 # External object files for target Robot
 Robot_EXTERNAL_OBJECTS =
 
+include/Robot/libRobot.a: include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.o
 include/Robot/libRobot.a: include/Robot/CMakeFiles/Robot.dir/build.make
 include/Robot/libRobot.a: include/Robot/CMakeFiles/Robot.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Linking CXX static library libRobot.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libRobot.a"
 	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -P CMakeFiles/Robot.dir/cmake_clean_target.cmake
 	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Robot.dir/link.txt --verbose=$(VERBOSE)
 

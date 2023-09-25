@@ -36,9 +36,18 @@ class NRMK_Master
 	public:
 		enum
 		{
+#ifndef __RP__
 			NUM_NRMK_DRIVE_AXES = 6,
-				NUM_NRMK_IO_MODULE_AXES = 1,
-				NUM_NRMK_INDY_TOOL_AXES = 1,
+#else
+			NUM_NRMK_DRIVE_AXES = 7,	
+#endif	
+
+#ifdef __CB__
+			NUM_NRMK_IO_MODULE_AXES = 1,
+#else
+			NUM_NRMK_IO_MODULE_AXES = 0,
+#endif
+			NUM_NRMK_INDY_TOOL_AXES = 1,
 		};
 		enum
 			{
@@ -102,7 +111,7 @@ class NRMK_Master
 				UINT32 bitoffModesofoperationdisplay;								
 				
 			};
-
+#ifdef __CB__
 			struct NRMK_IO_MODULE_IN
 			{
 				UINT8		ControlCode; 	// 0x7100
@@ -256,7 +265,7 @@ class NRMK_Master
 				UINT32 bitoffRS485RxD9;								
 				
 			};
-
+#endif
 			struct NRMK_INDY_TOOL_IN
 			{
 				UINT8		ILed; 	// 0x7000
@@ -346,15 +355,15 @@ class NRMK_Master
 				// TODO: Init params here. 
 				_NRMK_Drive[i].InParam.Modesofoperation = ModeOp;															
 			}
-
-		for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
+#ifdef __CB__
+			for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
 			{
 				_systemReady[_NRMK_IO_Module[i].Index]=0;
 				_servoOn[_NRMK_IO_Module[i].Index] = false;
 				// TODO: Init params here. 														
 			}
-
-		for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
+#endif
+			for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
 			{
 				_systemReady[_NRMK_Indy_Tool[i].Index]=0;
 				_servoOn[_NRMK_Indy_Tool[i].Index] = false;
@@ -449,9 +458,9 @@ class NRMK_Master
 		
 		/* EtherCAT Slaves */
 		NRMK_DRIVE _NRMK_Drive[NUM_NRMK_DRIVE_AXES];
-
+#ifdef __CB__
 		NRMK_IO_MODULE _NRMK_IO_Module[NUM_NRMK_IO_MODULE_AXES];
-
+#endif
 		NRMK_INDY_TOOL _NRMK_Indy_Tool[NUM_NRMK_INDY_TOOL_AXES];
 						
 }; 

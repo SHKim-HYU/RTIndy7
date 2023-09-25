@@ -57,6 +57,8 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
+option(WITH_RP "with Indy RP option" OFF)
+option(WITH_CB "with Indy7 ControlBox" OFF)
 option(WITH_CASADI "import for CasADi function" OFF)
 option(WITH_BULLET "with Bullet Simulation" OFF)
 option(WITH_RAISIM "with RAISIM Simulation" OFF)
@@ -167,6 +169,16 @@ target_link_libraries(${PROJECT_NAME}
         dl
 )
 
+# ControlBox
+if(WITH_RP)
+    add_compile_definitions(__RP__)
+endif()
+
+# ControlBox
+if(WITH_CB)
+    add_compile_definitions(__CB__)
+endif()
+
 # jsoncpp
 find_package(jsoncpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} jsoncpp_lib)
@@ -219,8 +231,25 @@ if(WITH_CASADI)
       indy7_J_id
     )
 
+    set( INDYRP_CASADI
+      indyrp2_M
+      indyrp2_Minv
+      indyrp2_C
+      indyrp2_G
+      indyrp2_id
+      indyrp2_fd
+      indyrp2_fk
+      indyrp2_fk_ee
+      indyrp2_fkrot_ee
+      indyrp2_J_s
+      indyrp2_J_b
+      indyrp2_J_fd
+      indyrp2_J_id
+    )
+
     link_directories(
-      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI"
+      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indy7"
+      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indyRP"
     )
     # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
 endif()

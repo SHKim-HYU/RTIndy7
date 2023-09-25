@@ -1,0 +1,74 @@
+{
+    "name": "indyrp2",
+    "n_dof": "7",
+    "n_joints": "8",
+    "n_q": "14",
+    "n_frames": "21",
+    "gravity": {
+        "x": "0",
+        "y": "0",
+        "z": "-9.8100000000000005"
+    },
+    "forward_kinematics_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_fk.casadi",
+    "forward_dynamics_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_fd.casadi",
+    "inverse_dynamics_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_id.casadi",
+    "Jacobian_forward_dynamics_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_J_fd.casadi",
+    "Jacobian_inverse_dynamics_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_J_id.casadi",
+    "Jacobian_space_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_J_s.casadi",
+    "Jacobian_body_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_J_b.casadi",
+    "mass_matrix_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_M.casadi",
+    "mass_inverse_matrix_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_Minv.casadi",
+    "coriolis_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_C.casadi",
+    "gravity_path": "../lib/URDF2CASADI/indy7/casadi/indyrp2_G.casadi",
+    "joints": {
+        "joint0": {
+            "joint_types": "JointModelRUBZ",
+            "joint_pos_ub": "1.01",
+            "joint_pos_lb": "-1.01",
+            "joint_torque_limit": "inf",
+            "joint_vel_limit": "inf"
+        },
+        "joint1": {
+            "joint_types": "JointModelRUBZ",
+            "joint_pos_ub": "1.01",
+            "joint_pos_lb": "-1.01",
+            "joint_torque_limit": "inf",
+            "joint_vel_limit": "inf"
+        },
+        "joint2": {
+            "joint_types": "JointModelRUBZ",
+            "joint_pos_ub": "1.01",
+            "joint_pos_lb": "-1.01",
+            "joint_torque_limit": "inf",
+            "joint_vel_limit": "inf"
+        },
+        "joint3": {
+            "joint_types": "JointModelRUBZ",
+            "joint_pos_ub": "1.01",
+            "joint_pos_lb": "-1.01",
+            "joint_torque_limit": "inf",
+            "joint_vel_limit": "inf"
+        },
+        "joint4": {
+            "joint_types": "JointModelRUBZ",
+            "joint_pos_ub": "1.01",
+            "joint_pos_lb": "-1.01",
+            "joint_torque_limit": "inf",
+            "joint_vel_limit": "inf"
+        },
+        "joint5": {
+            "joint_types": "JointModelRUBZ",
+            "joint_pos_ub": "1.01",
+            "joint_pos_lb": "-1.01",
+            "joint_torque_limit": "inf",
+            "joint_vel_limit": "inf"
+        },
+        "joint6": {
+            "joint_types": "JointModelRUBZ",
+            "joint_pos_ub": "1.01",
+            "joint_pos_lb": "-1.01",
+            "joint_torque_limit": "inf",
+            "joint_vel_limit": "inf"
+        }
+    }
+}

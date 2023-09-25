@@ -45,11 +45,13 @@ typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
 #endif
 ////////////////////////////////////////////////////////////
 #ifdef __BULLET__
-#include "SharedMemory/SharedMemoryInProcessPhysicsC_API.h"
-#include "SharedMemory/PhysicsClientC_API.h"
+#include "SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h"
+#include "SharedMemory/PhysicsClientSharedMemory_C_API.h"
+#include "SharedMemory/b3RobotSimulatorClientAPI_InternalData.h"
 #include "Bullet3Common/b3Vector3.h"
 #include "Bullet3Common/b3Quaternion.h"
 #include "Bullet3Common/b3HashMap.h"
+
 #include "Utils/b3Clock.h"
 #include <map>
 #include <vector>
@@ -67,10 +69,17 @@ typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
 
 using namespace std;
 
-
+#ifdef __CB__
 #define NUM_IO_MODULE 	1
+#else
+#define NUM_IO_MODULE 	0
+#endif
 #define NUM_TOOL 		1
+#ifdef __RP__
+#define NUM_AXIS		7
+#else
 #define NUM_AXIS		6
+#endif
 #define NUM_SLAVES (NUM_IO_MODULE+NUM_AXIS+NUM_TOOL)		//Modify this number to indicate the actual number of motor on the network
 
 #ifndef PI
@@ -162,7 +171,7 @@ double gt=0;
 
 // Trajectory parameers
 double traj_time=0;
-int motion=1;
+int motion=-1;
 
 /// TO DO: This is user-code.
 double sine_amp=50000, f=0.2, period;
@@ -178,6 +187,7 @@ INT16 	ActualTor[NUM_SLAVES] = {0,};
 UINT32	DataIn[NUM_SLAVES] = {0,};
 UINT8	ModeOfOperationDisplay[NUM_SLAVES] = {0,};
 // IO
+#ifdef __CB__
 UINT8	StatusCode[NUM_SLAVES] = {0,};
 UINT8	DI5V[NUM_SLAVES] = {0,};
 UINT8	DI1[NUM_SLAVES] = {0,};
@@ -203,6 +213,7 @@ UINT8	RS485RxD6[NUM_SLAVES] = {0,};
 UINT8	RS485RxD7[NUM_SLAVES] = {0,};
 UINT8	RS485RxD8[NUM_SLAVES] = {0,};
 UINT8	RS485RxD9[NUM_SLAVES] = {0,};
+#endif
 // Tool
 UINT8	IStatus[NUM_SLAVES] = {0,};
 UINT8	IButton[NUM_SLAVES] = {0,};
@@ -224,6 +235,7 @@ UINT8 	ModeOfOperation[NUM_SLAVES] = {0,};
 UINT16	Controlword[NUM_SLAVES] = {0,};
 
 // IO
+#ifdef __CB__
 UINT8	ControlCode[NUM_SLAVES] = {0,};
 UINT8	DO5V[NUM_SLAVES] = {0,};
 UINT8	TO[NUM_SLAVES] = {0,};
@@ -244,7 +256,7 @@ UINT8	RS485TxD6[NUM_SLAVES] = {0,};
 UINT8	RS485TxD7[NUM_SLAVES] = {0,};
 UINT8	RS485TxD8[NUM_SLAVES] = {0,};
 UINT8	RS485TxD9[NUM_SLAVES] = {0,};
-
+#endif
 // Tool
 UINT8	ILed[NUM_SLAVES] = {0,};
 UINT8	IGripper[NUM_SLAVES] = {0,};
@@ -290,6 +302,7 @@ typedef struct STATE{
 	JVec q_ddot;
 	JVec tau;
 	JVec tau_ext;
+	JVec G;
 
 	Vector6d x;                           //Task space
 	Vector6d x_dot;
@@ -320,30 +333,20 @@ typedef struct JOINT_INFO{
 
 JVec MAX_TORQUES;
 
+Matrix6d Hinf_Kp;
+Matrix6d Hinf_Kv;
+Matrix6d Hinf_Ki;
+Matrix6d Hinf_K_gamma;
+
 #ifdef __BULLET__
 extern const int CONTROL_RATE;
-const int CONTROL_RATE = 1000;
+const int CONTROL_RATE = 100;
 
 // Bullet globals
-b3PhysicsClientHandle kPhysClient = 0;
 const b3Scalar FIXED_TIMESTEP = 1.0 / ((b3Scalar)CONTROL_RATE);
-// temp vars used a lot
 b3SharedMemoryCommandHandle command;
-b3SharedMemoryStatusHandle statusHandle;
 int statusType, ret;
-b3JointInfo jointInfo[8];
-b3JointSensorState b3state;
-// test
-int twojoint;
 
-using namespace std;
-
-map<string, int> jointNameToId;
-
-int actuated_joint_num;
-int eef_num;
-vector<int> actuated_joint_id;
-vector<string> actuated_joint_name;
 #endif
 
 #endif /* RTINDY7CLIENT_H_ */
