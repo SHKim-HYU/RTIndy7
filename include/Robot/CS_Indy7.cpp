@@ -4,7 +4,7 @@
 
 CS_Indy7::CS_Indy7(const string& _modelPath) : loader_(_modelPath)
 {
-	robotModel = loder_.getValue("name").asString();
+	robotModel = loader_.getValue("name").asString();
 	n_dof = loader_.getValue("n_dof").asInt();
 	
 	this->q.resize(this->n_dof);
@@ -119,16 +119,16 @@ CS_Indy7::CS_Indy7(const string& _modelPath) : loader_(_modelPath)
 
 }
 
-CS_Indy7::load_casadi_function(JsonLoader& loader)
+void CS_Indy7::load_casadi_function(JsonLoader& loader_)
 {
-    string FD_path = loader_.getValue("forward_dynamics_path");
-    string M_path = loader_.getValue("mass_matrix_path");
-    string Minv_path = loader_.getValue("mass_inverse_matrix_path");
-    string C_path = loader_.getValue("coriolis_path");
-    string G_path = loader_.getValue("gravity_path");
-    string FK_path = loader_.getValue("forward_kinematics_path");
-    string Js_path = loader_.getValue("Jacobian_space_path");
-    string Jb_path = loader_.getValue("Jacobian_body_path");
+    string FD_path = loader_.getValue("forward_dynamics_path").asString();
+    string M_path = loader_.getValue("mass_matrix_path").asString();
+    string Minv_path = loader_.getValue("mass_inverse_matrix_path").asString();
+    string C_path = loader_.getValue("coriolis_path").asString();
+    string G_path = loader_.getValue("gravity_path").asString();
+    string FK_path = loader_.getValue("forward_kinematics_path").asString();
+    string Js_path = loader_.getValue("Jacobian_space_path").asString();
+    string Jb_path = loader_.getValue("Jacobian_body_path").asString();
 
     fd_cs = casadi::Function::load(FD_path);
     M_cs = casadi::Function::load(M_path);
@@ -191,20 +191,20 @@ CS_Indy7::load_casadi_function(JsonLoader& loader)
     // }
 }
 
-CS_Indy7::updateRobot(JVec _q, JVec _dq)
+void CS_Indy7::updateRobot(JVec _q, JVec _dq)
 {
-    M = M(JVec _q);
-    Minv = Minv(JVec _q);
-    C = C(JVec _q, JVec _dq);
-    G = G(JVec _q); 
+    M = getM(_q);
+    Minv = getMinv(_q);
+    C = getC(_q, _dq);
+    G = getG(_q); 
 
-    T_ee = FK(JVec _q);
+    T_ee = getFK(_q);
 
 
     isUpdated=true;   
 }
 
-CS_Indy7::M(JVec _q)
+MassMat CS_Indy7::getM(JVec _q)
 {
     casadi::DM q_dm = casadi::DM(vector<double>(_q.data(), _q.data() + _q.size()));
     vector<casadi::DM> arg = {q_dm};
@@ -213,7 +213,7 @@ CS_Indy7::M(JVec _q)
     return M;
 }
 
-CS_Indy7::Minv(JVec _q)
+MassMat CS_Indy7::getMinv(JVec _q)
 {
     casadi::DM q_dm = casadi::DM(vector<double>(_q.data(), _q.data() + _q.size()));
     vector<casadi::DM> arg = {q_dm};
@@ -222,18 +222,18 @@ CS_Indy7::Minv(JVec _q)
     return M;
 }
 
-CS_Indy7::C(JVec _q, JVec _dq)
+MassMat CS_Indy7::getC(JVec _q, JVec _dq)
 {
     casadi::DM q_dm = casadi::DM(vector<double>(_q.data(), _q.data() + _q.size()));
     casadi::DM dq_dm = casadi::DM(vector<double>(_dq.data(), _dq.data() + _dq.size()));
     map<string, casadi::DM> arg;
     arg["q"] = q_dm; arg["dq"] = dq_dm;
-    vector<casadi::DM> C_res = C_cs(arg);
+    map<string, casadi::DM> C_res = C_cs(arg);
 
     return C;
 }
 
-CS_Indy7::G(JVec _q)
+JVec CS_Indy7::getG(JVec _q)
 {
     casadi::DM q_dm = casadi::DM(vector<double>(_q.data(), _q.data() + _q.size()));
     vector<casadi::DM> arg = {q_dm};
@@ -242,7 +242,7 @@ CS_Indy7::G(JVec _q)
     return G;
 }
 
-CS_Indy7::FK(JVec _q)
+SE3 CS_Indy7::getFK(JVec _q)
 {
     casadi::DM q_dm = casadi::DM(vector<double>(_q.data(), _q.data() + _q.size()));
     vector<casadi::DM> arg = {q_dm};
@@ -251,7 +251,7 @@ CS_Indy7::FK(JVec _q)
     return T_ee;
 }
 
-CS_Indy7::J_b(JVec _q)
+Jacobian CS_Indy7::getJ_b(JVec _q)
 {
     casadi::DM q_dm = casadi::DM(vector<double>(_q.data(), _q.data() + _q.size()));
     vector<casadi::DM> arg = {q_dm};
@@ -260,7 +260,7 @@ CS_Indy7::J_b(JVec _q)
     return J_b;
 }
 
-CS_Indy7::J_s(JVec _q)
+Jacobian CS_Indy7::getJ_s(JVec _q)
 {
     casadi::DM q_dm = casadi::DM(vector<double>(_q.data(), _q.data() + _q.size()));
     vector<casadi::DM> arg = {q_dm};
@@ -269,7 +269,7 @@ CS_Indy7::J_s(JVec _q)
     return J_s;
 }
 
-CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des)
+JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des)
 {
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
@@ -277,21 +277,21 @@ CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des)
     if(isUpdated)
     {
         JVec ddq_ref = Kv*edot+Kp*e;
-        JVec torq = M*ddq_ref+C*dq+G;
+        tau = M*ddq_ref+C*dq+G;
         isUpdated = false;
     }
     else
     {
-        M = M(JVec _q);
-        C = C(JVec _q, JVec _dq);
-        G = G(JVec _q);
+        M = getM(q);
+        C = getC(q, dq);
+        G = getG(q);
         JVec ddq_ref = Kv*edot+Kp*e;
-        JVec torq = M*ddq_ref+C*dq+G;
+        tau = M*ddq_ref+C*dq+G;
     }
-    return torq;   
+    return tau;   
 }
 
-CS_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES)
+void CS_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES)
 {
     for(int i =0;i<JOINTNUM;i++){
         if(abs(torque(i))> MAX_TORQUES(i)){
@@ -301,25 +301,26 @@ CS_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES)
     }
 }
 
-CS_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec eint)
+JVec CS_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec eint)
 {
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
+    
     if(isUpdated)
     {
         JVec ddq_ref = ddq_des+Hinf_Kv*edot+Hinf_Kp*e;
         JVec dq_ref = dq_des;
-        JVec torq = M*ddq_ref+C*dq_ref+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
+        tau = M*ddq_ref+C*dq_ref+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
         isUpdated = false;
     }
     else
     {
-        M = M(JVec _q);
-        C = C(JVec _q, JVec _dq);
-        G = G(JVec _q);
+        M = getM(q);
+        C = getC(q, dq);
+        G = getG(q);
         JVec ddq_ref = ddq_des+Hinf_Kv*edot+Hinf_Kp*e;
         JVec dq_ref = dq_des;
-        JVec torq = M*ddq_ref+C*dq_ref+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
+        tau = M*ddq_ref+C*dq_ref+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
     }
-    return torq;
+    return tau;
 }

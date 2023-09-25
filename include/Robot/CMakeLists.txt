@@ -4,25 +4,20 @@ project(Robot LANGUAGES CXX)
 set(CMAKE_DEBUG_POSTFIX "d")
 
 
-
+file(GLOB SOURCE_FILES "ServoAxis.cpp" "ServoAxis.h")
 
 if(WITH_BULLET)
-        file(GLOB SOURCE_FILES "ServoAxis.cpp" "ServoAxis.h")
         file(GLOB BULLET_SRC_FILES "bullet_Indy7.cpp" "bullet_Indy7.h")
-        add_library(${PROJECT_NAME} SHARED STATIC ${SOURCE_FILES} ${BULLET_SRC_FILES})
-elseif(WITH_RAISIM)
-        file(GLOB SOURCE_FILES "ServoAxis.cpp" "ServoAxis.h")
-        add_library(${PROJECT_NAME} SHARED STATIC ${SOURCE_FILES})
-else()
-        file(GLOB SOURCE_FILES "ServoAxis.cpp" "ServoAxis.h")
-        add_library(${PROJECT_NAME} SHARED STATIC ${SOURCE_FILES})
+        list(APPEND SOURCE_FILES ${BULLET_SRC_FILES})
 endif()
 
 if(WITH_CASADI)
         file(GLOB CSINDY_SRC_FILES "CS_Indy7.cpp" "CS_Indy7.h")
-        add_library(${PROJECT_NAME} SHARED STATIC ${SOURCE_FILES} ${BULLET_SRC_FILES})
+        list(APPEND SOURCE_FILES ${CSINDY_SRC_FILES})
 endif()
 
+
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 add_library(sub::Robot ALIAS ${PROJECT_NAME})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)

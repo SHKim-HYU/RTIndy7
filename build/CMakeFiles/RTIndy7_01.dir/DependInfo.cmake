@@ -17,12 +17,12 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../bin/inc"
+  "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
   "../include/EcatSystem"
   "../include/Interpolator"
   "../include/MR"
   "../include/Network"
   "../include/Robot"
-  "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
   "/usr/xenomai/include/trank"
   "/usr/xenomai/include/cobalt"
   "/usr/xenomai/include"
