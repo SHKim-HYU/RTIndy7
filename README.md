@@ -13,7 +13,18 @@ $ sudo apt-get install libeigen3-dev libpoco-dev libjsoncpp-dev
 ```
 $ mkdir build && cd build
 $ cmake ../ && make -j($nproc)
+```
+### cmake options
 
+All options are off as a default
+
+- WITH_BULLET: Connect to pybullet server for visualization of simulation
+- WITH_CASADI: Compute robot kinematics & dynamics based on Pinocchio library using CasADi symbolic framework
+- WITH_RP: Sellect robot model IndyRP, NRMK(default: Indy7)
+- WITH_CB: Add I/O control box Ethercat slave 
+
+````
 $ sudo -s
 $ ./RTIndy7_01
 ```
+

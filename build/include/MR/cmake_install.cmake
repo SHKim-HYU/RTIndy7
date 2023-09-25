@@ -1,8 +1,8 @@
-# Install script for directory: /home/xeno/Indy_ws/Space_Indy7/include/MR
+# Install script for directory: /home/xeno/Indy_ws/RTIndy7/include/MR
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/xeno/Indy_ws/Space_Indy7")
+  set(CMAKE_INSTALL_PREFIX "/home/xeno/Indy_ws/RTIndy7")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
