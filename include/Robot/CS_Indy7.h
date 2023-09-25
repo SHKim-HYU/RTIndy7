@@ -4,6 +4,7 @@
 #include "iostream"
 #include "json_loader.h"
 #include <Eigen/Dense>
+#include <casadi/casadi.hpp>
 #include <dlfcn.h>
 
 typedef long long int casadi_int;
@@ -21,6 +22,7 @@ public:
 	JsonLoader loader_;
 
 	bool load_casadi_function();
+	void updateRobot(JVec _q, JVec _dq);
 
 	MassMat M(JVec _q);
 	MassMat Minv(JVec _q);
@@ -39,6 +41,7 @@ public:
 
 private:
 	JVec q, dq, ddq;
+	JVec tau;
 	MassMat M, Minv, C;
 	JVec G;
 
@@ -46,10 +49,13 @@ private:
 	Jacobian J_b, J_s;
 
 private:
+	bool isUpdated = false;
 	string robotModel;
 	int n_dof;
-	void* fd_handle, M_handle, C_handle, G_handle, J_s_handle, J_b_handle, FK_handle;
-	eval_t fd_eval, M_eval, C_eval, G_eval, J_s_eval, J_b_eval, FK_eval;
+	void* fd_handle, M_handle, Minv_handle, C_handle, G_handle, J_s_handle, J_b_handle, FK_handle;
+	eval_t fd_eval, M_eval, Minv_eval C_eval, G_eval, J_s_eval, J_b_eval, FK_eval;
+
+	casadi::Function fd_cs, M_cs, Minv_cs, C_cs, G_cs, J_s_cs, J_b_cs, FK_cs;
 
     MassMat Kp;
     MassMat Kv;
