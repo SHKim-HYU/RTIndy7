@@ -5,7 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/xeno/Indy_ws/RTIndy7/include/EcatSystem/PDOConfig.c" "/home/xeno/Indy_ws/RTIndy7/build/include/EcatSystem/CMakeFiles/EcatSystem.dir/PDOConfig.c.o"
+  "/home/xeno/Indy_ws/Space_Indy7/include/EcatSystem/PDOConfig.c" "/home/xeno/Indy_ws/Space_Indy7/build/include/EcatSystem/CMakeFiles/EcatSystem.dir/PDOConfig.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -25,7 +25,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "/usr/xenomai/include/alchemy"
   )
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/xeno/Indy_ws/RTIndy7/include/EcatSystem/Ecat_Master.cpp" "/home/xeno/Indy_ws/RTIndy7/build/include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o"
+  "/home/xeno/Indy_ws/Space_Indy7/include/EcatSystem/Ecat_Master.cpp" "/home/xeno/Indy_ws/Space_Indy7/build/include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

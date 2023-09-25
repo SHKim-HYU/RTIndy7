@@ -37,7 +37,7 @@ ec_sync_info_t NRMK_Drive_syncs[] = {
     {0xff}
 };
 
-
+#ifdef __CB__
 ec_pdo_info_t NRMK_IO_Module_pdos[] = {
     {0x1610, 20, NRMK_IO_Module_pdo_entries + 0}, /* IO_OUT process data mapping */
     {0x1a10, 25, NRMK_IO_Module_pdo_entries + 20}, /* IO_IN process data mapping */
@@ -50,6 +50,7 @@ ec_sync_info_t NRMK_IO_Module_syncs[] = {
     {3, EC_DIR_INPUT, 1, NRMK_IO_Module_pdos + 1, EC_WD_DISABLE},
     {0xff}
 };
+#endif
 
 ec_pdo_info_t NRMK_Indy_Tool_pdos[] = {
     {0x1600, 7, NRMK_Indy_Tool_pdo_entries + 0}, /* HRI_OUT process data mapping */
@@ -69,8 +70,14 @@ struct ecat_variables
 {
     enum
     {
+#ifdef __CB__
         NUM_RXDOMAIN_ENTRIES = 57,
         NUM_TXDOMAIN_ENTRIES = 65,      
+#endif
+#ifndef __CB__
+        NUM_RXDOMAIN_ENTRIES = 37,
+        NUM_TXDOMAIN_ENTRIES = 40,         
+#endif
     };
 
 
@@ -209,8 +216,8 @@ int NRMK_Master::getAxisEcatStatus(unsigned int AxisIdx, unsigned int & State)
                 return 0;
             }
         }
-
-                for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
+#ifdef __CB__
+    for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
         if (_NRMK_IO_Module[i].Index == AxisIdx)
         {
             ec_slave_config_state_t s;
@@ -235,8 +242,8 @@ int NRMK_Master::getAxisEcatStatus(unsigned int AxisIdx, unsigned int & State)
                 return 0;
             }
         }
-
-                for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
+#endif
+    for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
         if (_NRMK_Indy_Tool[i].Index == AxisIdx)
         {
             ec_slave_config_state_t s;
@@ -552,8 +559,8 @@ void NRMK_Master::processTxDomain()
         _NRMK_Drive[i].OutParam.Modesofoperationdisplay = EC_READ_S8(_systemVars->_txDomain_pd + _NRMK_Drive[i].offModesofoperationdisplay);
         
     }
-
-                for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; ++i)
+#ifdef __CB__
+    for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; ++i)
     {
         _NRMK_IO_Module[i].OutParam.StatusCode = EC_READ_U8(_systemVars->_txDomain_pd + _NRMK_IO_Module[i].offStatusCode);
         _NRMK_IO_Module[i].OutParam.DI5V = EC_READ_U8(_systemVars->_txDomain_pd + _NRMK_IO_Module[i].offDI5V);
@@ -582,8 +589,8 @@ void NRMK_Master::processTxDomain()
         _NRMK_IO_Module[i].OutParam.RS485RxD9 = EC_READ_U8(_systemVars->_txDomain_pd + _NRMK_IO_Module[i].offRS485RxD9);
         
     }
-
-                for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; ++i)
+#endif
+    for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; ++i)
     {
         _NRMK_Indy_Tool[i].OutParam.IStatus = EC_READ_U8(_systemVars->_txDomain_pd + _NRMK_Indy_Tool[i].offIStatus);
         _NRMK_Indy_Tool[i].OutParam.IButton = EC_READ_U8(_systemVars->_txDomain_pd + _NRMK_Indy_Tool[i].offIButton);
@@ -634,6 +641,7 @@ void NRMK_Master::processRxDomain()
         
     }
 
+#ifdef __CB__
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; ++i)
     {
         _systemReady[_NRMK_IO_Module[i].Index] = 1;
@@ -660,7 +668,7 @@ void NRMK_Master::processRxDomain()
         EC_WRITE_U8(_systemVars->_rxDomain_pd +  _NRMK_IO_Module[i].offRS485TxD9, _NRMK_IO_Module[i].InParam.RS485TxD9);
         
     }
-
+#endif
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; ++i)
     {
         _systemReady[_NRMK_Indy_Tool[i].Index] = 1;
@@ -743,6 +751,7 @@ void NRMK_Master::readBuffer(int EntryID, void * const data)
         }
             break;          
 
+#ifdef __CB__
         case 0x61001:
         {
             UINT8 * const _statusCode = static_cast<UINT8 * const>(data);
@@ -1017,7 +1026,7 @@ void NRMK_Master::readBuffer(int EntryID, void * const data)
 
         }
             break;          
-
+#endif
         case 0x60001:
         {
             UINT8 * const _iStatus = static_cast<UINT8 * const>(data);
@@ -1196,7 +1205,7 @@ void NRMK_Master::writeBuffer(int EntryID, void * const data)
 
         }
             break;                      
-
+#ifdef __CB__
         case 0x71001:
         {
             UINT8 * const _controlCode = static_cast<UINT8 * const>(data);
@@ -1436,7 +1445,7 @@ void NRMK_Master::writeBuffer(int EntryID, void * const data)
 
         }
             break;                      
-
+#endif
         case 0x70001:
         {
             UINT8 * const _iLed = static_cast<UINT8 * const>(data);
@@ -1549,6 +1558,7 @@ void NRMK_Master::writeSDO(int EntryID, void * const data)
 
 int NRMK_Master::_initSlaves()
 {
+#ifdef __CB__
     _NRMK_Drive[0].Index = 1; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 1;
 
     _NRMK_Drive[1].Index = 2; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 2;
@@ -1564,7 +1574,22 @@ int NRMK_Master::_initSlaves()
     _NRMK_IO_Module[0].Index = 0; _NRMK_IO_Module[0].Alias = 0; _NRMK_IO_Module[0].Position = 0;
 
     _NRMK_Indy_Tool[0].Index = 7; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 7;
-    
+#endif
+#ifndef __CB__
+    _NRMK_Drive[0].Index = 0; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 0;
+
+    _NRMK_Drive[1].Index = 1; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 1;
+
+    _NRMK_Drive[2].Index = 2; _NRMK_Drive[2].Alias = 0; _NRMK_Drive[2].Position = 2;
+
+    _NRMK_Drive[3].Index = 3; _NRMK_Drive[3].Alias = 0; _NRMK_Drive[3].Position = 3;
+
+    _NRMK_Drive[4].Index = 4; _NRMK_Drive[4].Alias = 0; _NRMK_Drive[4].Position = 4;
+
+    _NRMK_Drive[5].Index = 5; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[5].Position = 5;
+
+    _NRMK_Indy_Tool[0].Index = 6; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 6;
+#endif
     
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
     {
@@ -1582,7 +1607,7 @@ int NRMK_Master::_initSlaves()
             return -1;
         }
     }
-
+#ifdef __CB__
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
     {
         _NRMK_IO_Module[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, NRMK_VendorID, NRMK_IO_Module_ProductCode);                   
@@ -1599,7 +1624,7 @@ int NRMK_Master::_initSlaves()
             return -1;
         }
     }
-
+#endif
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
     {
         _NRMK_Indy_Tool[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, NRMK_VendorID, NRMK_Indy_Tool_ProductCode);                   
@@ -1649,7 +1674,7 @@ int NRMK_Master::_initDomains()
                     _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6060, 0, &(_NRMK_Drive[i].offModesofoperation), &(_NRMK_Drive[i].bitoffModesofoperation));    // Modesofoperation
                     
                 }
-
+#ifdef __CB__
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
                 {
                     _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 1, &(_NRMK_IO_Module[i].offControlCode), &(_NRMK_IO_Module[i].bitoffControlCode));  // ControlCode
@@ -1674,7 +1699,7 @@ int NRMK_Master::_initDomains()
                     _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x7100, 20, &(_NRMK_IO_Module[i].offRS485TxD9), &(_NRMK_IO_Module[i].bitoffRS485TxD9)); // RS485TxD9
                     
                 }
-
+#endif
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
                 {
                     _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 1, &(_NRMK_Indy_Tool[i].offILed), &(_NRMK_Indy_Tool[i].bitoffILed));    // ILed
@@ -1696,7 +1721,7 @@ int NRMK_Master::_initDomains()
                     _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Drive_ProductCode, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, 0x6061, 0, &(_NRMK_Drive[i].offModesofoperationdisplay), &(_NRMK_Drive[i].bitoffModesofoperationdisplay));  // Modesofoperationdisplay
                     
                 }
-
+#ifdef __CB__
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
                 {
                     _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 1, &(_NRMK_IO_Module[i].offStatusCode), &(_NRMK_IO_Module[i].bitoffStatusCode));    // StatusCode
@@ -1726,7 +1751,7 @@ int NRMK_Master::_initDomains()
                     _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_IO_Module_ProductCode, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, 0x6100, 25, &(_NRMK_IO_Module[i].offRS485RxD9), &(_NRMK_IO_Module[i].bitoffRS485RxD9)); // RS485RxD9
                     
                 }
-
+#endif
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
                 {
                     _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 1, &(_NRMK_Indy_Tool[i].offIStatus), &(_NRMK_Indy_Tool[i].bitoffIStatus));  // IStatus
@@ -1762,17 +1787,21 @@ int NRMK_Master::_initDomains()
         // 0x0700(sync0,1), 0x0300(sync0), 0x0000(none)
         ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
-
+#ifdef __CB__
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
         ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
-
+#endif
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
         ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
     
-    
+#ifdef __CB__   
     int ret = ecrt_master_select_reference_clock(_systemVars->_master, _NRMK_IO_Module[0].Config);
+#endif
+#ifndef __CB__
+    int ret = ecrt_master_select_reference_clock(_systemVars->_master, _NRMK_Drive[0].Config);
+#endif
     if (ret < 0)
     {
         fprintf(stderr, "Failed to select reference clock: %s\n", strerror(-ret));

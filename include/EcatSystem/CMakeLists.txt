@@ -21,6 +21,12 @@ if(Etherlab_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${Etherlab_LIBRARIES})
 endif(Etherlab_FOUND)
 
+# ControlBox
+if(WITH_CB)
+    add_compile_definitions(__CB__)
+endif()
+
+
 find_package(Xenomai 3.1.1 REQUIRED NATIVE)
 if(Xenomai_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${KERNELHEADERS_DIR})

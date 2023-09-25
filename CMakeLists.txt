@@ -57,6 +57,7 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
+option(WITH_CB "with Indy7 ControlBox" OFF)
 option(WITH_CASADI "import for CasADi function" OFF)
 option(WITH_BULLET "with Bullet Simulation" OFF)
 option(WITH_RAISIM "with RAISIM Simulation" OFF)
@@ -166,6 +167,11 @@ target_link_libraries(${PROJECT_NAME}
         # pybullet_cpp
         dl
 )
+
+# ControlBox
+if(WITH_CB)
+    add_compile_definitions(__CB__)
+endif()
 
 # jsoncpp
 find_package(jsoncpp REQUIRED)

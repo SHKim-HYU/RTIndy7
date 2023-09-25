@@ -64,36 +64,36 @@ MR_Indy7::MR_Indy7() {
         case 0:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 50+1.0/invL2sqr_1 ;
+            Hinf_K_gamma(i,i) = 70+1.0/invL2sqr_1 ;
             break;
         case 1:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 50+1.0/invL2sqr_2 ;
+            Hinf_K_gamma(i,i) = 70+1.0/invL2sqr_2 ;
 
             break;
         case 2:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_3 ;
+            Hinf_K_gamma(i,i) = 70.0+1.0/invL2sqr_3 ;
 
             break;
         case 3:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_4 ;
+            Hinf_K_gamma(i,i) = 70.0+1.0/invL2sqr_4 ;
 
             break;
         case 4:
               Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_5 ;
+            Hinf_K_gamma(i,i) = 70.0+1.0/invL2sqr_5 ;
 
             break;
         case 5:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 50.0+1.0/invL2sqr_6 ;
+            Hinf_K_gamma(i,i) = 70.0+1.0/invL2sqr_6 ;
 
             break;
         }
@@ -209,7 +209,7 @@ JVec MR_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,J
     JVec G = mr::GravityForces(q,this->g,this->Mlist, this->Glist, this->Slist) ; 
     JVec ddq_ref = ddq_des+Hinf_Kv*edot+Hinf_Kp*e;
     JVec torq = Mmat*ddq_ref+C+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
-
+    
     return torq;
 }
 

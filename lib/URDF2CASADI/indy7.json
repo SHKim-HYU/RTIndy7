@@ -7,7 +7,7 @@
     "gravity": {
         "x": "0",
         "y": "0",
-        "z": "-9.8100000000000005"
+        "z": "0"
     },
     "forward_kinematics_path": "indy7_fk.casadi",
     "forward_dynamics_path": "indy7_fd.casadi",
