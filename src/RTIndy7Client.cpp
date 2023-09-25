@@ -81,12 +81,18 @@ void trajectory_generation(){
 	    case 1:
 	    	info.q_target(0)=1.5709; 	info.q_target(1)=-0.4071; 	info.q_target(2)=0.4071;
 	    	info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
+#ifdef __RP__
+	    	info.q_target(6)=0.0;
+#endif
 	    	traj_time = 3.0;
 	    	motion++;
 	        break;
 	    case 2:
 	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
 	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
+#ifdef __RP__
+	    	info.q_target(6)=0.0;
+#endif
 	    	// info.q_target(0)=-1.5709; 	info.q_target(1)=0.4071; 	info.q_target(2)=-0.4071;
 	    	// info.q_target(3)=-1.5709; 	info.q_target(4)=-1.5709; 	info.q_target(5)=-1.5709;
 	    	traj_time = 3.0;
@@ -96,6 +102,9 @@ void trajectory_generation(){
 	    case 3:
 	    	info.q_target(0)=-1.5709; 	info.q_target(1)=0.4071; 	info.q_target(2)=-0.4071;
 	    	info.q_target(3)=-1.5709; 	info.q_target(4)=-1.5709; 	info.q_target(5)=-1.5709;
+#ifdef __RP__
+	    	info.q_target(6)=0.0;
+#endif
 	    	// info.q_target(0)=1.5709; 	info.q_target(1)=-0.4071; 	info.q_target(2)=0.4071;
 	    	// info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
 	    	traj_time = 3.0;
@@ -104,12 +113,18 @@ void trajectory_generation(){
 	    case 4:
 	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
 	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
+#ifdef __RP__
+	    	info.q_target(6)=0.0;
+#endif
 	    	traj_time = 3.0;
 	    	motion=1;
 	    	break;
 	    default:
 	    	info.q_target(0)=info.act.q(0); 	info.q_target(1)=info.act.q(1); 	info.q_target(2)=info.act.q(2);
 	    	info.q_target(3)=info.act.q(3); 	info.q_target(4)=info.act.q(4); 	info.q_target(5)=info.act.q(5);
+#ifdef __RP__
+	    	info.q_target(6)=0.0;
+#endif
 	    	motion=1;
 	    	break;
 	    }
