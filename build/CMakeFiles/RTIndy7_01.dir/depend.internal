@@ -306,6 +306,34 @@ CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o
  /usr/include/jsoncpp/json/value.h
  /usr/include/jsoncpp/json/version.h
  /usr/include/jsoncpp/json/writer.h
+ /usr/local/include/bullet/Bullet3Common/b3AlignedAllocator.h
+ /usr/local/include/bullet/Bullet3Common/b3AlignedObjectArray.h
+ /usr/local/include/bullet/Bullet3Common/b3HashMap.h
+ /usr/local/include/bullet/Bullet3Common/b3Logging.h
+ /usr/local/include/bullet/Bullet3Common/b3MinMax.h
+ /usr/local/include/bullet/Bullet3Common/b3QuadWord.h
+ /usr/local/include/bullet/Bullet3Common/b3Quaternion.h
+ /usr/local/include/bullet/Bullet3Common/b3Scalar.h
+ /usr/local/include/bullet/Bullet3Common/b3Vector3.h
+ /usr/local/include/bullet/LinearMath/btAlignedAllocator.h
+ /usr/local/include/bullet/LinearMath/btAlignedObjectArray.h
+ /usr/local/include/bullet/LinearMath/btMatrix3x3.h
+ /usr/local/include/bullet/LinearMath/btMinMax.h
+ /usr/local/include/bullet/LinearMath/btQuadWord.h
+ /usr/local/include/bullet/LinearMath/btQuaternion.h
+ /usr/local/include/bullet/LinearMath/btScalar.h
+ /usr/local/include/bullet/LinearMath/btTransform.h
+ /usr/local/include/bullet/LinearMath/btVector3.h
+ /usr/local/include/bullet/SharedMemory/PhysicsClientC_API.h
+ /usr/local/include/bullet/SharedMemory/PhysicsClientSharedMemory2_C_API.h
+ /usr/local/include/bullet/SharedMemory/PhysicsClientSharedMemory_C_API.h
+ /usr/local/include/bullet/SharedMemory/PhysicsClientTCP_C_API.h
+ /usr/local/include/bullet/SharedMemory/PhysicsClientUDP_C_API.h
+ /usr/local/include/bullet/SharedMemory/PhysicsDirectC_API.h
+ /usr/local/include/bullet/SharedMemory/SharedMemoryPublic.h
+ /usr/local/include/bullet/SharedMemory/b3RobotSimulatorClientAPI_InternalData.h
+ /usr/local/include/bullet/SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h
+ /usr/local/include/bullet/Utils/b3Clock.h
  /usr/xenomai/include/alchemy/compat.h
  /usr/xenomai/include/alchemy/mutex.h
  /usr/xenomai/include/alchemy/task.h

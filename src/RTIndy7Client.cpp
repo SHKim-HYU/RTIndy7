@@ -23,6 +23,9 @@ RT_TASK RTIndy7_task;
 #ifdef __BULLET__
 RT_TASK bullet_task;
 #endif
+#ifdef __POCO__
+RT_TASK poco_task;
+#endif
 #ifdef __CASADI__
 RT_TASK indysim_task;
 CS_Indy7 cs_indy7;
@@ -707,6 +710,33 @@ void bullet_run(void *arg)
 }
 #endif
 
+#ifdef __POCO__
+void poco_run(void *arg)
+{
+	RTIME now, previous=0;
+	RTIME beginCycle, endCycle;
+	rt_task_set_periodic(NULL, TM_NOW, 40*cycle_ns); // 100Hz
+
+	rt_printf("Start Poco\n");
+	while (1)
+	{
+		beginCycle = rt_timer_read();
+		if(!system_ready)
+		{
+			
+		}
+		else
+		{
+			
+
+		}
+		endCycle = rt_timer_read();
+		periodBullet = (unsigned long) endCycle - beginCycle;
+		rt_task_wait_period(NULL); //wait for next cycle
+	}
+}
+#endif
+
 // Safety task
 void safety_run(void *arg)
 {
@@ -882,6 +912,9 @@ void signal_handler(int signum)
 #ifdef __BULLET__
 	rt_task_delete(&bullet_task);
 #endif
+#ifdef __POCO__
+	rt_task_delete(&poco_task);
+#endif
 	// FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
 	// FTConfigParamCB[0]=FT_STOP_DEVICE;
 	// nrmk_master.writeBuffer(0x70003, FTConfigParam);
@@ -963,6 +996,12 @@ int main(int argc, char **argv)
 	rt_task_start(&bullet_task, &bullet_run, NULL);
 #endif
 
+#ifdef __POCO__
+	// RTIndy7 visualization	
+	rt_task_create(&poco_task, "poco_task", 0, 90, 0);
+	rt_task_start(&poco_task, &poco_run, NULL);
+#endif
+
 #ifdef __CASADI__
 	// RTIndy7 simulation
 	rt_task_create(&indysim_task, "indysim_task", 0, 96, 0);
@@ -970,7 +1009,7 @@ int main(int argc, char **argv)
 #endif
 
 	// RTIndy7 safety
-	rt_task_create(&safety_task, "safety_task", 0, 90, 0);
+	rt_task_create(&safety_task, "safety_task", 0, 93, 0);
 	rt_task_start(&safety_task, &safety_run, NULL);
 
 	// printing: create and start

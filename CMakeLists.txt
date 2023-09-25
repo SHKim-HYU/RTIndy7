@@ -60,6 +60,7 @@ option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
 option(WITH_RP "with Indy RP option" OFF)
 option(WITH_CB "with Indy7 ControlBox" OFF)
 option(WITH_CASADI "import for CasADi function" OFF)
+option(WITH_POCO "with POCO Comunication" OFF)
 option(WITH_BULLET "with Bullet Simulation" OFF)
 option(WITH_RAISIM "with RAISIM Simulation" OFF)
 #===============================================================================
@@ -252,6 +253,18 @@ if(WITH_CASADI)
       "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indyRP"
     )
     # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
+endif()
+
+# Poco
+if(WITH_POCO)
+    add_compile_definitions(__POCO__)
+    find_package(Poco REQUIRED)
+    if (Poco_FOUND)
+        MESSAGE(STATUS "Poco_INCLUDE_DIRS = ${Poco_INCLUDE_DIRS}")
+        MESSAGE(STATUS "Poco_LIBRARIES = ${Poco_LIBRARIES}")
+        target_include_directories(${PROJECT_NAME} PUBLIC ${Poco_INCLUDE_DIRS})
+        target_link_libraries(${PROJECT_NAME} ${Poco_LIBRARIES})
+    endif()
 endif()
 
 # Bullet

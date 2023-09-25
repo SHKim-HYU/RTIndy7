@@ -16,8 +16,9 @@ $ cmake ../ && make -j($nproc)
 
 All options are off as a default
 
-- WITH_BULLET: Connect to pybullet server for visualization of simulation
 - WITH_CASADI: Compute robot kinematics & dynamics based on Pinocchio library using CasADi symbolic framework
+- WITH_POCO: Connect to remote visualizer such as blender, pybullet, etc.
+- WITH_BULLET: Connect to pybullet server for visualization of simulation
 - WITH_RP: Sellect robot model IndyRP, NRMK(default: Indy7)
 - WITH_CB: Add I/O control box Ethercat slave 
 
