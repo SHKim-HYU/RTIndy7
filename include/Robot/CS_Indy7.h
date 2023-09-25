@@ -21,7 +21,7 @@ public:
 
 	JsonLoader loader_;
 
-	bool load_casadi_function();
+	void load_casadi_function();
 	void updateRobot(JVec _q, JVec _dq);
 
 	MassMat M(JVec _q);
