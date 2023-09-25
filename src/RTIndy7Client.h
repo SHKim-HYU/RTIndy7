@@ -38,10 +38,12 @@
 
 /////////////////////////////////////////////////////////////
 #ifdef __CASADI__
-#include <dlfcn.h>
+// #include <dlfcn.h>
 
-typedef long long int casadi_int;
-typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
+// typedef long long int casadi_int;
+// typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
+
+#include "CS_Indy7.h"
 #endif
 ////////////////////////////////////////////////////////////
 #ifdef __BULLET__

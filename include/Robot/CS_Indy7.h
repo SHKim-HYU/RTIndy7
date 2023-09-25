@@ -5,7 +5,7 @@
 #include "json_loader.h"
 #include "modern_robotics.h"
 #include <Eigen/Dense>
-#include <casadi/casadi.hpp>
+// #include <casadi/casadi.hpp>
 #include <dlfcn.h>
 #include "../../src/PropertyDefinition.h"
 
@@ -19,23 +19,43 @@ using namespace mr;
 class CS_Indy7 {
 public:
 	CS_Indy7();
-	CS_Indy7(const string& _modelPath);
-	~CS_Indy7(){};
+	
+	// ~CS_Indy7(){
+	// 	// Free the handle
+    // 	dlclose(fd_handle);
+    // 	dlclose(M_handle);
+    // 	dlclose(Minv_handle);
+    // 	dlclose(C_handle);
+    // 	dlclose(G_handle);
+    // 	dlclose(J_s_handle);
+    // 	dlclose(J_b_handle);
+    // 	dlclose(FK_handle);
+	// };
 
-	JsonLoader loader_;
+	// JsonLoader loader_;
 
-	void load_casadi_function(JsonLoader& loader_);
+	void CSSetup(const string& _modelPath);
 	void updateRobot(JVec _q, JVec _dq);
 
-	MassMat getM(JVec _q);
-	MassMat getMinv(JVec _q);
-	MassMat getC(JVec _q, JVec _dq);
-	JVec getG(JVec _q);
+	MassMat computeM(JVec _q);
+	MassMat computeMinv(JVec _q);
+	MassMat computeC(JVec _q, JVec _dq);
+	JVec computeG(JVec _q);
 
-	SE3 getFK(JVec _q);
+	SE3 computeFK(JVec _q);
 
-	Jacobian getJ_b(JVec _q);
-	Jacobian getJ_s(JVec _q);
+	Jacobian computeJ_b(JVec _q);
+	Jacobian computeJ_s(JVec _q);
+
+	MassMat getM();
+	MassMat getMinv();
+	MassMat getC();
+	JVec getG();
+
+	SE3 getFK();
+
+	Jacobian getJ_b();
+	Jacobian getJ_s();
 
 	JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
     void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
@@ -55,10 +75,26 @@ private:
 	bool isUpdated = false;
 	string robotModel;
 	int n_dof;
-	// void* fd_handle, M_handle, Minv_handle, C_handle, G_handle, J_s_handle, J_b_handle, FK_handle;
-	// eval_t fd_eval, M_eval, Minv_eval C_eval, G_eval, J_s_eval, J_b_eval, FK_eval;
 
-	casadi::Function fd_cs, M_cs, Minv_cs, C_cs, G_cs, J_s_cs, J_b_cs, FK_cs;
+	void* fd_handle;
+	void* M_handle;
+	void* Minv_handle;
+	void* C_handle;
+	void* G_handle;
+	void* J_s_handle;
+	void* J_b_handle;
+	void* FK_handle;
+	
+	eval_t fd_eval;
+	eval_t M_eval;
+	eval_t Minv_eval;
+	eval_t C_eval;
+	eval_t G_eval;
+	eval_t J_s_eval;
+	eval_t J_b_eval;
+	eval_t FK_eval;
+
+	// casadi::Function fd_cs, M_cs, Minv_cs, C_cs, G_cs, J_s_cs, J_b_cs, FK_cs;
 
     MassMat Kp;
     MassMat Kv;
@@ -68,5 +104,5 @@ private:
     MassMat Hinf_Kv;
     MassMat Hinf_Ki;
     MassMat Hinf_K_gamma;
-}
+};
 #endif // CS_INDY7_H

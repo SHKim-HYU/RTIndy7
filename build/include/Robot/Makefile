@@ -198,33 +198,6 @@ CS_Indy7.cpp.s:
 	cd /home/xeno/Indy_ws/RTIndy7/build && $(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.s
 .PHONY : CS_Indy7.cpp.s
 
-bullet_Indy7.o: bullet_Indy7.cpp.o
-
-.PHONY : bullet_Indy7.o
-
-# target to build an object file
-bullet_Indy7.cpp.o:
-	cd /home/xeno/Indy_ws/RTIndy7/build && $(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.o
-.PHONY : bullet_Indy7.cpp.o
-
-bullet_Indy7.i: bullet_Indy7.cpp.i
-
-.PHONY : bullet_Indy7.i
-
-# target to preprocess a source file
-bullet_Indy7.cpp.i:
-	cd /home/xeno/Indy_ws/RTIndy7/build && $(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.i
-.PHONY : bullet_Indy7.cpp.i
-
-bullet_Indy7.s: bullet_Indy7.cpp.s
-
-.PHONY : bullet_Indy7.s
-
-# target to generate assembly for a file
-bullet_Indy7.cpp.s:
-	cd /home/xeno/Indy_ws/RTIndy7/build && $(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/bullet_Indy7.cpp.s
-.PHONY : bullet_Indy7.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -241,9 +214,6 @@ help:
 	@echo "... CS_Indy7.o"
 	@echo "... CS_Indy7.i"
 	@echo "... CS_Indy7.s"
-	@echo "... bullet_Indy7.o"
-	@echo "... bullet_Indy7.i"
-	@echo "... bullet_Indy7.s"
 .PHONY : help
 
 

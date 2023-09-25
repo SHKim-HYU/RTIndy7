@@ -58,7 +58,7 @@ if(WITH_CASADI)
         MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
         MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
         target_include_directories(${PROJECT_NAME} PUBLIC ${CASADI_INCLUDE_DIR})
-        target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
+        target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES} dl)
     endif ()
 endif ()
 

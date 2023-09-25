@@ -107,12 +107,12 @@
 
 // SN: DB45I7E0B008
 
-#define ZERO_POS_7 448713
-#define ZERO_POS_8 -25024
-#define ZERO_POS_9 138717
-#define ZERO_POS_10 5909388//-713436
-#define ZERO_POS_11 -1058082
-#define ZERO_POS_12 -88988
+// #define ZERO_POS_7 448713
+// #define ZERO_POS_8 -25024
+// #define ZERO_POS_9 138717
+// #define ZERO_POS_10 5909388//-713436
+// #define ZERO_POS_11 -1058082
+// #define ZERO_POS_12 -88988
 
 // SN: DB45I17E0B007
 
@@ -156,6 +156,7 @@
 #define MAX_TORQUE_4 79.79
 #define MAX_TORQUE_5 79.79
 #define MAX_TORQUE_6 79.79
+#define MAX_TORQUE_6 79.79
 
 
 #define invL2sqr_1 1000
@@ -164,7 +165,7 @@
 #define invL2sqr_4 600
 #define invL2sqr_5 600
 #define invL2sqr_6 600
-
+#define invL2sqr_7 600
 
 
 
