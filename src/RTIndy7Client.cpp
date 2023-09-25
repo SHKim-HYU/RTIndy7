@@ -731,7 +731,7 @@ void poco_run(void *arg)
 
 		}
 		endCycle = rt_timer_read();
-		periodBullet = (unsigned long) endCycle - beginCycle;
+		periodPoco = (unsigned long) endCycle - beginCycle;
 		rt_task_wait_period(NULL); //wait for next cycle
 	}
 }

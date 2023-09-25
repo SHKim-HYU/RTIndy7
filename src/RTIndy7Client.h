@@ -110,12 +110,14 @@ unsigned long periodCompute = 0, worstCompute = 0;
 unsigned long periodEcat = 0, worstEcat = 0;
 unsigned long periodBuffer = 0, worstBuffer = 0;
 unsigned int overruns = 0;
+#ifdef __POCO__
+unsigned long periodPoco = 0;
+#endif
 #ifdef __BULLET__
 unsigned long periodBullet = 0;
 #endif
 #ifdef __CASADI__
 unsigned long periodIndysim = 0;
-
 #endif
 
 
