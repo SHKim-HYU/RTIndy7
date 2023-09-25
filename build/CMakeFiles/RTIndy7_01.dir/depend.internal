@@ -12,9 +12,9 @@ CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o
  ../include/MR/modern_robotics.h
  ../include/Robot/ServoAxis.h
  ../include/Robot/bullet_Indy7.h
- /home/xeno/Indy_ws/Space_Indy7/src/PropertyDefinition.h
- /home/xeno/Indy_ws/Space_Indy7/src/RTIndy7Client.cpp
- /home/xeno/Indy_ws/Space_Indy7/src/RTIndy7Client.h
+ /home/xeno/Indy_ws/RTIndy7/src/PropertyDefinition.h
+ /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp
+ /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.h
  /opt/etherlab/include/ecrt.h
  /usr/include/eigen3/Eigen/Cholesky
  /usr/include/eigen3/Eigen/Core

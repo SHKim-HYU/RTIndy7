@@ -57,6 +57,7 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
+option(WITH_RP "with Indy RP option" OFF)
 option(WITH_CB "with Indy7 ControlBox" OFF)
 option(WITH_CASADI "import for CasADi function" OFF)
 option(WITH_BULLET "with Bullet Simulation" OFF)
@@ -169,6 +170,11 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 # ControlBox
+if(WITH_RP)
+    add_compile_definitions(__RP__)
+endif()
+
+# ControlBox
 if(WITH_CB)
     add_compile_definitions(__CB__)
 endif()
@@ -223,6 +229,22 @@ if(WITH_CASADI)
       indy7_J_b
       indy7_J_fd
       indy7_J_id
+    )
+
+    set( INDYRP_CASADI
+      indyrp2_M
+      indyrp2_Minv
+      indyrp2_C
+      indyrp2_G
+      indyrp2_id
+      indyrp2_fd
+      indyrp2_fk
+      indyrp2_fk_ee
+      indyrp2_fkrot_ee
+      indyrp2_J_s
+      indyrp2_J_b
+      indyrp2_J_fd
+      indyrp2_J_id
     )
 
     link_directories(

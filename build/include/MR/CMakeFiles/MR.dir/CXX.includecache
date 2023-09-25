@@ -6,25 +6,25 @@
 
 #IncludeRegexTransform: 
 
-/home/xeno/Indy_ws/Space_Indy7/include/MR/MR_Indy7.cpp
+/home/xeno/Indy_ws/RTIndy7/include/MR/MR_Indy7.cpp
 MR_Indy7.h
-/home/xeno/Indy_ws/Space_Indy7/include/MR/MR_Indy7.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/MR_Indy7.h
 ../../src/PropertyDefinition.h
-/home/xeno/Indy_ws/Space_Indy7/src/PropertyDefinition.h
+/home/xeno/Indy_ws/RTIndy7/src/PropertyDefinition.h
 
-/home/xeno/Indy_ws/Space_Indy7/include/MR/MR_Indy7.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/MR_Indy7.h
 jsoncpp/json/json.h
-/home/xeno/Indy_ws/Space_Indy7/include/MR/jsoncpp/json/json.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/jsoncpp/json/json.h
 iostream
-/home/xeno/Indy_ws/Space_Indy7/include/MR/iostream
+/home/xeno/Indy_ws/RTIndy7/include/MR/iostream
 modern_robotics.h
-/home/xeno/Indy_ws/Space_Indy7/include/MR/modern_robotics.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.h
 Eigen/Dense
 -
 
-/home/xeno/Indy_ws/Space_Indy7/include/MR/modern_robotics.cpp
+/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.cpp
 modern_robotics.h
-/home/xeno/Indy_ws/Space_Indy7/include/MR/modern_robotics.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.h
 Eigen/Dense
 -
 cmath
@@ -36,7 +36,7 @@ iostream
 chrono
 -
 
-/home/xeno/Indy_ws/Space_Indy7/include/MR/modern_robotics.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.h
 Eigen/Dense
 -
 cmath
@@ -48,7 +48,7 @@ iostream
 chrono
 -
 
-/home/xeno/Indy_ws/Space_Indy7/src/PropertyDefinition.h
+/home/xeno/Indy_ws/RTIndy7/src/PropertyDefinition.h
 
 /usr/include/eigen3/Eigen/Cholesky
 Core

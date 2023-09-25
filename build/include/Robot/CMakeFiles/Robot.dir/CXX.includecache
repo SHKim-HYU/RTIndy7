@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/xeno/Indy_ws/Space_Indy7/include/MR/modern_robotics.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.h
 Eigen/Dense
 -
 cmath
@@ -18,21 +18,21 @@ iostream
 chrono
 -
 
-/home/xeno/Indy_ws/Space_Indy7/include/Robot/bullet_Indy7.cpp
+/home/xeno/Indy_ws/RTIndy7/include/Robot/bullet_Indy7.cpp
 bullet_Indy7.h
-/home/xeno/Indy_ws/Space_Indy7/include/Robot/bullet_Indy7.h
+/home/xeno/Indy_ws/RTIndy7/include/Robot/bullet_Indy7.h
 
-/home/xeno/Indy_ws/Space_Indy7/include/Robot/bullet_Indy7.h
+/home/xeno/Indy_ws/RTIndy7/include/Robot/bullet_Indy7.h
 LinearMath/btVector3.h
-/home/xeno/Indy_ws/Space_Indy7/include/Robot/LinearMath/btVector3.h
+/home/xeno/Indy_ws/RTIndy7/include/Robot/LinearMath/btVector3.h
 LinearMath/btQuaternion.h
-/home/xeno/Indy_ws/Space_Indy7/include/Robot/LinearMath/btQuaternion.h
+/home/xeno/Indy_ws/RTIndy7/include/Robot/LinearMath/btQuaternion.h
 Bullet3Common/b3HashMap.h
-/home/xeno/Indy_ws/Space_Indy7/include/Robot/Bullet3Common/b3HashMap.h
+/home/xeno/Indy_ws/RTIndy7/include/Robot/Bullet3Common/b3HashMap.h
 SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h
-/home/xeno/Indy_ws/Space_Indy7/include/Robot/SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h
+/home/xeno/Indy_ws/RTIndy7/include/Robot/SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h
 ../MR/modern_robotics.h
-/home/xeno/Indy_ws/Space_Indy7/include/MR/modern_robotics.h
+/home/xeno/Indy_ws/RTIndy7/include/MR/modern_robotics.h
 vector
 -
 Eigen/Dense

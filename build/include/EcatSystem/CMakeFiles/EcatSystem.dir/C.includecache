@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/xeno/Indy_ws/Space_Indy7/include/EcatSystem/PDOConfig.c
+/home/xeno/Indy_ws/RTIndy7/include/EcatSystem/PDOConfig.c
 PDOConfig.h
-/home/xeno/Indy_ws/Space_Indy7/include/EcatSystem/PDOConfig.h
+/home/xeno/Indy_ws/RTIndy7/include/EcatSystem/PDOConfig.h
 
-/home/xeno/Indy_ws/Space_Indy7/include/EcatSystem/PDOConfig.h
+/home/xeno/Indy_ws/RTIndy7/include/EcatSystem/PDOConfig.h
 ecrt.h
-/home/xeno/Indy_ws/Space_Indy7/include/EcatSystem/ecrt.h
+/home/xeno/Indy_ws/RTIndy7/include/EcatSystem/ecrt.h
 
 /opt/etherlab/include/ecrt.h
 asm/byteorder.h
