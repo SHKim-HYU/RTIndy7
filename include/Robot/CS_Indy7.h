@@ -37,6 +37,8 @@ public:
 	void CSSetup(const string& _modelPath);
 	void updateRobot(JVec _q, JVec _dq);
 
+	JVec computeFD(JVec _q, JVec _dq, JVec _tau);
+
 	MassMat computeM(JVec _q);
 	MassMat computeMinv(JVec _q);
 	MassMat computeC(JVec _q, JVec _dq);
@@ -64,7 +66,7 @@ public:
 
 private:
 	JVec q, dq, ddq;
-	JVec tau;
+	JVec tau, ddq_res;
 	MassMat M, Minv, C;
 	JVec G;
 
@@ -76,7 +78,7 @@ private:
 	string robotModel;
 	int n_dof;
 
-	void* fd_handle;
+	void* FD_handle;
 	void* M_handle;
 	void* Minv_handle;
 	void* C_handle;
@@ -85,7 +87,7 @@ private:
 	void* J_b_handle;
 	void* FK_handle;
 	
-	eval_t fd_eval;
+	eval_t FD_eval;
 	eval_t M_eval;
 	eval_t Minv_eval;
 	eval_t C_eval;

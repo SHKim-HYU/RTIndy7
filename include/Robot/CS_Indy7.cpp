@@ -252,45 +252,53 @@ void CS_Indy7::CSSetup(const string& _modelPath)// : loader_(_modelPath)
 
 	// Load the shared library
     string casadi_path = "../lib/URDF2CASADI/";
-    casadi_path = casadi_path + robotModel + '/' + robotModel;
-    std::cout<<casadi_path<<std::endl;
-    fd_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_fd.so", RTLD_LAZY);
-    if (fd_handle == 0) {
+    casadi_path = casadi_path + robotModel + "/" + robotModel;
+
+    string func_path = casadi_path + "_fd.so";
+    FD_handle = dlopen(func_path.c_str(), RTLD_LAZY);
+    if (FD_handle == 0) {
         throw std::runtime_error("Cannot open indy7_fd.so");
     }
-    M_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_M.so", RTLD_LAZY);
+    func_path = casadi_path + "_M.so";
+    M_handle = dlopen(func_path.c_str(), RTLD_LAZY);
     if (M_handle == 0) {
         throw std::runtime_error("Cannot open indy7_M.so");
     }
-    Minv_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_Minv.so", RTLD_LAZY);
+    func_path = casadi_path + "_Minv.so";
+    Minv_handle = dlopen(func_path.c_str(), RTLD_LAZY);
     if (Minv_handle == 0) {
         throw std::runtime_error("Cannot open indy7_Minv.so");
     }
-    C_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_C.so", RTLD_LAZY);
+    func_path = casadi_path + "_C.so";
+    C_handle = dlopen(func_path.c_str(), RTLD_LAZY);
     if (C_handle == 0) {
         throw std::runtime_error("Cannot open indy7_C.so");
     }
-    G_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_G.so", RTLD_LAZY);
+    func_path = casadi_path + "_G.so";
+    G_handle = dlopen(func_path.c_str(), RTLD_LAZY);
     if (G_handle == 0) {
         throw std::runtime_error("Cannot open indy7_G.so");
     }
-    FK_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_fk_ee.so", RTLD_LAZY);
+    func_path = casadi_path + "_fk_ee.so";
+    FK_handle = dlopen(func_path.c_str(), RTLD_LAZY);
     if (FK_handle == 0) {
         throw std::runtime_error("Cannot open indy7_fk_ee.so");
     }
-    J_b_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_J_b.so", RTLD_LAZY);
+    func_path = casadi_path + "_J_b.so";
+    J_b_handle = dlopen(func_path.c_str(), RTLD_LAZY);
     if (J_b_handle == 0) {
         throw std::runtime_error("Cannot open indy7_J_b.so");
     }
-    J_s_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_J_b.so", RTLD_LAZY);
+    func_path = casadi_path + "_J_s.so";
+    J_s_handle = dlopen(func_path.c_str(), RTLD_LAZY);
     if (J_s_handle == 0) {
-        throw std::runtime_error("Cannot open indy7_J_b.so");
+        throw std::runtime_error("Cannot open indy7_J_s.so");
     }
 
     // Reset error
     dlerror();
     // Function evaluation
-    fd_eval = (eval_t)dlsym(fd_handle, "aba");
+    FD_eval = (eval_t)dlsym(FD_handle, "aba");
     if (dlerror()) {
         throw std::runtime_error("Function evaluation failed.");
     }
@@ -298,10 +306,10 @@ void CS_Indy7::CSSetup(const string& _modelPath)// : loader_(_modelPath)
     if (dlerror()) {
         throw std::runtime_error("Function evaluation failed.");
     }
-    // Minv_eval = (eval_t)dlsym(Minv_handle, "Minv");
-    // if (dlerror()) {
-    //     throw std::runtime_error("Function evaluation failed.");
-    // }
+    Minv_eval = (eval_t)dlsym(Minv_handle, "Minv");
+    if (dlerror()) {
+        throw std::runtime_error("Function evaluation failed.");
+    }
 
     C_eval = (eval_t)dlsym(C_handle, "coriolis");
     if (dlerror()) {
@@ -319,11 +327,10 @@ void CS_Indy7::CSSetup(const string& _modelPath)// : loader_(_modelPath)
     if (dlerror()) {
         throw std::runtime_error("Function evaluation failed.");
     }
-    // J_s_eval = (eval_t)dlsym(J_s_handle, "J_s");
-    // if (dlerror()) {
-    //     throw std::runtime_error("Function evaluation failed.");
-    // }
-    printf("pass\n");
+    J_s_eval = (eval_t)dlsym(J_s_handle, "J_s");
+    if (dlerror()) {
+        throw std::runtime_error("Function evaluation failed.");
+    }
 
 }
 
@@ -339,6 +346,57 @@ void CS_Indy7::updateRobot(JVec _q, JVec _dq)
 
     isUpdated=true;   
 }
+
+JVec CS_Indy7::computeFD(JVec _q, JVec _dq, JVec _tau)
+{
+
+    // Allocate input/output buffers and work vectors
+    casadi_int sz_arg = n_dof;
+    casadi_int sz_res = n_dof;
+    casadi_int sz_iw = 0;
+    casadi_int sz_w = 0;
+
+    const double* arg[3*sz_arg];
+    double* res[sz_res*sz_res];
+    casadi_int iw[sz_iw];
+    double w[sz_w];
+
+    // Set input values
+    double input_pos[sz_arg];
+    double input_vel[sz_arg];
+    double input_tau[sz_arg];
+
+    for (casadi_int i = 0; i < sz_arg; ++i) {
+        input_pos[i] = _q(i);
+        input_vel[i] = _dq(i);
+        input_tau[i] = _tau(i);
+        arg[3*i] = &input_pos[i];
+        arg[3*i+1] = &input_vel[i];
+        arg[3*i+2] = &input_tau[i];
+    }
+
+    // Set output buffers
+    double output_values[sz_res]; // 6x1 Vector
+    for (casadi_int i = 0; i < sz_res; ++i) {
+        res[i] = &output_values[i];
+    }
+
+    // Evaluate the function
+    int mem = 0;  // No thread-local memory management
+    
+    if (FD_eval(arg, res, iw, w, mem)) {
+        throw std::runtime_error("Function evaluation failed.\n");
+    }
+
+    for (casadi_int i = 0; i < sz_res; ++i) {
+        ddq_res(i) = output_values[i];
+    }
+
+
+    return ddq_res;
+
+}
+
 
 MassMat CS_Indy7::computeM(JVec _q)
 {

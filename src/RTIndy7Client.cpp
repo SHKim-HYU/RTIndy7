@@ -524,26 +524,7 @@ void indysim_run(void *arg)
 				JVec _tau = JVec::Zero();
 
 				// 1st stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = _q(i);
-				    temp_q_dot[i] = _q_dot(i);
-				    temp_tau[i] = _tau(i);
-				    // temp_tau[i] = 0.0;
-
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i + 1] = &temp_q_dot[i];
-				    fd_arg[3*i + 2] = &temp_tau[i];
-				}
-				
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-			    //k1
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k1(i) = fd_values[i];
-		    	}
+			    k1 = cs_sim_indy7.computeFD(_q, _q_dot, _tau);
 		    	
 		    	// k2
 		    	JVec _q1 = info.act.q + 0.5 * period * info.act.q_dot;		// period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
@@ -553,24 +534,9 @@ void indysim_run(void *arg)
 		    	
 
 			    // 2nd stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = _q1(i);
-				    temp_q_dot[i] = _q_dot1(i);
+			    k2 = cs_sim_indy7.computeFD(_q1, _q_dot1, _tau);
 
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i+1] = &temp_q_dot[i];
-				    fd_arg[3*i+2] = &temp_tau[i];
-				}
 
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k2(i) = fd_values[i]; //k2(q_ddot)
-		    	}
 		    	JVec _q2 = info.act.q + 0.5 * period * _q_dot1;
 		    	JVec _q_dot2 = info.act.q_dot + 0.5 * period * k2;
 		    	// JVec _q_dot2 = info.act.q_dot + 0.5 * period * k2;
@@ -578,48 +544,15 @@ void indysim_run(void *arg)
 		    	
 
 		    	// 3th stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = _q2(i);
-				    temp_q_dot[i] = _q_dot2(i);
+			    k3 = cs_sim_indy7.computeFD(_q2, _q_dot2, _tau);
 
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i + 1] = &temp_q_dot[i];
-				    fd_arg[3*i + 2] = &temp_tau[i];
-				}
-
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k3(i) = fd_values[i];
-		    	}
 		    	JVec _q3 = info.act.q + period * _q_dot2;
 		    	JVec _q_dot3 = info.act.q_dot + period * k3;
 		    	// JVec _q_dot3 = info.act.q_dot + period * k3;
 		    	// JVec _q3 = info.act.q + period * _q_dot3;
 
 			   	// 4th stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = _q3(i);
-				    temp_q_dot[i] = _q_dot3(i);
-
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i + 1] = &temp_q_dot[i];
-				    fd_arg[3*i + 2] = &temp_tau[i];
-				}
-
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k4(i) = fd_values[i];
-		    	}
+			    k4 = cs_sim_indy7.computeFD(_q3, _q_dot3, _tau);
 
 		    	info.nom.q = info.act.q + (period / 6.0) * (info.act.q_dot + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
 		    	info.nom.q_dot = info.act.q_dot + (period / 6.0) * (k1 + 2 * (k2 + k3) + k4);
@@ -655,25 +588,7 @@ void indysim_run(void *arg)
 			else if(cnt==1)
 			{
 				// 1st stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = info.nom.q(i);
-				    temp_q_dot[i] = info.nom.q_dot(i);
-				    temp_tau[i] = info.nom.tau(i);
-
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i + 1] = &temp_q_dot[i];
-				    fd_arg[3*i + 2] = &temp_tau[i];
-				}
-
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k1(i) = fd_values[i];
-		    	}
+			    k1 = cs_sim_indy7.computeFD(info.nom.q, info.nom.q_dot, info.nom.tau);
 
 		    	JVec _q1 = info.nom.q + 0.5 * period * info.nom.q_dot;
 		    	JVec _q_dot1 = info.nom.q_dot + 0.5 * period * k1;
@@ -682,24 +597,7 @@ void indysim_run(void *arg)
 
 
 			    // 2nd stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = _q1(i);
-				    temp_q_dot[i] = _q_dot1(i);
-
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i + 1] = &temp_q_dot[i];
-				    fd_arg[3*i + 2] = &temp_tau[i];
-				}
-
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k2(i) = fd_values[i];
-		    	}
+			    k2 = cs_sim_indy7.computeFD(_q1, _q_dot1, info.nom.tau);
 
 		    	JVec _q2 = info.nom.q + 0.5 * period * _q_dot1;
 		    	JVec _q_dot2 = info.nom.q_dot + 0.5 * period * k2;
@@ -708,24 +606,7 @@ void indysim_run(void *arg)
 
 
 		    	// 3th stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = _q2(i);
-				    temp_q_dot[i] = _q_dot2(i);
-
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i + 1] = &temp_q_dot[i];
-				    fd_arg[3*i + 2] = &temp_tau[i];
-				}
-
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k3(i) = fd_values[i];
-		    	}
+		    	k3 = cs_sim_indy7.computeFD(_q2, _q_dot2, info.nom.tau);
 
 		    	JVec _q3 = info.nom.q + period * _q_dot2;
 		    	JVec _q_dot3 = info.nom.q_dot + period * k3;
@@ -733,24 +614,7 @@ void indysim_run(void *arg)
 		    	// JVec _q3 = info.nom.q + period * _q_dot3;
 
 			   	// 4th stage
-			    // Set input values
-			    for (casadi_int i = 0; i < sz_arg; ++i) {
-				    temp_q[i] = _q3(i);
-				    temp_q_dot[i] = _q_dot3(i);
-
-				    fd_arg[3*i] = &temp_q[i];
-				    fd_arg[3*i + 1] = &temp_q_dot[i];
-				    fd_arg[3*i + 2] = &temp_tau[i];
-				}
-
-			    // Evaluate the function	    
-			    if (fd_eval(fd_arg, fd_res, fd_iw, fd_w, fd_mem)) {
-			        throw std::runtime_error("Function evaluation failed.");
-			    }
-
-			    for (casadi_int i = 0; i < sz_res; ++i) {
-		        	k4(i) = fd_values[i];
-		    	}
+			    k4 = cs_sim_indy7.computeFD(_q3, _q_dot3, info.nom.tau);
 
 		    	info.nom.q = info.nom.q + (period / 6.0) * (info.nom.q_dot + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
 		    	info.nom.q_dot = info.nom.q_dot + (period / 6.0) * (k1 + 2 * (k2 + k3) + k4);
