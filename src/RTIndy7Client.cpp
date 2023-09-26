@@ -543,41 +543,24 @@ void indysim_run(void *arg)
 
 				// 1st stage
 			    k1 = cs_sim_indy7.computeFD(_q, _q_dot, _tau);
-		    	
-		    	// k2
 		    	JVec _q1 = info.act.q + 0.5 * period * info.act.q_dot;		// period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 		    	JVec _q_dot1 = info.act.q_dot + 0.5 * period * k1; // k2(q_dot)
-		    	// JVec _q_dot1 = info.act.q_dot + 0.5 * period * k1;
-		    	// JVec _q1 = info.act.q + 0.5 * period * _q_dot1;		// period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 		    	
-
 			    // 2nd stage
 			    k2 = cs_sim_indy7.computeFD(_q1, _q_dot1, _tau);
-
-
-		    	JVec _q2 = info.act.q + 0.5 * period * _q_dot1;
+				JVec _q2 = info.act.q + 0.5 * period * _q_dot1;
 		    	JVec _q_dot2 = info.act.q_dot + 0.5 * period * k2;
-		    	// JVec _q_dot2 = info.act.q_dot + 0.5 * period * k2;
-		    	// JVec _q2 = info.act.q + 0.5 * period * _q_dot2;		// period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 		    	
-
 		    	// 3th stage
 			    k3 = cs_sim_indy7.computeFD(_q2, _q_dot2, _tau);
-
-		    	JVec _q3 = info.act.q + period * _q_dot2;
+				JVec _q3 = info.act.q + period * _q_dot2;
 		    	JVec _q_dot3 = info.act.q_dot + period * k3;
-		    	// JVec _q_dot3 = info.act.q_dot + period * k3;
-		    	// JVec _q3 = info.act.q + period * _q_dot3;
-
+		    	
 			   	// 4th stage
 			    k4 = cs_sim_indy7.computeFD(_q3, _q_dot3, _tau);
-
 		    	info.nom.q = info.act.q + (period / 6.0) * (info.act.q_dot + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
 		    	info.nom.q_dot = info.act.q_dot + (period / 6.0) * (k1 + 2 * (k2 + k3) + k4);
 				
-		    	// info.nom.q_dot = info.act.q_dot + (period / 6.0) * (k1 + 2 * (k2 + k3) + k4);
-		    	// info.nom.q = info.act.q + (period / 6.0) * (_q_dot1 + 2 * (_q_dot2 + _q_dot3) + info.nom.q_dot);
-		    	
 		    	// update robot & compute dynamics
 		    	cs_sim_indy7.updateRobot(info.nom.q, info.nom.q_dot);
 		    	
@@ -595,7 +578,6 @@ void indysim_run(void *arg)
 
 			    JVec ddq_ref = info.des.q_ddot + Hinf_Kv*edot + Hinf_Kp*e;
 			    JVec dq_ref = info.des.q_dot + Hinf_Kv*edot + Hinf_Kp*e;
-			    // rt_printf("ddq_ref: %lf, %lf, %lf, %lf, %lf, %lf \n", ddq_ref(0), ddq_ref(1), ddq_ref(2), ddq_ref(3), ddq_ref(4), ddq_ref(5));
 
 			    info.nom.tau = M*ddq_ref + (Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint) - info.nom.tau_ext;
 			    // info.nom.tau = M*ddq_ref + (Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
@@ -607,38 +589,23 @@ void indysim_run(void *arg)
 			{
 				// 1st stage
 			    k1 = cs_sim_indy7.computeFD(info.nom.q, info.nom.q_dot, info.nom.tau);
-
 		    	JVec _q1 = info.nom.q + 0.5 * period * info.nom.q_dot;
 		    	JVec _q_dot1 = info.nom.q_dot + 0.5 * period * k1;
-				// JVec _q_dot1 = info.nom.q_dot + 0.5 * period * k1;
-				// JVec _q1 = info.nom.q + 0.5 * period * _q_dot1;
-
 
 			    // 2nd stage
 			    k2 = cs_sim_indy7.computeFD(_q1, _q_dot1, info.nom.tau);
-
 		    	JVec _q2 = info.nom.q + 0.5 * period * _q_dot1;
 		    	JVec _q_dot2 = info.nom.q_dot + 0.5 * period * k2;
-		    	// JVec _q_dot2 = info.nom.q_dot + 0.5 * period * k2;
-		    	// JVec _q2 = info.nom.q + 0.5 * period * _q_dot2;
-
 
 		    	// 3th stage
 		    	k3 = cs_sim_indy7.computeFD(_q2, _q_dot2, info.nom.tau);
-
 		    	JVec _q3 = info.nom.q + period * _q_dot2;
 		    	JVec _q_dot3 = info.nom.q_dot + period * k3;
-		    	// JVec _q_dot3 = info.nom.q_dot + period * k3;
-		    	// JVec _q3 = info.nom.q + period * _q_dot3;
 
 			   	// 4th stage
 			    k4 = cs_sim_indy7.computeFD(_q3, _q_dot3, info.nom.tau);
-
 		    	info.nom.q = info.nom.q + (period / 6.0) * (info.nom.q_dot + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
 		    	info.nom.q_dot = info.nom.q_dot + (period / 6.0) * (k1 + 2 * (k2 + k3) + k4);
-				
-		    	// info.nom.q_dot = info.nom.q_dot + (period / 6.0) * (k1 + 2 * (k2 + k3) + k4);
-		    	// info.nom.q = info.nom.q + (period / 6.0) * (_q_dot1 + 2 * (_q_dot2 + _q_dot3) + info.nom.q_dot);
 
 		    	// update robot & compute dynamics
 		    	cs_sim_indy7.updateRobot(info.nom.q, info.nom.q_dot);
