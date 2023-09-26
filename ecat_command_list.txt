@@ -1,2 +1,0 @@
-엔코더 값 읽기
-sudo ethercattool -p6 upload -t int32 0x6064 0
