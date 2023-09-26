@@ -710,7 +710,6 @@ void poco_run(void *arg)
 		else
 		{
 			
-
 		}
 		endCycle = rt_timer_read();
 		periodPoco = (unsigned long) endCycle - beginCycle;
