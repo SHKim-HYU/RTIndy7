@@ -664,9 +664,10 @@ void bullet_run(void *arg)
 
 	b3sim.setTimeStep(FIXED_TIMESTEP);
 	b3sim.resetSimulation();
-	b3sim.setGravity( btVector3(0 , 0 ,0));
+	b3sim.setGravity( btVector3(0 , 0 , -9.8));
 
-	int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/Space_Indy7/description/indy7.urdf");
+	// [ToDo] model path update
+	int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
 	// int robotId = b3sim.loadURDF("quadruped/minitaur.urdf");
 	b3sim.setRealTimeSimulation(false);
 	Bullet_Indy7 bt3indy7(&b3sim,robotId);

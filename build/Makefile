@@ -183,6 +183,19 @@ EcatSystem/fast:
 .PHONY : EcatSystem/fast
 
 #=============================================================================
+# Target rules for targets named CAN
+
+# Build rule for target.
+CAN: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 CAN
+.PHONY : CAN
+
+# fast build rule for target.
+CAN/fast:
+	$(MAKE) -f include/CAN/CMakeFiles/CAN.dir/build.make include/CAN/CMakeFiles/CAN.dir/build
+.PHONY : CAN/fast
+
+#=============================================================================
 # Target rules for targets named Interpolator
 
 # Build rule for target.
@@ -275,6 +288,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... RTIndy7_01"
 	@echo "... EcatSystem"
+	@echo "... CAN"
 	@echo "... Interpolator"
 	@echo "... MR"
 	@echo "... Network"

@@ -59,11 +59,20 @@ BULLET_SOFTBODY_LIBRARY:FILEPATH=/usr/local/lib/libBulletSoftBody.so
 //Path to a library.
 BULLET_WORLDIMPORTER_LIBRARY:FILEPATH=/usr/local/lib/libBulletWorldImporter.so
 
+//Value Computed by CMake
+CAN_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/CAN
+
+//Dependencies for the target
+CAN_LIB_DEPENDS:STATIC=general;/usr/lib/libpcanfd.so;
+
+//Value Computed by CMake
+CAN_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/CAN
+
 //Path to a file.
-CASADI_INCLUDE_DIR:PATH=/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/include
+CASADI_INCLUDE_DIR:PATH=/home/xeno/mpc_ws/casadi/build/install_folder/include
 
 //Path to a library.
-CASADI_LIBRARY:FILEPATH=/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
+CASADI_LIBRARY:FILEPATH=/home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -380,6 +389,12 @@ Network_LIB_DEPENDS:STATIC=optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation
 //Value Computed by CMake
 Network_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Network
 
+//Path to a file.
+PCAN_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+PCAN_LIBRARY:FILEPATH=/usr/lib/libpcanfd.so
+
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 
@@ -441,16 +456,13 @@ RTIndy7_VERBOSE:BOOL=ON
 Robot_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/Robot
 
 //Dependencies for the target
-Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/usr/local/lib/libBulletDynamics.so;general;/usr/local/lib/libBulletInverseDynamics.so;general;/usr/local/lib/libBulletInverseDynamicsUtils.so;general;/usr/local/lib/libBullet3Common.so;general;/usr/local/lib/libBulletCollision.so;general;/usr/local/lib/libLinearMath.so;general;/usr/local/lib/libBulletSoftBody.so;general;/usr/local/lib/libBulletExampleBrowserLib.so;general;/usr/local/lib/libBulletRobotics.so;general;/usr/local/lib/libBulletRoboticsGUI.so;general;/usr/local/lib/libOpenGLWindow.so;general;/usr/local/lib/libgwen.so;general;/usr/local/lib/libBulletWorldImporter.so;general;/usr/local/lib/libBulletFileLoader.so;general;/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so;general;dl;
+Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/usr/local/lib/libBulletDynamics.so;general;/usr/local/lib/libBulletInverseDynamics.so;general;/usr/local/lib/libBulletInverseDynamicsUtils.so;general;/usr/local/lib/libBullet3Common.so;general;/usr/local/lib/libBulletCollision.so;general;/usr/local/lib/libLinearMath.so;general;/usr/local/lib/libBulletSoftBody.so;general;/usr/local/lib/libBulletExampleBrowserLib.so;general;/usr/local/lib/libBulletRobotics.so;general;/usr/local/lib/libBulletRoboticsGUI.so;general;/usr/local/lib/libOpenGLWindow.so;general;/usr/local/lib/libgwen.so;general;/usr/local/lib/libBulletWorldImporter.so;general;/usr/local/lib/libBulletFileLoader.so;general;/home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so;general;dl;
 
 //Value Computed by CMake
 Robot_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Robot
 
 //with Bullet Simulation
 WITH_BULLET:BOOL=ON
-
-//No help, variable specified on the command line.
-WITH_CASAD:UNINITIALIZED=ON
 
 //import for CasADi function
 WITH_CASADI:BOOL=ON
@@ -459,7 +471,7 @@ WITH_CASADI:BOOL=ON
 WITH_CB:BOOL=OFF
 
 //with POCO Comunication
-WITH_POCO:BOOL=ON
+WITH_POCO:BOOL=OFF
 
 //with RAISIM Simulation
 WITH_RAISIM:BOOL=OFF
@@ -873,7 +885,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

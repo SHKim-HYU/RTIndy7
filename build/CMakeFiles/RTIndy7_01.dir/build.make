@@ -80,14 +80,14 @@ RTIndy7_01_EXTERNAL_OBJECTS =
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/build.make
 RTIndy7_01: include/EcatSystem/libEcatSystem.a
+RTIndy7_01: include/CAN/libCAN.a
 RTIndy7_01: include/Interpolator/libInterpolator.a
 RTIndy7_01: include/MR/libMR.a
 RTIndy7_01: include/Network/libNetwork.a
 RTIndy7_01: include/Robot/libRobot.so
+RTIndy7_01: /usr/lib/libpcanfd.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
-RTIndy7_01: /home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
-RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
-RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
+RTIndy7_01: /home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so
 RTIndy7_01: /usr/local/lib/libBulletDynamics.so
 RTIndy7_01: /usr/local/lib/libBulletInverseDynamics.so
 RTIndy7_01: /usr/local/lib/libBulletInverseDynamicsUtils.so
@@ -104,6 +104,8 @@ RTIndy7_01: /usr/local/lib/libBulletWorldImporter.so
 RTIndy7_01: /usr/local/lib/libBulletFileLoader.so
 RTIndy7_01: /opt/etherlab/lib/libethercat.a
 RTIndy7_01: /opt/etherlab/lib/libethercat_rtdm.a
+RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
+RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoZip.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoNet.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4

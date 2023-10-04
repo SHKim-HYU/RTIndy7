@@ -113,7 +113,7 @@ include/Robot/libRobot.so: /usr/local/lib/libOpenGLWindow.so
 include/Robot/libRobot.so: /usr/local/lib/libgwen.so
 include/Robot/libRobot.so: /usr/local/lib/libBulletWorldImporter.so
 include/Robot/libRobot.so: /usr/local/lib/libBulletFileLoader.so
-include/Robot/libRobot.so: /home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
+include/Robot/libRobot.so: /home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so
 include/Robot/libRobot.so: include/Robot/CMakeFiles/Robot.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library libRobot.so"
 	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Robot.dir/link.txt --verbose=$(VERBOSE)
