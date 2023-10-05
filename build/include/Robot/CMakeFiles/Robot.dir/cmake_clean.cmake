@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Robot.dir/CS_Indy7.cpp.o"
-  "CMakeFiles/Robot.dir/bullet_Indy7.cpp.o"
   "libRobot.pdb"
   "libRobot.so"
 )

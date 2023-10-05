@@ -124,7 +124,7 @@ set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 set(ECAT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/EcatSystem)
 set(CAN_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/CAN)
 set(INTP_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Interpolator)
-set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
+# set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
 set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
 set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 
@@ -139,7 +139,7 @@ include_directories(
         ${ECAT_HEADERS_DIR}
         ${CAN_HEADERS_DIR}
         ${INTP_HEADERS_DIR}
-        ${MR_HEADERS_DIR}
+        # ${MR_HEADERS_DIR}
         ${NET_HEADERS_DIR}
         ${ROBOT_HEADERS_DIR}
         #[ToDo] will be replaced from the installed bullet3 SDK
@@ -151,7 +151,7 @@ include_directories(
 add_subdirectory(include/EcatSystem)
 add_subdirectory(include/CAN)
 add_subdirectory(include/Interpolator)
-add_subdirectory(include/MR)
+# add_subdirectory(include/MR)
 add_subdirectory(include/Network)
 add_subdirectory(include/Robot)
 #[ToDo] will be replaced from the installed bullet3 SDK
@@ -167,7 +167,7 @@ target_link_libraries(${PROJECT_NAME}
         sub::ECAT
         sub::CAN
         sub::Interpolator
-        sub::MR
+        # sub::MR
         sub::NETWORK
         sub::Robot
         # sub::bullet3

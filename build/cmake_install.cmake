@@ -42,7 +42,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/xeno/Indy_ws/RTIndy7/build/include/EcatSystem/cmake_install.cmake")
   include("/home/xeno/Indy_ws/RTIndy7/build/include/CAN/cmake_install.cmake")
   include("/home/xeno/Indy_ws/RTIndy7/build/include/Interpolator/cmake_install.cmake")
-  include("/home/xeno/Indy_ws/RTIndy7/build/include/MR/cmake_install.cmake")
   include("/home/xeno/Indy_ws/RTIndy7/build/include/Network/cmake_install.cmake")
   include("/home/xeno/Indy_ws/RTIndy7/build/include/Robot/cmake_install.cmake")
 

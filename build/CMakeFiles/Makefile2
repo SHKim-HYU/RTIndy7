@@ -57,7 +57,6 @@ all: CMakeFiles/RTIndy7_01.dir/all
 all: include/EcatSystem/all
 all: include/CAN/all
 all: include/Interpolator/all
-all: include/MR/all
 all: include/Network/all
 all: include/Robot/all
 
@@ -67,7 +66,6 @@ all: include/Robot/all
 preinstall: include/EcatSystem/preinstall
 preinstall: include/CAN/preinstall
 preinstall: include/Interpolator/preinstall
-preinstall: include/MR/preinstall
 preinstall: include/Network/preinstall
 preinstall: include/Robot/preinstall
 
@@ -78,7 +76,6 @@ clean: CMakeFiles/RTIndy7_01.dir/clean
 clean: include/EcatSystem/clean
 clean: include/CAN/clean
 clean: include/Interpolator/clean
-clean: include/MR/clean
 clean: include/Network/clean
 clean: include/Robot/clean
 
@@ -139,24 +136,6 @@ include/Interpolator/clean: include/Interpolator/CMakeFiles/Interpolator.dir/cle
 .PHONY : include/Interpolator/clean
 
 #=============================================================================
-# Directory level rules for directory include/MR
-
-# Recursive "all" directory target.
-include/MR/all: include/MR/CMakeFiles/MR.dir/all
-
-.PHONY : include/MR/all
-
-# Recursive "preinstall" directory target.
-include/MR/preinstall:
-
-.PHONY : include/MR/preinstall
-
-# Recursive "clean" directory target.
-include/MR/clean: include/MR/CMakeFiles/MR.dir/clean
-
-.PHONY : include/MR/clean
-
-#=============================================================================
 # Directory level rules for directory include/Network
 
 # Recursive "all" directory target.
@@ -199,17 +178,16 @@ include/Robot/clean: include/Robot/CMakeFiles/Robot.dir/clean
 CMakeFiles/RTIndy7_01.dir/all: include/EcatSystem/CMakeFiles/EcatSystem.dir/all
 CMakeFiles/RTIndy7_01.dir/all: include/CAN/CMakeFiles/CAN.dir/all
 CMakeFiles/RTIndy7_01.dir/all: include/Interpolator/CMakeFiles/Interpolator.dir/all
-CMakeFiles/RTIndy7_01.dir/all: include/MR/CMakeFiles/MR.dir/all
 CMakeFiles/RTIndy7_01.dir/all: include/Network/CMakeFiles/Network.dir/all
 CMakeFiles/RTIndy7_01.dir/all: include/Robot/CMakeFiles/Robot.dir/all
 	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/depend
 	$(MAKE) -f CMakeFiles/RTIndy7_01.dir/build.make CMakeFiles/RTIndy7_01.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=12,13 "Built target RTIndy7_01"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=9,10 "Built target RTIndy7_01"
 .PHONY : CMakeFiles/RTIndy7_01.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/RTIndy7_01.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 16
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 12
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/RTIndy7_01.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 0
 .PHONY : CMakeFiles/RTIndy7_01.dir/rule
@@ -306,40 +284,13 @@ include/Interpolator/CMakeFiles/Interpolator.dir/clean:
 .PHONY : include/Interpolator/CMakeFiles/Interpolator.dir/clean
 
 #=============================================================================
-# Target rules for target include/MR/CMakeFiles/MR.dir
-
-# All Build rule for target.
-include/MR/CMakeFiles/MR.dir/all:
-	$(MAKE) -f include/MR/CMakeFiles/MR.dir/build.make include/MR/CMakeFiles/MR.dir/depend
-	$(MAKE) -f include/MR/CMakeFiles/MR.dir/build.make include/MR/CMakeFiles/MR.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=8,9,10 "Built target MR"
-.PHONY : include/MR/CMakeFiles/MR.dir/all
-
-# Build rule for subdir invocation for target.
-include/MR/CMakeFiles/MR.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 include/MR/CMakeFiles/MR.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 0
-.PHONY : include/MR/CMakeFiles/MR.dir/rule
-
-# Convenience name for target.
-MR: include/MR/CMakeFiles/MR.dir/rule
-
-.PHONY : MR
-
-# clean rule for target.
-include/MR/CMakeFiles/MR.dir/clean:
-	$(MAKE) -f include/MR/CMakeFiles/MR.dir/build.make include/MR/CMakeFiles/MR.dir/clean
-.PHONY : include/MR/CMakeFiles/MR.dir/clean
-
-#=============================================================================
 # Target rules for target include/Network/CMakeFiles/Network.dir
 
 # All Build rule for target.
 include/Network/CMakeFiles/Network.dir/all:
 	$(MAKE) -f include/Network/CMakeFiles/Network.dir/build.make include/Network/CMakeFiles/Network.dir/depend
 	$(MAKE) -f include/Network/CMakeFiles/Network.dir/build.make include/Network/CMakeFiles/Network.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=11 "Built target Network"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=8 "Built target Network"
 .PHONY : include/Network/CMakeFiles/Network.dir/all
 
 # Build rule for subdir invocation for target.
@@ -366,12 +317,12 @@ include/Network/CMakeFiles/Network.dir/clean:
 include/Robot/CMakeFiles/Robot.dir/all:
 	$(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/depend
 	$(MAKE) -f include/Robot/CMakeFiles/Robot.dir/build.make include/Robot/CMakeFiles/Robot.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=14,15,16 "Built target Robot"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=11,12 "Built target Robot"
 .PHONY : include/Robot/CMakeFiles/Robot.dir/all
 
 # Build rule for subdir invocation for target.
 include/Robot/CMakeFiles/Robot.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 include/Robot/CMakeFiles/Robot.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/xeno/Indy_ws/RTIndy7/build/CMakeFiles 0
 .PHONY : include/Robot/CMakeFiles/Robot.dir/rule

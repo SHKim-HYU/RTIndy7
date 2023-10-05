@@ -3,7 +3,7 @@
 
 #include "iostream"
 #include "json_loader.h"
-#include "modern_robotics.h"
+// #include "modern_robotics.h"
 #include <Eigen/Dense>
 // #include <casadi/casadi.hpp>
 #include <dlfcn.h>
@@ -14,7 +14,6 @@ typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);
 
 using namespace Eigen;
 using namespace std;
-using namespace mr;
 
 class CS_Indy7 {
 public:

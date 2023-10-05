@@ -209,19 +209,6 @@ Interpolator/fast:
 .PHONY : Interpolator/fast
 
 #=============================================================================
-# Target rules for targets named MR
-
-# Build rule for target.
-MR: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 MR
-.PHONY : MR
-
-# fast build rule for target.
-MR/fast:
-	$(MAKE) -f include/MR/CMakeFiles/MR.dir/build.make include/MR/CMakeFiles/MR.dir/build
-.PHONY : MR/fast
-
-#=============================================================================
 # Target rules for targets named Network
 
 # Build rule for target.
@@ -290,7 +277,6 @@ help:
 	@echo "... EcatSystem"
 	@echo "... CAN"
 	@echo "... Interpolator"
-	@echo "... MR"
 	@echo "... Network"
 	@echo "... Robot"
 	@echo "... src/RTIndy7Client.o"

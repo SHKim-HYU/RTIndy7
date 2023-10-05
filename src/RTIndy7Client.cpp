@@ -465,9 +465,9 @@ void indysim_run(void *arg)
     // // Free the handle
     // dlclose(handle);
 
-	Hinf_Kp = Matrix6d::Zero();
-    Hinf_Kv = Matrix6d::Zero();
-    Hinf_K_gamma = Matrix6d::Zero();
+	Hinf_Kp = Matrixnd::Zero();
+    Hinf_Kv = Matrixnd::Zero();
+    Hinf_K_gamma = Matrixnd::Zero();
 
     for (int i=0; i<NUM_AXIS; ++i)
     {

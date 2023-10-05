@@ -1,5 +1,5 @@
 #include "MR_Indy7.h"
-#include "../../src/PropertyDefinition.h"
+#include "PropertyDefinition.h"
 
 bool ReadFromFile(const char* filename, char* buffer, int len){
   FILE* r = fopen(filename,"rb");
