@@ -321,12 +321,15 @@ void RTIndy7_run(void *arg)
 			// info.des.tau = mr_indy7.Gravity( info.act.q ) + info.act.tau_ext; // calcTorque
 			// info.des.tau = mr_indy7.Gravity( info.act.q ); // calcTorque
 			e = info.des.q-info.act.q;
+			// rt_printf("e: %lf, %lf, %lf, %lf, %lf, %lf\n", e[0], e[1], e[2], e[3], e[4], e[5]);
 			eint = eint + e*period;
 			
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint) + info.act.tau_ext;
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// info.des.G = mr_indy7.Gravity( info.act.q ); // calcTorque
+			
 			info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			// info.des.tau = cs_indy7.computeG( info.act.q ); // calcTorque
 			info.des.G = cs_indy7.computeG( info.act.q ); // calcTorque
 
 
@@ -465,9 +468,9 @@ void indysim_run(void *arg)
     // // Free the handle
     // dlclose(handle);
 
-	Hinf_Kp = Matrixnd::Zero();
-    Hinf_Kv = Matrixnd::Zero();
-    Hinf_K_gamma = Matrixnd::Zero();
+	Hinf_Kp = JMat::Zero();
+    Hinf_Kv = JMat::Zero();
+    Hinf_K_gamma = JMat::Zero();
 
     for (int i=0; i<NUM_AXIS; ++i)
     {

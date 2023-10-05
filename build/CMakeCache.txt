@@ -330,12 +330,6 @@ KERNELHEADERS_FOUND:STRING=1
 KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include;/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/arch/x86/include
 
 //Value Computed by CMake
-MR_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/MR
-
-//Value Computed by CMake
-MR_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/MR
-
-//Value Computed by CMake
 Network_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/Network
 
 //Dependencies for the target
@@ -432,7 +426,7 @@ WITH_POCO:BOOL=OFF
 WITH_RAISIM:BOOL=OFF
 
 //with Indy RP option
-WITH_RP:BOOL=ON
+WITH_RP:BOOL=OFF
 
 //Xenomai base directory location (optional, used for nonstandard
 // installation paths)

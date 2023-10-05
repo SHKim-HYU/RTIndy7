@@ -2,8 +2,8 @@
 
 #include <Eigen/Dense>
 
-#define ROBOT_DOF 7
-#define JOINTNUM 7
+#define ROBOT_DOF 6
+#define JOINTNUM 6
 
 // KDL
 
@@ -94,24 +94,24 @@
 // #define ZERO_POS_11 -1058082
 // #define ZERO_POS_12 -88988
 
-// SN: DB45I17E0B007
+// SN: DB45I17E0B007 [Indy7]
 
-// #define ZERO_POS_1 -389838
-// #define ZERO_POS_2 57701
-// #define ZERO_POS_3 -199021
-// #define ZERO_POS_4 9040
-// #define ZERO_POS_5 656537
-// #define ZERO_POS_6 -650739
+#define ZERO_POS_1 -389838
+#define ZERO_POS_2 57701
+#define ZERO_POS_3 -199021
+#define ZERO_POS_4 9040
+#define ZERO_POS_5 656537
+#define ZERO_POS_6 -650739
 
-// SN: DB26R7P0B008
+// SN: DB26R7P0B008 [IndyRP2]
 
-#define ZERO_POS_1 -1625
-#define ZERO_POS_2 -7749
-#define ZERO_POS_3 40393
-#define ZERO_POS_4 -24019
-#define ZERO_POS_5 -15000
-#define ZERO_POS_6 836049
-#define ZERO_POS_7 -1684257
+// #define ZERO_POS_1 -1625
+// #define ZERO_POS_2 -7749
+// #define ZERO_POS_3 40393
+// #define ZERO_POS_4 -24019
+// #define ZERO_POS_5 -15000
+// #define ZERO_POS_6 836049
+// #define ZERO_POS_7 -1684257
 
 
 // Power 500, Rev C, Value 0.088390. Nm/A
@@ -177,8 +177,8 @@
 #define CONTROL_FREQ 1000
 
 
-
 typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
+typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> JMat;
 typedef Eigen::Matrix<double, 4, 4> SE3;
 typedef Eigen::Matrix<double, 3, 3> SO3;
 typedef Eigen::Matrix<double, 4, 4> se3;

@@ -97,13 +97,13 @@ private:
 
 	// casadi::Function fd_cs, M_cs, Minv_cs, C_cs, G_cs, J_s_cs, J_b_cs, FK_cs;
 
-    MassMat Kp;
-    MassMat Kv;
-    MassMat Ki;
+    JMat Kp;
+    JMat Kv;
+    JMat Ki;
 
-    MassMat Hinf_Kp;
-    MassMat Hinf_Kv;
-    MassMat Hinf_Ki;
-    MassMat Hinf_K_gamma;
+    JMat Hinf_Kp;
+    JMat Hinf_Kv;
+    JMat Hinf_Ki;
+    JMat Hinf_K_gamma;
 };
 #endif // CS_INDY7_H

@@ -25,6 +25,15 @@ CS_Indy7::CS_Indy7()
     this->Hinf_Ki.resize( this->n_dof, this->n_dof);
     this->Hinf_K_gamma.resize( this->n_dof, this->n_dof);
 
+    Hinf_Kp = JMat::Zero();
+    Hinf_Kv = JMat::Zero();
+    Hinf_Ki = JMat::Zero();
+    Hinf_K_gamma = JMat::Zero();
+
+    Kp = JMat::Zero();
+    Kv = JMat::Zero();
+    Ki = JMat::Zero();
+
     for (int i=0; i<this->n_dof; ++i)
     {
         switch(i)
