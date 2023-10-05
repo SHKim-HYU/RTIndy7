@@ -15,7 +15,7 @@
 JointInfo info;
 JointInfo sim;
 
-MR_Indy7 mr_indy7;
+// MR_Indy7 mr_indy7;
 
 
 // Xenomai RT tasks
@@ -940,8 +940,8 @@ int main(int argc, char **argv)
 	// cycle_ns = 125000; // nanosecond -> 8kHz
 	period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
 
-	mr_indy7=MR_Indy7();
-	mr_indy7.MRSetup();
+	// mr_indy7=MR_Indy7();
+	// mr_indy7.MRSetup();
 
 	cs_indy7=CS_Indy7();
 	cs_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json");

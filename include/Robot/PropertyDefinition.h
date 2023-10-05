@@ -1,8 +1,7 @@
 #pragma once
 
-#ifndef __RP__
-#define ROBOT_DOF 6
-#define JOINTNUM 6
+#define ROBOT_DOF 7
+#define JOINTNUM 7
 
 // KDL
 
@@ -95,27 +94,16 @@
 
 // SN: DB45I17E0B007
 
-#define ZERO_POS_1 -389838
-#define ZERO_POS_2 57701
-#define ZERO_POS_3 -199021
-#define ZERO_POS_4 9040
-#define ZERO_POS_5 656537
-#define ZERO_POS_6 -650739
-
-
-// Power 500, Rev C, Value 0.088390. Nm/A
-// Power 500, Rev C, Value 0.083971. Nm/A
-// Power 200, Rev C, Value 0.089144. Nm/A
-// Power 100, Rev C, Value 0.057980. Nm/A
-// Power 100, Rev C, Value 0.055081. Nm/A
-// Power 100, Rev C, Value 0.057980. Nm/A
-
-#else
-#define ROBOT_DOF 7
-#define JOINTNUM 7
+// #define ZERO_POS_1 -389838
+// #define ZERO_POS_2 57701
+// #define ZERO_POS_3 -199021
+// #define ZERO_POS_4 9040
+// #define ZERO_POS_5 656537
+// #define ZERO_POS_6 -650739
 
 // SN: DB26R7P0B008
-#define ZERO_POS_1 -1625770
+
+#define ZERO_POS_1 -1625
 #define ZERO_POS_2 -7749
 #define ZERO_POS_3 40393
 #define ZERO_POS_4 -24019
@@ -123,13 +111,14 @@
 #define ZERO_POS_6 836049
 #define ZERO_POS_7 -1684257
 
+
 // Power 500, Rev C, Value 0.088390. Nm/A
 // Power 500, Rev C, Value 0.083971. Nm/A
 // Power 200, Rev C, Value 0.089144. Nm/A
 // Power 100, Rev C, Value 0.057980. Nm/A
 // Power 100, Rev C, Value 0.055081. Nm/A
 // Power 100, Rev C, Value 0.057980. Nm/A
-#endif //__RP__
+
 
 #define HARMONIC_120 120
 #define HARMONIC_100 100

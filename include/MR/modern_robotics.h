@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
-#define JOINTNUM 6
+#include "PropertyDefinition.h"
 
 namespace mr {
     typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;

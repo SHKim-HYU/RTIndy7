@@ -7,7 +7,7 @@
 #include <Eigen/Dense>
 // #include <casadi/casadi.hpp>
 #include <dlfcn.h>
-#include "../../src/PropertyDefinition.h"
+#include "PropertyDefinition.h"
 
 typedef long long int casadi_int;
 typedef int (*eval_t)(const double**, double**, casadi_int*, double*, int);

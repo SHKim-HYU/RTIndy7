@@ -67,7 +67,7 @@
 #include "PropertyDefinition.h"
 
 #include "ServoAxis.h"  // For Indy7 interface
-#include "MR_Indy7.h"
+// #include "MR_Indy7.h"
 
 using namespace std;
 
