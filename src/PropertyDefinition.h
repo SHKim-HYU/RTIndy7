@@ -1,10 +1,10 @@
 #pragma once
 
-
+#ifndef __RP__
 #define ROBOT_DOF 6
+#define JOINTNUM 6
 
-
-// Right ARM
+// KDL
 
 #define BASE_Y 0.0
 #define BASE_Z 0.0
@@ -75,27 +75,6 @@
 #define J_Iyz_6 -0.00000132
 #define J_Izz_6 0.00037240
 
-
-#define HARMONIC_120 120
-#define HARMONIC_100 100
-#define HARMONIC_50 50
-
-#define GEAR_RATIO_121 121
-#define GEAR_RATIO_101 101
-#define GEAR_RATIO_50 50
-
-#define ENC_2048 2048
-#define ENC_1024 1024
-#define ENC_1000 1000
-#define ENC_512 512
-#define ABS_ENC_19 524288
-
-#define ENC_CORE_500 65536
-#define ENC_CORE_200 65536
-#define ENC_CORE_100 65536
-#define ENC_CORE 65536
-
-
 // SN: DB45I7E0B008
 
 // #define ZERO_POS_1 448713
@@ -123,13 +102,6 @@
 #define ZERO_POS_5 656537
 #define ZERO_POS_6 -650739
 
-#define MAX_CURRENT_1 2.55
-#define MAX_CURRENT_2 2.55
-#define MAX_CURRENT_3 2.83
-
-#define MAX_CURRENT_4 2.83
-#define MAX_CURRENT_5 2.83
-#define MAX_CURRENT_6 2.83
 
 // Power 500, Rev C, Value 0.088390. Nm/A
 // Power 500, Rev C, Value 0.083971. Nm/A
@@ -137,6 +109,46 @@
 // Power 100, Rev C, Value 0.057980. Nm/A
 // Power 100, Rev C, Value 0.055081. Nm/A
 // Power 100, Rev C, Value 0.057980. Nm/A
+
+#else
+#define ROBOT_DOF 7
+#define JOINTNUM 7
+
+// SN: DB26R7P0B008
+#define ZERO_POS_1 -1625770
+#define ZERO_POS_2 -7749
+#define ZERO_POS_3 40393
+#define ZERO_POS_4 -24019
+#define ZERO_POS_5 -15000
+#define ZERO_POS_6 836049
+#define ZERO_POS_7 -1684257
+
+// Power 500, Rev C, Value 0.088390. Nm/A
+// Power 500, Rev C, Value 0.083971. Nm/A
+// Power 200, Rev C, Value 0.089144. Nm/A
+// Power 100, Rev C, Value 0.057980. Nm/A
+// Power 100, Rev C, Value 0.055081. Nm/A
+// Power 100, Rev C, Value 0.057980. Nm/A
+#endif //__RP__
+
+#define HARMONIC_120 120
+#define HARMONIC_100 100
+#define HARMONIC_50 50
+
+#define GEAR_RATIO_121 121
+#define GEAR_RATIO_101 101
+#define GEAR_RATIO_50 50
+
+#define ENC_2048 2048
+#define ENC_1024 1024
+#define ENC_1000 1000
+#define ENC_512 512
+#define ABS_ENC_19 524288
+
+#define ENC_CORE_500 65536
+#define ENC_CORE_200 65536
+#define ENC_CORE_100 65536
+#define ENC_CORE 65536
 
 #define TORQUE_CONST_500 0.0884 		
 #define TORQUE_CONST_200 0.087		
@@ -146,9 +158,13 @@
 #define TORQUE_ADC_200 96
 #define TORQUE_ADC_100 96
 
-#define EFFICIENCY 60.0
-#define JOINTNUM 6
-#define CONTROL_FREQ 1000
+#define MAX_CURRENT_1 2.55
+#define MAX_CURRENT_2 2.55
+#define MAX_CURRENT_3 2.83
+#define MAX_CURRENT_4 2.83
+#define MAX_CURRENT_5 2.83
+#define MAX_CURRENT_6 2.83
+#define MAX_CURRENT_7 2.83
 
 #define MAX_TORQUE_1 431.97
 #define MAX_TORQUE_2 431.97
@@ -156,8 +172,7 @@
 #define MAX_TORQUE_4 79.79
 #define MAX_TORQUE_5 79.79
 #define MAX_TORQUE_6 79.79
-#define MAX_TORQUE_6 79.79
-
+#define MAX_TORQUE_7 79.79
 
 #define invL2sqr_1 1000
 #define invL2sqr_2 1000
@@ -167,5 +182,5 @@
 #define invL2sqr_6 600
 #define invL2sqr_7 600
 
-
-
+#define EFFICIENCY 60.0
+#define CONTROL_FREQ 1000
