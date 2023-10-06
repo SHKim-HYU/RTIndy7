@@ -2,9 +2,6 @@
 
 #include <Eigen/Dense>
 
-#define ROBOT_DOF 6
-#define JOINTNUM 6
-
 // KDL
 
 #define BASE_Y 0.0
@@ -76,6 +73,18 @@
 #define J_Iyz_6 -0.00000132
 #define J_Izz_6 0.00037240
 
+#ifndef __RP__
+
+#define ROBOT_DOF 6
+#define JOINTNUM 6
+
+// Power 500, Rev C, Value 0.088390. Nm/A
+// Power 500, Rev C, Value 0.083971. Nm/A
+// Power 200, Rev C, Value 0.089144. Nm/A
+// Power 100, Rev C, Value 0.057980. Nm/A
+// Power 100, Rev C, Value 0.055081. Nm/A
+// Power 100, Rev C, Value 0.057980. Nm/A
+
 // SN: DB45I7E0B008
 
 // #define ZERO_POS_1 448713
@@ -103,15 +112,32 @@
 #define ZERO_POS_5 656537
 #define ZERO_POS_6 -650739
 
-// SN: DB26R7P0B008 [IndyRP2]
+#define MAX_CURRENT_1 2.55
+#define MAX_CURRENT_2 2.55
+#define MAX_CURRENT_3 2.83
+#define MAX_CURRENT_4 2.83
+#define MAX_CURRENT_5 2.83
+#define MAX_CURRENT_6 2.83
 
-// #define ZERO_POS_1 -1625
-// #define ZERO_POS_2 -7749
-// #define ZERO_POS_3 40393
-// #define ZERO_POS_4 -24019
-// #define ZERO_POS_5 -15000
-// #define ZERO_POS_6 836049
-// #define ZERO_POS_7 -1684257
+#define MAX_TORQUE_1 431.97
+#define MAX_TORQUE_2 431.97
+#define MAX_TORQUE_3 197.23
+#define MAX_TORQUE_4 79.79
+#define MAX_TORQUE_5 79.79
+#define MAX_TORQUE_6 79.79
+
+#define invL2sqr_1 1000
+#define invL2sqr_2 1000
+#define invL2sqr_3 800
+#define invL2sqr_4 600
+#define invL2sqr_5 600
+#define invL2sqr_6 600
+
+
+#else
+
+#define ROBOT_DOF 7
+#define JOINTNUM 7
 
 
 // Power 500, Rev C, Value 0.088390. Nm/A
@@ -121,6 +147,42 @@
 // Power 100, Rev C, Value 0.055081. Nm/A
 // Power 100, Rev C, Value 0.057980. Nm/A
 
+
+// SN: DB26R7P0B008 [IndyRP2]
+
+#define ZERO_POS_1 -1625
+#define ZERO_POS_2 -7749
+#define ZERO_POS_3 40393
+#define ZERO_POS_4 -24019
+#define ZERO_POS_5 -15000
+#define ZERO_POS_6 836049
+#define ZERO_POS_7 -1684257
+
+#define MAX_CURRENT_1 2.55
+#define MAX_CURRENT_2 2.55
+#define MAX_CURRENT_3 2.83
+#define MAX_CURRENT_4 2.83
+#define MAX_CURRENT_5 2.83
+#define MAX_CURRENT_6 2.83
+#define MAX_CURRENT_7 2.83
+
+#define MAX_TORQUE_1 431.97
+#define MAX_TORQUE_2 431.97
+#define MAX_TORQUE_3 197.23
+#define MAX_TORQUE_4 197.23
+#define MAX_TORQUE_5 79.79
+#define MAX_TORQUE_6 79.79
+#define MAX_TORQUE_7 79.79
+
+#define invL2sqr_1 1000
+#define invL2sqr_2 1000
+#define invL2sqr_3 800
+#define invL2sqr_4 800
+#define invL2sqr_5 600
+#define invL2sqr_6 600
+#define invL2sqr_7 600
+
+#endif
 
 #define HARMONIC_120 120
 #define HARMONIC_100 100
@@ -149,29 +211,6 @@
 #define TORQUE_ADC_200 96
 #define TORQUE_ADC_100 96
 
-#define MAX_CURRENT_1 2.55
-#define MAX_CURRENT_2 2.55
-#define MAX_CURRENT_3 2.83
-#define MAX_CURRENT_4 2.83
-#define MAX_CURRENT_5 2.83
-#define MAX_CURRENT_6 2.83
-#define MAX_CURRENT_7 2.83
-
-#define MAX_TORQUE_1 431.97
-#define MAX_TORQUE_2 431.97
-#define MAX_TORQUE_3 197.23
-#define MAX_TORQUE_4 79.79
-#define MAX_TORQUE_5 79.79
-#define MAX_TORQUE_6 79.79
-#define MAX_TORQUE_7 79.79
-
-#define invL2sqr_1 1000
-#define invL2sqr_2 1000
-#define invL2sqr_3 800
-#define invL2sqr_4 600
-#define invL2sqr_5 600
-#define invL2sqr_6 600
-#define invL2sqr_7 600
 
 #define EFFICIENCY 60.0
 #define CONTROL_FREQ 1000

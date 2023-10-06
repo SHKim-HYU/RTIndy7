@@ -4,7 +4,12 @@ project(Robot LANGUAGES CXX)
 set(CMAKE_DEBUG_POSTFIX "d")
 
 
-file(GLOB SOURCE_FILES "ServoAxis.cpp" "ServoAxis.h")
+file(GLOB SOURCE_FILES "ServoAxis.cpp" "ServoAxis.h" "PropertyDefinition.h")
+
+# IndyRP Option
+if(WITH_RP)
+    add_compile_definitions(__RP__)
+endif()
 
 if(WITH_BULLET)
         file(GLOB BULLET_SRC_FILES "bullet_Indy7.cpp" "bullet_Indy7.h")

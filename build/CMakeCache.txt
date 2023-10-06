@@ -18,16 +18,16 @@
 CAN_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/CAN
 
 //Dependencies for the target
-CAN_LIB_DEPENDS:STATIC=general;/usr/lib/libpcanfd.so;
+CAN_LIB_DEPENDS:STATIC=general;PCAN_LIBRARY-NOTFOUND;
 
 //Value Computed by CMake
 CAN_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/CAN
 
 //Path to a file.
-CASADI_INCLUDE_DIR:PATH=/home/xeno/mpc_ws/casadi/build/install_folder/include
+CASADI_INCLUDE_DIR:PATH=/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/include
 
 //Path to a library.
-CASADI_LIBRARY:FILEPATH=/home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so
+CASADI_LIBRARY:FILEPATH=/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -321,13 +321,13 @@ Interpolator_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/Interpol
 Interpolator_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Interpolator
 
 //Path to a file.
-KERNELHEADERS_DIR:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+
+KERNELHEADERS_DIR:PATH=/usr/src/linux-headers-5.4.124-xenomai-3.1.1+
 
 //Set to 1 if kernel headers were found
 KERNELHEADERS_FOUND:STRING=1
 
 //Kernel headers include dirs
-KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include;/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/arch/x86/include
+KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.4.124-xenomai-3.1.1+/include;/usr/src/linux-headers-5.4.124-xenomai-3.1.1+/arch/x86/include
 
 //Value Computed by CMake
 Network_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/Network
@@ -339,10 +339,10 @@ Network_LIB_DEPENDS:STATIC=optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation
 Network_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Network
 
 //Path to a file.
-PCAN_INCLUDE_DIR:PATH=/usr/include
+PCAN_INCLUDE_DIR:PATH=PCAN_INCLUDE_DIR-NOTFOUND
 
 //Path to a library.
-PCAN_LIBRARY:FILEPATH=/usr/lib/libpcanfd.so
+PCAN_LIBRARY:FILEPATH=PCAN_LIBRARY-NOTFOUND
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
@@ -405,7 +405,7 @@ RTIndy7_VERBOSE:BOOL=ON
 Robot_BINARY_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/build/include/Robot
 
 //Dependencies for the target
-Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so;general;dl;
+Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so;general;dl;
 
 //Value Computed by CMake
 Robot_SOURCE_DIR:STATIC=/home/xeno/Indy_ws/RTIndy7/include/Robot
@@ -426,7 +426,7 @@ WITH_POCO:BOOL=OFF
 WITH_RAISIM:BOOL=OFF
 
 //with Indy RP option
-WITH_RP:BOOL=OFF
+WITH_RP:BOOL=ON
 
 //Xenomai base directory location (optional, used for nonstandard
 // installation paths)
@@ -487,7 +487,7 @@ Xenomai_COBALT_LIBRARIES:STRING=cobalt;modechk;pthread;rt
 Xenomai_COBALT_LIBRARY_DIRS:STRING=-L/usr/xenomai/lib
 
 //Xenomai Kernel Headers directory 
-Xenomai_KERNEL_INCLUDE_DIR:STRING=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include/xenomai
+Xenomai_KERNEL_INCLUDE_DIR:STRING=/usr/src/linux-headers-5.4.124-xenomai-3.1.1+/include/xenomai
 
 //Path to a library.
 Xenomai_LIBRARY_NATIVE:FILEPATH=Xenomai_LIBRARY_NATIVE-NOTFOUND
@@ -858,7 +858,7 @@ Etherlab_ethercat_rtdm_LIBRARY-ADVANCED:INTERNAL=1
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v0.29.1()]
 //Details about finding Xenomai
-FIND_PACKAGE_MESSAGE_DETAILS_Xenomai:INTERNAL=[/usr/xenomai/include/trank;/usr/xenomai/include/cobalt;/usr/xenomai/include;/usr/xenomai/include/alchemy][trank;alchemy;copperplate;cobalt;modechk;pthread;rt][cfound components: NATIVE ][v3.2.3(3.1.1)]
+FIND_PACKAGE_MESSAGE_DETAILS_Xenomai:INTERNAL=[/usr/xenomai/include/trank;/usr/xenomai/include/cobalt;/usr/xenomai/include;/usr/xenomai/include/alchemy][trank;alchemy;copperplate;cobalt;modechk;pthread;rt][cfound components: NATIVE ][v3.1.1(3.1.1)]
 //ADVANCED property for variable: KERNELHEADERS_FOUND
 KERNELHEADERS_FOUND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
