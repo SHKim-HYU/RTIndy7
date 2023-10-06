@@ -328,8 +328,8 @@ void RTIndy7_run(void *arg)
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// info.des.G = mr_indy7.Gravity( info.act.q ); // calcTorque
 			
-			info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
-			// info.des.tau = cs_indy7.computeG( info.act.q ); // calcTorque
+			// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			info.des.tau = cs_indy7.computeG( info.act.q ); // calcTorque
 			info.des.G = cs_indy7.computeG( info.act.q ); // calcTorque
 
 
@@ -418,10 +418,17 @@ void indysim_run(void *arg)
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
 
 	// Load the shared library
+#ifndef __RP__
     void* fd_handle = dlopen("../lib/URDF2CASADI/indy7/indy7_fd.so", RTLD_LAZY);
     if (fd_handle == 0) {
         throw std::runtime_error("Cannot open indy7_fd.so");
     }
+#else
+    void* fd_handle = dlopen("../lib/URDF2CASADI/indyrp/indyrp_fd.so", RTLD_LAZY);
+    if (fd_handle == 0) {
+        throw std::runtime_error("Cannot open indyrp_fd.so");
+    }
+#endif
     
     // Reset error
     dlerror();
@@ -946,11 +953,18 @@ int main(int argc, char **argv)
 	// mr_indy7=MR_Indy7();
 	// mr_indy7.MRSetup();
 
+	#ifndef __RP__
 	cs_indy7=CS_Indy7();
 	cs_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json");
 	cs_sim_indy7=CS_Indy7();
 	cs_sim_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json");
-	
+	#else
+	cs_indy7=CS_Indy7();
+	cs_indy7.CSSetup("../lib/URDF2CASADI/indyrp2/indyrp2.json");
+	cs_sim_indy7=CS_Indy7();
+	cs_sim_indy7.CSSetup("../lib/URDF2CASADI/indyrp2/indyrp2.json");
+	#endif
+
 	MAX_TORQUES<<MAX_TORQUE_1,MAX_TORQUE_2,MAX_TORQUE_3,MAX_TORQUE_4,MAX_TORQUE_5,MAX_TORQUE_6;
 
 	// For CST (cyclic synchronous torque) control

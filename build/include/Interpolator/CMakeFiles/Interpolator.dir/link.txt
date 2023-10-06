@@ -1,0 +1,2 @@
+/usr/bin/ar qc libInterpolator.a  
+/usr/bin/ranlib libInterpolator.a

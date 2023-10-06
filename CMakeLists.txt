@@ -122,7 +122,7 @@ set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 # set(CTRL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Control)
 # set(KDL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/KDL)
 set(ECAT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/EcatSystem)
-set(CAN_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/CAN)
+# set(CAN_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/CAN)
 set(INTP_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Interpolator)
 # set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
 set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
@@ -137,7 +137,7 @@ include_directories(
         # ${CTRL_HEADERS_DIR}
         # ${KDL_HEADERS_DIR}
         ${ECAT_HEADERS_DIR}
-        ${CAN_HEADERS_DIR}
+        # ${CAN_HEADERS_DIR}
         ${INTP_HEADERS_DIR}
         # ${MR_HEADERS_DIR}
         ${NET_HEADERS_DIR}
@@ -149,7 +149,7 @@ include_directories(
 # add_subdirectory(include/Control)
 # add_subdirectory(include/KDL)
 add_subdirectory(include/EcatSystem)
-add_subdirectory(include/CAN)
+# add_subdirectory(include/CAN)
 add_subdirectory(include/Interpolator)
 # add_subdirectory(include/MR)
 add_subdirectory(include/Network)
@@ -165,7 +165,7 @@ target_link_libraries(${PROJECT_NAME}
         # sub::CTRL
         # sub::KDL
         sub::ECAT
-        sub::CAN
+        # sub::CAN
         sub::Interpolator
         # sub::MR
         sub::NETWORK
@@ -185,15 +185,15 @@ if(WITH_CB)
     add_compile_definitions(__CB__)
 endif()
 
-# libpcan
-find_path(PCAN_INCLUDE_DIR NAMES libpcanfd.h)
-find_library(PCAN_LIBRARY NAMES pcanfd)
-target_include_directories(${PROJECT_NAME} PUBLIC ${PCAN_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME}
-       ${PCAN_LIBRARY}
-)
-message(STATUS "pcan library: ${PCAN_LIBRARY}")
-message(STATUS "pcan include: ${PCAN_INCLUDE_DIR}")
+# # libpcan
+# find_path(PCAN_INCLUDE_DIR NAMES libpcanfd.h)
+# find_library(PCAN_LIBRARY NAMES pcanfd)
+# target_include_directories(${PROJECT_NAME} PUBLIC ${PCAN_INCLUDE_DIR})
+# target_link_libraries(${PROJECT_NAME}
+#        ${PCAN_LIBRARY}
+# )
+# message(STATUS "pcan library: ${PCAN_LIBRARY}")
+# message(STATUS "pcan include: ${PCAN_INCLUDE_DIR}")
 
 # jsoncpp
 find_package(jsoncpp REQUIRED)
