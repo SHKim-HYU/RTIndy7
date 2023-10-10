@@ -60,15 +60,15 @@ include CMakeFiles/RTIndy7_01.dir/flags.make
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: CMakeFiles/RTIndy7_01.dir/flags.make
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: ../src/RTIndy7Client.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o -c /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp
+	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o -c /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp
 
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp > CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp > CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.i
 
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp -o CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xeno/Indy_ws/RTIndy7/src/RTIndy7Client.cpp -o CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.s
 
 # Object files for target RTIndy7_01
 RTIndy7_01_OBJECTS = \
@@ -84,11 +84,11 @@ RTIndy7_01: include/Interpolator/libInterpolator.a
 RTIndy7_01: include/Network/libNetwork.a
 RTIndy7_01: include/Robot/libRobot.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
-RTIndy7_01: /home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
+RTIndy7_01: /home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so
+RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
+RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
 RTIndy7_01: /opt/etherlab/lib/libethercat.a
 RTIndy7_01: /opt/etherlab/lib/libethercat_rtdm.a
-RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
-RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoZip.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoNet.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4

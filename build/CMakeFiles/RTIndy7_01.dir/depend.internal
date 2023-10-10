@@ -332,14 +332,23 @@ CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o
  /usr/xenomai/include/cobalt/signal.h
  /usr/xenomai/include/cobalt/stdio.h
  /usr/xenomai/include/cobalt/stdlib.h
+ /usr/xenomai/include/cobalt/sys/cobalt.h
  /usr/xenomai/include/cobalt/sys/ioctl.h
  /usr/xenomai/include/cobalt/sys/mman.h
  /usr/xenomai/include/cobalt/sys/time.h
  /usr/xenomai/include/cobalt/ticks.h
  /usr/xenomai/include/cobalt/time.h
+ /usr/xenomai/include/cobalt/uapi/cond.h
+ /usr/xenomai/include/cobalt/uapi/corectl.h
+ /usr/xenomai/include/cobalt/uapi/event.h
  /usr/xenomai/include/cobalt/uapi/kernel/limits.h
+ /usr/xenomai/include/cobalt/uapi/kernel/synch.h
  /usr/xenomai/include/cobalt/uapi/kernel/thread.h
  /usr/xenomai/include/cobalt/uapi/kernel/types.h
+ /usr/xenomai/include/cobalt/uapi/kernel/urw.h
+ /usr/xenomai/include/cobalt/uapi/kernel/vdso.h
+ /usr/xenomai/include/cobalt/uapi/monitor.h
+ /usr/xenomai/include/cobalt/uapi/mutex.h
  /usr/xenomai/include/cobalt/uapi/sched.h
  /usr/xenomai/include/cobalt/uapi/sem.h
  /usr/xenomai/include/cobalt/uapi/signal.h

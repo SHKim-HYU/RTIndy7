@@ -60,15 +60,15 @@ include include/Robot/CMakeFiles/Robot.dir/flags.make
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o: include/Robot/CMakeFiles/Robot.dir/flags.make
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o: ../include/Robot/CS_Indy7.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o"
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Robot.dir/CS_Indy7.cpp.o -c /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp
+	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Robot.dir/CS_Indy7.cpp.o -c /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp
 
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Robot.dir/CS_Indy7.cpp.i"
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp > CMakeFiles/Robot.dir/CS_Indy7.cpp.i
+	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp > CMakeFiles/Robot.dir/CS_Indy7.cpp.i
 
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Robot.dir/CS_Indy7.cpp.s"
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp -o CMakeFiles/Robot.dir/CS_Indy7.cpp.s
+	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp -o CMakeFiles/Robot.dir/CS_Indy7.cpp.s
 
 # Object files for target Robot
 Robot_OBJECTS = \
@@ -84,7 +84,7 @@ include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
 include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
 include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoZip.so
 include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoNet.so
-include/Robot/libRobot.so: /home/xeno/mpc_ws/casadi_source/casadi/build/install_folder/lib/libcasadi.so
+include/Robot/libRobot.so: /home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so
 include/Robot/libRobot.so: include/Robot/CMakeFiles/Robot.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libRobot.so"
 	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Robot.dir/link.txt --verbose=$(VERBOSE)

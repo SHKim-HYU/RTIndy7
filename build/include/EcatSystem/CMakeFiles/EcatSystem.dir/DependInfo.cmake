@@ -9,15 +9,10 @@ set(CMAKE_DEPENDS_CHECK_C
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_C
-  "__RP__"
-  )
-
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
   "../bin/inc"
-  "/usr/src/linux-headers-5.4.124-xenomai-3.1.1+"
+  "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
   "../include/EcatSystem"
   "../include/Interpolator"
   "../include/Network"
@@ -33,15 +28,10 @@ set(CMAKE_DEPENDS_CHECK_CXX
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_CXX
-  "__RP__"
-  )
-
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../bin/inc"
-  "/usr/src/linux-headers-5.4.124-xenomai-3.1.1+"
+  "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
   "../include/EcatSystem"
   "../include/Interpolator"
   "../include/Network"

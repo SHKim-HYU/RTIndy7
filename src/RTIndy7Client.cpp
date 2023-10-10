@@ -518,12 +518,14 @@ void indysim_run(void *arg)
             Hinf_K_gamma(i,i) = 1.0+1.0/invL2sqr_6 ;
 
             break;
+#ifdef __RP__
     	case 6:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
             Hinf_K_gamma(i,i) = 1.0+1.0/invL2sqr_7 ;
 
             break;
+#endif
         }
     }
 

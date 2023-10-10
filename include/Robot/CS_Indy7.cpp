@@ -73,12 +73,14 @@ CS_Indy7::CS_Indy7()
             Hinf_K_gamma(i,i) = 70.0+1.0/invL2sqr_6 ;
 
             break;
+#ifdef __RP__
         case 6:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
             Hinf_K_gamma(i,i) = 70.0+1.0/invL2sqr_7 ;
 
             break;
+#endif
         }
     }
    for (int i=0; i<this->n_dof; ++i)
@@ -189,12 +191,14 @@ void CS_Indy7::CSSetup(const string& _modelPath)// : loader_(_modelPath)
             Hinf_K_gamma(i,i) = 60.0+1.0/invL2sqr_6 ;
 
             break;
+#ifdef __RP__
         case 6:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
             Hinf_K_gamma(i,i) = 60.0+1.0/invL2sqr_7 ;
 
             break;
+#endif
         }
     }
    for (int i=0; i<this->n_dof; ++i)
