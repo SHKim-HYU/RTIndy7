@@ -1,0 +1,9 @@
+{
+    "cmake.configureSettings": {
+        "WITH_CASADI": "ON",
+        "WITH_BULLET": "OFF",
+        "WITH_POCO": "ON",
+        "WITH_CB": "OFF",
+        "WITH_RP": "OFF"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "Run Release with sudo",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "sudo",
+            "args": ["${workspaceFolder}/build/RTIndy7_01"],
+            "externalConsole": false
+        }
+    ]
+}
