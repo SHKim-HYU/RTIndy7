@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG -fPIC   -std=c++17
 
 CXX_DEFINES = -DRobot_EXPORTS -D__CASADI__
 
-CXX_INCLUDES = -I/home/xeno/Indy_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.4.239-xenomai-3.2.3+ -I/home/xeno/Indy_ws/RTIndy7/include/EcatSystem -I/home/xeno/Indy_ws/RTIndy7/include/Interpolator -I/home/xeno/Indy_ws/RTIndy7/include/Network -I/home/xeno/Indy_ws/RTIndy7/include/Robot -I/home/xeno/mpc_ws/casadi/build/install_folder/include -I/home/xeno/mpc_ws/casadi/build/install_folder/include/casadi -isystem /usr/include/eigen3 -isystem /usr/include/jsoncpp 
+CXX_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.4.239-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Network -I/home/robot/robot_ws/RTIndy7/include/Robot -I/home/robot/mpc_ws/casadi/build/install_folder/include -I/home/robot/mpc_ws/casadi/build/install_folder/include/casadi -isystem /usr/include/eigen3 -isystem /usr/include/jsoncpp 
 

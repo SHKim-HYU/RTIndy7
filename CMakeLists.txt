@@ -57,6 +57,7 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
+option(WITH_REAL "with Real robot Indy" ON)
 option(WITH_RP "with Indy RP option" OFF)
 option(WITH_CB "with Indy7 ControlBox" OFF)
 option(WITH_CASADI "import for CasADi function" OFF)
@@ -175,7 +176,12 @@ target_link_libraries(${PROJECT_NAME}
         dl
 )
 
-# ControlBox
+# Real robot
+if(WITH_REAL)
+    add_compile_definitions(__REAL__)
+endif()
+
+# IndyRP2
 if(WITH_RP)
     add_compile_definitions(__RP__)
 endif()

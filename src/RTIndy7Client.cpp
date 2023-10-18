@@ -264,6 +264,7 @@ void writeEcatData(){
 }
 
 // RTIndy7_task
+#ifdef __REAL__
 void RTIndy7_run(void *arg)
 {
 	RTIME beginCycle, endCycle;
@@ -408,6 +409,7 @@ void RTIndy7_run(void *arg)
 		rt_task_wait_period(NULL); 	//wait for next cycle
 	}
 }
+#endif
 
 #ifdef __CASADI__
 // IndySim task
@@ -438,7 +440,11 @@ void indysim_run(void *arg)
     if (dlerror()) {
         throw std::runtime_error("Function evaluation failed.");
     }
-    
+#ifndef __REAL__
+	system_ready=1;
+	info.act.q = JVec::Zero();   
+#endif
+
     // Allocate input/output buffers and work vectors
     casadi_int sz_arg = NUM_AXIS;
     casadi_int sz_res = NUM_AXIS;
@@ -542,6 +548,14 @@ void indysim_run(void *arg)
 				cnt=0;
 			}
 
+#ifndef __REAL__
+			// Trajectory Generation
+			trajectory_generation();
+			
+			//[ToDo] Add MPC Function 
+			compute();	
+#endif
+			
 			////////////////   Implicit Euler method   /////////////////
 
 			/////////////////  RK4   //////////////////
@@ -642,10 +656,15 @@ void indysim_run(void *arg)
 			    // info.nom.tau = M*ddq_ref + (Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
 			    // info.nom.tau = M*ddq_ref + C*info.nom.q_dot;
 			}
-
+#ifndef __REAL__
+			info.act.q = info.nom.q;
+			info.act.q_dot = info.nom.q_dot;
+#endif
 			endCycle = rt_timer_read();
 			periodIndysim = (unsigned long) endCycle - beginCycle;
-		
+#ifndef __REAL__
+			gt+= period;
+#endif
 		}
 		rt_task_wait_period(NULL); //wait for next cycle
 	}
@@ -679,7 +698,7 @@ void bullet_run(void *arg)
 	b3sim.setGravity( btVector3(0 , 0 , -9.8));
 
 	// [ToDo] model path update
-	int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
+	int robotId = b3sim.loadURDF("/home/robot/robot_ws/RTIndy7/description/indy7.urdf");
 	// int robotId = b3sim.loadURDF("quadruped/minitaur.urdf");
 	b3sim.setRealTimeSimulation(false);
 	Bullet_Indy7 bt3indy7(&b3sim,robotId);
@@ -819,6 +838,8 @@ void print_run(void *arg)
 			step=(unsigned long)(now - previous) / 1000000;
 			itime+=step;
 			previous=now;
+
+#ifdef __REAL__
 			if (!nrmk_master.getMasterStatus(NumSlaves, masterState))
 				rt_printf("Master: Offline\n");
 			if (!nrmk_master.getRxDomainStatus())
@@ -833,7 +854,7 @@ void print_run(void *arg)
 				if (!nrmk_master.getAxisEcatStatus(i,slaveState[i-1]))
 				rt_printf("idx: %u, slaveState: %u",i,slaveState[i-1]);	
 			}
-			
+#endif			
 			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
 			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
 			#ifdef __BULLET__
@@ -896,8 +917,9 @@ void print_run(void *arg)
 /****************************************************************************/
 void signal_handler(int signum)
 {
+#ifdef __REAL__
 	rt_task_delete(&RTIndy7_task);
-	
+#endif
 	rt_task_delete(&safety_task);
 	rt_task_delete(&print_task);
 #ifdef __CASADI__
@@ -987,9 +1009,11 @@ int main(int argc, char **argv)
 	// RTIndy7_task: create and start
 	printf("Now running rt task ...\n");
 
+#ifdef __REAL__
 	// RTIndy7 control
 	rt_task_create(&RTIndy7_task, "RTIndy7_task", 0, 99, 0);
 	rt_task_start(&RTIndy7_task, &RTIndy7_run, NULL);
+#endif
 
 #ifdef __BULLET__
 	// RTIndy7 simulation

@@ -271,8 +271,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/xeno/Indy_ws/RTIndy7/build",
-		"source" : "/home/xeno/Indy_ws/RTIndy7"
+		"build" : "/home/robot/robot_ws/RTIndy7/build",
+		"source" : "/home/robot/robot_ws/RTIndy7"
 	},
 	"version" : 
 	{

@@ -1,8 +1,8 @@
-# Install script for directory: /home/xeno/Indy_ws/RTIndy7
+# Install script for directory: /home/robot/robot_ws/RTIndy7
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/xeno/Indy_ws/RTIndy7")
+  set(CMAKE_INSTALL_PREFIX "/home/robot/robot_ws/RTIndy7")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,10 +39,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/xeno/Indy_ws/RTIndy7/build/include/EcatSystem/cmake_install.cmake")
-  include("/home/xeno/Indy_ws/RTIndy7/build/include/Interpolator/cmake_install.cmake")
-  include("/home/xeno/Indy_ws/RTIndy7/build/include/Network/cmake_install.cmake")
-  include("/home/xeno/Indy_ws/RTIndy7/build/include/Robot/cmake_install.cmake")
+  include("/home/robot/robot_ws/RTIndy7/build/include/EcatSystem/cmake_install.cmake")
+  include("/home/robot/robot_ws/RTIndy7/build/include/Interpolator/cmake_install.cmake")
+  include("/home/robot/robot_ws/RTIndy7/build/include/Network/cmake_install.cmake")
+  include("/home/robot/robot_ws/RTIndy7/build/include/Robot/cmake_install.cmake")
 
 endif()
 
@@ -54,5 +54,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/xeno/Indy_ws/RTIndy7/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/robot/robot_ws/RTIndy7/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
