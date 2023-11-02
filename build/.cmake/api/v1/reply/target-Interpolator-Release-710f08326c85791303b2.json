@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "include/Network/libNetworkd.a"
+			"path" : "include/Interpolator/libInterpolator.a"
 		}
 	],
 	"backtrace" : 1,
@@ -15,7 +15,7 @@
 		],
 		"files" : 
 		[
-			"include/Network/CMakeLists.txt"
+			"include/Interpolator/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -30,13 +30,13 @@
 			}
 		]
 	},
-	"id" : "Network::@157f8c884db9c9087acb",
-	"name" : "Network",
-	"nameOnDisk" : "libNetworkd.a",
+	"id" : "Interpolator::@3b557d557d621394a5fb",
+	"name" : "Interpolator",
+	"nameOnDisk" : "libInterpolator.a",
 	"paths" : 
 	{
-		"build" : "include/Network",
-		"source" : "include/Network"
+		"build" : "include/Interpolator",
+		"source" : "include/Interpolator"
 	},
 	"sourceGroups" : 
 	[
@@ -45,7 +45,8 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2
 			]
 		}
 	],
@@ -53,12 +54,17 @@
 	[
 		{
 			"backtrace" : 1,
-			"path" : "include/Network/PacketHandler.h",
+			"path" : "include/Interpolator/BlendedPolynomialAlgorithm.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "include/Network/SocketHandler.h",
+			"path" : "include/Interpolator/InterpolatorConstants.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Interpolator/PolynomialAlgorithm.h",
 			"sourceGroupIndex" : 0
 		}
 	],

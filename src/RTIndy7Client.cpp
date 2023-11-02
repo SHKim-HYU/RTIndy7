@@ -936,7 +936,7 @@ void signal_handler(int signum)
 int main(int argc, char **argv)
 {
 	// Perform auto-init of rt_print buffers if the task doesn't do so
-    rt_print_auto_init(1);
+    rt_print_init(0, NULL);
 
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);

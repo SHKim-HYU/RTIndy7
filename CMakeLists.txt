@@ -215,7 +215,7 @@ if(Xenomai_FOUND)
 
         target_include_directories(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_INCLUDE_DIRS})
         # target_link_libraries(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_LIBRARY_DIRS} ${Xenomai_${comp_lists}_LIBRARIES})
-        target_link_libraries(${PROJECT_NAME} ${Xenomai_${comp_lists}_DL_FLAGS})
+        target_link_libraries(${PROJECT_NAME} ${Xenomai_${comp_lists}_DL_FLAGS} ${Xenomai_${comp_lists}_LIBRARIES})
         set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS ${Xenomai_${comp_lists}_DEFINITIONS})
     endforeach(comp_lists ${Xenomai_SKINS})
 endif(Xenomai_FOUND)
@@ -268,6 +268,14 @@ if(WITH_CASADI)
       "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indyRP"
     )
     # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
+endif()
+
+find_package(Eigen 3.0.0)
+if( Eigen_FOUND )
+   add_definitions( ${Eigen_DEFINITIONS} )
+   target_include_directories (${PROJECT_NAME} PUBLIC ${Eigen_INCLUDE_DIRS} )
+else()
+   MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN_INCLUDE_DIR to the include directory of your Eigen installation.")
 endif()
 
 # Poco

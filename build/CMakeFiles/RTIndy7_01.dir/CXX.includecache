@@ -167,8 +167,6 @@ alchemy/timer.h
 -
 alchemy/mutex.h
 -
-rtdk.h
--
 CS_Indy7.h
 /home/robot/robot_ws/RTIndy7/src/CS_Indy7.h
 SharedMemory/b3RobotSimulatorClientAPI_NoDirect.h
@@ -2120,10 +2118,6 @@ copperplate/heapobj.h
 cobalt/uapi/kernel/types.h
 -
 sys/time.h
--
-
-/usr/xenomai/include/trank/rtdk.h
-stdio.h
 -
 
 /usr/xenomai/include/trank/trank.h

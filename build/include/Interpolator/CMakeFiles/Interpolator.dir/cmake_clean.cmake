@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "libInterpolatord.a"
-  "libInterpolatord.pdb"
+  "libInterpolator.a"
+  "libInterpolator.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

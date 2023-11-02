@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "include/Robot/libRobotd.so"
+			"path" : "include/Robot/libRobot.so"
 		}
 	],
 	"backtrace" : 1,
@@ -79,7 +79,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fPIC  "
+					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG -fPIC  "
 				},
 				{
 					"fragment" : "-std=c++17"
@@ -193,7 +193,7 @@
 		"language" : "CXX"
 	},
 	"name" : "Robot",
-	"nameOnDisk" : "libRobotd.so",
+	"nameOnDisk" : "libRobot.so",
 	"paths" : 
 	{
 		"build" : "include/Robot",

@@ -1,3 +1,3 @@
 file(REMOVE_RECURSE
-  "libNetworkd.a"
+  "libNetwork.a"
 )

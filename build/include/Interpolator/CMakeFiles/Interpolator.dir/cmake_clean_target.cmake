@@ -1,3 +1,3 @@
 file(REMOVE_RECURSE
-  "libInterpolatord.a"
+  "libInterpolator.a"
 )

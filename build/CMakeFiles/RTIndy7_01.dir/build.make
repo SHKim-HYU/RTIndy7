@@ -79,10 +79,10 @@ RTIndy7_01_EXTERNAL_OBJECTS =
 
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o
 RTIndy7_01: CMakeFiles/RTIndy7_01.dir/build.make
-RTIndy7_01: include/EcatSystem/libEcatSystemd.a
-RTIndy7_01: include/Interpolator/libInterpolatord.a
-RTIndy7_01: include/Network/libNetworkd.a
-RTIndy7_01: include/Robot/libRobotd.so
+RTIndy7_01: include/EcatSystem/libEcatSystem.a
+RTIndy7_01: include/Interpolator/libInterpolator.a
+RTIndy7_01: include/Network/libNetwork.a
+RTIndy7_01: include/Robot/libRobot.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
 RTIndy7_01: /opt/casadi/lib/libcasadi.so
 RTIndy7_01: /usr/lib/x86_64-linux-gnu/libPocoUtil.so

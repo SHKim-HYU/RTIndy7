@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "include/EcatSystem/libEcatSystemd.a"
+			"path" : "include/EcatSystem/libEcatSystem.a"
 		}
 	],
 	"backtrace" : 1,
@@ -66,7 +66,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls  "
+					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG  "
 				},
 				{
 					"fragment" : "-D__XENO_COMPAT__ -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__"
@@ -132,7 +132,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g  "
+					"fragment" : "-O3 -DNDEBUG  "
 				},
 				{
 					"fragment" : "-D__XENO_COMPAT__ -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__"
@@ -194,7 +194,7 @@
 	],
 	"id" : "EcatSystem::@f689c52d19d87c0c3843",
 	"name" : "EcatSystem",
-	"nameOnDisk" : "libEcatSystemd.a",
+	"nameOnDisk" : "libEcatSystem.a",
 	"paths" : 
 	{
 		"build" : "include/EcatSystem",

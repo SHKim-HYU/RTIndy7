@@ -52,7 +52,7 @@
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 275,
+				"line" : 283,
 				"parent" : 0
 			},
 			{
@@ -78,6 +78,12 @@
 				"file" : 0,
 				"line" : 230,
 				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 276,
+				"parent" : 0
 			}
 		]
 	},
@@ -87,7 +93,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls  "
+					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG  "
 				},
 				{
 					"fragment" : "-D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__"
@@ -162,7 +168,7 @@
 					"path" : "/usr/xenomai/include/trank"
 				},
 				{
-					"backtrace" : 2,
+					"backtrace" : 10,
 					"isSystem" : true,
 					"path" : "/usr/include/eigen3"
 				},
@@ -204,7 +210,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls",
+				"fragment" : "-std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG",
 				"role" : "flags"
 			},
 			{
@@ -217,22 +223,22 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "include/EcatSystem/libEcatSystemd.a",
+				"fragment" : "include/EcatSystem/libEcatSystem.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "include/Interpolator/libInterpolatord.a",
+				"fragment" : "include/Interpolator/libInterpolator.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "include/Network/libNetworkd.a",
+				"fragment" : "include/Network/libNetwork.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "include/Robot/libRobotd.so",
+				"fragment" : "include/Robot/libRobot.so",
 				"role" : "libraries"
 			},
 			{
@@ -246,6 +252,30 @@
 			},
 			{
 				"fragment" : "-Wl,--no-as-needed -Wl,@/usr/xenomai/lib/modechk.wrappers -lalchemy -lcopperplate /usr/xenomai/lib/xenomai/bootstrap.o -Wl,--wrap=main -Wl,--dynamic-list=/usr/xenomai/lib/dynlist.ld -L/usr/xenomai/lib -lcobalt -lmodechk -lpthread -lrt",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lalchemy",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lcopperplate",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lcobalt",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lmodechk",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lrt",
 				"role" : "libraries"
 			},
 			{

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "libNetworkd.a"
-  "libNetworkd.pdb"
+  "libNetwork.a"
+  "libNetwork.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

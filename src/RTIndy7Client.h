@@ -33,7 +33,7 @@
 #include <alchemy/task.h>
 #include <alchemy/timer.h>
 #include <alchemy/mutex.h>
-#include <rtdk.h>		//The rdtk real-time printing library
+// #include <rtdk.h>		//The rdtk real-time printing library
 /****************************************************************************/
 
 /////////////////////////////////////////////////////////////
