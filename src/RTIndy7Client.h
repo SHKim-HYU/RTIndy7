@@ -30,9 +30,9 @@
 #include <stdexcept>
 
 //-xenomai-///////////////////////////////////////////////////////////////
-#include <native/task.h>
-#include <native/timer.h>
-#include <native/mutex.h>
+#include <alchemy/task.h>
+#include <alchemy/timer.h>
+#include <alchemy/mutex.h>
 #include <rtdk.h>		//The rdtk real-time printing library
 /****************************************************************************/
 

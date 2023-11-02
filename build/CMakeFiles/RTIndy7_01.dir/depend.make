@@ -360,10 +360,6 @@ CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/copperpl
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/copperplate/heapobj.h
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/copperplate/reference.h
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/copperplate/threadobj.h
-CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/trank/native/mutex.h
-CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/trank/native/task.h
-CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/trank/native/timer.h
-CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/trank/native/types.h
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/trank/rtdk.h
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/trank/trank.h
 CMakeFiles/RTIndy7_01.dir/src/RTIndy7Client.cpp.o: /usr/xenomai/include/xeno_config.h

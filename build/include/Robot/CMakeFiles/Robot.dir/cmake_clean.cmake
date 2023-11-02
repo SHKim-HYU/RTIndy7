@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Robot.dir/CS_Indy7.cpp.o"
-  "libRobot.pdb"
-  "libRobot.so"
+  "libRobotd.pdb"
+  "libRobotd.so"
 )
 
 # Per-language clean rules from dependency scanning.

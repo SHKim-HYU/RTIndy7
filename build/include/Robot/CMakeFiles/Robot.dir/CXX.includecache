@@ -6,27 +6,27 @@
 
 #IncludeRegexTransform: 
 
-/home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp
+/home/robot/robot_ws/RTIndy7/include/Robot/CS_Indy7.cpp
 CS_Indy7.h
-/home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.h
+/home/robot/robot_ws/RTIndy7/include/Robot/CS_Indy7.h
 
-/home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.h
+/home/robot/robot_ws/RTIndy7/include/Robot/CS_Indy7.h
 iostream
-/home/xeno/Indy_ws/RTIndy7/include/Robot/iostream
+/home/robot/robot_ws/RTIndy7/include/Robot/iostream
 json_loader.h
-/home/xeno/Indy_ws/RTIndy7/include/Robot/json_loader.h
+/home/robot/robot_ws/RTIndy7/include/Robot/json_loader.h
 Eigen/Dense
 -
 dlfcn.h
 -
 PropertyDefinition.h
-/home/xeno/Indy_ws/RTIndy7/include/Robot/PropertyDefinition.h
+/home/robot/robot_ws/RTIndy7/include/Robot/PropertyDefinition.h
 
-/home/xeno/Indy_ws/RTIndy7/include/Robot/PropertyDefinition.h
+/home/robot/robot_ws/RTIndy7/include/Robot/PropertyDefinition.h
 Eigen/Dense
 -
 
-/home/xeno/Indy_ws/RTIndy7/include/Robot/json_loader.h
+/home/robot/robot_ws/RTIndy7/include/Robot/json_loader.h
 iostream
 -
 fstream

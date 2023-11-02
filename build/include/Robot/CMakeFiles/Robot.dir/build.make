@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xeno/Indy_ws/RTIndy7
+CMAKE_SOURCE_DIR = /home/robot/robot_ws/RTIndy7
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xeno/Indy_ws/RTIndy7/build
+CMAKE_BINARY_DIR = /home/robot/robot_ws/RTIndy7/build
 
 # Include any dependencies generated for this target.
 include include/Robot/CMakeFiles/Robot.dir/depend.make
@@ -59,16 +59,16 @@ include include/Robot/CMakeFiles/Robot.dir/flags.make
 
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o: include/Robot/CMakeFiles/Robot.dir/flags.make
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o: ../include/Robot/CS_Indy7.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o"
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Robot.dir/CS_Indy7.cpp.o -c /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o"
+	cd /home/robot/robot_ws/RTIndy7/build/include/Robot && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Robot.dir/CS_Indy7.cpp.o -c /home/robot/robot_ws/RTIndy7/include/Robot/CS_Indy7.cpp
 
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Robot.dir/CS_Indy7.cpp.i"
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp > CMakeFiles/Robot.dir/CS_Indy7.cpp.i
+	cd /home/robot/robot_ws/RTIndy7/build/include/Robot && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/robot/robot_ws/RTIndy7/include/Robot/CS_Indy7.cpp > CMakeFiles/Robot.dir/CS_Indy7.cpp.i
 
 include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Robot.dir/CS_Indy7.cpp.s"
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xeno/Indy_ws/RTIndy7/include/Robot/CS_Indy7.cpp -o CMakeFiles/Robot.dir/CS_Indy7.cpp.s
+	cd /home/robot/robot_ws/RTIndy7/build/include/Robot && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robot/robot_ws/RTIndy7/include/Robot/CS_Indy7.cpp -o CMakeFiles/Robot.dir/CS_Indy7.cpp.s
 
 # Object files for target Robot
 Robot_OBJECTS = \
@@ -77,28 +77,28 @@ Robot_OBJECTS = \
 # External object files for target Robot
 Robot_EXTERNAL_OBJECTS =
 
-include/Robot/libRobot.so: include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o
-include/Robot/libRobot.so: include/Robot/CMakeFiles/Robot.dir/build.make
-include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
-include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
-include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
-include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoZip.so
-include/Robot/libRobot.so: /usr/lib/x86_64-linux-gnu/libPocoNet.so
-include/Robot/libRobot.so: /home/xeno/mpc_ws/casadi/build/install_folder/lib/libcasadi.so
-include/Robot/libRobot.so: include/Robot/CMakeFiles/Robot.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xeno/Indy_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libRobot.so"
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Robot.dir/link.txt --verbose=$(VERBOSE)
+include/Robot/libRobotd.so: include/Robot/CMakeFiles/Robot.dir/CS_Indy7.cpp.o
+include/Robot/libRobotd.so: include/Robot/CMakeFiles/Robot.dir/build.make
+include/Robot/libRobotd.so: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
+include/Robot/libRobotd.so: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
+include/Robot/libRobotd.so: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
+include/Robot/libRobotd.so: /usr/lib/x86_64-linux-gnu/libPocoZip.so
+include/Robot/libRobotd.so: /usr/lib/x86_64-linux-gnu/libPocoNet.so
+include/Robot/libRobotd.so: /opt/casadi/lib/libcasadi.so
+include/Robot/libRobotd.so: include/Robot/CMakeFiles/Robot.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libRobotd.so"
+	cd /home/robot/robot_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Robot.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-include/Robot/CMakeFiles/Robot.dir/build: include/Robot/libRobot.so
+include/Robot/CMakeFiles/Robot.dir/build: include/Robot/libRobotd.so
 
 .PHONY : include/Robot/CMakeFiles/Robot.dir/build
 
 include/Robot/CMakeFiles/Robot.dir/clean:
-	cd /home/xeno/Indy_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -P CMakeFiles/Robot.dir/cmake_clean.cmake
+	cd /home/robot/robot_ws/RTIndy7/build/include/Robot && $(CMAKE_COMMAND) -P CMakeFiles/Robot.dir/cmake_clean.cmake
 .PHONY : include/Robot/CMakeFiles/Robot.dir/clean
 
 include/Robot/CMakeFiles/Robot.dir/depend:
-	cd /home/xeno/Indy_ws/RTIndy7/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xeno/Indy_ws/RTIndy7 /home/xeno/Indy_ws/RTIndy7/include/Robot /home/xeno/Indy_ws/RTIndy7/build /home/xeno/Indy_ws/RTIndy7/build/include/Robot /home/xeno/Indy_ws/RTIndy7/build/include/Robot/CMakeFiles/Robot.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/robot/robot_ws/RTIndy7/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/robot/robot_ws/RTIndy7 /home/robot/robot_ws/RTIndy7/include/Robot /home/robot/robot_ws/RTIndy7/build /home/robot/robot_ws/RTIndy7/build/include/Robot /home/robot/robot_ws/RTIndy7/build/include/Robot/CMakeFiles/Robot.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : include/Robot/CMakeFiles/Robot.dir/depend
 
