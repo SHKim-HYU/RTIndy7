@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 3.8)
 # Set variables:
 #   * PROJECT_NAME
 #   * PROJECT_VERSION
-project(RTIndy7_01 VERSION 2.0.0 LANGUAGES C CXX)
+project(RT_Indy7 VERSION 2.0.0 LANGUAGES C CXX)
 
 # Use MACOSX_RPATH by default on OS X. This was added in CMake 2.8.12 and
 # became default in CMake 3.0. Explicitly setting this policy is necessary to
@@ -63,6 +63,8 @@ option(WITH_CASADI "import for CasADi function" OFF)
 option(WITH_POCO "with POCO Comunication" OFF)
 option(WITH_BULLET "with Bullet Simulation" OFF)
 option(WITH_RAISIM "with RAISIM Simulation" OFF)
+option(WITH_QT "with QT app" ON)
+option(WITH_LR "with LR Control" ON)
 #===============================================================================
 # Build type settings
 #===============================================================================
@@ -128,8 +130,41 @@ set(INTP_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Interpolator)
 set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
 set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 
+
+if(WITH_QT)
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
+    find_package(Qt5 COMPONENTS Widgets Core Quick REQUIRED)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTORCC ON)
+
+    set(QTWIDGET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/QT/QtWidgets)
+    set(DARKSTYLE_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/QT/DarkStyleWindow)
+    include_directories(
+        ${QTWIDGET_HEADERS_DIR}
+        ${DARKSTYLE_HEADERS_DIR}    
+    )
+    add_subdirectory(include/QT/DarkStyleWindow)
+    add_subdirectory(include/QT/QtWidgets)
+    add_subdirectory(include/QT/QCustomPlot_library)
+    
+    set(QT_LIBRARIES
+	sub::QtWidgets
+	sub::DarkStyleWindow
+	Qt5::Widgets 
+	Qt5::Core
+	Qt5::Gui
+	Qt5::Network
+	Qt5::Quick
+	qcustomplot
+    )
+    SET(QT_SRCS src/qt/mainwindow.cpp src/qt/mainwindow.h src/qt/mainwindow.ui src/qt/qt_run.cpp src/qt/qt_run.h)
+    add_compile_definitions(__QT__)
+endif()
+
 #[ToDo] will be replaced from the installed bullet3 SDK
 # set(BULLET_HEADER_DIR ${PROJECT_SOURCE_DIR}/include/bullet3) 
+
 
 include_directories(${PROJ_INSTALL_INCLUDE_DIR})
 include_directories(
@@ -146,6 +181,7 @@ include_directories(
         # ${BULLET_HEADER_DIR}
 )
 
+
 # add_subdirectory(include/Control)
 # add_subdirectory(include/KDL)
 add_subdirectory(include/EcatSystem)
@@ -154,20 +190,81 @@ add_subdirectory(include/Interpolator)
 # add_subdirectory(include/MR)
 add_subdirectory(include/Network)
 add_subdirectory(include/Robot)
+add_subdirectory(include/LieGroupRobotics)
+
+
+
 #[ToDo] will be replaced from the installed bullet3 SDK
 # add_subdirectory(include/bullet3)
 
-add_executable(${PROJECT_NAME}
-        src/RTIndy7Client.cpp
-)
 
+file(GLOB_RECURSE RUN_SOURCES "src/*/*_run.cpp")
+
+message("\n\nRUN_SOURCES: ${RUN_SOURCES}")
+SET(CONTROL_SRCS src/control/control_run.cpp )
+SET(PRINT_SRCS src/print/print_run.cpp )
+SET(ECAT_SRCS  src/ecat/ecat_run.cpp )
+SET(SAFETY_SRCS  src/safety/safety_run.cpp )
+SET(TCP_SRCS  src/tcp/tcp_run.cpp )
+SET(LR_CONTROL_SRCS  src/lr_control/lr_control_run.cpp )
+
+
+if(WITH_QT)
+    if(WITH_CASADI)
+        add_executable(${PROJECT_NAME}
+                src/main.cpp
+                ${PRINT_SRCS}
+                ${ECAT_SRCS}
+                ${CONTROL_SRCS}
+                ${SAFETY_SRCS}
+                ${TCP_SRCS}
+                ${QT_SRCS}            
+        )
+    elseif(WITH_LR)
+        add_executable(${PROJECT_NAME}
+                src/main.cpp
+                ${PRINT_SRCS}
+                ${ECAT_SRCS}
+                ${SAFETY_SRCS}
+                ${TCP_SRCS}
+                ${LR_CONTROL_SRCS}
+                ${QT_SRCS}            
+        )
+    endif()
+else()
+if(WITH_CASADI)
+    add_executable(${PROJECT_NAME}
+            src/main.cpp
+            ${PRINT_SRCS}
+            ${ECAT_SRCS}
+            ${CONTROL_SRCS}
+            ${SAFETY_SRCS}
+            ${TCP_SRCS}
+    )
+    elseif(WITH_LR)
+    add_executable(${PROJECT_NAME}
+            src/main.cpp
+            ${PRINT_SRCS}
+            ${ECAT_SRCS}
+            ${SAFETY_SRCS}
+            ${TCP_SRCS}
+            ${LR_CONTROL_SRCS}
+    )
+    endif()
+endif()
+
+
+
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
+
+#target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME}
         # sub::CTRL
         # sub::KDL
         sub::ECAT
         # sub::CAN
         sub::Interpolator
-        # sub::MR
+        sub::LR
         sub::NETWORK
         sub::Robot
         # sub::bullet3
@@ -183,6 +280,11 @@ endif()
 # ControlBox
 if(WITH_CB)
     add_compile_definitions(__CB__)
+endif()
+
+# LieGroupRobotics
+if(WITH_LR)
+    add_compile_definitions(__LR__)
 endif()
 
 # # libpcan

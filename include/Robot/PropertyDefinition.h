@@ -103,14 +103,15 @@
 // #define ZERO_POS_11 -1058082
 // #define ZERO_POS_12 -88988
 
-// SN: DB45I17E0B007 [Indy7]
 
-#define ZERO_POS_1 -389838
-#define ZERO_POS_2 57701
-#define ZERO_POS_3 -199021
-#define ZERO_POS_4 9040
-#define ZERO_POS_5 656537
-#define ZERO_POS_6 -650739
+
+//SN: P1182I07003
+#define ZERO_POS_1 48364
+#define ZERO_POS_2 5992
+#define ZERO_POS_3 -28718
+#define ZERO_POS_4 4754
+#define ZERO_POS_5 29969
+#define ZERO_POS_6 -3031
 
 #define MAX_CURRENT_1 2.55
 #define MAX_CURRENT_2 2.55
