@@ -212,7 +212,8 @@
 #define TORQUE_ADC_100 96
 
 
-#define EFFICIENCY 75.0
+// #define EFFICIENCY 75.0
+#define EFFICIENCY 90.0
 #define CONTROL_FREQ 1000
 
 

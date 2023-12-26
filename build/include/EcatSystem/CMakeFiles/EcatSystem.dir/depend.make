@@ -57,7 +57,5 @@ include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o: /usr/xenomai/inc
 include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o: /usr/xenomai/include/cobalt/unistd.h
 include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o: /usr/xenomai/include/cobalt/wrappers.h
 include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o: /usr/xenomai/include/copperplate/clockobj.h
-include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o: /usr/xenomai/include/trank/native/timer.h
-include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o: /usr/xenomai/include/trank/trank.h
 include/EcatSystem/CMakeFiles/EcatSystem.dir/Ecat_Master.cpp.o: /usr/xenomai/include/xeno_config.h
 

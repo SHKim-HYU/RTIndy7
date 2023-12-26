@@ -164,10 +164,6 @@
 					"path" : "/opt/etherlab/include"
 				},
 				{
-					"backtrace" : 2,
-					"path" : "/usr/xenomai/include/trank"
-				},
-				{
 					"backtrace" : 10,
 					"isSystem" : true,
 					"path" : "/usr/include/eigen3"
@@ -296,10 +292,6 @@
 			},
 			{
 				"fragment" : "/opt/etherlab/lib/libethercat_rtdm.a",
-				"role" : "libraries"
-			},
-			{
-				"fragment" : "-ltrank",
 				"role" : "libraries"
 			},
 			{

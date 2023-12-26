@@ -13,7 +13,7 @@ Ecat_Master.h
 /home/robot/robot_ws/RTIndy7/include/EcatSystem/Ecat_Master.h
 unistd.h
 -
-native/timer.h
+alchemy/timer.h
 -
 arpa/inet.h
 -
@@ -330,18 +330,6 @@ boilerplate/limits.h
 cobalt/ticks.h
 -
 cobalt/sys/cobalt.h
--
-
-/usr/xenomai/include/trank/native/timer.h
-errno.h
--
-trank/trank.h
--
-alchemy/timer.h
--
-
-/usr/xenomai/include/trank/trank.h
-boilerplate/compiler.h
 -
 
 /usr/xenomai/include/xeno_config.h

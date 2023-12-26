@@ -28,7 +28,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/opt/casadi/include"
   "/opt/casadi/include/casadi"
   "/opt/etherlab/include"
-  "/usr/xenomai/include/trank"
   "/usr/include/eigen3"
   "/usr/include/jsoncpp"
   )

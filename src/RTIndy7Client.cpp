@@ -88,7 +88,9 @@ void trajectory_generation(){
 	    	motion++;
 	        break;
 	    case 2:
-	    	info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
+	    	// info.q_target(0)=1.5709; 	info.q_target(1)=-0.4071; 	info.q_target(2)=0.4071;
+	    	// info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
+			info.q_target(0)=0.0; 	info.q_target(1)=0.0; 	info.q_target(2)=0.0;
 	    	info.q_target(3)=0.0; 	info.q_target(4)=0.0; 	info.q_target(5)=0.0;
 #ifdef __RP__
 	    	info.q_target(6)=0.0;
@@ -155,7 +157,7 @@ int compute()
 	cs_indy7.updateRobot(info.act.q , info.act.q_dot);
 
 	Jacobian J_b = cs_indy7.getJ_b();
-
+	
 	info.act.tau_ext = J_b.transpose()*info.act.F;
 
 	return 0;
@@ -238,7 +240,7 @@ void readEcatData(){
 	info.act.F(2) = (double)FTRawFz[NUM_IO_MODULE+NUM_AXIS] / force_divider;
 	info.act.F(3) = (double)FTRawTx[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 	info.act.F(4) = (double)FTRawTy[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
-	info.act.F(5) = (double)FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+	info.act.F(5) = -(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 
 #ifdef __CB__
 	info.act.F_CB(0) = (double)FTRawFxCB[0] / force_divider;
@@ -269,10 +271,7 @@ void RTIndy7_run(void *arg)
 	RTIME beginCycle, endCycle;
 	RTIME beginRead, beginReadbuf, beginWrite, beginWritebuf, beginCompute;
 
-	// Synchronize EtherCAT Master (for Distributed Clock Mode)
-	// nrmk_master.syncEcatMaster();
-
-	/* Arguments: &task (NULL=self),
+		/* Arguments: &task (NULL=self),
 	 *            start time,
 	 *            period
 	 */
@@ -328,7 +327,9 @@ void RTIndy7_run(void *arg)
 			// info.des.tau = mr_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
 			// info.des.G = mr_indy7.Gravity( info.act.q ); // calcTorque
 			
+			// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint) - 1* info.act.tau_ext;
 			// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot,eint);
+			// info.des.tau = cs_indy7.computeG( info.act.q ) - 1* info.act.tau_ext; // calcTorque
 			info.des.tau = cs_indy7.computeG( info.act.q ); // calcTorque
 			info.des.G = cs_indy7.computeG( info.act.q ); // calcTorque
 
@@ -351,6 +352,8 @@ void RTIndy7_run(void *arg)
 		periodBuffer += (unsigned long) rt_timer_read() - beginWritebuf;
 
 		beginWrite = rt_timer_read();
+		// Synchronize EtherCAT Master (for Distributed Clock Mode)
+		nrmk_master.syncEcatMaster();
 		nrmk_master.processRxDomain();
 		periodEcat += (unsigned long) rt_timer_read() - beginWrite;
 
@@ -361,17 +364,29 @@ void RTIndy7_run(void *arg)
 		{	
 			if(ft_init_cnt==0)
 			{
-				// Set bias
-				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_BIAS;
+				// Stop FT Sensor
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
 #ifdef __CB__
-				FTConfigParamCB[0]=FT_SET_BIAS;
+				FTConfigParamCB[0]=FT_STOP_DEVICE;
 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
 #endif
 				nrmk_master.processRxDomain();
 				ft_init_cnt++;
 			}
 			else if(ft_init_cnt==1)
+			{
+				// Start
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_START_DEVICE;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+#ifdef __CB__
+				FTConfigParamCB[0]=FT_START_DEVICE;
+				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+#endif
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else if(ft_init_cnt==2)
 			{
 				// Set Filter 100Hz
 				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_FILTER_50;
@@ -383,13 +398,13 @@ void RTIndy7_run(void *arg)
 				nrmk_master.processRxDomain();
 				ft_init_cnt++;
 			}
-			else if(ft_init_cnt==2)
+			else if(ft_init_cnt==3)
 			{
-				// Start
-				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_START_DEVICE;
+				// Set bias
+				FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_SET_BIAS;
 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
 #ifdef __CB__
-				FTConfigParamCB[0]=FT_START_DEVICE;
+				FTConfigParamCB[0]=FT_SET_BIAS;
 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
 #endif
 				nrmk_master.processRxDomain();
@@ -679,7 +694,7 @@ void bullet_run(void *arg)
 	b3sim.setGravity( btVector3(0 , 0 , -9.8));
 
 	// [ToDo] model path update
-	int robotId = b3sim.loadURDF("/home/xeno/Indy_ws/RTIndy7/description/indy7.urdf");
+	int robotId = b3sim.loadURDF("/home/robot/robot_ws/RTIndy7/description/indy7.urdf");
 	// int robotId = b3sim.loadURDF("quadruped/minitaur.urdf");
 	b3sim.setRealTimeSimulation(false);
 	Bullet_Indy7 bt3indy7(&b3sim,robotId);
@@ -834,33 +849,33 @@ void print_run(void *arg)
 				rt_printf("idx: %u, slaveState: %u",i,slaveState[i-1]);	
 			}
 			
-			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
-			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
-			#ifdef __BULLET__
-			rt_printf("Bullet_dt=%lius\n",periodBullet/1000);
-			#endif
-			#ifdef __CASADI__
-			rt_printf("IndySim_dt=%lius\n",periodIndysim/1000);
-			#endif
-			for(int j=0; j<NUM_AXIS; ++j){
-				rt_printf("ID: %d", j);
-			// 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
-			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
-			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
-			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
-				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-				rt_printf("\t NomPos: %lf, NomVel: %lf \n",info.nom.q(j), info.nom.q_dot(j));
-				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
-			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
-				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf, NomTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j), info.act.tau_ext(j));
-			}
+			// rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
+			// rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
+			// #ifdef __BULLET__
+			// rt_printf("Bullet_dt=%lius\n",periodBullet/1000);
+			// #endif
+			// #ifdef __CASADI__
+			// rt_printf("IndySim_dt=%lius\n",periodIndysim/1000);
+			// #endif
+			// for(int j=0; j<NUM_AXIS; ++j){
+			// 	rt_printf("ID: %d", j);
+			// // 	//rt_printf("\t CtrlWord: 0x%04X, ",		ControlWord[j]);
+			// // 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
+			// //     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
+			// // 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+			// 	rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
+			// 	rt_printf("\t NomPos: %lf, NomVel: %lf \n",info.nom.q(j), info.nom.q_dot(j));
+			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+			// // 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
+			// 	// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
+			// 	rt_printf("\t TarTor: %f, ActTor: %lf, NomTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j), info.act.tau_ext(j));
+			// }
 
-			rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
-			rt_printf("ReadFT_CB: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
-			rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
+			// rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
+			// rt_printf("ReadFT_CB: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
+			// rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
 
-			rt_printf("\n");
+			// rt_printf("\n");
 
 
 
@@ -896,6 +911,13 @@ void print_run(void *arg)
 /****************************************************************************/
 void signal_handler(int signum)
 {
+	FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
+	// FTConfigParamCB[0]=FT_STOP_DEVICE;
+	nrmk_master.writeBuffer(0x70003, FTConfigParam);
+	// nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+	nrmk_master.processRxDomain();
+
+
 	rt_task_delete(&RTIndy7_task);
 	
 	rt_task_delete(&safety_task);
@@ -909,11 +931,6 @@ void signal_handler(int signum)
 #ifdef __POCO__
 	rt_task_delete(&poco_task);
 #endif
-	// FTConfigParam[NUM_IO_MODULE+NUM_AXIS]=FT_STOP_DEVICE;
-	// FTConfigParamCB[0]=FT_STOP_DEVICE;
-	// nrmk_master.writeBuffer(0x70003, FTConfigParam);
-	// nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
-	// nrmk_master.processRxDomain();
 
 	printf("\n\n");
 	if(signum==SIGINT)

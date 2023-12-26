@@ -10,7 +10,7 @@
 #include "Ecat_Master.h"
 
 #include <unistd.h>
-#include <native/timer.h>
+#include <alchemy/timer.h>
 
 // for license mac----
 #include <arpa/inet.h>
@@ -30,10 +30,10 @@ ec_pdo_info_t NRMK_Drive_pdos[] = {
 };
 
 ec_sync_info_t NRMK_Drive_syncs[] = {
-    {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
-    {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
-    {2, EC_DIR_OUTPUT, 1, NRMK_Drive_pdos + 0, EC_WD_ENABLE},
-    {3, EC_DIR_INPUT, 1, NRMK_Drive_pdos + 1, EC_WD_DISABLE},
+    {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},                 // Sync Manager0: Assigned to Receive Mailbox
+    {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},                  // Sync Manager1: Assigned to Transmit Mailbox
+    {2, EC_DIR_OUTPUT, 1, NRMK_Drive_pdos + 0, EC_WD_ENABLE},   // Sync Manager2: Assigned to Receive PDOs (written by master)
+    {3, EC_DIR_INPUT, 1, NRMK_Drive_pdos + 1, EC_WD_DISABLE},   // Sync Manager3: Assigned to Transmit PDOs (written by slaves)
     {0xff}
 };
 
@@ -1830,17 +1830,16 @@ int NRMK_Master::_initDomains()
         
     // Config DC Mode
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
-        // 0x0700(sync0,1), 0x0300(sync0), 0x0000(none)
-        ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
-        //ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
+        // ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
+        ecrt_slave_config_dc(_NRMK_Drive[i].Config, 0x0400, _systemVars->_cycle_ns, 0, 0, 0);
 #ifdef __CB__
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
         ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
         //ecrt_slave_config_dc(_NRMK_IO_Module[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
 #endif
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
-        ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
-        //ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0300, _systemVars->_cycle_ns, 0, 0, 0);
+        // ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0000, _systemVars->_cycle_ns, 0, 0, 0);
+        ecrt_slave_config_dc(_NRMK_Indy_Tool[i].Config, 0x0400, _systemVars->_cycle_ns, 0, 0, 0);
     
 #ifdef __CB__   
     int ret = ecrt_master_select_reference_clock(_systemVars->_master, _NRMK_IO_Module[0].Config);

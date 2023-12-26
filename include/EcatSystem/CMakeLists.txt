@@ -32,7 +32,7 @@ if(WITH_RP)
 endif()
 
 
-find_package(Xenomai 3.1.1 REQUIRED NATIVE)
+find_package(Xenomai 3.1.1 REQUIRED ALCHEMY)
 if(Xenomai_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${KERNELHEADERS_DIR})
     foreach(comp_lists ${Xenomai_FOUND_COMP})

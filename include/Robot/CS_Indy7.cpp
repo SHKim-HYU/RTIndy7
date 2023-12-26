@@ -159,12 +159,12 @@ void CS_Indy7::CSSetup(const string& _modelPath)// : loader_(_modelPath)
         case 0:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 60+1.0/invL2sqr_1 ;
+            Hinf_K_gamma(i,i) = 60.0+1.0/invL2sqr_1 ;
             break;
         case 1:
             Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
-            Hinf_K_gamma(i,i) = 60+1.0/invL2sqr_2 ;
+            Hinf_K_gamma(i,i) = 60.0+1.0/invL2sqr_2 ;
 
             break;
         case 2:
@@ -353,6 +353,8 @@ void CS_Indy7::updateRobot(JVec _q, JVec _dq)
     // Minv = computeMinv(_q);
     C = computeC(_q, _dq);
     G = computeG(_q); 
+
+    J_b = computeJ_b(_q);
 
     T_ee = computeFK(_q);
 
