@@ -329,10 +329,23 @@ typedef struct JOINT_INFO{
 
 JVec MAX_TORQUES;
 
-JMat Hinf_Kp;
-JMat Hinf_Kv;
-JMat Hinf_Ki;
-JMat Hinf_K_gamma;
+JVec Kp_r;
+JVec Kd_r;
+JVec Ki_r;
+
+JVec Hinf_Kp_r;
+JVec Hinf_Kv_r;
+JVec Hinf_Ki_r;
+JVec Hinf_K_gamma_r;
+
+JVec Kp_n;
+JVec Kd_n;
+JVec Ki_n;
+
+JVec Hinf_Kp_n;
+JVec Hinf_Kv_n;
+JVec Hinf_Ki_n;
+JVec Hinf_K_gamma_n;
 
 #ifdef __BULLET__
 extern const int CONTROL_RATE;

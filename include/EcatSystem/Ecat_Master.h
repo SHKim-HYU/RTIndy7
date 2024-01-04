@@ -16,7 +16,7 @@
 #include "ecrt.h"
 
 #include "CoE.h"
-
+#include <map>
 #include "PDOConfig.h"
 #include <stdio.h>
 #include <memory>
@@ -440,7 +440,61 @@ class NRMK_Master
 
 			return true;
 		}
+		enum DeviceState
+		{
+			STATE_UNDEFINED 					= 0,
+			STATE_START 						= 1,
+			STATE_NOT_READY_TO_SWITCH_ON		= 3,
+			STATE_SWITCH_ON_DISABLED			= 4,
+			STATE_READY_TO_SWITCH_ON			= 5,
+			STATE_SWITCH_ON						= 6,
+			STATE_OPERATION_ENABLED				= 7,
+			STATE_QUICK_STOP_ACTIVE				= 8,
+			STATE_FAULT_REACTION_ACTIVE			= 9,
+			STATE_FAULT							= 10
+		};
 
+		std::map<DeviceState,std::string> device_state_str_ = {
+			{STATE_START,                  	"Start"},
+			{STATE_NOT_READY_TO_SWITCH_ON, 	"Not Ready to Switch On"},
+			{STATE_SWITCH_ON_DISABLED,     	"Switch on Disabled"},
+			{STATE_READY_TO_SWITCH_ON,     	"Ready to Switch On"},
+			{STATE_SWITCH_ON,              	"Switch On"},
+			{STATE_OPERATION_ENABLED,      	"Operation Enabled"},
+			{STATE_QUICK_STOP_ACTIVE,      	"Quick Stop Active"},
+			{STATE_FAULT_REACTION_ACTIVE,  	"Fault Reaction Active"},
+			{STATE_FAULT,                  	"Fault"}
+		};
+
+		/** returns device state based upon the status_word */
+		DeviceState deviceState(uint16_t status_word)
+		{
+			if      ((status_word & 0b01001111) == 0b00000000){
+				return STATE_NOT_READY_TO_SWITCH_ON;
+			}
+			else if ((status_word & 0b01001111) == 0b01000000){
+				return STATE_SWITCH_ON_DISABLED;
+			}
+			else if ((status_word & 0b01101111) == 0b00100001){
+				return STATE_READY_TO_SWITCH_ON;
+			}
+			else if ((status_word & 0b01101111) == 0b00100011){
+				return STATE_SWITCH_ON;
+			}
+			else if ((status_word & 0b01101111) == 0b00100111){
+				return STATE_OPERATION_ENABLED;        	
+			}
+			else if ((status_word & 0b01101111) == 0b00000111){
+				return STATE_QUICK_STOP_ACTIVE;
+			}
+			else if ((status_word & 0b01001111) == 0b00001111){
+				return STATE_FAULT_REACTION_ACTIVE;
+			}
+			else if ((status_word & 0b01001111) == 0b00001000){
+				return STATE_FAULT;
+			}
+			return STATE_UNDEFINED;
+		}
 	private:
 		void _setMasterCycle(UINT32 DCCycle);
 		int	_initMaster();

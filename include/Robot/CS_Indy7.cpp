@@ -34,13 +34,16 @@ CS_Indy7::CS_Indy7()
     Kv = JMat::Zero();
     Ki = JMat::Zero();
 
+    e = JVec::Zero();
+    eint = JVec::Zero();
+
     for (int i=0; i<this->n_dof; ++i)
     {
         switch(i)
         {
         case 0:
             Hinf_Kp(i,i) = 100.0;
-            Hinf_Kv(i,i) = 20.0;
+            Hinf_Kp(i,i) = 20.0;
             Hinf_K_gamma(i,i) = 70+1.0/invL2sqr_1 ;
             break;
         case 1:
@@ -126,12 +129,13 @@ CS_Indy7::CS_Indy7()
     }
 }
 
-void CS_Indy7::CSSetup(const string& _modelPath)// : loader_(_modelPath)
+void CS_Indy7::CSSetup(const string& _modelPath, double _period)// : loader_(_modelPath), period[sec]
 {
 	JsonLoader loader_ = JsonLoader(_modelPath);
 
 	robotModel = loader_.getValue("name").asString();
 	n_dof = std::stoi(loader_.getValue("n_dof").asString());
+    period = _period;
 
     this->q.resize(this->n_dof);
     this->dq.resize(this->n_dof);
@@ -347,10 +351,31 @@ void CS_Indy7::CSSetup(const string& _modelPath)// : loader_(_modelPath)
 
 }
 
+void CS_Indy7::setPIDgain(JVec _Kp, JVec _Kd, JVec _Ki)
+{
+    for (int i=0; i<this->n_dof; ++i)
+    {
+        Kp(i,i) = _Kp(i);
+        Kv(i,i) = _Kd(i);
+        Ki(i,i) = _Ki(i);
+    }
+}
+
+void CS_Indy7::setHinfgain(JVec _Hinf_Kp, JVec _Hinf_Kd, JVec _Hinf_Ki, JVec _Hinf_K_gamma)
+{
+    for (int i=0; i<this->n_dof; ++i)
+    {
+        Hinf_Kp(i,i) = _Hinf_Kp(i);
+        Hinf_Kv(i,i) = _Hinf_Kd(i);
+        Hinf_Ki(i,i) = _Hinf_Ki(i);
+        Hinf_K_gamma(i,i) = _Hinf_K_gamma(i);
+    }
+}
+
 void CS_Indy7::updateRobot(JVec _q, JVec _dq)
 {
     M = computeM(_q);
-    // Minv = computeMinv(_q);
+    Minv = computeMinv(_q);
     C = computeC(_q, _dq);
     G = computeG(_q); 
 
@@ -410,6 +435,37 @@ JVec CS_Indy7::computeFD(JVec _q, JVec _dq, JVec _tau)
 
     return ddq_res;
 
+}
+
+void CS_Indy7::computeRK45(JVec _q, JVec _dq, JVec _tau, JVec &_q_nom, JVec &_dq_nom)
+{
+    JVec k1, k2, k3, k4;
+
+    // state update
+    JVec _q0 = _q;
+    // JVec _q_dot = info.act.q_dot;
+    JVec _q_dot0 = _dq;
+    // JVec _tau = _tau;
+
+    // 1st stage
+    k1 = computeFD(_q, _q_dot0, _tau);
+    JVec _q1 = _q + 0.5 * period * _dq;		// period=((double) cycle_ns)/((double) NSEC_PER_SEC);	//period in second unit
+    JVec _q_dot1 = _dq + 0.5 * period * k1; // k2(q_dot)
+    
+    // 2nd stage
+    k2 = computeFD(_q1, _q_dot1, _tau);
+    JVec _q2 = _q + 0.5 * period * _q_dot1;
+    JVec _q_dot2 = _dq + 0.5 * period * k2;
+    
+    // 3th stage
+    k3 = computeFD(_q2, _q_dot2, _tau);
+    JVec _q3 = _q + period * _q_dot2;
+    JVec _q_dot3 = _dq + period * k3;
+    
+    // 4th stage
+    k4 = computeFD(_q3, _q_dot3, _tau);
+    _q_nom = _q + (period / 6.0) * (_dq + 2 * (_q_dot1 + _q_dot2) + _q_dot3);
+    _dq_nom = _dq + (period / 6.0) * (k1 + 2 * (k2 + k3) + k4);
 }
 
 
@@ -770,15 +826,15 @@ Jacobian CS_Indy7::getJ_s()
 }
 
 
-JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des)
+JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des)
 {
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
     
     if(isUpdated)
     {
-        JVec ddq_ref = Kv*edot+Kp*e;
-        tau = M*ddq_ref+C*dq+G;
+        JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
+        tau = M*ddq_ref + C*dq + G;
         isUpdated = false;
     }
     else
@@ -786,7 +842,7 @@ JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des)
         M = computeM(q);
         C = computeC(q, dq);
         G = computeG(q);
-        JVec ddq_ref = Kv*edot+Kp*e;
+        JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
         tau = M*ddq_ref+C*dq+G;
     }
     return tau;   
@@ -802,10 +858,12 @@ void CS_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES)
     }
 }
 
-JVec CS_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec eint)
+JVec CS_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des)
 {
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
+    
+    eint = eint + e*period;	
     
     if(isUpdated)
     {

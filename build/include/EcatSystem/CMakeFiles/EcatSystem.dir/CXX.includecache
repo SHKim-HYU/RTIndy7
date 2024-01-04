@@ -29,6 +29,8 @@ ecrt.h
 /home/robot/robot_ws/RTIndy7/include/EcatSystem/ecrt.h
 CoE.h
 /home/robot/robot_ws/RTIndy7/include/EcatSystem/CoE.h
+map
+-
 PDOConfig.h
 /home/robot/robot_ws/RTIndy7/include/EcatSystem/PDOConfig.h
 stdio.h

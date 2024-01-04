@@ -13,6 +13,8 @@ ecrt.h
 ../include/EcatSystem/ecrt.h
 CoE.h
 ../include/EcatSystem/CoE.h
+map
+-
 PDOConfig.h
 ../include/EcatSystem/PDOConfig.h
 stdio.h

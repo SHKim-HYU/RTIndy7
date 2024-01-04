@@ -33,10 +33,13 @@ public:
 
 	// JsonLoader loader_;
 
-	void CSSetup(const string& _modelPath);
+	void CSSetup(const string& _modelPath, double _period);
+	void setPIDgain(JVec _Kp, JVec _Kd, JVec _Ki);
+	void setHinfgain(JVec _Hinf_Kp, JVec _Hinf_Kd, JVec _Hinf_Ki, JVec _Hinf_K_gamma);
 	void updateRobot(JVec _q, JVec _dq);
 
 	JVec computeFD(JVec _q, JVec _dq, JVec _tau);
+	void computeRK45(JVec _q, JVec _dq, JVec _tau, JVec &_q_nom, JVec &_dq_nom);
 
 	MassMat computeM(JVec _q);
 	MassMat computeMinv(JVec _q);
@@ -58,14 +61,15 @@ public:
 	Jacobian getJ_b();
 	Jacobian getJ_s();
 
-	JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des);
+	JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
     void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
     
-    JVec HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des,JVec eint);
+    JVec HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
 
 private:
 	JVec q, dq, ddq;
 	JVec tau, ddq_res;
+	JVec e, eint;
 	MassMat M, Minv, C;
 	JVec G;
 
@@ -76,6 +80,7 @@ private:
 	bool isUpdated = false;
 	string robotModel;
 	int n_dof;
+	double period;
 
 	void* FD_handle;
 	void* M_handle;
