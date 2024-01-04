@@ -166,7 +166,10 @@ int compute()
 void controller()
 {
 	// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot) - 1* info.act.tau_ext;
-	info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
+	// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
+
+	JVec tau_a = cs_indy7.NRIC(info.act.q, info.act.q_dot, info.nom.q, info.nom.q_dot);
+	info.des.tau = info.nom.tau - tau_a;
 	
 	// info.des.tau = cs_indy7.ComputedTorqueControl(info.act.q, info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
 	
@@ -298,13 +301,17 @@ void RTIndy7_run(void *arg)
 
 	int ft_init_cnt = 0;
 
+	NRIC_Kp << 10.0, 10.0, 10.0, 10.0, 10.0, 10.0;
+	NRIC_Ki << 5.0, 5.0, 5.0, 5.0, 5.0, 5.0;
+	NRIC_K_gamma << 850.0, 850.0, 850.0, 550.0, 550.0, 550.0;
+
 	Kp_r << 70.0, 70.0, 40.0, 25.0, 15.0, 15.0;
 	Kd_r << 7.0, 7.0, 4.0, 2.5, 1.5, 1.5;
 	Ki_r = JVec::Zero();
 
-	Hinf_Ki_r << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
-    Hinf_Kp_r << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
-	Hinf_Kv_r = JVec::Zero();
+	Hinf_Kp_r << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
+    Hinf_Kv_r << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
+	Hinf_Ki_r = JVec::Zero();
     Hinf_K_gamma_r << 60.0+1.0/invL2sqr_1, 60.0+1.0/invL2sqr_2, 60.0+1.0/invL2sqr_3, 60.0+1.0/invL2sqr_4, 60.0+1.0/invL2sqr_5, 60.0+1.0/invL2sqr_6;
 
 #ifdef __RP__
@@ -313,8 +320,9 @@ void RTIndy7_run(void *arg)
 	Hinf_K_gamma_r(NUM_AXIS-1) = 1.0+1.0/invL2sqr_7;
 #endif
 
-	cs_sim_indy7.setPIDgain(Kp_r, Kd_r, Ki_r);
-	cs_sim_indy7.setHinfgain(Hinf_Kp_r, Hinf_Kv_r, Hinf_Ki_r, Hinf_K_gamma_r);
+	cs_indy7.setNRICgain(NRIC_Kp, NRIC_Ki, NRIC_K_gamma);
+	cs_indy7.setPIDgain(Kp_r, Kd_r, Ki_r);
+	cs_indy7.setHinfgain(Hinf_Kp_r, Hinf_Kv_r, Hinf_Ki_r, Hinf_K_gamma_r);
 
 	while (run)
 	{

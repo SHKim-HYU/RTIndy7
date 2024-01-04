@@ -329,6 +329,11 @@ typedef struct JOINT_INFO{
 
 JVec MAX_TORQUES;
 
+// Controller Gains
+JVec NRIC_Kp;
+JVec NRIC_Ki;
+JVec NRIC_K_gamma;
+
 JVec Kp_r;
 JVec Kd_r;
 JVec Ki_r;

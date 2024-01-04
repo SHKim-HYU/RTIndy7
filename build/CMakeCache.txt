@@ -14,51 +14,6 @@
 # EXTERNAL cache entries
 ########################
 
-//Path to a library.
-BULLET_COLLISION_LIBRARY:FILEPATH=/usr/local/lib/libBulletCollision.so
-
-//Path to a library.
-BULLET_COMMON_LIBRARY:FILEPATH=/usr/local/lib/libBullet3Common.so
-
-//Path to a library.
-BULLET_DYNAMICS_LIBRARY:FILEPATH=/usr/local/lib/libBulletDynamics.so
-
-//Path to a library.
-BULLET_EXAMPLE_LIBRARY:FILEPATH=/usr/local/lib/libBulletExampleBrowserLib.so
-
-//Path to a library.
-BULLET_FILELOADER_LIBRARY:FILEPATH=/usr/local/lib/libBulletFileLoader.so
-
-//Path to a library.
-BULLET_GWEN_LIBRARY:FILEPATH=/usr/local/lib/libgwen.so
-
-//Path to a library.
-BULLET_IDUTILS_LIBRARY:FILEPATH=/usr/local/lib/libBulletInverseDynamicsUtils.so
-
-//Path to a file.
-BULLET_INCLUDE_DIR:PATH=/usr/local/include/bullet
-
-//Path to a library.
-BULLET_INVDYNAMICS_LIBRARY:FILEPATH=/usr/local/lib/libBulletInverseDynamics.so
-
-//Path to a library.
-BULLET_MATH_LIBRARY:FILEPATH=/usr/local/lib/libLinearMath.so
-
-//Path to a library.
-BULLET_OPENGL_LIBRARY:FILEPATH=/usr/local/lib/libOpenGLWindow.so
-
-//Path to a library.
-BULLET_ROBOTICSGUI_LIBRARY:FILEPATH=/usr/local/lib/libBulletRoboticsGUI.so
-
-//Path to a library.
-BULLET_ROBOTICS_LIBRARY:FILEPATH=/usr/local/lib/libBulletRobotics.so
-
-//Path to a library.
-BULLET_SOFTBODY_LIBRARY:FILEPATH=/usr/local/lib/libBulletSoftBody.so
-
-//Path to a library.
-BULLET_WORLDIMPORTER_LIBRARY:FILEPATH=/usr/local/lib/libBulletWorldImporter.so
-
 //Path to a file.
 CASADI_INCLUDE_DIR:PATH=/opt/casadi/include
 
@@ -706,34 +661,6 @@ jsoncpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/jsoncpp
 # INTERNAL cache entries
 ########################
 
-//ADVANCED property for variable: BULLET_COLLISION_LIBRARY
-BULLET_COLLISION_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_COMMON_LIBRARY
-BULLET_COMMON_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_DYNAMICS_LIBRARY
-BULLET_DYNAMICS_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_EXAMPLE_LIBRARY
-BULLET_EXAMPLE_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_FILELOADER_LIBRARY
-BULLET_FILELOADER_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_GWEN_LIBRARY
-BULLET_GWEN_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_IDUTILS_LIBRARY
-BULLET_IDUTILS_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_INVDYNAMICS_LIBRARY
-BULLET_INVDYNAMICS_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_MATH_LIBRARY
-BULLET_MATH_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_OPENGL_LIBRARY
-BULLET_OPENGL_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_ROBOTICSGUI_LIBRARY
-BULLET_ROBOTICSGUI_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_ROBOTICS_LIBRARY
-BULLET_ROBOTICS_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_SOFTBODY_LIBRARY
-BULLET_SOFTBODY_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BULLET_WORLDIMPORTER_LIBRARY
-BULLET_WORLDIMPORTER_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -917,8 +844,6 @@ EIGEN_INCLUDE_DIR-ADVANCED:INTERNAL=1
 Etherlab_ethercat_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Etherlab_ethercat_rtdm_LIBRARY
 Etherlab_ethercat_rtdm_LIBRARY-ADVANCED:INTERNAL=1
-//Details about finding Bullet
-FIND_PACKAGE_MESSAGE_DETAILS_Bullet:INTERNAL=[/usr/local/lib/libBulletDynamics.so][/usr/local/lib/libBullet3Common.so][/usr/local/lib/libBulletCollision.so][/usr/local/lib/libLinearMath.so][/usr/local/lib/libBulletSoftBody.so][/usr/local/lib/libBulletExampleBrowserLib.so][/usr/local/lib/libBulletRobotics.so][/usr/local/lib/libOpenGLWindow.so][/usr/local/lib/libgwen.so][/usr/local/lib/libBulletInverseDynamics.so][/usr/local/lib/libBulletInverseDynamicsUtils.so][/usr/local/lib/libBulletWorldImporter.so][/usr/local/lib/libBulletFileLoader.so][/usr/local/lib/libBulletRoboticsGUI.so][/usr/local/include/bullet][v()]
 //Details about finding Eigen
 FIND_PACKAGE_MESSAGE_DETAILS_Eigen:INTERNAL=[/usr/include/eigen3][v(3.0.0)]
 //Details about finding PkgConfig

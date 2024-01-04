@@ -30,6 +30,10 @@ CS_Indy7::CS_Indy7()
     Hinf_Ki = JMat::Zero();
     Hinf_K_gamma = JMat::Zero();
 
+    NRIC_Kp = JMat::Zero();
+    NRIC_Ki = JMat::Zero();
+    NRIC_K_gamma = JMat::Zero();
+
     Kp = JMat::Zero();
     Kv = JMat::Zero();
     Ki = JMat::Zero();
@@ -43,7 +47,7 @@ CS_Indy7::CS_Indy7()
         {
         case 0:
             Hinf_Kp(i,i) = 100.0;
-            Hinf_Kp(i,i) = 20.0;
+            Hinf_Kv(i,i) = 20.0;
             Hinf_K_gamma(i,i) = 70+1.0/invL2sqr_1 ;
             break;
         case 1:
@@ -65,7 +69,7 @@ CS_Indy7::CS_Indy7()
 
             break;
         case 4:
-              Hinf_Kp(i,i) = 100.0;
+            Hinf_Kp(i,i) = 100.0;
             Hinf_Kv(i,i) = 20.0;
             Hinf_K_gamma(i,i) = 70.0+1.0/invL2sqr_5 ;
 
@@ -369,6 +373,16 @@ void CS_Indy7::setHinfgain(JVec _Hinf_Kp, JVec _Hinf_Kd, JVec _Hinf_Ki, JVec _Hi
         Hinf_Kv(i,i) = _Hinf_Kd(i);
         Hinf_Ki(i,i) = _Hinf_Ki(i);
         Hinf_K_gamma(i,i) = _Hinf_K_gamma(i);
+    }
+}
+
+void CS_Indy7::setNRICgain(JVec _NRIC_Kp, JVec _NRIC_Ki, JVec _NRIC_K_gamma)
+{
+    for (int i=0; i<this->n_dof; ++i)
+    {
+        NRIC_Kp(i,i) = _NRIC_Kp(i);
+        NRIC_Ki(i,i) = _NRIC_Ki(i);
+        NRIC_K_gamma(i,i) = _NRIC_K_gamma(i);
     }
 }
 
@@ -831,6 +845,8 @@ JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec
     JVec e = q_des-q;
     JVec edot = dq_des-dq;
     
+    eint = eint + e*period;	
+    
     if(isUpdated)
     {
         JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
@@ -881,5 +897,15 @@ JVec CS_Indy7::HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des)
         JVec dq_ref = dq_des;
         tau = M*ddq_ref+C*dq_ref+G+(Hinf_K_gamma)*(edot + Hinf_Kv*e + Hinf_Kp*eint);
     }
+    return tau;
+}
+JVec CS_Indy7::NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n)
+{
+    JVec e = q_r-q_n;
+    JVec edot = dq_r - dq_n;
+    eint = eint + e*period;	
+    
+    tau = NRIC_K_gamma * (edot + NRIC_Kp*e + NRIC_Ki*eint);
+
     return tau;
 }

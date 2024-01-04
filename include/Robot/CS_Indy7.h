@@ -36,6 +36,8 @@ public:
 	void CSSetup(const string& _modelPath, double _period);
 	void setPIDgain(JVec _Kp, JVec _Kd, JVec _Ki);
 	void setHinfgain(JVec _Hinf_Kp, JVec _Hinf_Kd, JVec _Hinf_Ki, JVec _Hinf_K_gamma);
+	void setNRICgain(JVec _NRIC_Kp, JVec _NRIC_Ki, JVec _NRIC_K_gamma);
+
 	void updateRobot(JVec _q, JVec _dq);
 
 	JVec computeFD(JVec _q, JVec _dq, JVec _tau);
@@ -64,7 +66,8 @@ public:
 	JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
     void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
     
-    JVec HinfControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
+    JVec HinfControl(JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
+	JVec NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n);
 
 private:
 	JVec q, dq, ddq;
@@ -110,5 +113,9 @@ private:
     JMat Hinf_Kv;
     JMat Hinf_Ki;
     JMat Hinf_K_gamma;
+
+	JMat NRIC_Kp;
+    JMat NRIC_Ki;
+    JMat NRIC_K_gamma;
 };
 #endif // CS_INDY7_H
