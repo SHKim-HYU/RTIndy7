@@ -29,6 +29,7 @@ RT_TASK poco_task;
 #ifdef __CASADI__
 RT_TASK indysim_task;
 CS_Indy7 cs_indy7;
+CS_Indy7 cs_nom_indy7;
 CS_Indy7 cs_sim_indy7;
 #endif
 RT_TASK safety_task;
@@ -84,8 +85,8 @@ void trajectory_generation(){
 #ifdef __RP__
 	    	info.q_target(6)=0.0;
 #endif
-	    	traj_time = 3.0;
-	    	motion++;
+	    	traj_time = 10.0;
+	    	// motion++;
 	        break;
 	    case 2:
 	    	// info.q_target(0)=1.5709; 	info.q_target(1)=-0.4071; 	info.q_target(2)=0.4071;
@@ -97,7 +98,7 @@ void trajectory_generation(){
 #endif
 	    	// info.q_target(0)=-1.5709; 	info.q_target(1)=0.4071; 	info.q_target(2)=-0.4071;
 	    	// info.q_target(3)=-1.5709; 	info.q_target(4)=-1.5709; 	info.q_target(5)=-1.5709;
-	    	traj_time = 3.0;
+	    	traj_time = 10.0;
 	    	motion++;
 	    	// motion=1;
 	        break;
@@ -109,7 +110,7 @@ void trajectory_generation(){
 #endif
 	    	// info.q_target(0)=1.5709; 	info.q_target(1)=-0.4071; 	info.q_target(2)=0.4071;
 	    	// info.q_target(3)=1.5709; 	info.q_target(4)=1.5709; 	info.q_target(5)=1.5709;
-	    	traj_time = 3.0;
+	    	traj_time = 10.0;
 	    	motion++;
 	        break;
 	    case 4:
@@ -118,7 +119,7 @@ void trajectory_generation(){
 #ifdef __RP__
 	    	info.q_target(6)=0.0;
 #endif
-	    	traj_time = 3.0;
+	    	traj_time = 10.0;
 	    	motion=1;
 	    	break;
 	    default:
@@ -155,27 +156,80 @@ int compute()
 {
 	// Update Robot
 	cs_indy7.updateRobot(info.act.q , info.act.q_dot);
+	// Update nominal
+	cs_nom_indy7.updateRobot(info.nom.q , info.nom.q_dot);
+
+	SE3 T_ee = cs_indy7.computeFK(info.act.q);
+	info.act.x << T_ee(0,3), T_ee(1,3), T_ee(2,3), 0, 0, 0;
+
+	// rt_printf("T_ee:\n");
+	// rt_printf("%lf, %lf, %lf, %lf\n", T_ee(0,0), T_ee(0,1), T_ee(0,2), T_ee(0,3));
+	// rt_printf("%lf, %lf, %lf, %lf\n", T_ee(1,0), T_ee(1,1), T_ee(1,2), T_ee(1,3));
+	// rt_printf("%lf, %lf, %lf, %lf\n", T_ee(2,0), T_ee(2,1), T_ee(2,2), T_ee(2,3));
+	// rt_printf("%lf, %lf, %lf, %lf\n", T_ee(3,0), T_ee(3,1), T_ee(3,2), T_ee(3,3));
 
 	Jacobian J_b = cs_indy7.getJ_b();
-	MassMat Minv =cs_indy7.getMinv(); 
+	info.act.x_dot = J_b*info.act.q_dot;
 	info.act.tau_ext = J_b.transpose()*info.act.F;
+	
+	// rt_printf("tau_ext:\n");
+	// rt_printf("%lf, %lf, %lf, %lf, %lf, %lf\n\n", info.act.tau_ext(0), info.act.tau_ext(1), info.act.tau_ext(2), info.act.tau_ext(3), info.act.tau_ext(4), info.act.tau_ext(5));
 
+	info.act.tau_fric = cs_indy7.FrictionEstimation(info.act.q_dot);
+	// info.act.tau_fric = JVec::Zero();
+	
 	return 0;
 }
 
 void controller()
 {
+	//nominal controller
+	// info.nom.tau = cs_nom_indy7.ComputedTorqueControl(info.nom.q, info.nom.q_dot, info.des.q, info.des.q_dot, info.des.q_ddot);
+	info.nom.tau = cs_nom_indy7.ComputedTorqueControl(info.nom.q, info.nom.q_dot, info.des.q, info.des.q_dot, info.des.q_ddot) + 1* info.act.tau_ext;
+	// info.nom.tau = cs_nom_indy7.HinfControl(info.nom.q, info.nom.q_dot, info.des.q, info.des.q_dot, info.des.q_ddot);
+		
+	info.act.tau_aux = cs_indy7.NRIC(info.act.q, info.act.q_dot, info.nom.q, info.nom.q_dot);
+	
+	// // Bound compensation
+	// Comp_alpha = 1500;
+	// Comp_bound << 1.0, 1.0, 1.0, 0.5, 0.5, 0.5;
+	// Comp_bound = Comp_alpha*Comp_bound;
+	
+	// for(int i=0; i<NUM_AXIS; i++)
+	// {
+	// 	if(abs(info.act.tau_aux(i))<=Comp_bound(i))
+	// 	{
+	// 		Comp_(i) = info.act.tau_aux(i);
+	// 		Est_(i) = 0.0;
+	// 	}
+	// 	else if(abs(info.act.tau_aux(i))>Comp_bound(i))
+	// 	{
+	// 		Comp_(i) = Comp_bound(i)*sign(info.act.tau_aux(i));
+	// 		Est_(i) = info.act.tau_aux(i)-Comp_bound(i)*sign(info.act.tau_aux(i));
+	// 	}
+	// }
+	// info.des.tau = info.nom.tau - Comp_ + info.act.tau_fric;
+	// info.nom.tau += Est_;
+
+	// NRIC result
+	// info.des.tau = info.nom.tau - info.act.tau_aux + info.act.tau_fric;
+	info.des.tau = info.nom.tau - info.act.tau_aux;
+
+	// Hinf ctrl
 	// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot) - 1* info.act.tau_ext;
 	// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
+	// info.des.tau = cs_indy7.HinfControl( info.act.q , info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot) + info.act.tau_fric;
 
-	JVec tau_a = cs_indy7.NRIC(info.act.q, info.act.q_dot, info.nom.q, info.nom.q_dot);
-	info.des.tau = info.nom.tau - tau_a;
-	
+	// IDC
 	// info.des.tau = cs_indy7.ComputedTorqueControl(info.act.q, info.act.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
 	
+	// Gravity
 	// info.des.tau = cs_indy7.computeG( info.act.q ) - 1* info.act.tau_ext; // calcTorque
 	// info.des.tau = cs_indy7.computeG( info.act.q ); // calcTorque
-	info.des.G = cs_indy7.computeG( info.act.q ); // calcTorque
+	// info.des.G = cs_indy7.computeG( info.act.q ); // calcTorque
+
+	// Update nominal
+	cs_nom_indy7.computeRK45(info.nom.q, info.nom.q_dot, info.nom.tau, info.nom.q, info.nom.q_dot);
 }
 
 void readEcatData(){
@@ -246,6 +300,9 @@ void readEcatData(){
 		{
 			Axis[i].setTarPosInRad(info.act.q(i));
 			Axis[i].setDesPosInRad(info.act.q(i));
+			info.nom.q = info.act.q;
+			info.nom.q_dot = info.act.q_dot;
+			info.nom.tau = info.act.tau;
 		}
 
 	}
@@ -256,7 +313,7 @@ void readEcatData(){
 	info.act.F(2) = (double)FTRawFz[NUM_IO_MODULE+NUM_AXIS] / force_divider;
 	info.act.F(3) = (double)FTRawTx[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 	info.act.F(4) = (double)FTRawTy[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
-	info.act.F(5) = -(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
+	info.act.F(5) = (double)FTRawTz[NUM_IO_MODULE+NUM_AXIS] / torque_divider;
 
 #ifdef __CB__
 	info.act.F_CB(0) = (double)FTRawFxCB[0] / force_divider;
@@ -298,31 +355,35 @@ void RTIndy7_run(void *arg)
 	info.des.q_ddot = JVec::Zero();
 	info.des.F = Vector6d::Zero();
 	info.des.F_CB = Vector6d::Zero();
+	info.act.tau_aux = JVec::Zero();
 
 	int ft_init_cnt = 0;
 
-	NRIC_Kp << 10.0, 10.0, 10.0, 10.0, 10.0, 10.0;
+	// Real
+	NRIC_Kp << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
 	NRIC_Ki << 5.0, 5.0, 5.0, 5.0, 5.0, 5.0;
 	NRIC_K_gamma << 850.0, 850.0, 850.0, 550.0, 550.0, 550.0;
-
-	Kp_r << 70.0, 70.0, 40.0, 25.0, 15.0, 15.0;
-	Kd_r << 7.0, 7.0, 4.0, 2.5, 1.5, 1.5;
-	Ki_r = JVec::Zero();
-
-	Hinf_Kp_r << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
-    Hinf_Kv_r << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
-	Hinf_Ki_r = JVec::Zero();
-    Hinf_K_gamma_r << 60.0+1.0/invL2sqr_1, 60.0+1.0/invL2sqr_2, 60.0+1.0/invL2sqr_3, 60.0+1.0/invL2sqr_4, 60.0+1.0/invL2sqr_5, 60.0+1.0/invL2sqr_6;
-
-#ifdef __RP__
-	Hinf_Ki_r(NUM_AXIS-1) = 100.0;
-	Hinf_Kp_r(NUM_AXIS-1) = 20;
-	Hinf_K_gamma_r(NUM_AXIS-1) = 1.0+1.0/invL2sqr_7;
-#endif
-
+	// NRIC_Kp << 2.0, 2.0, 2.0, 2.0, 2.0, 2.0;
+	// NRIC_Ki << 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
+	// NRIC_K_gamma << 285.0, 285.0, 285.0, 155.0, 155.0, 155.0;
 	cs_indy7.setNRICgain(NRIC_Kp, NRIC_Ki, NRIC_K_gamma);
-	cs_indy7.setPIDgain(Kp_r, Kd_r, Ki_r);
-	cs_indy7.setHinfgain(Hinf_Kp_r, Hinf_Kv_r, Hinf_Ki_r, Hinf_K_gamma_r);
+
+	// nominal
+	Kp_n << 70.0, 70.0, 40.0, 25.0, 15.0, 15.0;
+	Kd_n << 7.0, 7.0, 4.0, 2.5, 1.5, 1.5;
+	Ki_n = JVec::Zero();
+	// Kp_n << 0.001, 0.001, 0.001, 0.00025, 0.00025, 0.00001;
+	// Kd_n << 0.0001, 0.0001, 0.0001, 0.000025, 0.000025, 0.000001;
+	// Ki_n = JVec::Zero();
+
+	Hinf_Ki_n << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
+    Hinf_Kp_n << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
+	Hinf_Kv_n = JVec::Zero();
+    Hinf_K_gamma_n << 1.0+1.0/invL2sqr_1, 1.0+1.0/invL2sqr_2, 1.0+1.0/invL2sqr_3, 1.0+1.0/invL2sqr_4, 1.0+1.0/invL2sqr_5, 1.0+1.0/invL2sqr_6;
+
+
+	cs_nom_indy7.setPIDgain(Kp_n, Kd_n, Ki_n);
+	cs_nom_indy7.setHinfgain(Hinf_Kp_n, Hinf_Kv_n, Hinf_Ki_n, Hinf_K_gamma_n);
 
 	while (run)
 	{
@@ -445,23 +506,23 @@ void indysim_run(void *arg)
 
 	int cnt = -1;    
 
-	Kp_n << 70.0, 70.0, 40.0, 25.0, 15.0, 15.0;
-	Kd_n << 7.0, 7.0, 4.0, 2.5, 1.5, 1.5;
-	Ki_n = JVec::Zero();
+	Kp_s << 70.0, 70.0, 40.0, 25.0, 15.0, 15.0;
+	Kd_s << 7.0, 7.0, 4.0, 2.5, 1.5, 1.5;
+	Ki_s = JVec::Zero();
 
-	Hinf_Ki_n << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
-    Hinf_Kp_n << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
-	Hinf_Kv_n = JVec::Zero();
-    Hinf_K_gamma_n << 1.0+1.0/invL2sqr_1, 1.0+1.0/invL2sqr_2, 1.0+1.0/invL2sqr_3, 1.0+1.0/invL2sqr_4, 1.0+1.0/invL2sqr_5, 1.0+1.0/invL2sqr_6;
+	Hinf_Ki_s << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
+    Hinf_Kp_s << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
+	Hinf_Kv_s = JVec::Zero();
+    Hinf_K_gamma_s << 1.0+1.0/invL2sqr_1, 1.0+1.0/invL2sqr_2, 1.0+1.0/invL2sqr_3, 1.0+1.0/invL2sqr_4, 1.0+1.0/invL2sqr_5, 1.0+1.0/invL2sqr_6;
 
 #ifdef __RP__
-	Hinf_Ki_n(NUM_AXIS-1) = 100.0;
-	Hinf_Kp_n(NUM_AXIS-1) = 20;
-	Hinf_K_gamma_n(NUM_AXIS-1) = 1.0+1.0/invL2sqr_7;
+	Hinf_Ki_s(NUM_AXIS-1) = 100.0;
+	Hinf_Kp_s(NUM_AXIS-1) = 20;
+	Hinf_K_gamma_s(NUM_AXIS-1) = 1.0+1.0/invL2sqr_7;
 #endif
 
-	cs_sim_indy7.setPIDgain(Kp_n, Kd_n, Ki_n);
-	cs_sim_indy7.setHinfgain(Hinf_Kp_n, Hinf_Kv_n, Hinf_Ki_n, Hinf_K_gamma_n);
+	cs_sim_indy7.setPIDgain(Kp_s, Kd_s, Ki_s);
+	cs_sim_indy7.setHinfgain(Hinf_Kp_s, Hinf_Kv_s, Hinf_Ki_s, Hinf_K_gamma_s);
 
 	// loop
 	while(1)
@@ -479,26 +540,26 @@ void indysim_run(void *arg)
 			/////////////////  RK4   //////////////////
 			if(cnt == 0)
 			{
-				// cs_indy7.computeRK45(info.act.q, JVec::Zero(), JVec::Zero(), info.nom.q, info.nom.q_dot);
-				cs_indy7.computeRK45(info.act.q, info.act.q_dot, info.act.tau, info.nom.q, info.nom.q_dot);
+				cs_sim_indy7.computeRK45(info.act.q, JVec::Zero(), JVec::Zero(), info.sim.q, info.sim.q_dot);
+				// cs_sim_indy7.computeRK45(info.act.q, info.act.q_dot, info.act.tau, info.sim.q, info.sim.q_dot);
 
 				cnt++;
 			}
 			else if(cnt==1)
 			{
-				cs_indy7.computeRK45(info.nom.q, info.nom.q_dot, info.nom.tau, info.nom.q, info.nom.q_dot);
+				cs_sim_indy7.computeRK45(info.sim.q, info.sim.q_dot, info.sim.tau, info.sim.q, info.sim.q_dot);
 			}
 			
 			// update robot & compute dynamics
-			cs_sim_indy7.updateRobot(info.nom.q, info.nom.q_dot);
+			cs_sim_indy7.updateRobot(info.sim.q, info.sim.q_dot);
 			
 			// Calculate Joint controller
 			J_b = cs_sim_indy7.getJ_b();
-			info.nom.tau_ext = J_b.transpose()*info.act.F;
+			info.sim.tau_ext = J_b.transpose()*info.act.F;
 
-			// info.nom.tau = cs_sim_indy7.HinfControl(info.nom.q, info.nom.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
-			info.nom.tau = cs_indy7.ComputedTorqueControl(info.nom.q, info.nom.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
-
+			// info.sim.tau = cs_sim_indy7.HinfControl(info.sim.q, info.sim.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
+			info.sim.tau = cs_sim_indy7.ComputedTorqueControl(info.sim.q, info.sim.q_dot, info.des.q, info.des.q_dot,info.des.q_ddot);
+			
 			endCycle = rt_timer_read();
 			periodIndysim = (unsigned long) endCycle - beginCycle;
 		
@@ -636,7 +697,7 @@ void print_run(void *arg)
 	 *            start time,
 	 *            period (here: 100ms = 0.1s)
 	 */
-	rt_task_set_periodic(NULL, TM_NOW, cycle_ns*400);
+	rt_task_set_periodic(NULL, TM_NOW, cycle_ns*1);
 	
 	string filename = "robot_log.csv";
 	ifstream checkFile(filename);
@@ -708,15 +769,16 @@ void print_run(void *arg)
 			// 	//rt_printf("\t StatWord: 0x%04X, \n",	StatusWord[j]);
 			//     //rt_printf("\t DeviceState: %d, ",		DeviceState[j]);
 			// 	//rt_printf("\t ModeOfOp: %d,	\n",		ModeOfOperationDisplay[j]);
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
 				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
 				rt_printf("\t NomPos: %lf, NomVel: %lf \n",info.nom.q(j), info.nom.q_dot(j));
-				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+				rt_printf("\t SimPos: %lf, SimVel: %lf \n",info.sim.q(j), info.sim.q_dot(j));
 			// 	rt_printf("\t e: %lf, edot :%lf",info.des.q[j]-info.act.q[j],info.des.q_dot[j]-info.act.q_ddot[j]);
 				// rt_printf("\t TarTor: %f, ",				TargetTorq[j]);
-				rt_printf("\t TarTor: %f, ActTor: %lf, NomTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j), info.act.tau_ext(j));
+				rt_printf("\t TarTor: %f, ActTor: %lf, NomTor: %lf\n\t SimTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j),  info.sim.tau(j), info.act.tau_ext(j));
 			}
-
-			// rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
+			rt_printf("FK: x: %lf, y: %lf, z: %lf\n", info.act.x(0), info.act.x(1), info.act.x(2));
+			rt_printf("ReadFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
 			// rt_printf("ReadFT_CB: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F_CB(0),info.act.F_CB(1),info.act.F_CB(2),info.act.F_CB(3),info.act.F_CB(4),info.act.F_CB(5));
 			// rt_printf("overload: %u, error: %u\n", FTOverloadStatus[NUM_IO_MODULE+NUM_AXIS], FTErrorFlag[NUM_IO_MODULE+NUM_AXIS]);
 
@@ -826,11 +888,15 @@ int main(int argc, char **argv)
 	#ifndef __RP__
 	cs_indy7=CS_Indy7();
 	cs_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json", period);
+	cs_nom_indy7=CS_Indy7();
+	cs_nom_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json", period);
 	cs_sim_indy7=CS_Indy7();
 	cs_sim_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json", period);
 	#else
 	cs_indy7=CS_Indy7();
 	cs_indy7.CSSetup("../lib/URDF2CASADI/indyrp2/indyrp2.json");
+	cs_nom_indy7=CS_Indy7();
+	cs_nom_indy7.CSSetup("../lib/URDF2CASADI/indyrp2/indyrp2.json");
 	cs_sim_indy7=CS_Indy7();
 	cs_sim_indy7.CSSetup("../lib/URDF2CASADI/indyrp2/indyrp2.json");
 	#endif

@@ -22,6 +22,7 @@
 #include <time.h>		// time calls
 #include <sys/ioctl.h>
 #include <math.h>
+#include <cmath>
 #include <string>
 #include "iostream"
 #include <fstream>
@@ -273,8 +274,8 @@ const int 	 zeroPos[NUM_AXIS] = {ZERO_POS_1,ZERO_POS_2,ZERO_POS_3,ZERO_POS_4,ZER
 const int 	 gearRatio[NUM_AXIS] = {GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_101,GEAR_RATIO_101,GEAR_RATIO_101};
 const int 	 TauADC[NUM_AXIS] = {TORQUE_ADC_500,TORQUE_ADC_500,TORQUE_ADC_200,TORQUE_ADC_100,TORQUE_ADC_100,TORQUE_ADC_100};
 const double TauK[NUM_AXIS] = {TORQUE_CONST_500,TORQUE_CONST_500,TORQUE_CONST_200,TORQUE_CONST_100,TORQUE_CONST_100,TORQUE_CONST_100};
-const int 	 dirQ[NUM_AXIS] = {-1,-1,1,-1,-1,1};
-const int 	 dirTau[NUM_AXIS] = {-1,-1,1,-1,-1,1};
+const int 	 dirQ[NUM_AXIS] = {-1,-1,1,-1,-1,-1};
+const int 	 dirTau[NUM_AXIS] = {-1,-1,1,-1,-1,-1};
 #endif
 
 
@@ -297,7 +298,9 @@ typedef struct STATE{
 	JVec q_dot;
 	JVec q_ddot;
 	JVec tau;
+	JVec tau_fric;
 	JVec tau_ext;
+	JVec tau_aux;
 	JVec G;
 
 	Vector6d x;                           //Task space
@@ -324,6 +327,7 @@ typedef struct JOINT_INFO{
 	STATE act;
 	STATE des;
 	STATE nom;
+	STATE sim;
 
 }JointInfo;
 
@@ -351,6 +355,26 @@ JVec Hinf_Kp_n;
 JVec Hinf_Kv_n;
 JVec Hinf_Ki_n;
 JVec Hinf_K_gamma_n;
+
+JVec Kp_s;
+JVec Kd_s;
+JVec Ki_s;
+
+JVec Hinf_Kp_s;
+JVec Hinf_Kv_s;
+JVec Hinf_Ki_s;
+JVec Hinf_K_gamma_s;
+
+double Comp_alpha;
+JVec Comp_bound;
+JVec Comp_;
+JVec Est_;
+
+template<typename T>
+double sign(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 
 #ifdef __BULLET__
 extern const int CONTROL_RATE;

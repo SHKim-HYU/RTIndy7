@@ -34,8 +34,8 @@ namespace NRMKHelper
 			_qLimit[0] = PI;
 			_qLimit[1] = -PI;
 
-			_qdotLimit[0] = PI;
-			_qdotLimit[1] = -PI;
+			_qdotLimit[0] = 2*PI;
+			_qdotLimit[1] = -2*PI;
 
 			_tauLimit[0] = 2000;
 			_tauLimit[1] = -2000;

@@ -251,7 +251,10 @@ void CS_Indy7::CSSetup(const string& _modelPath, double _period)// : loader_(_mo
         }
     }
 	
-	
+	// Friction Parameters
+    Fc << F_c;
+    Fv1 << F_v1;
+    Fv2 << F_v2; 
 
     // string FD_path = loader_.getValue("forward_dynamics_path").asString();
     // string M_path = loader_.getValue("mass_matrix_path").asString();
@@ -403,7 +406,6 @@ void CS_Indy7::updateRobot(JVec _q, JVec _dq)
 
 JVec CS_Indy7::computeFD(JVec _q, JVec _dq, JVec _tau)
 {
-
     // Allocate input/output buffers and work vectors
     casadi_int sz_arg = n_dof;
     casadi_int sz_res = n_dof;
@@ -443,10 +445,19 @@ JVec CS_Indy7::computeFD(JVec _q, JVec _dq, JVec _tau)
     }
 
     for (casadi_int i = 0; i < sz_res; ++i) {
-        ddq_res(i) = output_values[i];
+        // if(!isnan(output_values[i]))
+            ddq_res(i) = output_values[i];
+        // else
+        //     cout<<[ERROR NaN]<<endl;
     }
 
+    // // fd method
+    // Minv = computeMinv(_q);
+    // C = computeC(_q,_dq);
+    // G = computeG(_q);
 
+    // ddq_res = Minv*(_tau-C*_dq-G);
+    
     return ddq_res;
 
 }
@@ -839,6 +850,22 @@ Jacobian CS_Indy7::getJ_s()
     return J_s;
 }
 
+JVec CS_Indy7::FrictionEstimation(JVec dq)
+{
+    JVec tau_fric;
+    
+    for (int i; i<JOINTNUM; i++)
+	{
+		if(dq(i)>0.0)
+			tau_fric(i) = Fc(i)+Fv1(i)*(1-exp(-fabs(dq(i)/Fv2(i))));
+		else if(dq(i)<0.0)
+			tau_fric(i) = -(Fc(i)+Fv1(i)*(1-exp(-fabs(dq(i)/Fv2(i)))));
+		else
+			tau_fric(i) = 0.0;
+	}
+
+    return tau_fric;
+}
 
 JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des)
 {

@@ -63,6 +63,8 @@ public:
 	Jacobian getJ_b();
 	Jacobian getJ_s();
 
+	JVec FrictionEstimation(JVec dq);
+
 	JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
     void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
     
@@ -117,5 +119,11 @@ private:
 	JMat NRIC_Kp;
     JMat NRIC_Ki;
     JMat NRIC_K_gamma;
+
+	// Friction model parameters
+	JVec Fc;
+	JVec Fv1;
+	JVec Fv2;
+
 };
 #endif // CS_INDY7_H
