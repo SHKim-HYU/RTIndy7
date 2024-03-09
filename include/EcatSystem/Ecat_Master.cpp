@@ -36,6 +36,7 @@ ec_sync_info_t NRMK_Drive_syncs[] = {
     {3, EC_DIR_INPUT, 1, NRMK_Drive_pdos + 1, EC_WD_DISABLE},
     {0xff}
 };
+#define __DUALARM__ 1
 
 #ifdef __CB__
 ec_pdo_info_t NRMK_IO_Module_pdos[] = {
@@ -70,23 +71,33 @@ struct ecat_variables
 {
     enum
     {
-#ifdef __CB__
-#ifdef __RP__
-        NUM_RXDOMAIN_ENTRIES = 62,
-        NUM_TXDOMAIN_ENTRIES = 70,      
-#else
-        NUM_RXDOMAIN_ENTRIES = 57,
-        NUM_TXDOMAIN_ENTRIES = 65,      
-#endif
-#else
-#ifdef __RP__
-        NUM_RXDOMAIN_ENTRIES = 42,
-        NUM_TXDOMAIN_ENTRIES = 45,         
-#else
-        NUM_RXDOMAIN_ENTRIES = 37,
-        NUM_TXDOMAIN_ENTRIES = 40,         
-#endif
-#endif
+
+        
+        
+
+
+        #ifdef __DUALARM__
+            NUM_RXDOMAIN_ENTRIES =5*12+7*2+20*2,
+            NUM_TXDOMAIN_ENTRIES =5*12+10*2+25*2,
+        #else
+            #ifdef __CB__
+            #ifdef __RP__
+                    NUM_RXDOMAIN_ENTRIES = 62,
+                    NUM_TXDOMAIN_ENTRIES = 70,      
+            #else
+                    NUM_RXDOMAIN_ENTRIES = 57,
+                    NUM_TXDOMAIN_ENTRIES = 65,      
+            #endif
+            #else
+            #ifdef __RP__
+                    NUM_RXDOMAIN_ENTRIES = 42,
+                    NUM_TXDOMAIN_ENTRIES = 45,         
+            #else
+                    NUM_RXDOMAIN_ENTRIES = 37,
+                    NUM_TXDOMAIN_ENTRIES = 40,         
+            #endif
+            #endif
+        #endif
     };
 
 
@@ -1194,7 +1205,7 @@ void NRMK_Master::writeBuffer(int EntryID, void * const data)
         case 0x60710:
         {
             INT16 * const _targettorque = static_cast<INT16 * const>(data);
-            
+
             for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
             {
                 _NRMK_Drive[i].InParam.Targettorque = _targettorque[_NRMK_Drive[i].Index];
@@ -1567,6 +1578,40 @@ void NRMK_Master::writeSDO(int EntryID, void * const data)
 
 int NRMK_Master::_initSlaves()
 {
+
+
+
+#ifdef __DUALARM__
+    _NRMK_Drive[0].Index = 2; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 2;
+
+    _NRMK_Drive[1].Index = 3; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 3;
+
+    _NRMK_Drive[2].Index = 4; _NRMK_Drive[2].Alias = 0; _NRMK_Drive[2].Position = 4;
+
+    _NRMK_Drive[3].Index = 5; _NRMK_Drive[3].Alias = 0; _NRMK_Drive[3].Position = 5;
+
+    _NRMK_Drive[4].Index = 6; _NRMK_Drive[4].Alias = 0; _NRMK_Drive[4].Position = 6;
+
+    _NRMK_Drive[5].Index = 7; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[5].Position = 7;
+
+    _NRMK_Drive[6].Index = 10; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[6].Position = 10;
+    
+    _NRMK_Drive[7].Index = 11; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[7].Position = 11;
+
+    _NRMK_Drive[8].Index = 12; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[8].Position = 12;
+
+    _NRMK_Drive[9].Index = 13; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[9].Position = 13;
+
+    _NRMK_Drive[10].Index = 14; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[10].Position = 14;
+    
+    _NRMK_Drive[11].Index = 15; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[11].Position = 15;
+
+    _NRMK_IO_Module[0].Index = 1; _NRMK_IO_Module[0].Alias = 0; _NRMK_IO_Module[0].Position = 1;
+    _NRMK_IO_Module[1].Index = 9; _NRMK_IO_Module[1].Alias = 0; _NRMK_IO_Module[1].Position = 9;
+
+    _NRMK_Indy_Tool[0].Index = 8; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 8;
+    _NRMK_Indy_Tool[1].Index = 16; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[1].Position = 16;
+#else
 #ifdef __CB__
 #ifdef __RP__
     _NRMK_Drive[0].Index = 1; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 1;
@@ -1587,21 +1632,21 @@ int NRMK_Master::_initSlaves()
 
     _NRMK_Indy_Tool[0].Index = 8; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 8;
 #else
-    _NRMK_Drive[0].Index = 1; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 1;
+    _NRMK_Drive[0].Index = 2; _NRMK_Drive[0].Alias = 0; _NRMK_Drive[0].Position = 2;
 
-    _NRMK_Drive[1].Index = 2; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 2;
+    _NRMK_Drive[1].Index = 3; _NRMK_Drive[1].Alias = 0; _NRMK_Drive[1].Position = 3;
 
-    _NRMK_Drive[2].Index = 3; _NRMK_Drive[2].Alias = 0; _NRMK_Drive[2].Position = 3;
+    _NRMK_Drive[2].Index = 4; _NRMK_Drive[2].Alias = 0; _NRMK_Drive[2].Position = 4;
 
-    _NRMK_Drive[3].Index = 4; _NRMK_Drive[3].Alias = 0; _NRMK_Drive[3].Position = 4;
+    _NRMK_Drive[3].Index = 5; _NRMK_Drive[3].Alias = 0; _NRMK_Drive[3].Position = 5;
 
-    _NRMK_Drive[4].Index = 5; _NRMK_Drive[4].Alias = 0; _NRMK_Drive[4].Position = 5;
+    _NRMK_Drive[4].Index = 6; _NRMK_Drive[4].Alias = 0; _NRMK_Drive[4].Position = 6;
 
-    _NRMK_Drive[5].Index = 6; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[5].Position = 6;
+    _NRMK_Drive[5].Index = 7; _NRMK_Drive[5].Alias = 0; _NRMK_Drive[5].Position = 7;
 
-    _NRMK_IO_Module[0].Index = 0; _NRMK_IO_Module[0].Alias = 0; _NRMK_IO_Module[0].Position = 0;
+    _NRMK_IO_Module[0].Index = 1; _NRMK_IO_Module[0].Alias = 0; _NRMK_IO_Module[0].Position = 1;
 
-    _NRMK_Indy_Tool[0].Index = 7; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 7;
+    _NRMK_Indy_Tool[0].Index = 8; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 8;
 #endif
 #else
 #ifdef __RP__
@@ -1636,7 +1681,9 @@ int NRMK_Master::_initSlaves()
     _NRMK_Indy_Tool[0].Index = 6; _NRMK_Indy_Tool[0].Alias = 0; _NRMK_Indy_Tool[0].Position = 6;
 #endif
 #endif
-    
+#endif
+    //std::cout<<"NUM_NRMK_DRIVE_AXES : " <<NUM_NRMK_DRIVE_AXES<<std::endl;
+
     for (int i=0; i<NUM_NRMK_DRIVE_AXES; i++)
     {
         _NRMK_Drive[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_Drive[i].Alias, _NRMK_Drive[i].Position, NRMK_VendorID, NRMK_Drive_ProductCode);                   
@@ -1654,6 +1701,7 @@ int NRMK_Master::_initSlaves()
         }
     }
 #ifdef __CB__
+    //std::cout<<"NUM_NRMK_IO_MODULE_AXES : " <<NUM_NRMK_IO_MODULE_AXES<<std::endl;
     for (int i=0; i<NUM_NRMK_IO_MODULE_AXES; i++)
     {
         _NRMK_IO_Module[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_IO_Module[i].Alias, _NRMK_IO_Module[i].Position, NRMK_VendorID, NRMK_IO_Module_ProductCode);                   
@@ -1671,6 +1719,8 @@ int NRMK_Master::_initSlaves()
         }
     }
 #endif
+    //std::cout<<"NUM_NRMK_INDY_TOOL_AXES : " <<NUM_NRMK_INDY_TOOL_AXES<<std::endl;
+
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
     {
         _NRMK_Indy_Tool[i].Config = ecrt_master_slave_config(_systemVars->_master, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, NRMK_VendorID, NRMK_Indy_Tool_ProductCode);                   
@@ -1746,6 +1796,7 @@ int NRMK_Master::_initDomains()
                     
                 }
 #endif
+
     for (int i=0; i<NUM_NRMK_INDY_TOOL_AXES; i++)
                 {
                     _systemVars->_registerRxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x7000, 1, &(_NRMK_Indy_Tool[i].offILed), &(_NRMK_Indy_Tool[i].bitoffILed));    // ILed
@@ -1812,7 +1863,6 @@ int NRMK_Master::_initDomains()
                     _systemVars->_registerTxDomainEntry(NRMK_VendorID, NRMK_Indy_Tool_ProductCode, _NRMK_Indy_Tool[i].Alias, _NRMK_Indy_Tool[i].Position, 0x6000, 10, &(_NRMK_Indy_Tool[i].offFTErrorFlag), &(_NRMK_Indy_Tool[i].bitoffFTErrorFlag)); // FTErrorFlag
                     
                 }
-    
     
     // Init Domain
     if (ecrt_domain_reg_pdo_entry_list(_systemVars->_rxDomain, _systemVars->_rxDomain_regs) != 0)

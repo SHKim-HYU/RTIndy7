@@ -1,10 +1,14 @@
 #include "ecat_run.h"
-const int 	 zeroPos[NUM_AXIS] = {ZERO_POS_1,ZERO_POS_2,ZERO_POS_3,ZERO_POS_4,ZERO_POS_5,ZERO_POS_6};
-const int 	 gearRatio[NUM_AXIS] = {GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_101,GEAR_RATIO_101,GEAR_RATIO_101};
-const int 	 TauADC[NUM_AXIS] = {TORQUE_ADC_500,TORQUE_ADC_500,TORQUE_ADC_200,TORQUE_ADC_100,TORQUE_ADC_100,TORQUE_ADC_100};
-const double TauK[NUM_AXIS] = {TORQUE_CONST_500,TORQUE_CONST_500,TORQUE_CONST_200,TORQUE_CONST_100,TORQUE_CONST_100,TORQUE_CONST_100};
-const int 	 dirQ[NUM_AXIS] = {-1,-1,1,-1,-1,1};
-const int 	 dirTau[NUM_AXIS] = {-1,-1,1,-1,-1,1};
+const int 	 zeroPos[NUM_AXIS] = {ZERO_POS_1,ZERO_POS_2,ZERO_POS_3,ZERO_POS_4,ZERO_POS_5,ZERO_POS_6,
+                                  ZERO_POS_7,ZERO_POS_8,ZERO_POS_9,ZERO_POS_10,ZERO_POS_11,ZERO_POS_12};
+const int 	 gearRatio[NUM_AXIS] = {GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_101,GEAR_RATIO_101,GEAR_RATIO_101,
+									GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_121,GEAR_RATIO_101,GEAR_RATIO_101,GEAR_RATIO_101};
+const int 	 TauADC[NUM_AXIS] = {TORQUE_ADC_500,TORQUE_ADC_500,TORQUE_ADC_200,TORQUE_ADC_100,TORQUE_ADC_100,TORQUE_ADC_100,
+ 								TORQUE_ADC_500,TORQUE_ADC_500,TORQUE_ADC_200,TORQUE_ADC_100,TORQUE_ADC_100,TORQUE_ADC_100};
+const double TauK[NUM_AXIS] = {TORQUE_CONST_500,TORQUE_CONST_500,TORQUE_CONST_200,TORQUE_CONST_100,TORQUE_CONST_100,TORQUE_CONST_100,
+ 								TORQUE_CONST_500,TORQUE_CONST_500,TORQUE_CONST_200,TORQUE_CONST_100,TORQUE_CONST_100,TORQUE_CONST_100};
+const int 	 dirQ[NUM_AXIS] = {-1,-1,1,-1,-1,1,-1,-1,1,-1,-1,1};
+const int 	 dirTau[NUM_AXIS] = {-1,-1,1,-1,-1,1,-1,-1,1,-1,-1,1};
 
 double force_divider =50.0;
 double torque_divider = 2000.0;
@@ -84,7 +88,62 @@ void readEcatData(){
 	nrmk_master.readBuffer(0x60008, FTRawTz);
 	nrmk_master.readBuffer(0x60009, FTOverloadStatus);
 	nrmk_master.readBuffer(0x600010, FTErrorFlag);	
-	
+	#ifdef __DUALARM__
+	for(int i=0; i<NUM_AXIS;i++)
+	{
+		if(i<6){
+			Axis[i].setCurrentPosInCnt(ActualPos[i+2]);
+			Axis[i].setCurrentVelInCnt(ActualVel[i+2]);
+			Axis[i].setCurrentTorInCnt(ActualTor[i+2]);
+			Axis[i].setCurrentTime(gt);
+			
+			Axis[0].setCurrentPosInCnt(ActualPos[1]);
+			Axis[0].setCurrentVelInCnt(ActualVel[1]);
+			Axis[0].setCurrentTorInCnt(ActualTor[1]);
+			
+			info.act_l.q(i) = Axis[i].getCurrPosInRad();
+			info.act_l.q_dot(i) = Axis[i].getCurrVelInRad();
+			info.act_l.tau(i) = Axis[i].getCurrTorInNm();		
+			
+			
+
+			Axis[0].setCurrentTime(gt);				
+			if(!system_ready)
+			{
+				Axis[i].setTarPosInRad(info.act_l.q(i));
+				Axis[i].setDesPosInRad(info.act_l.q(i));
+
+			}			
+		}
+		else{
+			//std::cout<<"ActualPos["<<i<<"]"<<ActualPos[i+4]<<std::endl;
+			Axis[i].setCurrentPosInCnt(ActualPos[i+4]);
+			Axis[i].setCurrentVelInCnt(ActualVel[i+4]);
+			Axis[i].setCurrentTorInCnt(ActualTor[i+4]);
+			Axis[i].setCurrentTime(gt);
+			
+			info.act_r.q(i-6) = Axis[i].getCurrPosInRad();
+			info.act_r.q_dot(i-6) = Axis[i].getCurrVelInRad();
+			info.act_r.tau(i-6) = Axis[i].getCurrTorInNm();		
+
+			if(!system_ready)
+			{
+				Axis[i].setTarPosInRad(info.act_r.q(i-6));
+				Axis[i].setDesPosInRad(info.act_r.q(i-6));
+			}					
+		}
+
+
+
+		// info.act_l.q(i) = Axis[i].getCurrPosInRad();
+		// info.act_l.q_dot(i) = Axis[i].getCurrVelInRad();
+		// info.act_l.tau(i) = Axis[i].getCurrTorInNm();
+
+	}
+
+
+
+	#else
 	for(int i=0; i<NUM_AXIS;i++)
 	{
 
@@ -105,6 +164,7 @@ void readEcatData(){
 		}
 
 	}
+	#endif
 	
 	// Update RFT data
 	info.act.F(0) = (double)FTRawFx[NUM_IO_MODULE+NUM_AXIS] / force_divider;
@@ -126,12 +186,25 @@ void readEcatData(){
 	// info.act.F<<(double)FTRawFx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawFz[NUM_IO_MODULE+NUM_AXIS]
 	//           <<(double)FTRawTx[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTy[NUM_IO_MODULE+NUM_AXIS]<<(double)FTRawTz[NUM_IO_MODULE+NUM_AXIS];
 }
-
+double gt_2=0;
 void writeEcatData(){
+	//info.des_l.tau(4) = 10*sin(2*3.141592*gt_2);
+	gt_2 = gt_2+0.001;
+	//std::cout<<info.des_l.tau(0)<<std::endl;
 	for(int i=0;i<NUM_AXIS;i++){
-		Axis[i].setDesTorInNm(info.des.tau(i));
-		TargetTor[i+NUM_IO_MODULE]=Axis[i].getDesTorInCnt();
+		if(i<6){
+			Axis[i].setDesTorInNm(info.des_l.tau(i));
+			TargetTor[i+2]=Axis[i].getDesTorInCnt();
+			Axis[0].setDesTorInNm(info.des_l.tau(0));
+			//TargetTor[1]=Axis[0].getDesTorInCnt();
+			TargetTor[1]=Axis[0].getDesTorInCnt();
+		}
+		else{
+			Axis[i].setDesTorInNm(info.des_r.tau(i-6));
+			TargetTor[i+4]=Axis[i].getDesTorInCnt();
+		}
 	}
+	
 	// TO DO: write data to actuators in EtherCAT system interface
 	nrmk_master.writeBuffer(0x60710, TargetTor);
 	// nrmk_master.writeBuffer(0x60600, ModeOfOperation);

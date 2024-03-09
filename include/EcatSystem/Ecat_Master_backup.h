@@ -30,33 +30,24 @@
 #define FT_SET_BIAS 0x11
 #define FT_BIAS_SUB 0x01
 #define FT_UNBIAS_SUB 0x00
-#define __DUALARM__ 1
-#define __CB__ 1
+
 class NRMK_Master
 { 
 	public:
 		enum
 		{
-
-#ifdef __DUALARM__
-			NUM_NRMK_DRIVE_AXES = 12,
-			NUM_NRMK_IO_MODULE_AXES = 2,
-			NUM_NRMK_INDY_TOOL_AXES = 2,
-
+#ifndef __RP__
+			NUM_NRMK_DRIVE_AXES = 6,
 #else
-	#ifndef __RP__
-				NUM_NRMK_DRIVE_AXES = 6,
-	#else
-				NUM_NRMK_DRIVE_AXES = 7,	
-	#endif	
+			NUM_NRMK_DRIVE_AXES = 7,	
+#endif	
 
-	#ifdef __CB__
-				NUM_NRMK_IO_MODULE_AXES = 1,
-	#else
-				NUM_NRMK_IO_MODULE_AXES = 0,
-	#endif
-				NUM_NRMK_INDY_TOOL_AXES = 1,
-#endif			
+#ifdef __CB__
+			NUM_NRMK_IO_MODULE_AXES = 1,
+#else
+			NUM_NRMK_IO_MODULE_AXES = 0,
+#endif
+			NUM_NRMK_INDY_TOOL_AXES = 1,
 		};
 		enum
 			{
@@ -385,6 +376,7 @@ class NRMK_Master
 				printf("Init Master Failed.\n");
 				return -1;
 			}					
+
 			if (_initSlaves() == -1)
 			{
 				printf("Init Slaves Failed.\n");
@@ -442,28 +434,11 @@ class NRMK_Master
 	
 		bool isSystemReady()
 		{
-			// for (int i=0; i<NUM_MOTION_AXIS; ++i)
-			// 	if (!_systemReady[i])
-			// 		return false;
-			bool SystemReadyCheck[12]={0,};
+			for (int i=0; i<NUM_MOTION_AXIS; ++i)
+				if (!_systemReady[i])
+					return false;
 
-			SystemReadyCheck[0] = _systemReady[1];
-			SystemReadyCheck[1] = _systemReady[3];
-			SystemReadyCheck[2] = _systemReady[4];
-			SystemReadyCheck[3] = _systemReady[5];
-			SystemReadyCheck[4] = _systemReady[6];
-			SystemReadyCheck[5] = _systemReady[7];
-			SystemReadyCheck[6] = _systemReady[10];
-			SystemReadyCheck[7] = _systemReady[11];
-			SystemReadyCheck[8] = _systemReady[12];
-			SystemReadyCheck[9] = _systemReady[13];
-			SystemReadyCheck[10] = _systemReady[14];
-			SystemReadyCheck[11] = _systemReady[15];
-
-
-			// return SystemReadyCheck[0]&SystemReadyCheck[1]&SystemReadyCheck[2]&SystemReadyCheck[3]&SystemReadyCheck[4]&SystemReadyCheck[5]&
-			// SystemReadyCheck[6]&SystemReadyCheck[7]&SystemReadyCheck[8]&SystemReadyCheck[9]&SystemReadyCheck[10]&SystemReadyCheck[11];
-			return SystemReadyCheck[0]&SystemReadyCheck[1]&SystemReadyCheck[2]&SystemReadyCheck[3]&SystemReadyCheck[4]&SystemReadyCheck[5];
+			return true;
 		}
 
 	private:

@@ -3,19 +3,26 @@
 
 //--------------__Define-----------------------
 
-
-#ifdef __CB__
-#define NUM_IO_MODULE 	1
+#ifdef __DUALARM__
+#define NUM_IO_MODULE 	2
+#define NUM_TOOL 		2
+#define NUM_AXIS		12
 #else
-#define NUM_IO_MODULE 	0
-#endif
-#define NUM_TOOL 		1
-#ifdef __RP__
-#define NUM_AXIS		7
-#else
+	#ifdef __CB__
+	#define NUM_IO_MODULE 	1
+	#else
+	#define NUM_IO_MODULE 	0
+	#endif
+	#define NUM_TOOL 		1
 
-#define NUM_AXIS		6
+	#ifdef __RP__
+	#define NUM_AXIS		7
+	#else
+
+	#define NUM_AXIS		6
+	#endif
 #endif
+
 #define NUM_SLAVES (NUM_IO_MODULE+NUM_AXIS+NUM_TOOL)		//Modify this number to indicate the actual number of motor on the network
 
 #ifndef PI
@@ -118,8 +125,12 @@ typedef struct JOINT_INFO{
 	JVec qddot_target;
 	JVec traj_time;
 
+	STATE act_l;
+	STATE act_r;
 	STATE act;
 	STATE des;
+	STATE des_l;
+	STATE des_r;
 	STATE nom;
 
 }JointInfo;
@@ -229,7 +240,9 @@ extern CS_Indy7 cs_sim_indy7;
 #ifdef __LR__
     #include "lr_control/lr_control_run.h"
     #include "LR_Control.h"
+	#include "LR_Trajectory.h"
     extern LR_Control lr_control;
+	extern LR_Trajectory lr_traj;
 
 #endif
 ////////////// RxPDO //////////////

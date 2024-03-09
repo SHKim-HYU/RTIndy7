@@ -58,11 +58,12 @@ set(BUILD_SHARED_LIBS TRUE)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
 option(WITH_RP "with Indy RP option" OFF)
-option(WITH_CB "with Indy7 ControlBox" OFF)
+option(WITH_CB "with Indy7 ControlBox" ON)
 option(WITH_CASADI "import for CasADi function" OFF)
 option(WITH_POCO "with POCO Comunication" OFF)
 option(WITH_BULLET "with Bullet Simulation" OFF)
 option(WITH_RAISIM "with RAISIM Simulation" OFF)
+option(WITH_DUALARM "DUALARM" ON)
 option(WITH_QT "with QT app" ON)
 option(WITH_LR "with LR Control" ON)
 #===============================================================================
@@ -285,6 +286,11 @@ endif()
 # LieGroupRobotics
 if(WITH_LR)
     add_compile_definitions(__LR__)
+endif()
+
+# LieGroupRobotics
+if(WITH_DUALARM)
+    add_compile_definitions(__DUALARM__)
 endif()
 
 # # libpcan

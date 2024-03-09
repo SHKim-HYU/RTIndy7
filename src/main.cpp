@@ -1,7 +1,7 @@
 /*
  * main.cpp
  *
- *  Created on: 2023. 11. 26.
+ *  Created on: 2024. 3. 9.
  *      Author: Minchang Sung
  */
 
@@ -115,6 +115,7 @@ CS_Indy7 cs_sim_indy7;
 
 #ifdef __LR__
 LR_Control lr_control;
+LR_Trajectory lr_traj;
 #endif
 JOINT_INFO info;
 double period = 0;
@@ -158,6 +159,7 @@ int main(int argc, char **argv)
 
 
 
+	std::cout<<"NUM_AXIS : " <<NUM_AXIS<<std::endl;
 
 	// For CST (cyclic synchronous torque) control
 	if (nrmk_master.init(OP_MODE_CYCLIC_SYNC_TORQUE, CYCLE_NS) == -1)
@@ -165,13 +167,31 @@ int main(int argc, char **argv)
 		printf("System Initialization Failed\n");
 	    return 0;
 	}
+
+	std::cout<<"NUM_AXIS : " <<NUM_AXIS<<std::endl;
 	for (int i = 0; i < NUM_AXIS; ++i)
 		ModeOfOperation[i] = OP_MODE_CYCLIC_SYNC_TORQUE;
 
 	// For trajectory interpolation
 	initAxes();
-	for(int i=0;i<NUM_SLAVES;i++)
-		nrmk_master.setServoOn(i);
+	//for(int i=0;i<16;i++)
+	//	nrmk_master.setServoOn(i);
+
+		 nrmk_master.setServoOn(1);
+		 //nrmk_master.setServoOn(2);
+		 nrmk_master.setServoOn(3);
+	     nrmk_master.setServoOn(4);
+		 nrmk_master.setServoOn(5);
+		 nrmk_master.setServoOn(6);
+		 nrmk_master.setServoOn(7);
+
+		nrmk_master.setServoOn(10);
+		nrmk_master.setServoOn(11);
+		nrmk_master.setServoOn(12);
+		nrmk_master.setServoOn(13);
+		nrmk_master.setServoOn(14);
+		nrmk_master.setServoOn(15);
+		
     run =1;
 	period=((double) CYCLE_NS)/((double) NSEC_PER_SEC);	//period in second unit
 
@@ -187,6 +207,7 @@ int main(int argc, char **argv)
 
     lr_control=LR_Control();
 	lr_control.LRSetup("../info/LR_info.json");
+	lr_traj = LR_Trajectory();
     
     rt_task_create(&control_task, "rt_lr_control_run", 0, 98, 0);
     rt_task_start(&control_task, &rt_lr_control_run, NULL);    
@@ -198,6 +219,10 @@ int main(int argc, char **argv)
     rt_task_create(&safety_task, "rt_safety_task", 0, 98, 0);
     rt_task_start(&safety_task, &rt_safety_run, NULL);
 
+#ifdef __DUALARM__
+	std::cout<<"dualArm Task"<<std::endl;
+	std::cout<<NUM_SLAVES<<std::endl;
+#endif 
 
     //qt thread
     #ifdef __QT__

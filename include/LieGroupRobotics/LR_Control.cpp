@@ -48,7 +48,7 @@ LR_Control::LR_Control() {
     this->g.resize(3);
     this->torq.resize(JOINTNUM);
 
-    this->g<<0,0,-9.8;
+    this->g<<0 ,8.487,-4.9;
     this->Kp = MatrixNd::Zero();
     this->Kv = MatrixNd::Zero();
     this->Ki = MatrixNd::Zero();
@@ -58,9 +58,9 @@ LR_Control::LR_Control() {
     this->Task_Kp = Matrix6d::Identity()*2000;
     this->Task_Kv = Matrix6d::Identity()*200;
     JVec invL2sqr=JVec::Zero();
-    invL2sqr<<80.0,160.0,160.0,160.0,80.0,80.0,8.0;
+    invL2sqr<<1000.0, 1000.0,800.0, 600.0,600.0,600.0;
     JVec K=JVec::Zero();
-    K<<80,300,10,200,10,50,1;
+    K<<100.0, 100.0, 80.0, 80.0, 70.0, 70.0, 50.0;
     for (int i=0; i<JOINTNUM; ++i)
     {
         switch(i)

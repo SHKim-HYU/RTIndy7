@@ -72,6 +72,46 @@
 #define J_Iyy_6 0.00042387
 #define J_Iyz_6 -0.00000132
 #define J_Izz_6 0.00037240
+#ifdef __DUALARM__
+    #define ZERO_POS_1 53744
+    #define ZERO_POS_2 11697
+    #define ZERO_POS_3 72308
+    #define ZERO_POS_4 167172
+    #define ZERO_POS_5 56088
+    #define ZERO_POS_6 9866
+    #define ZERO_POS_7 448713
+    #define ZERO_POS_8 -25024
+    #define ZERO_POS_9 138717
+    #define ZERO_POS_10 -713436
+    #define ZERO_POS_11 -1058082
+    #define ZERO_POS_12 -88988
+
+    #define MAX_CURRENT_1 2.55
+    #define MAX_CURRENT_2 2.55
+    #define MAX_CURRENT_3 2.83
+    #define MAX_CURRENT_4 2.83
+    #define MAX_CURRENT_5 2.83
+    #define MAX_CURRENT_6 2.83
+
+    #define MAX_TORQUE_1 431.97
+    #define MAX_TORQUE_2 431.97
+    #define MAX_TORQUE_3 197.23
+    #define MAX_TORQUE_4 79.79
+    #define MAX_TORQUE_5 79.79
+    #define MAX_TORQUE_6 79.79
+
+    #define invL2sqr_1 1000
+    #define invL2sqr_2 1000
+    #define invL2sqr_3 800
+    #define invL2sqr_4 600
+    #define invL2sqr_5 600
+    #define invL2sqr_6 600    
+    
+    #define ROBOT_DOF 6
+    #define JOINTNUM 6
+#else
+  
+
 
 #ifndef __RP__
 
@@ -183,6 +223,7 @@
 #define invL2sqr_6 600
 #define invL2sqr_7 600
 
+#endif
 #endif
 
 #define HARMONIC_120 120

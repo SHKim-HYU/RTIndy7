@@ -40,7 +40,7 @@ void MainWindow::GraphInit()
     colors.append(QColor(0, 128, 128));    // 청록색
     colors.append(QColor(255, 192, 203));  // 핑크색
 
-    for(int i =0;i<JOINTNUM;i++){
+    for(int i =0;i<12;i++){
         ui->widget_RealTimeGraph->addGraph();
         ui->widget_RealTimeGraph->graph(i)->setPen(QPen(colors.at(i)));
     }
@@ -81,13 +81,20 @@ void MainWindow::RealtimeDataSlot()
     	//std::lock_guard<std::mutex> lock(g_pages_mutex); 
         for(int j =0;j<JOINTNUM;j++){
             switch(display_flag){
-                case JOINT_POS: ui->widget_RealTimeGraph->graph(j)->addData(key, info.act.q[j]);break;
-                case JOINT_VEL: ui->widget_RealTimeGraph->graph(j)->addData(key, info.act.q_dot[j]);break;
-                case JOINT_TORQ: ui->widget_RealTimeGraph->graph(j)->addData(key, info.act.tau[j]);break;
+                case JOINT_POS: ui->widget_RealTimeGraph->graph(j)->addData(key, info.act_l.q[j]);break;
+                case JOINT_VEL: ui->widget_RealTimeGraph->graph(j)->addData(key, info.act_l.q_dot[j]);break;
+                case JOINT_TORQ: ui->widget_RealTimeGraph->graph(j)->addData(key, info.act_l.tau[j]);break;
                 case EXT_WRENCH: if(j<6){ui->widget_RealTimeGraph->graph(j)->addData(key, info.act.F[j]);break;}
             }
         }
-            
+        for(int j =0;j<JOINTNUM;j++){
+            switch(display_flag){
+                case JOINT_POS: ui->widget_RealTimeGraph->graph(j+6)->addData(key, info.act_r.q[j]);break;
+                case JOINT_VEL: ui->widget_RealTimeGraph->graph(j+6)->addData(key, info.act_r.q_dot[j]);break;
+                case JOINT_TORQ: ui->widget_RealTimeGraph->graph(j+6)->addData(key, info.act_r.tau[j]);break;
+                case EXT_WRENCH: if(j<6){ui->widget_RealTimeGraph->graph(j+6)->addData(key, info.act.F[j]);break;}
+            }
+        }
       ui->widget_RealTimeGraph->xAxis->setRange(key,5,Qt::AlignRight);
       ui->widget_RealTimeGraph->replot();
 
