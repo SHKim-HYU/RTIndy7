@@ -439,31 +439,24 @@ class NRMK_Master
 		{
 			return _servoOn[AxisIdx];
 		}
-	
+		bool isMotorReady()
+		{
+
+			int left_idx[6] = {1,3,4,5,6,7};
+			int right_idx[6] = {10,11,12,13,14,15};
+			// bool check = false;
+			// for (int i=0; i<6; ++i){
+			// 	check = check&_systemReady[left_idx[i]]&_systemReady[right_idx[i]];				
+			// }
+			return _systemReady[1]&_systemReady[3]&_systemReady[4]&_systemReady[5]&_systemReady[6]&_systemReady[7]&
+			_systemReady[10]&_systemReady[11]&_systemReady[12]&_systemReady[13]&_systemReady[14]&_systemReady[15];
+		}
 		bool isSystemReady()
 		{
-			// for (int i=0; i<NUM_MOTION_AXIS; ++i)
-			// 	if (!_systemReady[i])
-			// 		return false;
-			bool SystemReadyCheck[12]={0,};
-
-			SystemReadyCheck[0] = _systemReady[1];
-			SystemReadyCheck[1] = _systemReady[3];
-			SystemReadyCheck[2] = _systemReady[4];
-			SystemReadyCheck[3] = _systemReady[5];
-			SystemReadyCheck[4] = _systemReady[6];
-			SystemReadyCheck[5] = _systemReady[7];
-			SystemReadyCheck[6] = _systemReady[10];
-			SystemReadyCheck[7] = _systemReady[11];
-			SystemReadyCheck[8] = _systemReady[12];
-			SystemReadyCheck[9] = _systemReady[13];
-			SystemReadyCheck[10] = _systemReady[14];
-			SystemReadyCheck[11] = _systemReady[15];
-
-
-			// return SystemReadyCheck[0]&SystemReadyCheck[1]&SystemReadyCheck[2]&SystemReadyCheck[3]&SystemReadyCheck[4]&SystemReadyCheck[5]&
-			// SystemReadyCheck[6]&SystemReadyCheck[7]&SystemReadyCheck[8]&SystemReadyCheck[9]&SystemReadyCheck[10]&SystemReadyCheck[11];
-			return SystemReadyCheck[0]&SystemReadyCheck[1]&SystemReadyCheck[2]&SystemReadyCheck[3]&SystemReadyCheck[4]&SystemReadyCheck[5];
+			 for (int i=0; i<NUM_MOTION_AXIS; ++i)
+			 	if (!_systemReady[i])
+					return false;
+			return true;
 		}
 
 	private:

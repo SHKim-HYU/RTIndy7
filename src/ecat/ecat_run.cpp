@@ -101,17 +101,17 @@ void readEcatData(){
 			Axis[0].setCurrentVelInCnt(ActualVel[1]);
 			Axis[0].setCurrentTorInCnt(ActualTor[1]);
 			
-			info.act_l.q(i) = Axis[i].getCurrPosInRad();
-			info.act_l.q_dot(i) = Axis[i].getCurrVelInRad();
-			info.act_l.tau(i) = Axis[i].getCurrTorInNm();		
+			info.act.q_l(i) = Axis[i].getCurrPosInRad();
+			info.act.q_dot_l(i) = Axis[i].getCurrVelInRad();
+			info.act.tau_l(i) = Axis[i].getCurrTorInNm();		
 			
 			
 
 			Axis[0].setCurrentTime(gt);				
 			if(!system_ready)
 			{
-				Axis[i].setTarPosInRad(info.act_l.q(i));
-				Axis[i].setDesPosInRad(info.act_l.q(i));
+				Axis[i].setTarPosInRad(info.act.q_l(i));
+				Axis[i].setDesPosInRad(info.act.q_l(i));
 
 			}			
 		}
@@ -122,14 +122,14 @@ void readEcatData(){
 			Axis[i].setCurrentTorInCnt(ActualTor[i+4]);
 			Axis[i].setCurrentTime(gt);
 			
-			info.act_r.q(i-6) = Axis[i].getCurrPosInRad();
-			info.act_r.q_dot(i-6) = Axis[i].getCurrVelInRad();
-			info.act_r.tau(i-6) = Axis[i].getCurrTorInNm();		
+			info.act.q_r(i-6) = Axis[i].getCurrPosInRad();
+			info.act.q_dot_r(i-6) = Axis[i].getCurrVelInRad();
+			info.act.tau_r(i-6) = Axis[i].getCurrTorInNm();		
 
 			if(!system_ready)
 			{
-				Axis[i].setTarPosInRad(info.act_r.q(i-6));
-				Axis[i].setDesPosInRad(info.act_r.q(i-6));
+				Axis[i].setTarPosInRad(info.act.q_r(i-6));
+				Axis[i].setDesPosInRad(info.act.q_r(i-6));
 			}					
 		}
 
@@ -193,14 +193,14 @@ void writeEcatData(){
 	//std::cout<<info.des_l.tau(0)<<std::endl;
 	for(int i=0;i<NUM_AXIS;i++){
 		if(i<6){
-			Axis[i].setDesTorInNm(info.des_l.tau(i));
+			Axis[i].setDesTorInNm(info.des.tau_l(i));
 			TargetTor[i+2]=Axis[i].getDesTorInCnt();
-			Axis[0].setDesTorInNm(info.des_l.tau(0));
+			Axis[0].setDesTorInNm(info.des.tau_l(0));
 			//TargetTor[1]=Axis[0].getDesTorInCnt();
 			TargetTor[1]=Axis[0].getDesTorInCnt();
 		}
 		else{
-			Axis[i].setDesTorInNm(info.des_r.tau(i-6));
+			Axis[i].setDesTorInNm(info.des.tau_r(i-6));
 			TargetTor[i+4]=Axis[i].getDesTorInCnt();
 		}
 	}
@@ -208,4 +208,83 @@ void writeEcatData(){
 	// TO DO: write data to actuators in EtherCAT system interface
 	nrmk_master.writeBuffer(0x60710, TargetTor);
 	// nrmk_master.writeBuffer(0x60600, ModeOfOperation);
+}
+void rt_ecat_setup_start(RTIME& beginCycle,RTIME& endCycle,RTIME& beginRead, RTIME& beginReadbuf, RTIME& beginWrite, RTIME &beginWritebuf,RTIME& beginCompute, int& ft_init_cnt){
+		beginCycle = rt_timer_read();
+		periodEcat = 0;
+		periodBuffer = 0;
+		beginRead = rt_timer_read();
+		nrmk_master.processTxDomain();
+		periodEcat += (unsigned long)rt_timer_read() - beginRead;
+		// Read data in EtherCAT Buffer
+		beginReadbuf = rt_timer_read();
+		readEcatData();
+		periodBuffer += (unsigned long)rt_timer_read() - beginReadbuf;
+		beginCompute = rt_timer_read();
+}
+void rt_ecat_setup_end(RTIME& beginCycle,RTIME& endCycle,RTIME& beginRead, RTIME& beginReadbuf, RTIME& beginWrite, RTIME &beginWritebuf,RTIME& beginCompute, int& ft_init_cnt){
+		periodCompute = (unsigned long)rt_timer_read() - beginCompute;
+		// Write data in EtherCAT Buffer
+		beginWritebuf = rt_timer_read();
+		writeEcatData();
+		periodBuffer += (unsigned long)rt_timer_read() - beginWritebuf;
+		beginWrite = rt_timer_read();
+		nrmk_master.processRxDomain();
+		periodEcat += (unsigned long)rt_timer_read() - beginWrite;
+
+		endCycle = rt_timer_read();
+		periodCycle = (unsigned long)endCycle - beginCycle;
+
+		if (nrmk_master.isMotorReady())
+		{
+			if (ft_init_cnt == 0)
+			{
+				// Set bias
+				FTConfigParam[NUM_IO_MODULE + NUM_AXIS] = FT_SET_BIAS;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				#ifdef __CB__
+								FTConfigParamCB[0] = FT_SET_BIAS;
+								nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				#endif
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else if (ft_init_cnt == 1)
+			{
+				// Set Filter 100Hz
+				FTConfigParam[NUM_IO_MODULE + NUM_AXIS] = FT_SET_FILTER_50;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				#ifdef __CB__
+								FTConfigParamCB[0] = FT_SET_FILTER_50;
+								nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				#endif
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else if (ft_init_cnt == 2)
+			{
+				// Start
+				FTConfigParam[NUM_IO_MODULE + NUM_AXIS] = FT_START_DEVICE;
+				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+				#ifdef __CB__
+								FTConfigParamCB[0] = FT_START_DEVICE;
+								nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+				#endif
+				nrmk_master.processRxDomain();
+				ft_init_cnt++;
+			}
+			else
+				system_ready = 1; // all drives have been done
+
+			gt += period;
+
+			if (periodEcat > worstEcat)
+				worstEcat = periodEcat;
+			if (periodBuffer > worstBuffer)
+				worstBuffer = periodBuffer;
+			if (periodCompute > worstCompute)
+				worstCompute = periodCompute;
+			if (periodCycle > CYCLE_NS)
+				overruns++;
+		}
 }

@@ -2,8 +2,6 @@
 #include "../ecat/ecat_run.h"
 
 
-
-
 // Trajectory parameers
 double traj_time=0;
 int motion=-1;
@@ -120,6 +118,7 @@ void rt_control_run(void* param){
 	JVec e = JVec::Zero();
 
 	int ft_init_cnt = 0;
+	// Symbols/expressions
 
 	while (run)
 	{

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<GainTuning>
+
+<!-- Lock, Linear  -->
+<!--
+<impedance index="x" mass="50" damping="800" stiffness="10000" invL2sqr="420.0">
+</impedance>
+
+<impedance index="y" mass="50" damping="800" stiffness="10000" invL2sqr="420.0">
+</impedance>
+
+<impedance index="z" mass="2" damping="10" stiffness="40" invL2sqr="320.0">
+</impedance>
+-->
+
+<!--Force-controlled impedance --->
+<impedance index="x" mass="2" damping="10" stiffness="40" invL2sqr="320.0">
+</impedance>
+
+<impedance index="y" mass="2" damping="10" stiffness="40" invL2sqr="320.0">
+</impedance>
+
+<impedance index="z" mass="50" damping="800" stiffness="10000" invL2sqr="320.0">
+</impedance>
+
+<!-- Lock, Rotational  -->
+<impedance index="u" mass="3" damping="12" stiffness="30"  invL2sqr="60.0">
+</impedance> 
+
+<impedance index="v" mass="3" damping="12" stiffness="30"  invL2sqr="60.0">
+</impedance>
+
+<impedance index="w" mass="3" damping="12" stiffness="30"  invL2sqr="60.0">
+</impedance>
+
+<!-- Unlock, Rotational  -->
+<!--
+<impedance index="u" mass="0.01" damping="0.2" stiffness="0.2"  invL2sqr="75.0">
+</impedance>
+
+<impedance index="v" mass="0.01" damping="0.2" stiffness="0.2"  invL2sqr="75.0">
+</impedance>
+
+<impedance index="w" mass="3" damping="15" stiffness="30"  invL2sqr="75.0">
+</impedance>
+-->
+</GainTuning>

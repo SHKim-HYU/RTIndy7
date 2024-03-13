@@ -73,18 +73,85 @@
 #define J_Iyz_6 -0.00000132
 #define J_Izz_6 0.00037240
 #ifdef __DUALARM__
+
+    //serial Num : D11936I07004
     #define ZERO_POS_1 53744
     #define ZERO_POS_2 11697
     #define ZERO_POS_3 72308
     #define ZERO_POS_4 167172
     #define ZERO_POS_5 56088
     #define ZERO_POS_6 9866
-    #define ZERO_POS_7 448713
-    #define ZERO_POS_8 -25024
-    #define ZERO_POS_9 138717
-    #define ZERO_POS_10 -713436
-    #define ZERO_POS_11 -1058082
-    #define ZERO_POS_12 -88988
+    //MDH Parameters D11936I07004
+    #define MDH_alpha1 0.027 // degree
+    #define MDH_alpha2 90.0671
+    #define MDH_alpha3 0.048
+    #define MDH_alpha4 89.931
+    #define MDH_alpha5 90.0741
+    #define MDH_alpha6 -89.9951
+    
+    
+    #define MDH_a1 0.9083 // mm
+    #define MDH_a2 0.0165
+    #define MDH_a3 448.1241
+    #define MDH_a4 -0.0472
+    #define MDH_a5 0.2018
+    #define MDH_a6 0.319
+    
+    #define MDH_d1 300.3872 // mm
+    #define MDH_MDH_d2 -0.4393
+    #define MDH_d3 3.0607
+    #define MDH_d4 349.5632
+    #define MDH_d5 182.7953
+    #define MDH_d6 227.0154
+    
+    #define MDH_theta1 0.0196 // degree
+    #define MDH_theta2 89.9967
+    #define MDH_theta3 89.9783
+    #define MDH_theta4 179.9989
+    #define MDH_theta5 0.1645
+    #define MDH_theta6 -0.0724
+    
+
+    //serial Num : DB45I7E0B008
+    #define ZERO_POS_7 448720
+    #define ZERO_POS_8 -25000
+    #define ZERO_POS_9 138722
+    #define ZERO_POS_10 -713413
+    #define ZERO_POS_11 -1058109
+    #define ZERO_POS_12 -88968
+
+
+    //MDH Parameters D11936I07004
+    #define MDH_alpha7 0.1637 // degree
+    #define MDH_alpha8 89.9657
+    #define MDH_alpha9 0.1224
+    #define MDH_alpha10 90.1234
+    #define MDH_alpha11 89.9962
+    #define MDH_alpha12 -89.9147
+    
+    
+    #define MDH_a7 -3.9799 // mm
+    #define MDH_a8 0.0853
+    #define MDH_a9 450.5995
+    #define MDH_a10 0.2931
+    #define MDH_a11 0.2545
+    #define MDH_a12 0.0188
+    
+    #define MDH_d7 298.1096 // mm
+    #define MDH_d8 0.1201
+    #define MDH_d9 3.6201
+    #define MDH_d10 350.5901
+    #define MDH_d11 183.1179
+    #define MDH_d12 231.8081
+    
+    #define MDH_theta7 -0.009 // degree
+    #define MDH_theta8 89.9318
+    #define MDH_theta9 90.2619
+    #define MDH_theta10 179.8178
+    #define MDH_theta11 0.8733
+    #define MDH_theta12 -0.1435
+
+
 
     #define MAX_CURRENT_1 2.55
     #define MAX_CURRENT_2 2.55

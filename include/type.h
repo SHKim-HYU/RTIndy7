@@ -2,6 +2,8 @@
 #define TYPE_TEMPLATE_H
 
 #define JOINTNUM 6
+#define RELJOINTNUM 12
+
 
 typedef Eigen::Matrix<double, JOINTNUM, 1> JVec;
 typedef Eigen::Matrix<double, 4, 4> SE3;
@@ -22,5 +24,10 @@ typedef Eigen::Matrix<double, 6, JOINTNUM> Matrix6xn;
 typedef Eigen::Matrix<double, 6, JOINTNUM+1> Matrix6xn_1;
 typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MassMat;
 typedef Eigen::Matrix<double, JOINTNUM, JOINTNUM> MatrixNd;
+
+typedef Eigen::Matrix<double, RELJOINTNUM, 1> RelJVec;
+typedef Eigen::Matrix<double, 6, RELJOINTNUM> RelScrewList;
+typedef Eigen::Matrix<double, 6, RELJOINTNUM> RelJacobian;
+typedef Eigen::Matrix<double, RELJOINTNUM,6 > RelpinvJacobian;
 
 #endif // TYPE_TEMPLATE_H

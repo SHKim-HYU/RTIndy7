@@ -2,7 +2,7 @@
 # Set minimum version of CMake. Since command 'project' use
 # VERSION sub-option we need at least 3.0.
 # Note: If you use 2.6 or 2.4, God kills a kitten. Seriously.
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.16)
 
 # THIS HAS TO COME BEFORE THE PROJECT LINE
 #set(CMAKE_C_COMPILER "gcc")
@@ -57,13 +57,13 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
-option(WITH_RP "with Indy RP option" OFF)
+option(WITH_RP "with Indy RP option" ON)
 option(WITH_CB "with Indy7 ControlBox" ON)
+option(WITH_DUALARM "DUALARM" ON)
 option(WITH_CASADI "import for CasADi function" OFF)
 option(WITH_POCO "with POCO Comunication" OFF)
-option(WITH_BULLET "with Bullet Simulation" OFF)
+option(WITH_BULLET "with Bullet Simulation" ON)
 option(WITH_RAISIM "with RAISIM Simulation" OFF)
-option(WITH_DUALARM "DUALARM" ON)
 option(WITH_QT "with QT app" ON)
 option(WITH_LR "with LR Control" ON)
 #===============================================================================
@@ -122,19 +122,50 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS
 set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_DEBUG} -pg")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
-# set(CTRL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Control)
 # set(KDL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/KDL)
 set(ECAT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/EcatSystem)
 # set(CAN_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/CAN)
 set(INTP_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Interpolator)
-# set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
 set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
 set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 
 
+# add_subdirectory(include/KDL)
+add_subdirectory(include/EcatSystem)
+# add_subdirectory(include/CAN)
+add_subdirectory(include/Interpolator)
+add_subdirectory(include/Network)
+add_subdirectory(include/Robot)
+
+
+
+# Find package
+find_package(Qt5 COMPONENTS Widgets Core Quick REQUIRED)
+find_package(Eigen 3.0.0)
+
+find_package(jsoncpp REQUIRED)
+find_package(Xenomai 3.1.1 REQUIRED ALCHEMY)
+find_package(cxxopts REQUIRED)
+
+
+
+
+
+SET(CONTROL_SRCS src/control/control_run.cpp )
+SET(PRINT_SRCS src/print/print_run.cpp )
+SET(ECAT_SRCS  src/ecat/ecat_run.cpp )
+SET(SAFETY_SRCS  src/safety/safety_run.cpp )
+SET(TCP_SRCS  src/tcp/tcp_run.cpp )
+SET(LR_CONTROL_SRCS  src/lr_control/lr_control_run.cpp )
+SET(BULLET_SRCS src/bullet/bullet_run.cpp)
+SET(FT_SRCS  src/ft/ft_run.cpp  src/ft/FTread.cpp )
+
+SET(COMMON_SRCS ${PRINT_SRCS} ${ECAT_SRCS} ${SAFETY_SRCS} ${TCP_SRCS}  )
+SET(COMMON_INCLUDE_DIRS ${ECAT_HEADERS_DIR} ${ROBOT_HEADERS_DIR} ${NET_HEADERS_DIR} ${INTP_HEADERS_DIR})
+SET(COMMON_LIBRARIES   sub::ECAT sub::Interpolator sub::NETWORK sub::Robot dl)
 if(WITH_QT)
+    add_compile_definitions(__QT__)
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
-    find_package(Qt5 COMPONENTS Widgets Core Quick REQUIRED)
     set(CMAKE_AUTOMOC ON)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)
@@ -148,131 +179,86 @@ if(WITH_QT)
     add_subdirectory(include/QT/DarkStyleWindow)
     add_subdirectory(include/QT/QtWidgets)
     add_subdirectory(include/QT/QCustomPlot_library)
-    
-    set(QT_LIBRARIES
-	sub::QtWidgets
-	sub::DarkStyleWindow
-	Qt5::Widgets 
-	Qt5::Core
-	Qt5::Gui
-	Qt5::Network
-	Qt5::Quick
-	qcustomplot
-    )
+    set(QT_LIBRARIES 	sub::QtWidgets	sub::DarkStyleWindow	Qt5::Widgets 	Qt5::Core	Qt5::Gui	Qt5::Network	Qt5::Quick	qcustomplot  )
     SET(QT_SRCS src/qt/mainwindow.cpp src/qt/mainwindow.h src/qt/mainwindow.ui src/qt/qt_run.cpp src/qt/qt_run.h)
-    add_compile_definitions(__QT__)
+    SET(COMMON_SRCS ${COMMON_SRCS}  ${QT_SRCS})
+    SET(COMMON_INCLUDE_DIRS ${COMMON_INCLUDE_DIRS} )
+    SET(COMMON_LIBRARIES  ${COMMON_LIBRARIES} ${QT_LIBRARIES})
+endif()
+if(WITH_BULLET)
+    find_package(Bullet REQUIRED)
+    find_package(SimRobot REQUIRED)
+    add_compile_definitions(__BULLET__)
+    SET(COMMON_SRCS ${COMMON_SRCS} ${BULLET_SRCS} ${RobotSimulator_SRCS})
+    SET(COMMON_LIBRARIES  ${COMMON_LIBRARIES} ${BULLET_LIBRARIES} SimRobot::SimRobot)
 endif()
 
-#[ToDo] will be replaced from the installed bullet3 SDK
-# set(BULLET_HEADER_DIR ${PROJECT_SOURCE_DIR}/include/bullet3) 
-
-
-include_directories(${PROJ_INSTALL_INCLUDE_DIR})
-include_directories(
-        ${KERNELHEADERS_DIR}
-        # ${CTRL_HEADERS_DIR}
-        # ${KDL_HEADERS_DIR}
-        ${ECAT_HEADERS_DIR}
-        # ${CAN_HEADERS_DIR}
-        ${INTP_HEADERS_DIR}
-        # ${MR_HEADERS_DIR}
-        ${NET_HEADERS_DIR}
-        ${ROBOT_HEADERS_DIR}
-        #[ToDo] will be replaced from the installed bullet3 SDK
-        # ${BULLET_HEADER_DIR}
-)
-
-
-# add_subdirectory(include/Control)
-# add_subdirectory(include/KDL)
-add_subdirectory(include/EcatSystem)
-# add_subdirectory(include/CAN)
-add_subdirectory(include/Interpolator)
-# add_subdirectory(include/MR)
-add_subdirectory(include/Network)
-add_subdirectory(include/Robot)
-add_subdirectory(include/LieGroupRobotics)
-
-
-
-#[ToDo] will be replaced from the installed bullet3 SDK
-# add_subdirectory(include/bullet3)
-
-
-file(GLOB_RECURSE RUN_SOURCES "src/*/*_run.cpp")
-
-message("\n\nRUN_SOURCES: ${RUN_SOURCES}")
-SET(CONTROL_SRCS src/control/control_run.cpp )
-SET(PRINT_SRCS src/print/print_run.cpp )
-SET(ECAT_SRCS  src/ecat/ecat_run.cpp )
-SET(SAFETY_SRCS  src/safety/safety_run.cpp )
-SET(TCP_SRCS  src/tcp/tcp_run.cpp )
-SET(LR_CONTROL_SRCS  src/lr_control/lr_control_run.cpp )
-
-
-if(WITH_QT)
-    if(WITH_CASADI)
-        add_executable(${PROJECT_NAME}
-                src/main.cpp
-                ${PRINT_SRCS}
-                ${ECAT_SRCS}
-                ${CONTROL_SRCS}
-                ${SAFETY_SRCS}
-                ${TCP_SRCS}
-                ${QT_SRCS}            
-        )
-    elseif(WITH_LR)
-        add_executable(${PROJECT_NAME}
-                src/main.cpp
-                ${PRINT_SRCS}
-                ${ECAT_SRCS}
-                ${SAFETY_SRCS}
-                ${TCP_SRCS}
-                ${LR_CONTROL_SRCS}
-                ${QT_SRCS}            
-        )
-    endif()
-else()
+message("COMMON_LIBRARIES : ", ${COMMON_LIBRARIES})
 if(WITH_CASADI)
+    add_compile_definitions(__CASADI__)
+    find_package(CASADI REQUIRED)
     add_executable(${PROJECT_NAME}
-            src/main.cpp
-            ${PRINT_SRCS}
-            ${ECAT_SRCS}
-            ${CONTROL_SRCS}
-            ${SAFETY_SRCS}
-            ${TCP_SRCS}
+        src/main.cpp
+        ${CONTROL_SRCS}
+        ${COMMON_SRCS}
     )
-    elseif(WITH_LR)
-    add_executable(${PROJECT_NAME}
-            src/main.cpp
-            ${PRINT_SRCS}
-            ${ECAT_SRCS}
-            ${SAFETY_SRCS}
-            ${TCP_SRCS}
-            ${LR_CONTROL_SRCS}
-    )
-    endif()
+    if( Eigen_FOUND )
+   add_definitions( ${Eigen_DEFINITIONS} )
+   target_include_directories (${PROJECT_NAME} PUBLIC ${Eigen_INCLUDE_DIRS} )
+else()
+   MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN_INCLUDE_DIR to the include directory of your Eigen installation.")
+endif()
+    if (CASADI_FOUND)
+        MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
+        MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
+        target_include_directories(${PROJECT_NAME} PUBLIC 
+            ${KERNELHEADERS_DIR}
+            ${CASADI_INCLUDE_DIR} 
+            ${COMMON_INCLUDE_DIRS}
+        )
+        target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
+    endif ()
+    target_link_libraries(${PROJECT_NAME}
+      ${COMMON_LIBRARIES}
+     )
+    set( INDY7_CASADI indy7_M indy7_Minv indy7_C indy7_G indy7_id indy7_fd indy7_fk indy7_fk_ee indy7_fkrot_ee indy7_J_s indy7_J_b indy7_J_fd indy7_J_id )
+    set( INDYRP_CASADI indyrp2_M indyrp2_Minv indyrp2_C indyrp2_G indyrp2_id indyrp2_fd indyrp2_fk indyrp2_fk_ee indyrp2_fkrot_ee indyrp2_J_s indyrp2_J_b indyrp2_J_fd indyrp2_J_id )
+    link_directories(
+      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indy7"
+      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indyRP"
+    )     
 endif()
 
+if(WITH_LR)
+    add_compile_definitions(__LR__)
+    find_package(ruckig REQUIRED)
+    find_package(LR REQUIRED)
+    find_package(SimRobot REQUIRED)
+    find_package(pinocchio REQUIRED)
+    add_executable(${PROJECT_NAME}
+        src/main.cpp
+        ${LR_CONTROL_SRCS}
+        ${COMMON_SRCS}
+        ${FT_SRCS}
+    )
+    target_include_directories(${PROJECT_NAME} PUBLIC 
+        ${KERNELHEADERS_DIR}
+        ${COMMON_INCLUDE_DIRS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+    
+    target_link_libraries(${PROJECT_NAME}
+        ${COMMON_LIBRARIES}
+        LR::Control
+        LR::Trajectory
+        canlib
+     )
+     
 
-
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
-
-#target_include_directories(${PROJECT_NAME} PRIVATE src)
-target_link_libraries(${PROJECT_NAME}
-        # sub::CTRL
-        # sub::KDL
-        sub::ECAT
-        # sub::CAN
-        sub::Interpolator
-        sub::LR
-        sub::NETWORK
-        sub::Robot
-        # sub::bullet3
-        # pybullet_cpp
-        dl
-)
-
+endif()
+if(WITH_BULLET)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC -DBT_USE_DOUBLE_PRECISION )
+endif()
 # ControlBox
 if(WITH_RP)
     add_compile_definitions(__RP__)
@@ -288,178 +274,17 @@ if(WITH_LR)
     add_compile_definitions(__LR__)
 endif()
 
-# LieGroupRobotics
+# ControlBox
 if(WITH_DUALARM)
     add_compile_definitions(__DUALARM__)
 endif()
 
-# # libpcan
-# find_path(PCAN_INCLUDE_DIR NAMES libpcanfd.h)
-# find_library(PCAN_LIBRARY NAMES pcanfd)
-# target_include_directories(${PROJECT_NAME} PUBLIC ${PCAN_INCLUDE_DIR})
-# target_link_libraries(${PROJECT_NAME}
-#        ${PCAN_LIBRARY}
-# )
-# message(STATUS "pcan library: ${PCAN_LIBRARY}")
-# message(STATUS "pcan include: ${PCAN_INCLUDE_DIR}")
-
-# jsoncpp
-find_package(jsoncpp REQUIRED)
-target_link_libraries(${PROJECT_NAME} jsoncpp_lib)
-list(APPEND INCLUDE_DIRS_FOR_DYNAMIC_VIEW ${jSONCPP_INCLUDE_DIRS})
-
-# xenomai
-find_package(Xenomai 3.1.1 REQUIRED ALCHEMY)
 message(STATUS "Xenomai found with theses skins: ${Xenomai_SKINS}")
 if(Xenomai_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${KERNELHEADERS_DIR})
     foreach(comp_lists ${Xenomai_FOUND_COMP})
-        #message(STATUS "Xenomai ${comp_lists} includes : ${Xenomai_${comp_lists}_INCLUDE_DIRS}" )
-        #message(STATUS "Xenomai ${comp_lists} definitions: ${Xenomai_${comp_lists}_DEFINITIONS}")
-        #message(STATUS "Xenomai ${comp_lists} LIBRARY_DIRS : ${Xenomai_${comp_lists}_LIBRARY_DIRS} ")
-        #message(STATUS "Xenomai ${comp_lists} LIBRARIES : ${Xenomai_${comp_lists}_LIBRARIES}")
-        #message(STATUS "Xenomai ${comp_lists} LDFLAGS : ${Xenomai_${comp_lists}_LDFLAGS}")
-        #message(STATUS "Xenomai ${comp_lists} DL_FLAGS : ${Xenomai_${comp_lists}_DL_FLAGS}")
-
         target_include_directories(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_INCLUDE_DIRS})
-        # target_link_libraries(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_LIBRARY_DIRS} ${Xenomai_${comp_lists}_LIBRARIES})
         target_link_libraries(${PROJECT_NAME} ${Xenomai_${comp_lists}_DL_FLAGS} ${Xenomai_${comp_lists}_LIBRARIES})
         set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS ${Xenomai_${comp_lists}_DEFINITIONS})
     endforeach(comp_lists ${Xenomai_SKINS})
 endif(Xenomai_FOUND)
-
-# casadi
-if(WITH_CASADI)
-    add_compile_definitions(__CASADI__)
-    find_package(CASADI REQUIRED)
-    if (CASADI_FOUND)
-        MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
-        MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
-        target_include_directories(${PROJECT_NAME} PUBLIC ${CASADI_INCLUDE_DIR})
-        target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
-    endif ()
-
-    set( INDY7_CASADI
-      indy7_M
-      indy7_Minv
-      indy7_C
-      indy7_G
-      indy7_id
-      indy7_fd
-      indy7_fk
-      indy7_fk_ee
-      indy7_fkrot_ee
-      indy7_J_s
-      indy7_J_b
-      indy7_J_fd
-      indy7_J_id
-    )
-
-    set( INDYRP_CASADI
-      indyrp2_M
-      indyrp2_Minv
-      indyrp2_C
-      indyrp2_G
-      indyrp2_id
-      indyrp2_fd
-      indyrp2_fk
-      indyrp2_fk_ee
-      indyrp2_fkrot_ee
-      indyrp2_J_s
-      indyrp2_J_b
-      indyrp2_J_fd
-      indyrp2_J_id
-    )
-
-    link_directories(
-      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indy7"
-      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indyRP"
-    )
-    # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
-endif()
-
-find_package(Eigen 3.0.0)
-if( Eigen_FOUND )
-   add_definitions( ${Eigen_DEFINITIONS} )
-   target_include_directories (${PROJECT_NAME} PUBLIC ${Eigen_INCLUDE_DIRS} )
-else()
-   MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN_INCLUDE_DIR to the include directory of your Eigen installation.")
-endif()
-
-# Poco
-if(WITH_POCO)
-    add_compile_definitions(__POCO__)
-    find_package(Poco REQUIRED)
-    if (Poco_FOUND)
-        MESSAGE(STATUS "Poco_INCLUDE_DIRS = ${Poco_INCLUDE_DIRS}")
-        MESSAGE(STATUS "Poco_LIBRARIES = ${Poco_LIBRARIES}")
-        target_include_directories(${PROJECT_NAME} PUBLIC ${Poco_INCLUDE_DIRS})
-        target_link_libraries(${PROJECT_NAME} ${Poco_LIBRARIES})
-    endif()
-endif()
-
-# Bullet
-if(WITH_BULLET)
-    add_compile_definitions(__BULLET__)
-    find_package(Bullet REQUIRED)
-    if (BULLET_FOUND)
-        MESSAGE(STATUS "BULLET_INCLUDE_DIRS = ${BULLET_INCLUDE_DIRS}")
-        MESSAGE(STATUS "BULLET_LIBRARIES = ${BULLET_LIBRARIES}")
-        target_include_directories(${PROJECT_NAME} PUBLIC ${BULLET_INCLUDE_DIRS})
-        target_link_libraries(${PROJECT_NAME} ${BULLET_LIBRARIES})
-    endif()
-endif()
-
-# RAISIM
-if(WITH_RAISIM)
-    add_compile_definitions(__RAISIM__)
-    find_package(Raisim REQUIRED)
-endif()
-
-# check if Doxygen is installed
-#find_package(Doxygen)
-#if (DOXYGEN_FOUND)
-#    # set input and output files
-#    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/ doc/Doxyfile.in)
-#    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-#
-#    # request to configure the file
-#    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-#    message("Doxygen build started")
-#
-#    # note the option ALL which allows to build the docs together with the application
-#    add_custom_target( doc_doxygen ALL
-#                       COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-#                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#                       COMMENT "Generating API documentation with Doxygen"
-#                       VERBATIM )
-#else (DOXYGEN_FOUND)
-#    message("Doxygen need to be installed to generate the doxygen documentation")
-#endif (DOXYGEN_FOUND)
-
-#===============================================================================
-# Print build summary
-#===============================================================================
-if(RTIndy7_VERBOSE)
-    message(STATUS "")
-    message(STATUS "[ Build summary ]")
-    message(STATUS "CMAKE_GENERATOR  : ${CMAKE_GENERATOR}")
-    message(STATUS "Compiler ID      : ${CMAKE_CXX_COMPILER_ID}")
-    message(STATUS "Compiler version : ${CMAKE_CXX_COMPILER_VERSION}")
-    message(STATUS "Build type       : ${CMAKE_BUILD_TYPE}")
-    message(STATUS "BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
-    message(STATUS "Install path     : ${CMAKE_INSTALL_PREFIX}")
-    message(STATUS "CXX_FLAGS        : ${CMAKE_CXX_FLAGS}")
-    if(${CMAKE_BUILD_TYPE_UPPERCASE} STREQUAL "RELEASE")
-        message(STATUS "CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
-    elseif(${CMAKE_BUILD_TYPE_UPPERCASE} STREQUAL "DEBUG")
-        message(STATUS "CXX_FLAGS_DEBUG  : ${CMAKE_CXX_FLAGS_DEBUG}")
-    elseif(${CMAKE_BUILD_TYPE_UPPERCASE} STREQUAL "RELWITHDEBINFO")
-        message(STATUS "CXX_FLAGS_RELWITHDEBINFO: ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-    elseif(${CMAKE_BUILD_TYPE_UPPERCASE} STREQUAL "PROFILE")
-        message(STATUS "CXX_FLAGS_PROFILE: ${CMAKE_CXX_FLAGS_PROFILE}")
-    endif()
-    message(STATUS "CMAKE_SOURCE_DIR : ${CMAKE_SOURCE_DIR}")
-    message(STATUS "CMAKE_BINARY_DIR : ${CMAKE_BINARY_DIR}")
-    message(STATUS "")
-endif(RTIndy7_VERBOSE)

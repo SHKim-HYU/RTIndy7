@@ -1,0 +1,323 @@
+
+// void setHinfGain(MatrixNd& Hinf_K_gamma){
+//     JVec invL2sqr,K;
+//     invL2sqr<<1000.0,1000.0,800.0,600.0,600.0,600.0;
+//     K<<100.0, 100.0, 80.0, 70.0, 70.0, 70.0;
+//     for (int i=0; i<JOINTNUM; ++i){
+//         switch(i){
+// 		case 0:
+// 		    Hinf_K_gamma(i,i) = K(i)+1.0/invL2sqr(i) ;break;
+// 		case 1:
+// 		    Hinf_K_gamma(i,i) = K(i)+1.0/invL2sqr(i) ;break;
+// 		case 2:
+// 		    Hinf_K_gamma(i,i) = K(i)+1.0/invL2sqr(i) ;break;
+// 		case 3:
+// 		    Hinf_K_gamma(i,i) = K(i)+1.0/invL2sqr(i) ;break;
+// 		case 4:
+// 		    Hinf_K_gamma(i,i) = K(i)+1.0/invL2sqr(i) ;break;
+// 		case 5:
+// 		    Hinf_K_gamma(i,i) = K(i)+1.0/invL2sqr(i) ;break;
+//         }
+//     }
+// }
+// void saturate_Vector6d(Vector6d& val,double max_val){
+// 		for(int i =0;i<6;i++){
+// 			if(std::isnan(val(i))){
+// 				if(val(i)>0) val(i) = max_val;
+// 				else val(i) = -max_val;
+// 			}else{
+// 				if(val(i)>0){
+// 					if(abs(val(i))>max_val) val(i) = max_val;
+
+// 				}else{
+// 					if(abs(val(i))>max_val) val(i) = -max_val;
+// 				}
+// 			}
+// 		}
+		
+// }
+// JVec calcFriction(JVec q_dot, JVec tau)
+// {
+
+// 	JVec tau_f = JVec::Zero();
+// 	JVec F_c_n, F_c_p, F_v1_n, F_v1_p, F_v2_n, F_v2_p, temperature, sigma_0, sigma_1;
+// 	F_c_n << -10.061, -8.3239, -4.3925, -2.358, -2.2989, -2.1959;
+// 	F_c_p << 10.184, 8.324, 4.3925, 2.3993, 2.3286, 2.1387;
+// 	F_v1_n << -70.314, -55.341, -21.865, -10.085, -9.4613, -8.4724;
+// 	F_v1_p << 74.638, 55.341, 21.865, 10.196, 9.8648, 8.4115;
+// 	F_v2_n << -0.41363, 0.39086, 0.61329, -0.74007, 0.79397, -0.68712;
+// 	F_v2_p << -0.47417, 0.39086, 0.6133, -0.78353, 0.86276, -0.6613;
+// 	temperature << 36.821, 40.199, 45.787, 49.855, 50.042, 53.719;
+// 	sigma_0 << 1.6804e4, 1.6804e4, 1.6804e3, 1.6804e3, 1.6804e3, 1.6804e3;
+// 	sigma_1 << 259.2605, 259.2605, 81.9854, 81.9854, 81.9854, 81.9854;
+// 	JVec F_v = JVec::Zero();
+// 	JVec F_c = JVec::Zero();
+// 	JVec k = JVec::Zero();
+// 	k<<50,50,50,5,5,5;
+// 	for (int i = 0; i < 6; i++)
+// 	{
+// 		if (q_dot(i) > 0)
+// 		{
+// 			F_v(i) = F_v1_p(i) + F_v2_p(i) * temperature(i);
+// 			F_c(i) = F_c_p(i)*0.9;
+// 		}
+// 		else
+// 		{
+// 			F_v(i) = F_v1_n(i) + F_v2_n(i) * temperature(i);
+// 			F_c(i) = F_c_n(i)*0.9;
+// 		}
+// 		tau_f(i) = F_c(i) * 2.0 / 3.141592 * atan(k(i) * abs(q_dot(i)));
+// 	}
+
+// 	return tau_f;
+// }
+// void rt_lr_control_run(void *param)
+// {
+// 	RTIME beginCycle, endCycle;
+// 	RTIME beginRead, beginReadbuf, beginWrite, beginWritebuf, beginCompute;
+
+// 	// Synchronize EtherCAT Master (for Distributed Clock Mode)
+// 	// nrmk_master.syncEcatMaster();
+
+// 	/* Arguments: &task (NULL=self),
+// 	 *            start time,
+// 	 *            period
+// 	 */
+// 	rt_task_set_periodic(NULL, TM_NOW, CYCLE_NS);
+// 	JVec q0 = JVec::Zero();
+// 	q0 << 0, 0, 0, 0, 0;
+// 	info.des.q = q0;
+// 	info.des.q_dot = JVec::Zero();
+// 	info.des.q_ddot = JVec::Zero();
+// 	info.des.F = Vector6d::Zero();
+// 	info.des.F_CB = Vector6d::Zero();
+
+// 	JVec eint = JVec::Zero();
+// 	JVec e = JVec::Zero();
+// 	int ft_init_cnt = 0;
+
+// 	std::vector<JVec> joint_way_points;
+// 	std::vector<double> joint_delays;
+// 	std::vector<SE3> task_way_points;
+// 	std::vector<double> task_delays;
+// 	double dt = 0.001;
+
+// 	bool is_set_traj = 0;
+
+// 	JVec torques = JVec::Zero();
+// 	int print_cnt = 0;
+// 	LR_Trajectory lr_traj = LR_Trajectory();
+// 	JVec Hinf_K = JVec::Zero();
+// 	JVec gamma = JVec::Zero();
+// 	Hinf_K << 100.0, 100.0, 80.0, 70.0, 70.0, 70.0;
+// 	gamma << invL2sqr_1, invL2sqr_2, invL2sqr_3, invL2sqr_4, invL2sqr_5, invL2sqr_6;
+
+// 	MatrixNd K_ir = MatrixNd::Identity();
+// 	K_ir(0, 0) = 5.0;
+// 	K_ir(1, 1) = 5.0;
+// 	K_ir(2, 2) = 3.0;
+// 	K_ir(3, 3) = 3.0;
+// 	K_ir(4, 4) = 3.0;
+// 	K_ir(5, 5) = 3.0;
+// 	JVec q_ddot = JVec::Zero();
+// 	Matrix6d Task_Kp = Matrix6d::Identity() * 8000.0;
+// 	// Task_Kp(3,3)=Task_Kp(3,3)/30.0;
+// 	// Task_Kp(4,4)=Task_Kp(3,3)/30.0;
+// 	// Task_Kp(5,5)=Task_Kp(3,3)/30.0;
+// 	Matrix6d Task_Kv = Matrix6d::Identity() * 300.0;
+// 	// Task_Kv(3,3)=Task_Kv(3,3)/30.0;
+// 	// Task_Kv(4,4)=Task_Kv(3,3)/30.0;
+// 	// Task_Kv(5,5)=Task_Kv(3,3)/30.0;
+// 	Vector6d lambda_int = Vector6d::Zero();
+// 	MatrixNd Hinf_K_gamma = Matrix6d::Zero();
+// 	setHinfGain(Hinf_K_gamma);
+// 	JVec filtered_q_dot=JVec::Zero();
+// 	JVec e_int = JVec::Zero();
+
+// 	MatrixNd Kp = MatrixNd ::Identity()*100;
+// 	MatrixNd Kv = MatrixNd ::Identity()*20;
+// 	while (run)
+// 	{
+// 		beginCycle = rt_timer_read();
+// 		periodEcat = 0;
+// 		periodBuffer = 0;
+// 		beginRead = rt_timer_read();
+// 		nrmk_master.processTxDomain();
+// 		periodEcat += (unsigned long)rt_timer_read() - beginRead;
+// 		// Read data in EtherCAT Buffer
+// 		beginReadbuf = rt_timer_read();
+// 		readEcatData();
+// 		periodBuffer += (unsigned long)rt_timer_read() - beginReadbuf;
+// 		beginCompute = rt_timer_read();
+// 		if (system_ready)
+// 		{
+// 			if (use_control)
+// 			{
+// 				if(use_job){
+// 					if (is_set_traj == 0)
+// 					{
+// 						JointWayPointGenerator(joint_way_points, joint_delays, info.act.q);
+// 						torques = lr_control.GravityForces(info.act.q);
+// 						eint = eint * 0;
+// 						is_set_traj = 1;
+// 					}
+// 					else
+// 					{
+// 						Jacobian Jb = lr::JacobianBody(lr_control.Blist, info.act.q);
+// 						lr_traj.WayPointJointTrajectory(joint_way_points, joint_delays, gt, info.des.q, info.des.q_dot, info.des.q_ddot);
+
+// 						JVec tau_ext = Jb.transpose() * info.act.F_ext;
+
+// 						torques = lr_control.HinfControl(info.act.q, info.act.q_dot, info.des.q, info.des.q_dot, info.des.q_ddot, eint, dt, Hinf_K, gamma);
+// 						// torques = lr_control.GravityForces(info.act.q)-tau_ext+K_ir*tau_ext;
+// 						JVec e = info.des.q - info.act.q;
+// 					}
+// 				}
+// 				else{
+// // Task Control
+// 				if (is_set_traj == 0)
+// 				{
+// 					SE3 X0 = lr::FKinBody(lr_control.M, lr_control.Blist, info.act.q);
+// 					TaskWayPointGenerator(task_way_points, task_delays, X0);
+// 					torques = lr_control.GravityForces(info.act.q);
+// 					eint = eint * 0;
+// 					e_int=e_int*0;
+// 					lambda_int = lambda_int*0;
+// 					is_set_traj = 1;
+// 				}
+// 				else
+// 				{
+// 					// JVec tau_ext = Jb.transpose() * info.act.F_ext;
+// 					JVec q = info.act.q;
+// 					filtered_q_dot = 0.95*filtered_q_dot + 0.05*info.act.q_dot;
+// 					JVec q_dot = filtered_q_dot;
+					
+// 					SE3 T_des;
+// 					Vector6d V_des, V_dot_des;
+// 					lr_traj.WayPointTaskTrajectory(task_way_points, task_delays, gt, T_des, V_des, V_dot_des);
+// 					SE3 T = lr::FKinBody(lr_control.M, lr_control.Blist, q);
+// 					Jacobian Jb = lr::JacobianBody(lr_control.Blist, q);
+// 					Jacobian Jb_dot = lr::dJacobianBody(lr_control.M, lr_control.Blist, q, q_dot);
+// 					pinvJacobian pinvJb = Jb.transpose() * (Jb * Jb.transpose()).inverse();
+
+// 					SE3 T_err = lr::TransInv(T) * T_des;
+// 					SE3 invT_err = TransInv(T_err);
+// 					Vector6d V = Jb * q_dot;
+// 					Vector6d V_err = V_des - Ad(invT_err) * V;
+// 					Vector6d lambda = lr::se3ToVec(lr::MatrixLog6(T_err));
+// 					//saturate_Vector6d(V_err, 0.1);
+// 					//saturate_Vector6d(lambda, 0.1);
+// 					Vector6d lambda_dot = dlog6(-lambda) * V_err;
+// 					Vector6d V_dot = Jb_dot * q_dot + Jb * q_ddot;
+					
+// 					q_ddot = pinvJb*V_dot_des-pinvJb*Jb_dot*q_dot;
+// 					Vector6d V_dot_err = V_dot_des - Ad(invT_err) * V_dot + ad(V_err) * V;
+// 					Vector6d lambda_dot_ref = Task_Kv * lambda + Task_Kp * lambda_int;
+// 					Vector6d lambda_ddot_ref = Task_Kv * lambda_dot + Task_Kp * lambda;
+// 					Vector6d V_ref = Ad(T_err) * (V_des + dexp6(-lambda) * (lambda_dot_ref));
+// 					Vector6d V_dot_ref = Ad(T_err) * (V_dot_des + (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+
+
+// 					JVec q_des = q;
+// 					bool ret = lr::IKinBody(lr_control.Blist,lr_control.M,T_des,q_des,0.00001,0.00001);
+// 					JVec q_dot_des = pinvJb*V_des;
+// 					Jacobian Jb_dot_des = lr::dJacobianBody(lr_control.M,lr_control.Blist,q_des,q_dot_des);
+// 					JVec q_ddot_des = pinvJb*(V_dot_des - Jb_dot_des*q_dot_des);
+					
+// 					JVec e = q_des-q;
+// 					JVec e_dot = q_dot_des-q_dot;
+					
+
+// 					e_int +=e*dt;
+// 					JVec q_ddot_ref =q_ddot_des+Kv*e_dot +Kp*e;
+// 					JVec q_dot_ref =q_dot_des+Kv*e+Kp*e_int;
+// 					MassMat M = lr_control.MassMatrix(q);
+// 					MatrixNd C = lr_control.CoriolisMatrix(q,q_dot);    
+// 					JVec G = lr_control.GravityForces(q);	
+// 					JVec tau_f = calcFriction(q_dot,torques);
+// 					torques = M*q_ddot_ref +C*q_dot_ref +G+Hinf_K_gamma*(e_dot + Kv*e + Kp*e_int)+tau_f;
+// 					info.des.q = q_des;
+// 					lambda_int += lambda*dt;					
+// 					}
+// 				}
+				
+				
+// 			}
+// 			else if (use_grav_comp)
+// 			{
+// 				torques = lr_control.GravityForces(info.act.q);
+// 			}
+// 		}
+// 		else
+// 		{
+// 			torques = lr_control.GravityForces(info.act.q);
+// 		}
+
+// 		info.des.tau = torques;
+// 		periodCompute = (unsigned long)rt_timer_read() - beginCompute;
+// 		// Write data in EtherCAT Buffer
+// 		beginWritebuf = rt_timer_read();
+// 		writeEcatData();
+// 		periodBuffer += (unsigned long)rt_timer_read() - beginWritebuf;
+// 		beginWrite = rt_timer_read();
+// 		nrmk_master.processRxDomain();
+// 		periodEcat += (unsigned long)rt_timer_read() - beginWrite;
+
+// 		endCycle = rt_timer_read();
+// 		periodCycle = (unsigned long)endCycle - beginCycle;
+
+// 		if (nrmk_master.isSystemReady())
+// 		{
+// 			if (ft_init_cnt == 0)
+// 			{
+// 				// Set bias
+// 				FTConfigParam[NUM_IO_MODULE + NUM_AXIS] = FT_SET_BIAS;
+// 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+// #ifdef __CB__
+// 				FTConfigParamCB[0] = FT_SET_BIAS;
+// 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+// #endif
+// 				nrmk_master.processRxDomain();
+// 				ft_init_cnt++;
+// 			}
+// 			else if (ft_init_cnt == 1)
+// 			{
+// 				// Set Filter 100Hz
+// 				FTConfigParam[NUM_IO_MODULE + NUM_AXIS] = FT_SET_FILTER_50;
+// 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+// #ifdef __CB__
+// 				FTConfigParamCB[0] = FT_SET_FILTER_50;
+// 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+// #endif
+// 				nrmk_master.processRxDomain();
+// 				ft_init_cnt++;
+// 			}
+// 			else if (ft_init_cnt == 2)
+// 			{
+// 				// Start
+// 				FTConfigParam[NUM_IO_MODULE + NUM_AXIS] = FT_START_DEVICE;
+// 				nrmk_master.writeBuffer(0x70003, FTConfigParam);
+// #ifdef __CB__
+// 				FTConfigParamCB[0] = FT_START_DEVICE;
+// 				nrmk_master.writeBuffer(0x71007, FTConfigParamCB);
+// #endif
+// 				nrmk_master.processRxDomain();
+// 				ft_init_cnt++;
+// 			}
+// 			else
+// 				system_ready = 1; // all drives have been done
+
+// 			gt += period;
+
+// 			if (periodEcat > worstEcat)
+// 				worstEcat = periodEcat;
+// 			if (periodBuffer > worstBuffer)
+// 				worstBuffer = periodBuffer;
+// 			if (periodCompute > worstCompute)
+// 				worstCompute = periodCompute;
+// 			if (periodCycle > CYCLE_NS)
+// 				overruns++;
+// 		}
+// 		rt_task_wait_period(NULL); // wait for next cycle
+// 	}
+// }

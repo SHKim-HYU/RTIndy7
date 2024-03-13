@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.16)
 project(LR LANGUAGES CXX)
 
 set(CMAKE_DEBUG_POSTFIX "d")
@@ -16,5 +16,12 @@ target_include_directories( ${PROJECT_NAME}
         PUBLIC ${PROJECT_SOURCE_DIR})
 
 find_package(Eigen3 3.0 REQUIRED NO_MODULE)
-find_package(jsoncpp REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen jsoncpp)
+find_package(urdfdom REQUIRED)
+find_package(pinocchio REQUIRED)
+
+target_include_directories( ${PROJECT_NAME}
+        PUBLIC ${PROJECT_SOURCE_DIR}
+        ${urdfdom_INCLUDE_DIRS}        
+        )
+
+target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen ${urdfdom_LIBRARIES} pinocchio::pinocchio)

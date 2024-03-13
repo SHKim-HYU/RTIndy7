@@ -52,7 +52,7 @@ while (1)
 			rt_printf("Time=%0.3lfs, cycle_dt=%lius,  overrun=%d\n", gt, periodCycle/1000, overruns);
 			rt_printf("compute_dt= %lius, worst_dt= %lius, buffer_dt=%lius, ethercat_dt= %lius\n", periodCompute/1000, worstCompute/1000, periodBuffer/1000, periodEcat/1000);
 			#ifdef __BULLET__
-			rt_printf("Bullet_dt=%lius\n",periodBullet/1000);
+			//rt_printf("Bullet_dt=%lius\n",periodBullet/1000);
 			#endif
 			#ifdef __CASADI__
 			rt_printf("IndySim_dt=%lius\n",periodIndysim/1000);

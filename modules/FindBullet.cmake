@@ -83,8 +83,23 @@ _FIND_BULLET_LIBRARY(BULLET_GWEN_LIBRARY            gwen)
 _FIND_BULLET_LIBRARY(BULLET_WORLDIMPORTER_LIBRARY            BulletWorldImporter)
 _FIND_BULLET_LIBRARY(BULLET_FILELOADER_LIBRARY            BulletFileLoader)
 
+SET(BULLET_ROOT /opt/bullet3)
 
-
+SET(RobotSimulator_SRCS
+	${BULLET_ROOT}/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp
+	${BULLET_ROOT}/examples/ExampleBrowser/InProcessExampleBrowser.cpp
+	${BULLET_ROOT}/examples/SharedMemory/GraphicsServerExample.cpp
+	${BULLET_ROOT}/examples/SharedMemory/GraphicsClientExample.cpp
+	${BULLET_ROOT}/examples/SharedMemory/RemoteGUIHelper.cpp
+	${BULLET_ROOT}/examples/SharedMemory/PhysicsServerExample.cpp
+	${BULLET_ROOT}/examples/SharedMemory/PhysicsServerExampleBullet2.cpp
+	${BULLET_ROOT}/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp		
+)
+SET(RobotSimulator_INCLUDE_DIR
+		${BULLET_INCLUDE_DIRS}
+		${BULLET_INCLUDE_DIRS}/SharedMemory
+		${BULLET_INCLUDE_DIRS}/RobotSimulator	
+	)
 include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Bullet DEFAULT_MSG
     BULLET_DYNAMICS_LIBRARY BULLET_COMMON_LIBRARY BULLET_COLLISION_LIBRARY BULLET_MATH_LIBRARY

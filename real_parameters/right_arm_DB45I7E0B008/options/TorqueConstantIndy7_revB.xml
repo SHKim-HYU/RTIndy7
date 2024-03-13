@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TorqueConstants>
+<constant index="0" power="500" rev="B" value="0.0970045" ></constant>
+<constant index="1" power="500" rev="B" value="0.091899" ></constant>
+<constant index="2" power="200" rev="B" value="0.0954655" ></constant>
+<constant index="3" power="100" rev="B" value="0.063802" ></constant>
+<constant index="4" power="100" rev="B" value="0.063802" ></constant>
+<constant index="5" power="100" rev="B" value="0.063802" ></constant>
+</TorqueConstants>

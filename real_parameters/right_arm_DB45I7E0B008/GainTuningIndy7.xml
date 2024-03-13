@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GainTuning>
+	<gain index="0" invL2sqr="800" kp="100" kv="20">
+		<trajectory amplitude="0" mode="step"/>
+	</gain>
+	<gain index="1" invL2sqr="600" kp="100" kv="20">
+		<trajectory amplitude="0" mode="step"/>
+	</gain>
+	<gain index="2" invL2sqr="500" kp="100" kv="20">
+		<trajectory amplitude="0" mode="step"/>
+	</gain>
+	<gain index="3" invL2sqr="500" kp="100" kv="20">
+		<trajectory amplitude="0" mode="step"/>
+	</gain>
+	<gain index="4" invL2sqr="500" kp="100" kv="20">
+		<trajectory amplitude="0" mode="step"/>
+	</gain>
+	<gain index="5" invL2sqr="600" kp="100" kv="20">
+		<trajectory amplitude="0" mode="step"/>
+	</gain>
+</GainTuning>

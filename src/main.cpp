@@ -1,7 +1,7 @@
 /*
  * main.cpp
  *
- *  Created on: 2024. 3. 9.
+ *  Created on: 2023. 11. 26.
  *      Author: Minchang Sung
  */
 
@@ -10,10 +10,13 @@
 #define __XENO__
 #endif
 #include "main.h"
+#include <cxxopts.hpp>
 
 RT_TASK print_task;
 RT_TASK control_task;
 RT_TASK safety_task;
+RT_TASK bullet_task;
+RT_TASK ft_task;
 
 NRMK_Master nrmk_master;
 NRMKHelper::ServoAxis Axis[NUM_AXIS];
@@ -115,7 +118,6 @@ CS_Indy7 cs_sim_indy7;
 
 #ifdef __LR__
 LR_Control lr_control;
-LR_Trajectory lr_traj;
 #endif
 JOINT_INFO info;
 double period = 0;
@@ -151,15 +153,42 @@ void signal_handler(int signum) {
     nrmk_master.deinit();
     exit(1);
 }
+bool use_grav_comp;
+bool use_control;
+bool use_job;
+
 int main(int argc, char **argv)
 {
 	// Perform auto-init of rt_print buffers if the task doesn't do so
     rt_print_init(0, NULL);
 	mlockall(MCL_CURRENT|MCL_FUTURE);
+    cxxopts::Options options("RTIndy7", "RTIndy7");
+    bool use_qt;
+    bool use_bullet;
+    bool use_print;
+    options.add_options()
+        ("b,bullet", "With bullet", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+        ("q,qt", "With QT", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+        ("c,control", "Use control", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+        ("j,job", "Go job position", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+        ("grav,gravity", "Use gravity compensation", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+        ("p,print", "Use Print", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+        ("h,help", "Print usage");
+    auto result = options.parse(argc, argv);
+    // If no arguments were provided or help was requested, print the help message.
+    if (argc == 1 || result.count("help")) {
+        std::cout << options.help() << std::endl;
+        return 0; // Exit after displaying help
+    }
 
+    // GUI option
+    bool with_bullet = result["bullet"].as<bool>();
+    bool with_qt = result["qt"].as<bool>();
+    use_control = result["control"].as<bool>();
+    use_job = result["job"].as<bool>();
+    use_grav_comp = result["gravity"].as<bool>();
+    use_print = result["print"].as<bool>();
 
-
-	std::cout<<"NUM_AXIS : " <<NUM_AXIS<<std::endl;
 
 	// For CST (cyclic synchronous torque) control
 	if (nrmk_master.init(OP_MODE_CYCLIC_SYNC_TORQUE, CYCLE_NS) == -1)
@@ -167,36 +196,32 @@ int main(int argc, char **argv)
 		printf("System Initialization Failed\n");
 	    return 0;
 	}
-
-	std::cout<<"NUM_AXIS : " <<NUM_AXIS<<std::endl;
 	for (int i = 0; i < NUM_AXIS; ++i)
 		ModeOfOperation[i] = OP_MODE_CYCLIC_SYNC_TORQUE;
 
 	// For trajectory interpolation
 	initAxes();
-	//for(int i=0;i<16;i++)
-	//	nrmk_master.setServoOn(i);
-
-		 nrmk_master.setServoOn(1);
-		 //nrmk_master.setServoOn(2);
-		 nrmk_master.setServoOn(3);
-	     nrmk_master.setServoOn(4);
-		 nrmk_master.setServoOn(5);
-		 nrmk_master.setServoOn(6);
-		 nrmk_master.setServoOn(7);
-
-		nrmk_master.setServoOn(10);
-		nrmk_master.setServoOn(11);
-		nrmk_master.setServoOn(12);
-		nrmk_master.setServoOn(13);
-		nrmk_master.setServoOn(14);
-		nrmk_master.setServoOn(15);
-		
+	 for(int i=0;i<NUM_SLAVES;i++)
+	 	nrmk_master.setServoOn(i);
+//LeftArm
+//         nrmk_master.setServoOn(1);
+//         //nrmk_master.setServoOn(2);
+//         nrmk_master.setServoOn(3);
+//         nrmk_master.setServoOn(4);
+//         nrmk_master.setServoOn(5);
+//         nrmk_master.setServoOn(6);
+//         nrmk_master.setServoOn(7);
+// //RightArm
+//         nrmk_master.setServoOn(10);
+//         nrmk_master.setServoOn(11);
+//         nrmk_master.setServoOn(12);
+//         nrmk_master.setServoOn(13);
+//         nrmk_master.setServoOn(14);
+//         nrmk_master.setServoOn(15);    
     run =1;
 	period=((double) CYCLE_NS)/((double) NSEC_PER_SEC);	//period in second unit
 
 #ifdef __CASADI__
-
     cs_indy7=CS_Indy7();
 	cs_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json");
     
@@ -206,38 +231,56 @@ int main(int argc, char **argv)
 #else if __LR__
 
     lr_control=LR_Control();
-	lr_control.LRSetup("../info/LR_info.json");
-	lr_traj = LR_Trajectory();
+    Vector3d g = Vector3d::Zero();
+    g(0) = 0;
+    g(1) =8.487;
+    g(2) = -4.9;
+	//lr_control.LRSetup("../urdf/indyrp2/urdf/indyrp2.urdf",g);
+    lr_control.LRSetup("../urdf/indy7/indy7.urdf",g);
     
     rt_task_create(&control_task, "rt_lr_control_run", 0, 98, 0);
     rt_task_start(&control_task, &rt_lr_control_run, NULL);    
-#endif
 
-    rt_task_create(&print_task, "rt_print_task", 0, 5, 0);
-    rt_task_start(&print_task, &rt_print_run, NULL);
+    //  rt_task_create(&ft_task, "rt_ft_task", 0, 88, 0);
+    //  rt_task_start(&ft_task, &rt_ft_run, NULL);    
+#endif
+    if(use_print){
+        rt_task_create(&print_task, "rt_print_task", 0, 5, 0);
+        rt_task_start(&print_task, &rt_print_run, NULL);
+    }
+    
 
     rt_task_create(&safety_task, "rt_safety_task", 0, 98, 0);
     rt_task_start(&safety_task, &rt_safety_run, NULL);
 
-#ifdef __DUALARM__
-	std::cout<<"dualArm Task"<<std::endl;
-	std::cout<<NUM_SLAVES<<std::endl;
-#endif 
+
 
     //qt thread
     #ifdef __QT__
-    pthread_t qt_thread;
-    pthread_attr_t qt_attr;
-    struct sched_param qt_param;
-    if(1){
-        pthread_attr_init(&qt_attr);
-        pthread_attr_setschedpolicy(&qt_attr, SCHED_RR );
-        qt_param.sched_priority = sched_get_priority_max(SCHED_RR )-50;
-        pthread_attr_setschedparam(&qt_attr, &qt_param);
-        pthread_create(&qt_thread, &qt_attr, qt_run, NULL);
-        //set_thread_affinity(qt_thread, 2); // 2번 코어에 할당
-    }    
-    //RT task END
+        pthread_t qt_thread;
+        pthread_attr_t qt_attr;
+        struct sched_param qt_param;    
+        if(with_qt){
+            pthread_attr_init(&qt_attr);
+            pthread_attr_setschedpolicy(&qt_attr, SCHED_RR );
+            qt_param.sched_priority = sched_get_priority_max(SCHED_RR )-50;
+            pthread_attr_setschedparam(&qt_attr, &qt_param);
+            pthread_create(&qt_thread, &qt_attr, qt_run, NULL);
+        }
+
+    #endif
+
+    #ifdef __BULLET__
+        pthread_t bullet_thread;
+        pthread_attr_t bullet_attr;
+        struct sched_param bullet_param;
+        if(with_bullet){
+            pthread_attr_init(&bullet_attr);
+            pthread_attr_setschedpolicy(&bullet_attr, SCHED_RR );
+            bullet_param.sched_priority = sched_get_priority_max(SCHED_RR )-50;
+            pthread_attr_setschedparam(&bullet_attr, &bullet_param);
+            pthread_create(&bullet_thread, &bullet_attr, bullet_run, NULL);
+        }
     #endif
 
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MDHoffset>
+	<offset index="Link1" alpha="0.1637" a="-3.9799" d="298.1096" theta="-0.009"/>
+	<offset index="Link2" alpha="89.9657" a="0.0853" d="0.1201" theta="89.9318"/>
+	<offset index="Link3" alpha="0.1224" a="450.5995" d="3.6201" theta="90.2619"/>
+	<offset index="Link4" alpha="90.1234" a="0.2931" d="350.5901" theta="179.8178"/>
+	<offset index="Link5" alpha="89.9962" a="0.2545" d="183.1179" theta="0.8733"/>
+	<offset index="Link6" alpha="-89.9147" a="0.0188" d="231.8081" theta="-0.1435"/>
+	<offset index="Link7" alpha="0" a="0" d="0" theta="0"/>
+</MDHoffset>

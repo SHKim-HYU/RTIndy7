@@ -9,10 +9,9 @@
 // Trapezoidal trajectory interpolation for NRMK EtherLab Configuration Tool
 #include "BlendedPolynomialAlgorithm.h"
 
-#ifndef PI
-#define PI	(3.14159265359)
-#define PI2	(6.28318530718)
-#endif
+#define S_PI	(3.14159265359)
+#define S_PI2	(6.28318530718)
+
 
 namespace NRMKHelper
 {
@@ -31,11 +30,11 @@ namespace NRMKHelper
 			_t = 0;
 
 			// Physical limits
-			_qLimit[0] = PI;
-			_qLimit[1] = -PI;
+			_qLimit[0] = S_PI;
+			_qLimit[1] = -S_PI;
 
-			_qdotLimit[0] = PI;
-			_qdotLimit[1] = -PI;
+			_qdotLimit[0] = S_PI;
+			_qdotLimit[1] = -S_PI;
 
 			_tauLimit[0] = 2000;
 			_tauLimit[1] = -2000;
@@ -121,7 +120,7 @@ namespace NRMKHelper
 
 		void setConversionConstants()
 		{
-			_radToCnt = (_dirQ * _gearRatio * _pulsePerRevolution) / (PI2);
+			_radToCnt = (_dirQ * _gearRatio * _pulsePerRevolution) / (S_PI2);
 			_NmToCnt = (_dirTau*_tauADC)/(_tauK*_gearRatio*_gearEfficiency)*100.0;
 
 			_cntToRad = 1.0 /_radToCnt;

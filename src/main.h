@@ -3,6 +3,7 @@
 
 //--------------__Define-----------------------
 
+
 #ifdef __DUALARM__
 #define NUM_IO_MODULE 	2
 #define NUM_TOOL 		2
@@ -22,13 +23,8 @@
 	#define NUM_AXIS		6
 	#endif
 #endif
-
 #define NUM_SLAVES (NUM_IO_MODULE+NUM_AXIS+NUM_TOOL)		//Modify this number to indicate the actual number of motor on the network
 
-#ifndef PI
-#define PI	(3.14159265359)
-#define PI2	(6.28318530718)
-#endif
 
 #define WAKEUP_TIME				(5)	// wake up timeout before really run, in second
 #define NSEC_PER_SEC 			1000000000
@@ -96,11 +92,30 @@ typedef int8_t INT8;
 #include "safety/safety_run.h"
 
 
+#ifdef __BULLET__
+#include "bullet/bullet_run.h"
+#endif
+
+
 typedef struct STATE{
 	JVec q;
 	JVec q_dot;
 	JVec q_ddot;
+
+	JVec q_l;
+	JVec q_r;
+	JVec q_rel;
+	JVec q_dot_l;
+	JVec q_dot_r;
+	JVec q_dot_rel;
+	JVec q_ddot_l;
+	JVec q_ddot_r;
+	JVec q_ddot_rel;
+
+
 	JVec tau;
+	JVec tau_l;
+	JVec tau_r;
 	JVec tau_ext;
 	JVec G;
 
@@ -109,6 +124,8 @@ typedef struct STATE{
 	Vector6d x_ddot;
 	Vector6d F;
 	Vector6d F_CB;
+	Vector6d F_ext;	
+	Vector6d lambda;	
 
     double s_time;
 }state;
@@ -125,12 +142,8 @@ typedef struct JOINT_INFO{
 	JVec qddot_target;
 	JVec traj_time;
 
-	STATE act_l;
-	STATE act_r;
 	STATE act;
 	STATE des;
-	STATE des_l;
-	STATE des_r;
 	STATE nom;
 
 }JointInfo;
@@ -239,10 +252,11 @@ extern CS_Indy7 cs_sim_indy7;
 
 #ifdef __LR__
     #include "lr_control/lr_control_run.h"
-    #include "LR_Control.h"
-	#include "LR_Trajectory.h"
+    #include "ft/ft_run.h"
+
+	#include <LR/include/LR_Control.h>
+	#include <LR/include/LR_Trajectory.h>
     extern LR_Control lr_control;
-	extern LR_Trajectory lr_traj;
 
 #endif
 ////////////// RxPDO //////////////
@@ -272,6 +286,8 @@ extern unsigned long periodEcat, worstEcat;
 extern unsigned long periodBuffer, worstBuffer;
 extern unsigned int overruns;
 
-
+extern bool use_grav_comp;
+extern bool use_control;
+extern bool use_job;
 #endif  // MAIN_H
 
