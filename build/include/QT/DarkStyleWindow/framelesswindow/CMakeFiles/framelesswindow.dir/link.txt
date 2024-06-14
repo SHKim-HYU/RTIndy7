@@ -1,0 +1,2 @@
+/usr/bin/ar qc libframelesswindowd.a  CMakeFiles/framelesswindow.dir/framelesswindow_autogen/mocs_compilation.cpp.o CMakeFiles/framelesswindow.dir/framelesswindow.cpp.o CMakeFiles/framelesswindow.dir/windowdragger.cpp.o
+/usr/bin/ranlib libframelesswindowd.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libInterpolatord.a  CMakeFiles/Interpolator.dir/Interpolator_autogen/mocs_compilation.cpp.o
+/usr/bin/ranlib libInterpolatord.a

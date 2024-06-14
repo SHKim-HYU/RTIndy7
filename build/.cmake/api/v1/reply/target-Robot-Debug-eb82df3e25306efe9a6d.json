@@ -1,0 +1,231 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "include/Robot/libRobotd.so"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"add_compile_definitions",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"include/Robot/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 187,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 168,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 195,
+				"parent" : 3
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 34,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fPIC  "
+				},
+				{
+					"fragment" : "-std=c++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "Robot_EXPORTS"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "__QT__"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/Robot"
+				},
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Robot"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/Robot/Robot_autogen/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/QtWidgets"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/DarkStyleWindow"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/EcatSystem"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Interpolator"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Network"
+				},
+				{
+					"backtrace" : 7,
+					"isSystem" : true,
+					"path" : "/usr/include/eigen3"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/usr/include/jsoncpp"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "Robot_autogen::@bc8f6043f00d71530807"
+		}
+	],
+	"id" : "Robot::@bc8f6043f00d71530807",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wl,--no-undefined",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoFoundation.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoUtil.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoZip.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoNet.so",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "Robot",
+	"nameOnDisk" : "libRobotd.so",
+	"paths" : 
+	{
+		"build" : "include/Robot",
+		"source" : "include/Robot"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/Robot/Robot_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Robot/PropertyDefinition.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Robot/ServoAxis.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

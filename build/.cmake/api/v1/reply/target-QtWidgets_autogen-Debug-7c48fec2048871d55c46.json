@@ -1,0 +1,58 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"include/QT/QtWidgets/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"id" : "QtWidgets_autogen::@82bbd542f8889f4b0ee7",
+	"isGeneratorProvided" : true,
+	"name" : "QtWidgets_autogen",
+	"paths" : 
+	{
+		"build" : "include/QT/QtWidgets",
+		"source" : "include/QT/QtWidgets"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/QT/QtWidgets/CMakeFiles/QtWidgets_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/QT/QtWidgets/CMakeFiles/QtWidgets_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

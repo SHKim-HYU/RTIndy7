@@ -1,0 +1,287 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "include/EcatSystem/libEcatSystemd.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"add_compile_definitions",
+			"include_directories",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"include/EcatSystem/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 187,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 168,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 195,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 46,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls  "
+				},
+				{
+					"fragment" : "-D__XENO_COMPAT__ -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__"
+				},
+				{
+					"fragment" : "-std=c++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "__QT__"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/EcatSystem"
+				},
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/EcatSystem"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/EcatSystem/EcatSystem_autogen/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/QtWidgets"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/DarkStyleWindow"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Interpolator"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Network"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Robot"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/opt/etherlab/include"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include/trank"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include/cobalt"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include/alchemy"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g  "
+				},
+				{
+					"fragment" : "-D__XENO_COMPAT__ -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "__QT__"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/EcatSystem"
+				},
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/EcatSystem"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/EcatSystem/EcatSystem_autogen/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/QtWidgets"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/DarkStyleWindow"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Interpolator"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Network"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Robot"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/opt/etherlab/include"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include/trank"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include/cobalt"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/usr/xenomai/include/alchemy"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				2
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "EcatSystem_autogen::@f689c52d19d87c0c3843"
+		}
+	],
+	"id" : "EcatSystem::@f689c52d19d87c0c3843",
+	"name" : "EcatSystem",
+	"nameOnDisk" : "libEcatSystemd.a",
+	"paths" : 
+	{
+		"build" : "include/EcatSystem",
+		"source" : "include/EcatSystem"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/EcatSystem/EcatSystem_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "include/EcatSystem/Ecat_Master.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "include/EcatSystem/PDOConfig.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

@@ -1,0 +1,58 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"include/QT/DarkStyleWindow/framelesswindow/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"id" : "framelesswindow_autogen::@ea1f179fdad542dc97f9",
+	"isGeneratorProvided" : true,
+	"name" : "framelesswindow_autogen",
+	"paths" : 
+	{
+		"build" : "include/QT/DarkStyleWindow/framelesswindow",
+		"source" : "include/QT/DarkStyleWindow/framelesswindow"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/QT/DarkStyleWindow/framelesswindow/CMakeFiles/framelesswindow_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/QT/DarkStyleWindow/framelesswindow/CMakeFiles/framelesswindow_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

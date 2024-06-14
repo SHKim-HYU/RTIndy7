@@ -1,0 +1,2 @@
+/usr/bin/ar qc libDarkStyleWindowd.a  CMakeFiles/DarkStyleWindow.dir/DarkStyleWindow_autogen/mocs_compilation.cpp.o CMakeFiles/DarkStyleWindow.dir/DarkStyle.cpp.o
+/usr/bin/ranlib libDarkStyleWindowd.a

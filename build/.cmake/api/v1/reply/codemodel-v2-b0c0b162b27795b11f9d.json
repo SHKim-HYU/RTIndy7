@@ -1,0 +1,517 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5,
+						6,
+						8,
+						9,
+						10,
+						11
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						16,
+						17,
+						18,
+						19
+					]
+				},
+				{
+					"build" : "include/QT/DarkStyleWindow",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "include/QT/DarkStyleWindow",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"build" : "include/QT/DarkStyleWindow/darkstyle",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "include/QT/DarkStyleWindow/darkstyle"
+				},
+				{
+					"build" : "include/QT/DarkStyleWindow/framelesswindow",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 3,
+					"source" : "include/QT/DarkStyleWindow/framelesswindow",
+					"targetIndexes" : 
+					[
+						12,
+						13
+					]
+				},
+				{
+					"build" : "include/QT/DarkStyleWindow/images",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 4,
+					"source" : "include/QT/DarkStyleWindow/images"
+				},
+				{
+					"build" : "include/QT/QtWidgets",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 5,
+					"source" : "include/QT/QtWidgets",
+					"targetIndexes" : 
+					[
+						8,
+						9
+					]
+				},
+				{
+					"build" : "include/QT/QCustomPlot_library",
+					"childIndexes" : 
+					[
+						7
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 6,
+					"source" : "include/QT/QCustomPlot_library"
+				},
+				{
+					"build" : "include/QT/QCustomPlot_library/lib",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 6,
+					"projectIndex" : 7,
+					"source" : "include/QT/QCustomPlot_library/lib",
+					"targetIndexes" : 
+					[
+						14,
+						15
+					]
+				},
+				{
+					"build" : "include/EcatSystem",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 8,
+					"source" : "include/EcatSystem",
+					"targetIndexes" : 
+					[
+						2,
+						3
+					]
+				},
+				{
+					"build" : "include/Interpolator",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 9,
+					"source" : "include/Interpolator",
+					"targetIndexes" : 
+					[
+						4,
+						5
+					]
+				},
+				{
+					"build" : "include/Network",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 10,
+					"source" : "include/Network",
+					"targetIndexes" : 
+					[
+						6,
+						7
+					]
+				},
+				{
+					"build" : "include/Robot",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 11,
+					"source" : "include/Robot",
+					"targetIndexes" : 
+					[
+						10,
+						11
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						5,
+						6,
+						8,
+						9,
+						10,
+						11
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ros2_rt_indy7",
+					"targetIndexes" : 
+					[
+						16,
+						17,
+						18,
+						19
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "DarkStyleWindow",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "darkstyle",
+					"parentIndex" : 1
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "framelesswindow",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						12,
+						13
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						4
+					],
+					"name" : "images",
+					"parentIndex" : 1
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "QtWidgets",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						8,
+						9
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						7
+					],
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "qcustomplotroot",
+					"parentIndex" : 0
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7
+					],
+					"name" : "qcustomplot",
+					"parentIndex" : 6,
+					"targetIndexes" : 
+					[
+						14,
+						15
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						8
+					],
+					"name" : "EcatSystem",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						9
+					],
+					"name" : "Interpolator",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4,
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						10
+					],
+					"name" : "Network",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						6,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						11
+					],
+					"name" : "Robot",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						10,
+						11
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "DarkStyleWindow::@47c2847edb0d724c6980",
+					"jsonFile" : "target-DarkStyleWindow-Debug-7720b416c12bd4192ae1.json",
+					"name" : "DarkStyleWindow",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "DarkStyleWindow_autogen::@47c2847edb0d724c6980",
+					"jsonFile" : "target-DarkStyleWindow_autogen-Debug-0d76d00e643079980cc3.json",
+					"name" : "DarkStyleWindow_autogen",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "EcatSystem::@f689c52d19d87c0c3843",
+					"jsonFile" : "target-EcatSystem-Debug-28e1484e03ff5668cd44.json",
+					"name" : "EcatSystem",
+					"projectIndex" : 8
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "EcatSystem_autogen::@f689c52d19d87c0c3843",
+					"jsonFile" : "target-EcatSystem_autogen-Debug-f0a3c7c0e050bae5608c.json",
+					"name" : "EcatSystem_autogen",
+					"projectIndex" : 8
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "Interpolator::@3b557d557d621394a5fb",
+					"jsonFile" : "target-Interpolator-Debug-f1c6ae55ad6855e4af1b.json",
+					"name" : "Interpolator",
+					"projectIndex" : 9
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "Interpolator_autogen::@3b557d557d621394a5fb",
+					"jsonFile" : "target-Interpolator_autogen-Debug-d412a5cb984715168779.json",
+					"name" : "Interpolator_autogen",
+					"projectIndex" : 9
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "Network::@157f8c884db9c9087acb",
+					"jsonFile" : "target-Network-Debug-81d3fef49c74d4cc1909.json",
+					"name" : "Network",
+					"projectIndex" : 10
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "Network_autogen::@157f8c884db9c9087acb",
+					"jsonFile" : "target-Network_autogen-Debug-a2b1ef252e54ba39abf2.json",
+					"name" : "Network_autogen",
+					"projectIndex" : 10
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "QtWidgets::@82bbd542f8889f4b0ee7",
+					"jsonFile" : "target-QtWidgets-Debug-fe26236698068499ca93.json",
+					"name" : "QtWidgets",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "QtWidgets_autogen::@82bbd542f8889f4b0ee7",
+					"jsonFile" : "target-QtWidgets_autogen-Debug-7c48fec2048871d55c46.json",
+					"name" : "QtWidgets_autogen",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "Robot::@bc8f6043f00d71530807",
+					"jsonFile" : "target-Robot-Debug-eb82df3e25306efe9a6d.json",
+					"name" : "Robot",
+					"projectIndex" : 11
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "Robot_autogen::@bc8f6043f00d71530807",
+					"jsonFile" : "target-Robot_autogen-Debug-9a55e3ca6d8f671f361c.json",
+					"name" : "Robot_autogen",
+					"projectIndex" : 11
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "framelesswindow::@ea1f179fdad542dc97f9",
+					"jsonFile" : "target-framelesswindow-Debug-11ce3e1f8814e8b41947.json",
+					"name" : "framelesswindow",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "framelesswindow_autogen::@ea1f179fdad542dc97f9",
+					"jsonFile" : "target-framelesswindow_autogen-Debug-f13cb740c610b4286cb1.json",
+					"name" : "framelesswindow_autogen",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "qcustomplot::@8f425ba77a9b02a87376",
+					"jsonFile" : "target-qcustomplot-Debug-a9291766407f8d179b88.json",
+					"name" : "qcustomplot",
+					"projectIndex" : 7
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "qcustomplot_autogen::@8f425ba77a9b02a87376",
+					"jsonFile" : "target-qcustomplot_autogen-Debug-7c9d972fe34c4c87d002.json",
+					"name" : "qcustomplot_autogen",
+					"projectIndex" : 7
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ros2_rt_indy7_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ros2_rt_indy7_uninstall-Debug-ab977555a3a9ab89166f.json",
+					"name" : "ros2_rt_indy7_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rt_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rt_node-Debug-8badc351c5661d0af99e.json",
+					"name" : "rt_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rt_node_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rt_node_autogen-Debug-b13b0b4321b0c8f3fc88.json",
+					"name" : "rt_node_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Debug-429d6149ae409b86ecc0.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build",
+		"source" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

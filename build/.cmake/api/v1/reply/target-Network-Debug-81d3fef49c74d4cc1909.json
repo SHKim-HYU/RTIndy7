@@ -1,0 +1,174 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "include/Network/libNetworkd.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"add_compile_definitions",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"include/Network/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 187,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 168,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 195,
+				"parent" : 2
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls  "
+				},
+				{
+					"fragment" : "-std=c++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "__QT__"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/Network"
+				},
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Network"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/Network/Network_autogen/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/QtWidgets"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/DarkStyleWindow"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/EcatSystem"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Interpolator"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Robot"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "Network_autogen::@157f8c884db9c9087acb"
+		}
+	],
+	"id" : "Network::@157f8c884db9c9087acb",
+	"name" : "Network",
+	"nameOnDisk" : "libNetworkd.a",
+	"paths" : 
+	{
+		"build" : "include/Network",
+		"source" : "include/Network"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/Network/Network_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Network/PacketHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Network/SocketHandler.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

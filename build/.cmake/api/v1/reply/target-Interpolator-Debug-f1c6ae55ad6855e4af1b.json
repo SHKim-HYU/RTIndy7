@@ -1,0 +1,180 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "include/Interpolator/libInterpolatord.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"add_compile_definitions",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"include/Interpolator/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 187,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 168,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 195,
+				"parent" : 2
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls  "
+				},
+				{
+					"fragment" : "-std=c++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "__QT__"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/Interpolator"
+				},
+				{
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Interpolator"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/build/include/Interpolator/Interpolator_autogen/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/QtWidgets"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/QT/DarkStyleWindow"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/EcatSystem"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Network"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/robot/ros_ws/colcon_ws/src/ros2_rt_indy7/include/Robot"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "Interpolator_autogen::@3b557d557d621394a5fb"
+		}
+	],
+	"id" : "Interpolator::@3b557d557d621394a5fb",
+	"name" : "Interpolator",
+	"nameOnDisk" : "libInterpolatord.a",
+	"paths" : 
+	{
+		"build" : "include/Interpolator",
+		"source" : "include/Interpolator"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/Interpolator/Interpolator_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Interpolator/BlendedPolynomialAlgorithm.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Interpolator/InterpolatorConstants.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "include/Interpolator/PolynomialAlgorithm.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

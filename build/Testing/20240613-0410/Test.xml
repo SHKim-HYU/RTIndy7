@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20240613-0410-Experimental"
+	Name="robot"
+	Generator="ctest-3.16.3"
+	CompilerName="/usr/bin/c++"
+	CompilerVersion="9.4.0"
+	OSName="Linux"
+	Hostname="robot"
+	OSRelease="5.4.239-xenomai-3.2.3+"
+	OSVersion="#1 SMP PREEMPT Thu May 16 14:57:37 KST 2024"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="158"
+	ProcessorCacheSize="16384"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="2047"
+	TotalPhysicalMemory="32040"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="4699.93"
+	>
+	<Testing>
+		<StartDateTime>Jun 13 21:55 KST</StartDateTime>
+		<StartTestTime>1718283332</StartTestTime>
+		<TestList/>
+		<EndDateTime>Jun 13 21:55 KST</EndDateTime>
+		<EndTestTime>1718283332</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libNetworkd.a  CMakeFiles/Network.dir/Network_autogen/mocs_compilation.cpp.o
+/usr/bin/ranlib libNetworkd.a

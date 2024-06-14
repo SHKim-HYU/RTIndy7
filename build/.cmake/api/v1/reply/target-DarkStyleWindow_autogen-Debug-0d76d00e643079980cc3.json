@@ -1,0 +1,65 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"include/QT/DarkStyleWindow/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "framelesswindow::@ea1f179fdad542dc97f9"
+		}
+	],
+	"id" : "DarkStyleWindow_autogen::@47c2847edb0d724c6980",
+	"isGeneratorProvided" : true,
+	"name" : "DarkStyleWindow_autogen",
+	"paths" : 
+	{
+		"build" : "include/QT/DarkStyleWindow",
+		"source" : "include/QT/DarkStyleWindow"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/QT/DarkStyleWindow/CMakeFiles/DarkStyleWindow_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/include/QT/DarkStyleWindow/CMakeFiles/DarkStyleWindow_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}
