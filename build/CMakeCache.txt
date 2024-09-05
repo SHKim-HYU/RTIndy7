@@ -322,9 +322,6 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
-//Path to a file.
-EIGEN_INCLUDE_DIR:PATH=/usr/include/eigen3
-
 //Value Computed by CMake
 EcatSystem_BINARY_DIR:STATIC=/home/robot/robot_ws/RTIndy7/build/include/EcatSystem
 
@@ -366,15 +363,6 @@ KERNELHEADERS_FOUND:STRING=1
 
 //Kernel headers include dirs
 KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include;/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/arch/x86/include
-
-//Value Computed by CMake
-Network_BINARY_DIR:STATIC=/home/robot/robot_ws/RTIndy7/build/include/Network
-
-//Dependencies for the target
-Network_LIB_DEPENDS:STATIC=optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;
-
-//Value Computed by CMake
-Network_SOURCE_DIR:STATIC=/home/robot/robot_ws/RTIndy7/include/Network
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
@@ -437,27 +425,24 @@ RTIndy7_VERBOSE:BOOL=ON
 Robot_BINARY_DIR:STATIC=/home/robot/robot_ws/RTIndy7/build/include/Robot
 
 //Dependencies for the target
-Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/opt/casadi/lib/libcasadi.so;general;dl;
+Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/opt/casadi/lib/libcasadi.so;general;dl;general;/usr/local/lib/libBulletDynamics.so;general;/usr/local/lib/libBulletInverseDynamics.so;general;/usr/local/lib/libBulletInverseDynamicsUtils.so;general;/usr/local/lib/libBullet3Common.so;general;/usr/local/lib/libBulletCollision.so;general;/usr/local/lib/libLinearMath.so;general;/usr/local/lib/libBulletSoftBody.so;general;/usr/local/lib/libBulletExampleBrowserLib.so;general;/usr/local/lib/libBulletRobotics.so;general;/usr/local/lib/libBulletRoboticsGUI.so;general;/usr/local/lib/libOpenGLWindow.so;general;/usr/local/lib/libgwen.so;general;/usr/local/lib/libBulletWorldImporter.so;general;/usr/local/lib/libBulletFileLoader.so;
 
 //Value Computed by CMake
 Robot_SOURCE_DIR:STATIC=/home/robot/robot_ws/RTIndy7/include/Robot
 
-//with Bullet Simulation
+//No help, variable specified on the command line.
 WITH_BULLET:STRING=OFF
 
-//import for CasADi function
+//No help, variable specified on the command line.
 WITH_CASADI:STRING=ON
 
-//with Indy7 ControlBox
+//No help, variable specified on the command line.
 WITH_CB:STRING=OFF
 
-//with POCO Comunication
+//No help, variable specified on the command line.
 WITH_POCO:STRING=ON
 
-//with RAISIM Simulation
-WITH_RAISIM:BOOL=OFF
-
-//with Indy RP option
+//No help, variable specified on the command line.
 WITH_RP:STRING=OFF
 
 //Xenomai base directory location (optional, used for nonstandard
@@ -866,7 +851,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -911,57 +896,18 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Test CXX17_SUPPORT
 CXX17_SUPPORT:INTERNAL=1
-//ADVANCED property for variable: EIGEN_INCLUDE_DIR
-EIGEN_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Etherlab_ethercat_LIBRARY
 Etherlab_ethercat_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Etherlab_ethercat_rtdm_LIBRARY
 Etherlab_ethercat_rtdm_LIBRARY-ADVANCED:INTERNAL=1
 //Details about finding Bullet
 FIND_PACKAGE_MESSAGE_DETAILS_Bullet:INTERNAL=[/usr/local/lib/libBulletDynamics.so][/usr/local/lib/libBullet3Common.so][/usr/local/lib/libBulletCollision.so][/usr/local/lib/libLinearMath.so][/usr/local/lib/libBulletSoftBody.so][/usr/local/lib/libBulletExampleBrowserLib.so][/usr/local/lib/libBulletRobotics.so][/usr/local/lib/libOpenGLWindow.so][/usr/local/lib/libgwen.so][/usr/local/lib/libBulletInverseDynamics.so][/usr/local/lib/libBulletInverseDynamicsUtils.so][/usr/local/lib/libBulletWorldImporter.so][/usr/local/lib/libBulletFileLoader.so][/usr/local/lib/libBulletRoboticsGUI.so][/usr/local/include/bullet][v()]
-//Details about finding Eigen
-FIND_PACKAGE_MESSAGE_DETAILS_Eigen:INTERNAL=[/usr/include/eigen3][v(3.0.0)]
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v0.29.1()]
 //Details about finding Xenomai
 FIND_PACKAGE_MESSAGE_DETAILS_Xenomai:INTERNAL=[/usr/xenomai/include/cobalt;/usr/xenomai/include;/usr/xenomai/include/alchemy][alchemy;copperplate;cobalt;modechk;pthread;rt][cfound components: ALCHEMY ][v3.2.3(3.1.1)]
 //ADVANCED property for variable: KERNELHEADERS_FOUND
 KERNELHEADERS_FOUND-ADVANCED:INTERNAL=1
-PC_EIGEN_CFLAGS:INTERNAL=-I/usr/include/eigen3
-PC_EIGEN_CFLAGS_I:INTERNAL=
-PC_EIGEN_CFLAGS_OTHER:INTERNAL=
-PC_EIGEN_FOUND:INTERNAL=1
-PC_EIGEN_INCLUDEDIR:INTERNAL=
-PC_EIGEN_INCLUDE_DIRS:INTERNAL=/usr/include/eigen3
-PC_EIGEN_LDFLAGS:INTERNAL=
-PC_EIGEN_LDFLAGS_OTHER:INTERNAL=
-PC_EIGEN_LIBDIR:INTERNAL=
-PC_EIGEN_LIBRARIES:INTERNAL=
-PC_EIGEN_LIBRARY_DIRS:INTERNAL=
-PC_EIGEN_LIBS:INTERNAL=
-PC_EIGEN_LIBS_L:INTERNAL=
-PC_EIGEN_LIBS_OTHER:INTERNAL=
-PC_EIGEN_LIBS_PATHS:INTERNAL=
-PC_EIGEN_MODULE_NAME:INTERNAL=eigen3
-PC_EIGEN_PREFIX:INTERNAL=/usr
-PC_EIGEN_STATIC_CFLAGS:INTERNAL=-I/usr/include/eigen3
-PC_EIGEN_STATIC_CFLAGS_I:INTERNAL=
-PC_EIGEN_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_EIGEN_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/eigen3
-PC_EIGEN_STATIC_LDFLAGS:INTERNAL=
-PC_EIGEN_STATIC_LDFLAGS_OTHER:INTERNAL=
-PC_EIGEN_STATIC_LIBDIR:INTERNAL=
-PC_EIGEN_STATIC_LIBRARIES:INTERNAL=
-PC_EIGEN_STATIC_LIBRARY_DIRS:INTERNAL=
-PC_EIGEN_STATIC_LIBS:INTERNAL=
-PC_EIGEN_STATIC_LIBS_L:INTERNAL=
-PC_EIGEN_STATIC_LIBS_OTHER:INTERNAL=
-PC_EIGEN_STATIC_LIBS_PATHS:INTERNAL=
-PC_EIGEN_VERSION:INTERNAL=3.3.7
-PC_EIGEN_eigen3_INCLUDEDIR:INTERNAL=
-PC_EIGEN_eigen3_LIBDIR:INTERNAL=
-PC_EIGEN_eigen3_PREFIX:INTERNAL=
-PC_EIGEN_eigen3_VERSION:INTERNAL=
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Poco_Foundation_LIBRARY
@@ -984,7 +930,4 @@ Poco_Zip_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 XENOMAI_ROOT_DIR-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
-__pkg_config_arguments_PC_EIGEN:INTERNAL=eigen3
-__pkg_config_checked_PC_EIGEN:INTERNAL=1
-prefix_result:INTERNAL=
 

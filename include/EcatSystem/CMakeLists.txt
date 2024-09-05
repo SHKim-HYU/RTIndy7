@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(EcatSystem LANGUAGES C CXX)
 
 set(CMAKE_DEBUG_POSTFIX "d")
-file(GLOB SOURCE_FILES "*.cpp" "*.c")
+file(GLOB SOURCE_FILES "*.cpp" "*.c" "*.h")
 
 add_library(${PROJECT_NAME} SHARED STATIC
             ${SOURCE_FILES}
@@ -20,17 +20,6 @@ if(Etherlab_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${Etherlab_INCLUDE_DIR})
     target_link_libraries(${PROJECT_NAME} PUBLIC ${Etherlab_LIBRARIES})
 endif(Etherlab_FOUND)
-
-# ControlBox
-if(WITH_CB)
-    add_compile_definitions(__CB__)
-endif()
-
-# IndyRP Option
-if(WITH_RP)
-    add_compile_definitions(__RP__)
-endif()
-
 
 find_package(Xenomai 3.1.1 REQUIRED ALCHEMY)
 if(Xenomai_FOUND)

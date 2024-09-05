@@ -57,12 +57,6 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
-option(WITH_RP "with Indy RP option" OFF)
-option(WITH_CB "with Indy7 ControlBox" OFF)
-option(WITH_CASADI "import for CasADi function" OFF)
-option(WITH_POCO "with POCO Comunication" OFF)
-option(WITH_BULLET "with Bullet Simulation" OFF)
-option(WITH_RAISIM "with RAISIM Simulation" OFF)
 #===============================================================================
 # Build type settings
 #===============================================================================
@@ -113,19 +107,15 @@ if(GCC_VERSION VERSION_LESS 5.3.1)
     message(FATAL_ERROR "The installed g++ version is ${GCC_VERSION}. ${PROJECT_NAME} requires g++ 5.3.1 or greater.")
 endif()
 
+
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS_DEBUG}")
 set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_DEBUG} -pg")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
-# set(CTRL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Control)
-# set(KDL_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/KDL)
 set(ECAT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/EcatSystem)
-# set(CAN_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/CAN)
 set(INTP_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Interpolator)
-# set(MR_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/MR)
-set(NET_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Network)
 set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 
 #[ToDo] will be replaced from the installed bullet3 SDK
@@ -133,78 +123,84 @@ set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 
 include_directories(${PROJ_INSTALL_INCLUDE_DIR})
 include_directories(
-        ${KERNELHEADERS_DIR}
-        # ${CTRL_HEADERS_DIR}
-        # ${KDL_HEADERS_DIR}
-        ${ECAT_HEADERS_DIR}
-        # ${CAN_HEADERS_DIR}
-        ${INTP_HEADERS_DIR}
-        # ${MR_HEADERS_DIR}
-        ${NET_HEADERS_DIR}
-        ${ROBOT_HEADERS_DIR}
-        #[ToDo] will be replaced from the installed bullet3 SDK
-        # ${BULLET_HEADER_DIR}
+    ${KERNELHEADERS_DIR}
+    ${ECAT_HEADERS_DIR}
+    ${INTP_HEADERS_DIR}
+    ${ROBOT_HEADERS_DIR}
 )
 
-# add_subdirectory(include/Control)
-# add_subdirectory(include/KDL)
+# ECAT
 add_subdirectory(include/EcatSystem)
-# add_subdirectory(include/CAN)
+
 add_subdirectory(include/Interpolator)
-# add_subdirectory(include/MR)
-add_subdirectory(include/Network)
 add_subdirectory(include/Robot)
-#[ToDo] will be replaced from the installed bullet3 SDK
-# add_subdirectory(include/bullet3)
 
-add_executable(${PROJECT_NAME}
-        src/RTIndy7Client.cpp
+# Source files
+set(CTRL_SOURCE_FILES
+    src/RTIndy7Client.cpp
+)
+set(SIM_SOURCE_FILES
+    src/bullet_server.cpp
+)
+#bullet3
+set(BULLET_PHYSICS_SOURCE_DIR  "/opt/bullet3")
+include_directories(
+    ${BULLET_PHYSICS_SOURCE_DIR}/src
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/RobotSimulator		
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/ThirdPartyLibs
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/ThirdPartyLibs/enet/include
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/ThirdPartyLibs/clsocket/src
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/CommonInterfaces
+)
+SET(RobotSimulator_SRCS_GUI
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/RobotSimulator/b3RobotSimulatorClientAPI.h	
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/RobotSimulator/MinitaurSetup.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/RobotSimulator/MinitaurSetup.h
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/ExampleBrowser/InProcessExampleBrowser.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/GraphicsServerExample.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/GraphicsClientExample.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/RemoteGUIHelper.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/GraphicsServerExample.h
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/GraphicsClientExample.h
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/RemoteGUIHelper.h
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/GraphicsSharedMemoryCommands.h
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/GraphicsSharedMemoryPublic.h
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/PhysicsServerExample.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/PhysicsServerExampleBullet2.cpp
+    ${BULLET_PHYSICS_SOURCE_DIR}/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp	
 )
 
-target_link_libraries(${PROJECT_NAME}
-        # sub::CTRL
-        # sub::KDL
-        sub::ECAT
-        # sub::CAN
-        sub::Interpolator
-        # sub::MR
-        sub::NETWORK
-        sub::Robot
-        # sub::bullet3
-        # pybullet_cpp
-        dl
+# Add a executable with the above sources
+set(CTRL_EXECUTABLE ${PROJECT_NAME}_CTRL)
+set(SIM_EXECUTABLE ${PROJECT_NAME}_SIM)
+add_executable(${CTRL_EXECUTABLE} ${CTRL_SOURCE_FILES})
+add_executable(${SIM_EXECUTABLE} ${SIM_SOURCE_FILES} ${RobotSimulator_SRCS_GUI})
+
+
+target_link_libraries(${CTRL_EXECUTABLE}
+    sub::ECAT
+    sub::Interpolator
+    sub::Robot
+    dl
 )
-
-# ControlBox
-if(WITH_RP)
-    add_compile_definitions(__RP__)
-endif()
-
-# ControlBox
-if(WITH_CB)
-    add_compile_definitions(__CB__)
-endif()
-
-# # libpcan
-# find_path(PCAN_INCLUDE_DIR NAMES libpcanfd.h)
-# find_library(PCAN_LIBRARY NAMES pcanfd)
-# target_include_directories(${PROJECT_NAME} PUBLIC ${PCAN_INCLUDE_DIR})
-# target_link_libraries(${PROJECT_NAME}
-#        ${PCAN_LIBRARY}
-# )
-# message(STATUS "pcan library: ${PCAN_LIBRARY}")
-# message(STATUS "pcan include: ${PCAN_INCLUDE_DIR}")
+target_link_libraries(${SIM_EXECUTABLE}
+    sub::Robot
+    pthread
+)
 
 # jsoncpp
 find_package(jsoncpp REQUIRED)
-target_link_libraries(${PROJECT_NAME} jsoncpp_lib)
+target_link_libraries(${CTRL_EXECUTABLE} jsoncpp_lib)
 list(APPEND INCLUDE_DIRS_FOR_DYNAMIC_VIEW ${jSONCPP_INCLUDE_DIRS})
 
 # xenomai
 find_package(Xenomai 3.1.1 REQUIRED ALCHEMY)
 message(STATUS "Xenomai found with theses skins: ${Xenomai_SKINS}")
 if(Xenomai_FOUND)
-    target_include_directories(${PROJECT_NAME} PUBLIC ${KERNELHEADERS_DIR})
+    target_include_directories(${CTRL_EXECUTABLE} PUBLIC ${KERNELHEADERS_DIR})
     foreach(comp_lists ${Xenomai_FOUND_COMP})
         #message(STATUS "Xenomai ${comp_lists} includes : ${Xenomai_${comp_lists}_INCLUDE_DIRS}" )
         #message(STATUS "Xenomai ${comp_lists} definitions: ${Xenomai_${comp_lists}_DEFINITIONS}")
@@ -213,100 +209,23 @@ if(Xenomai_FOUND)
         #message(STATUS "Xenomai ${comp_lists} LDFLAGS : ${Xenomai_${comp_lists}_LDFLAGS}")
         #message(STATUS "Xenomai ${comp_lists} DL_FLAGS : ${Xenomai_${comp_lists}_DL_FLAGS}")
 
-        target_include_directories(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_INCLUDE_DIRS})
+        target_include_directories(${CTRL_EXECUTABLE} PUBLIC ${Xenomai_${comp_lists}_INCLUDE_DIRS})
         # target_link_libraries(${PROJECT_NAME} PUBLIC ${Xenomai_${comp_lists}_LIBRARY_DIRS} ${Xenomai_${comp_lists}_LIBRARIES})
-        target_link_libraries(${PROJECT_NAME} ${Xenomai_${comp_lists}_DL_FLAGS} ${Xenomai_${comp_lists}_LIBRARIES})
-        set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS ${Xenomai_${comp_lists}_DEFINITIONS})
+        target_link_libraries(${CTRL_EXECUTABLE} ${Xenomai_${comp_lists}_DL_FLAGS})
+        set_target_properties(${CTRL_EXECUTABLE} PROPERTIES COMPILE_FLAGS ${Xenomai_${comp_lists}_DEFINITIONS})
     endforeach(comp_lists ${Xenomai_SKINS})
 endif(Xenomai_FOUND)
 
-# casadi
-if(WITH_CASADI)
-    add_compile_definitions(__CASADI__)
-    find_package(CASADI REQUIRED)
-    if (CASADI_FOUND)
-        MESSAGE(STATUS "CASADI_INCLUDE_DIRS = ${CASADI_INCLUDE_DIR}")
-        MESSAGE(STATUS "CASADI_LIBRARIES = ${CASADI_LIBRARIES}")
-        target_include_directories(${PROJECT_NAME} PUBLIC ${CASADI_INCLUDE_DIR})
-        target_link_libraries(${PROJECT_NAME} ${CASADI_LIBRARIES})
-    endif ()
-
-    set( INDY7_CASADI
-      indy7_M
-      indy7_Minv
-      indy7_C
-      indy7_G
-      indy7_id
-      indy7_fd
-      indy7_fk
-      indy7_fk_ee
-      indy7_fkrot_ee
-      indy7_J_s
-      indy7_J_b
-      indy7_J_fd
-      indy7_J_id
-    )
-
-    set( INDYRP_CASADI
-      indyrp2_M
-      indyrp2_Minv
-      indyrp2_C
-      indyrp2_G
-      indyrp2_id
-      indyrp2_fd
-      indyrp2_fk
-      indyrp2_fk_ee
-      indyrp2_fkrot_ee
-      indyrp2_J_s
-      indyrp2_J_b
-      indyrp2_J_fd
-      indyrp2_J_id
-    )
-
-    link_directories(
-      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indy7"
-      "${CMAKE_CURRENT_SOURCE_DIR}/lib/URDF2CASADI/indyRP"
-    )
-    # target_link_libraries(${PROJECT_NAME} ${INDY7_CASADI})
+add_compile_definitions(__BULLET__)
+find_package(Bullet REQUIRED)
+if (BULLET_FOUND)
+    MESSAGE(STATUS "BULLET_INCLUDE_DIRS = ${BULLET_INCLUDE_DIRS}")
+    MESSAGE(STATUS "BULLET_LIBRARIES = ${BULLET_LIBRARIES}")
+    target_include_directories(${CTRL_EXECUTABLE} PUBLIC ${BULLET_INCLUDE_DIRS})
+    target_link_libraries(${CTRL_EXECUTABLE} ${BULLET_LIBRARIES})
 endif()
+target_compile_definitions(${SIM_EXECUTABLE} PUBLIC -DBT_USE_DOUBLE_PRECISION)
 
-find_package(Eigen 3.0.0)
-if( Eigen_FOUND )
-   add_definitions( ${Eigen_DEFINITIONS} )
-   target_include_directories (${PROJECT_NAME} PUBLIC ${Eigen_INCLUDE_DIRS} )
-else()
-   MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN_INCLUDE_DIR to the include directory of your Eigen installation.")
-endif()
-
-# Poco
-if(WITH_POCO)
-    add_compile_definitions(__POCO__)
-    find_package(Poco REQUIRED)
-    if (Poco_FOUND)
-        MESSAGE(STATUS "Poco_INCLUDE_DIRS = ${Poco_INCLUDE_DIRS}")
-        MESSAGE(STATUS "Poco_LIBRARIES = ${Poco_LIBRARIES}")
-        target_include_directories(${PROJECT_NAME} PUBLIC ${Poco_INCLUDE_DIRS})
-        target_link_libraries(${PROJECT_NAME} ${Poco_LIBRARIES})
-    endif()
-endif()
-
-# Bullet
-if(WITH_BULLET)
-    add_compile_definitions(__BULLET__)
-    find_package(Bullet REQUIRED)
-    if (BULLET_FOUND)
-        MESSAGE(STATUS "BULLET_INCLUDE_DIRS = ${BULLET_INCLUDE_DIRS}")
-        MESSAGE(STATUS "BULLET_LIBRARIES = ${BULLET_LIBRARIES}")
-        target_include_directories(${PROJECT_NAME} PUBLIC ${BULLET_INCLUDE_DIRS})
-        target_link_libraries(${PROJECT_NAME} ${BULLET_LIBRARIES})
-    endif()
-endif()
-
-# RAISIM
-if(WITH_RAISIM)
-    add_compile_definitions(__RAISIM__)
-    find_package(Raisim REQUIRED)
-endif()
 
 # check if Doxygen is installed
 #find_package(Doxygen)

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/g++
 CXX_FLAGS =  -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG -fPIC   -std=c++17
 
-CXX_DEFINES = -DRobot_EXPORTS -D__CASADI__
+CXX_DEFINES = -DBT_USE_DOUBLE_PRECISION -DRobot_EXPORTS -D__BULLET__ -D__CASADI__
 
-CXX_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.4.239-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Network -I/home/robot/robot_ws/RTIndy7/include/Robot -I/opt/casadi/include -I/opt/casadi/include/casadi -isystem /usr/include/eigen3 -isystem /usr/include/jsoncpp 
+CXX_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.4.239-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Robot -I/opt/bullet3/src -I/opt/bullet3/examples -I/opt/bullet3/examples/SharedMemory -I/opt/bullet3/examples/RobotSimulator -I/opt/bullet3/examples/ThirdPartyLibs -I/opt/bullet3/examples/ThirdPartyLibs/enet/include -I/opt/bullet3/examples/ThirdPartyLibs/clsocket/src -I/opt/bullet3/examples/CommonInterfaces -I/opt/casadi/include -I/opt/casadi/include/casadi -I/usr/local/include/bullet -isystem /usr/include/eigen3 -isystem /usr/include/jsoncpp 
 

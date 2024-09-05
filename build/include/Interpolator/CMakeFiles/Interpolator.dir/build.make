@@ -57,15 +57,30 @@ include include/Interpolator/CMakeFiles/Interpolator.dir/progress.make
 # Include the compile flags for this target's objects.
 include include/Interpolator/CMakeFiles/Interpolator.dir/flags.make
 
+include/Interpolator/CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.o: include/Interpolator/CMakeFiles/Interpolator.dir/flags.make
+include/Interpolator/CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.o: ../include/Interpolator/TaskTrajectory.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object include/Interpolator/CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.o"
+	cd /home/robot/robot_ws/RTIndy7/build/include/Interpolator && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.o -c /home/robot/robot_ws/RTIndy7/include/Interpolator/TaskTrajectory.cpp
+
+include/Interpolator/CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.i"
+	cd /home/robot/robot_ws/RTIndy7/build/include/Interpolator && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/robot/robot_ws/RTIndy7/include/Interpolator/TaskTrajectory.cpp > CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.i
+
+include/Interpolator/CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.s"
+	cd /home/robot/robot_ws/RTIndy7/build/include/Interpolator && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robot/robot_ws/RTIndy7/include/Interpolator/TaskTrajectory.cpp -o CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.s
+
 # Object files for target Interpolator
-Interpolator_OBJECTS =
+Interpolator_OBJECTS = \
+"CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.o"
 
 # External object files for target Interpolator
 Interpolator_EXTERNAL_OBJECTS =
 
+include/Interpolator/libInterpolator.a: include/Interpolator/CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.o
 include/Interpolator/libInterpolator.a: include/Interpolator/CMakeFiles/Interpolator.dir/build.make
 include/Interpolator/libInterpolator.a: include/Interpolator/CMakeFiles/Interpolator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Linking CXX static library libInterpolator.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libInterpolator.a"
 	cd /home/robot/robot_ws/RTIndy7/build/include/Interpolator && $(CMAKE_COMMAND) -P CMakeFiles/Interpolator.dir/cmake_clean_target.cmake
 	cd /home/robot/robot_ws/RTIndy7/build/include/Interpolator && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Interpolator.dir/link.txt --verbose=$(VERBOSE)
 

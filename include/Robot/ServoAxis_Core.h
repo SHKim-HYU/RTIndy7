@@ -1,5 +1,5 @@
 /*
- * ServoAxis.h
+ * ServoAxis_Core.h
 */
 
 #pragma once
@@ -7,8 +7,7 @@
 #include <limits>	// for numerical limits
 
 // Trapezoidal trajectory interpolation for NRMK EtherLab Configuration Tool
-#include "Interpolator/BlendedPolynomialAlgorithm.h"
-#include "TrajectoryDataList.h"
+#include "BlendedPolynomialAlgorithm.h"
 
 #ifndef PI
 #define PI	(3.14159265359)
@@ -24,10 +23,10 @@ namespace NRMKHelper
 	typedef uint8_t UINT8;
 	typedef int8_t INT8;
 
-	class ServoAxis
+	class ServoAxis_Core
 	{
 	public:
-		ServoAxis()
+		ServoAxis_Core()
 		{
 			_t = 0;
 
@@ -35,11 +34,11 @@ namespace NRMKHelper
 			_qLimit[0] = PI;
 			_qLimit[1] = -PI;
 
-			_qdotLimit[0] = PI;
-			_qdotLimit[1] = -PI;
+			_qdotLimit[0] = 2*PI;
+			_qdotLimit[1] = -2*PI;
 
-			_tauLimit[0] = 2000;
-			_tauLimit[1] = -2000;
+			_tauLimit[0] = 1000;
+			_tauLimit[1] = -1000;
 
 			_zeroPos = 0;
 			_dirQ = 1;
@@ -131,12 +130,13 @@ namespace NRMKHelper
 
 		bool isLimitReached()
 		{
-			if ((_q > _qLimit[0]) || (_q < _qLimit[1]))
-				return true;
+			// if ((_q > _qLimit[0]) || (_q < _qLimit[1]))
+			// 	return true;
 
 			if ((_qdot > _qdotLimit[0]) || (_qdot < _qdotLimit[1]))
 				return true;
-
+			if ((_tau > _tauLimit[0]) || (_tau < _tauLimit[1]))
+				return true;
 			return false;
 		}
 
@@ -291,7 +291,7 @@ namespace NRMKHelper
 		// Quintic Trajectory
 		void setTrajInitialQuintic()
 		{
-			_quintic.setInitialTraj(_t, _q, _qdot, 0);
+			_quintic.setInitialTraj(_t, _qdes, _qdotdes, 0);
 		}
 		void setTrajTargetQuintic(double duration)
 		{
