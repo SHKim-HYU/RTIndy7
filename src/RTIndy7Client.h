@@ -88,7 +88,8 @@ Vector3d x_offset;
 // Controller Gains
 JVec NRIC_Kp;
 JVec NRIC_Ki;
-JVec NRIC_K_gamma;
+JVec NRIC_K;
+JVec NRIC_gamma;
 
 JVec Kp_n;
 JVec Kd_n;
@@ -98,6 +99,8 @@ Twist Task_Kp;
 Twist Task_Kv;
 Twist Task_Ki;
 JVec Task_K;
+
+Matrix6d A_, D_, K_;
 
 JVec des_int;
 

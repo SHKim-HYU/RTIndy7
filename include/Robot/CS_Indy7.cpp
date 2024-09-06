@@ -147,6 +147,7 @@ void CS_Indy7::CSSetup(const string& _modelPath, double _period)// : loader_(_mo
 	Blist = Ad(TransInv(T_M)) * Slist;
 
     lambda_int = Twist::Zero();
+    gamma_int = Twist::Zero();
 
     r_floor << X_com, Y_com, Z_com;
     r_ceil = VecToso3(r_floor); 
@@ -375,13 +376,14 @@ void CS_Indy7::setHinfgain(JVec _Hinf_Kp, JVec _Hinf_Kd, JVec _Hinf_Ki, JVec _Hi
     }
 }
 
-void CS_Indy7::setNRICgain(JVec _NRIC_Kp, JVec _NRIC_Ki, JVec _NRIC_K_gamma)
+void CS_Indy7::setNRICgain(JVec _NRIC_Kp, JVec _NRIC_Ki, JVec _NRIC_K, JVec _NRIC_gamma)
 {
     for (int i=0; i<this->n_dof; ++i)
     {
         NRIC_Kp(i,i) = _NRIC_Kp(i);
         NRIC_Ki(i,i) = _NRIC_Ki(i);
-        NRIC_K_gamma(i,i) = _NRIC_K_gamma(i);
+        for(int i=0; i<ROBOT_DOF; i++)
+            NRIC_K_gamma(i,i) = _NRIC_K(i)+1/ _NRIC_gamma(i);
     }
 }
 
@@ -390,6 +392,13 @@ void CS_Indy7::setTaskgain(Twist _Kp, Twist _Kv, JVec _K)
     Task_Kp = _Kp.asDiagonal();
     Task_Kv = _Kv.asDiagonal();
     Task_K = _K.asDiagonal();
+}
+
+void CS_Indy7::setTaskImpedancegain(Matrix6d _A, Matrix6d _D, Matrix6d _K)
+{
+    A_ = _A;
+    D_ = _D;
+    K_ = _K;
 }
 
 void CS_Indy7::updateRobot(JVec _q, JVec _dq)
@@ -1184,6 +1193,91 @@ JVec CS_Indy7::TaskPassivityInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist 
     JVec qddot_ref = invJb * (V_dot_ref - dJ_b * q_dot_ref);
     JVec edot = q_dot_ref - q_dot;
     JVec tau_ref = Task_K * edot;
+    
+    JVec torques = M * qddot_ref + C * q_dot_ref + G + tau_ref;
+
+    return torques;
+}
+
+JVec CS_Indy7::TaskImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext)
+{
+    SE3 T_err = TransInv(T_ee)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    
+    Twist V_err = V_des - Ad(invT_err) * V_b;
+    
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_int += lambda * period;
+
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    F_eff = F_des - Ad(T_err).transpose()*F_ext;
+    gamma = dexp6(-lambda).transpose()*F_eff;
+    gamma_int += gamma *period;
+
+    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+
+    Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
+    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+
+
+    Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
+
+    Twist V_dot_ref = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+    
+    pinvJacobian invJb = J_b.transpose() * (J_b * J_b.transpose()).inverse();
+    JVec qddot_ref = invJb * (V_dot_ref - dJ_b * q_dot);
+    
+    JVec torques = M * qddot_ref + C * q_dot + G + J_b.transpose()*F_ext;
+
+    return torques;
+}
+
+JVec CS_Indy7::TaskPassivityImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext)
+{
+    A_.diagonal() << 3, 3, 3, 0.5, 0.5, 0.5;
+    D_.diagonal() << 10, 10, 10, 1, 1, 1;
+    K_.diagonal() << 1000, 1000, 1000, 100, 100, 100;
+
+    SE3 T_err = TransInv(T_ee)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    
+    Twist V_err = V_des - Ad(invT_err) * V_b;
+    
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_int += lambda * period;
+
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    F_eff = F_des - Ad(T_err).transpose()*F_ext;
+    gamma = dexp6(-lambda).transpose()*F_eff;
+    gamma_int += gamma *period;
+
+    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+
+    Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
+    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+
+
+    Twist lambda_dot_ref = -Task_Kv_imp * lambda - Task_Kp_imp * lambda_int + Task_Kgama_imp * gamma_int;
+    Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
+
+    Twist V_ref = Ad(T_err) * (V_des + dexp6(-lambda) * (lambda_dot_ref));
+    Twist V_dot_ref = Ad(T_err) * (V_dot_des + (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot_ref));
+    
+    pinvJacobian invJb = J_b.transpose() * (J_b * J_b.transpose()).inverse();
+    JVec q_dot_ref = invJb * V_ref;
+    JVec qddot_ref = invJb * (V_dot_ref - dJ_b * q_dot_ref);
+
+    Twist lambda_dot_tilde_ref = lambda_dot_ref - lambda_dot;
+    Twist V_tilde_ref = -Ad(T_err)*dexp6(-lambda)*lambda_dot_tilde_ref;
+    JVec tau_ref = J_b.transpose()*(Task_K_imp*V_tilde_ref - F_ext);
     
     JVec torques = M * qddot_ref + C * q_dot_ref + G + tau_ref;
 

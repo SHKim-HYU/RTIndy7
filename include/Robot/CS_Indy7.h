@@ -25,8 +25,9 @@ public:
 	void CSSetup(const string& _modelPath, double _period);
 	void setPIDgain(JVec _Kp, JVec _Kd, JVec _Ki);
 	void setHinfgain(JVec _Hinf_Kp, JVec _Hinf_Kd, JVec _Hinf_Ki, JVec _Hinf_K_gamma);
-	void setNRICgain(JVec _NRIC_Kp, JVec _NRIC_Ki, JVec _NRIC_K_gamma);
+	void setNRICgain(JVec _NRIC_Kp, JVec _NRIC_Ki, JVec _NRIC_K, JVec _NRIC_gamma);
 	void setTaskgain(Twist _Kp, Twist _Kv, JVec _K);
+	void setTaskImpedancegain(Matrix6d _Kp, Matrix6d _Kv, Matrix6d _Kgamma);
 
 	void updateRobot(JVec _q, JVec _dq);
 
@@ -72,16 +73,19 @@ public:
 	JVec ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des, JVec _tau_ext);
 	JVec PassivityInverseDynamicControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
 	JVec PassivityInverseDynamicControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des, JVec _tau_ext);
-
+	JVec HinfControl(JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
+	JVec HinfControl(JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des, JVec _tau_ext);
+	
 	// Task Space
     JVec TaskInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des);
 	JVec TaskPassivityInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des);
-	void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
+	JVec TaskImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext);
+	JVec TaskPassivityImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext);
     
-    JVec HinfControl(JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des);
-	JVec HinfControl(JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des, JVec _tau_ext);
-	JVec NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n);
+    JVec NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n);
+	
 	void computeAlpha(JVec edot, JVec tau_c);
+	void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
 
 private:
 	JVec q, dq, ddq;
@@ -142,6 +146,17 @@ private:
 	Matrix6d Task_Kv;
 	Matrix6d Task_Ki;
 	JMat Task_K;
+
+	Matrix6d Task_Kp_imp;
+	Matrix6d Task_Kv_imp;
+	Matrix6d Task_Kgama_imp;
+	Matrix6d Task_K_imp;
+
+	Twist F_eff;
+	Twist gamma, gamma_int;
+
+	Matrix6d A_, D_, K_;
+    Matrix6d A_lambda, D_lambda, K_lambda;
 
 	JMat M_imp;
     JMat B_imp;

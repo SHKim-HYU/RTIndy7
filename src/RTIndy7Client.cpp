@@ -124,10 +124,29 @@ void trajectory_generation(){
 	    	motion++;
 			// motion=1;
 	        break;
+
+		// case 2:
+		// 	info.q_target(0)=0.0; info.q_target(1)=0.707; info.q_target(2)=-1.5709;
+		// 	info.q_target(3)=0.0; info.q_target(4)=-0.707; info.q_target(5)=0.0;
+		// 	traj_time = 3;
+		// 	modeControl =1;
+	    // 	motion++;
+		// 	// motion=1;
+	    //     break;
+
+		// case 3:
+			
+		// 	info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=0.0;
+		// 	info.q_target(3)=0.0; info.q_target(4)=0.0; info.q_target(5)=0.0;
+	    // 	traj_time = 3;
+		// 	modeControl =1;
+	    // 	motion=1;
+	    //     break;
+
 	    case 2:
 	    	traj_time = 10;
 	    	motion++;
-			modeControl = 2;
+			modeControl = 3;
 			motioncnt=0;
 			// motion=1;
 	        break;
@@ -250,7 +269,9 @@ void control()
 		info.des.q = des_int;
 		
 		// info.nom.tau = cs_nom_indy7.TaskInverseDynamicsControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot);
-		info.nom.tau = cs_nom_indy7.TaskPassivityInverseDynamicsControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot);
+		// info.nom.tau = cs_nom_indy7.TaskPassivityInverseDynamicsControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot);
+		info.nom.tau = cs_nom_indy7.TaskImpedanceControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot, Twist::Zero(), info.act.F);
+		// info.nom.tau = cs_nom_indy7.TaskPassivityImpedanceControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot, Twist::Zero(), info.act.F);
 	}
 
 	// [Simulation]
@@ -301,8 +322,13 @@ void motor_run(void *arg)
 	// Real
 	NRIC_Kp << 20.0, 25.0, 10.0, 3.0, 3.0, 1.5;
 	NRIC_Ki << 5.0, 5.5, 2.5, 0.8, 0.8, 0.6;
-	NRIC_K_gamma << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
-	cs_indy7.setNRICgain(NRIC_Kp, NRIC_Ki, NRIC_K_gamma);
+	NRIC_K << 100.0, 100.0, 80.0, 80.0, 50.0, 50.0, 25.0;
+	NRIC_gamma << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
+	// NRIC_Kp << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
+	// NRIC_Ki << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
+	// NRIC_K << 100.0, 100.0, 80.0, 80.0, 50.0, 50.0, 25.0;
+	// NRIC_gamma << 800.0, 800.0, 500.0, 400.0, 400.0, 400.0;
+	cs_indy7.setNRICgain(NRIC_Kp, NRIC_Ki, NRIC_K,  NRIC_gamma);
 	
 	// nominal
 	// for IDC
@@ -321,6 +347,11 @@ void motor_run(void *arg)
 	Task_Kv << 1000, 1000, 1000, 1000, 1000, 1000;
 	Task_K << 1,1,0.5,0.3,0.2,0.2;
 	cs_nom_indy7.setTaskgain(Task_Kp, Task_Kv, Task_K);
+	// for Impedance model
+	A_.diagonal() << 4, 4, 4, 4, 4, 4;
+    D_.diagonal() << 80, 80, 80, 80, 80, 80;
+    K_.diagonal() << 120, 120, 2000, 2000, 2000, 2000;
+	cs_nom_indy7.setTaskImpedancegain(A_,D_,K_);
 
 
     for(int j=0; j<NRMK_DRIVE_NUM; ++j)
@@ -473,7 +504,7 @@ void print_run(void *arg)
 	 */
 	rt_task_set_periodic(NULL, TM_NOW, cycle_ns*1);
 	
-	/*
+	// /*
 	// Joint data log
 	string filename1 = "joint_log.csv";
 	ifstream checkFile1(filename1);
@@ -544,7 +575,8 @@ void print_run(void *arg)
 		newFile4.close();
 	}
 	ofstream csvFile4(filename4, ios_base::app);
-	*/
+	// */
+
 	while (1)
 	{
 		rt_task_wait_period(NULL); //wait for next cycle
@@ -591,8 +623,8 @@ void print_run(void *arg)
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.act.T(3,0), info.act.T(3,1), info.act.T(3,2), info.act.T(3,3));
 			rt_printf("\n");
 			rt_printf("\n");
-			// */
-			/*
+			
+			// /*
 			if(csvFile1.is_open())
 			{
 				csvFile1<<gt<<", ";
@@ -631,7 +663,7 @@ void print_run(void *arg)
 				for (int i = 0; i < ROBOT_DOF; ++i) csvFile4<<info.nom.tau(i) << ", ";
 				csvFile4<<"\n";
 			}
-			*/
+			// */
 		}
 		else
 		{
@@ -643,12 +675,12 @@ void print_run(void *arg)
 			}
 		}
 	}
-	/*
+	// /*
 	csvFile1.close();
 	csvFile2.close();
 	csvFile3.close();
 	csvFile4.close();
-	*/
+	// */
 }
 
 // Bullet task
