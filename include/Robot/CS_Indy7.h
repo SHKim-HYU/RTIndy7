@@ -105,6 +105,9 @@ private:
 	Twist V_dot;
 	Twist lambda, lambda_dot, lambda_int;
 	
+	Twist F_eff;
+	Twist gamma, gamma_int;
+
 	Matrix6d A_tool, B_tool;
 	Vector3d r_floor;
     Matrix3d r_ceil;
@@ -152,15 +155,8 @@ private:
 	Matrix6d Task_Kgama_imp;
 	Matrix6d Task_K_imp;
 
-	Twist F_eff;
-	Twist gamma, gamma_int;
-
 	Matrix6d A_, D_, K_;
     Matrix6d A_lambda, D_lambda, K_lambda;
-
-	JMat M_imp;
-    JMat B_imp;
-    JMat K_imp;
 
     JMat Kp;
     JMat Kv;

@@ -117,6 +117,8 @@ void trajectory_generation(){
 			info.q_target(3)=0.0; info.q_target(4)=-0.707; info.q_target(5)=0.0;
 			info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=-1.5709;
 			info.q_target(3)=0.0; info.q_target(4)=-1.5709; info.q_target(5)=0.0;
+			info.q_target(0)=0.0; info.q_target(1)=-0.56; info.q_target(2)=-2.14;
+			info.q_target(3)=0.0; info.q_target(4)=1.13; info.q_target(5)=0.0;
 			// info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=0.0;
 			// info.q_target(3)=0.0; info.q_target(4)=0.0; info.q_target(5)=0.0;
 	    	traj_time = 3;
@@ -235,14 +237,15 @@ void control()
 			gt_offset = gt;
 			x_offset << info.nom.T(0,3), info.nom.T(1,3), info.nom.T(2,3); // home position
 			// x_offset << 0.671833, -0.1865, 1.09692; // job positions
+			R_offset = info.nom.R;
 			motioncnt++;
 		}
 		
 		if(modeControl == 2)
 		{
-		info.des.T << -1,	0,		0,		x_offset(0)+radius*(1-cos(omega*(gt-gt_offset))),
-				  0,	1,		0,		x_offset(1)+radius*sin(omega*(gt-gt_offset)),
-				  0,	0,		-1,		x_offset(2),
+		info.des.T << R_offset(0,0),	R_offset(0,1),		R_offset(0,2),		x_offset(0)+radius*(1-cos(omega*(gt-gt_offset))),
+				  R_offset(1,0),	R_offset(1,1),		R_offset(1,2),		x_offset(1)+radius*sin(omega*(gt-gt_offset)),
+				  R_offset(2,0),	R_offset(2,1),		R_offset(2,2),		x_offset(2),
 				  0,	0,		0,		1;
 		// info.des.T << 0,	0,		1,		x_offset(0)+radius*(1-cos(omega*(gt-gt_offset))),
 		// 		  0,	1,		0,		x_offset(1)+radius*sin(omega*(gt-gt_offset)),
@@ -253,9 +256,9 @@ void control()
 		}
 		else if(modeControl==3)	
 		{
-		info.des.T << -1,	0,		0,		x_offset(0),
-				  0,	1,		0,		x_offset(1),
-				  0,	0,		-1,		x_offset(2),
+		info.des.T << R_offset(0,0),	R_offset(0,1),		R_offset(0,2),		x_offset(0),
+				R_offset(1,0),	R_offset(1,1),		R_offset(1,2),		x_offset(1),
+				R_offset(2,0),	R_offset(2,1),		R_offset(2,2),		x_offset(2),
 				  0,	0,		0,		1;
 		// info.des.T << 0,	0,		1,		x_offset(0),
 		// 		  0,	1,		0,		x_offset(1),
@@ -279,7 +282,7 @@ void control()
 		
 	// [NRIC]
 	info.act.tau_aux = cs_indy7.NRIC(info.act.q, info.act.q_dot, info.nom.q, info.nom.q_dot);
-	info.des.tau = info.nom.tau - info.act.tau_aux;
+	info.des.tau = info.nom.tau - info.act.tau_aux + info.act.tau_ext;
 	// info.des.tau = info.nom.tau - info.act.tau_aux;
 
 	// [Gravity Compensator]
@@ -322,12 +325,12 @@ void motor_run(void *arg)
 	// Real
 	NRIC_Kp << 20.0, 25.0, 10.0, 3.0, 3.0, 1.5;
 	NRIC_Ki << 5.0, 5.5, 2.5, 0.8, 0.8, 0.6;
-	NRIC_K << 100.0, 100.0, 80.0, 80.0, 50.0, 50.0, 25.0;
-	NRIC_gamma << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
-	// NRIC_Kp << 100.0, 100.0, 100.0, 100.0, 100.0, 100.0;
-	// NRIC_Ki << 20.0, 20.0, 20.0, 20.0, 20.0, 20.0;
-	// NRIC_K << 100.0, 100.0, 80.0, 80.0, 50.0, 50.0, 25.0;
-	// NRIC_gamma << 800.0, 800.0, 500.0, 400.0, 400.0, 400.0;
+	// NRIC_Kp << 100.0, 100.0, 100.0, 100, 100, 100;
+	// NRIC_Ki << 20.0, 20.0, 20.0, 20.0, 20., 20.0;
+	// NRIC_K << 80.0, 80.0, 50.0, 15.0, 15.0, 15.0;
+	// NRIC_gamma << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
+	NRIC_gamma << 80.0, 80.0, 50.0, 15.0, 15.0, 15.0;
+	NRIC_K << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
 	cs_indy7.setNRICgain(NRIC_Kp, NRIC_Ki, NRIC_K,  NRIC_gamma);
 	
 	// nominal
@@ -349,8 +352,8 @@ void motor_run(void *arg)
 	cs_nom_indy7.setTaskgain(Task_Kp, Task_Kv, Task_K);
 	// for Impedance model
 	A_.diagonal() << 4, 4, 4, 4, 4, 4;
-    D_.diagonal() << 80, 80, 80, 80, 80, 80;
-    K_.diagonal() << 120, 120, 2000, 2000, 2000, 2000;
+    D_.diagonal() << 80, 80, 100, 100, 100, 100;
+    K_.diagonal() << 120, 120, 4000, 4000, 4000, 4000;
 	cs_nom_indy7.setTaskImpedancegain(A_,D_,K_);
 
 

@@ -25,7 +25,7 @@ void *bullet_run(void *arg)
 
     
     btVector3 targetPos(0,0,0);
-    b3sim->resetDebugVisualizerCamera(3.5, -45, 135, targetPos);
+    b3sim->resetDebugVisualizerCamera(2, -45, 135, targetPos);
     b3sim->setTimeOut(10);
 
     b3sim->loadURDF("/opt/bullet3/data/plane.urdf");

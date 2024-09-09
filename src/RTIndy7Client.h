@@ -84,6 +84,7 @@ int modeControl = 0;
 int motioncnt = 0;
 
 Vector3d x_offset;
+SO3 R_offset;
 
 // Controller Gains
 JVec NRIC_Kp;

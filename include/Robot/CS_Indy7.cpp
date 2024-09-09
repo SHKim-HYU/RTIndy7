@@ -382,8 +382,7 @@ void CS_Indy7::setNRICgain(JVec _NRIC_Kp, JVec _NRIC_Ki, JVec _NRIC_K, JVec _NRI
     {
         NRIC_Kp(i,i) = _NRIC_Kp(i);
         NRIC_Ki(i,i) = _NRIC_Ki(i);
-        for(int i=0; i<ROBOT_DOF; i++)
-            NRIC_K_gamma(i,i) = _NRIC_K(i)+1/ _NRIC_gamma(i);
+        NRIC_K_gamma(i,i) = _NRIC_K(i)+1/ _NRIC_gamma(i);
     }
 }
 
