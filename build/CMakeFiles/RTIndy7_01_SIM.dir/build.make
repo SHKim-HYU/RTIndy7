@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/robot/robot_ws/RTIndy7
+CMAKE_SOURCE_DIR = /home/robot/robot_ws/temp/RTIndy7
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/robot/robot_ws/RTIndy7/build
+CMAKE_BINARY_DIR = /home/robot/robot_ws/temp/RTIndy7/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/RTIndy7_01_SIM.dir/depend.make
@@ -59,20 +59,20 @@ include CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 
 CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.o: ../src/bullet_server.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.o"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.o -c /home/robot/robot_ws/RTIndy7/src/bullet_server.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.o"
+	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.o -c /home/robot/robot_ws/temp/RTIndy7/src/bullet_server.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/robot/robot_ws/RTIndy7/src/bullet_server.cpp > CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/robot/robot_ws/temp/RTIndy7/src/bullet_server.cpp > CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.i
 
 CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robot/robot_ws/RTIndy7/src/bullet_server.cpp -o CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robot/robot_ws/temp/RTIndy7/src/bullet_server.cpp -o CMakeFiles/RTIndy7_01_SIM.dir/src/bullet_server.cpp.s
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp.o: /opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp.o -c /opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/b3RobotSimulatorClientAPI.cpp.i: cmake_force
@@ -85,7 +85,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/b3RobotSimulat
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp.o: /opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp.o -c /opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/MinitaurSetup.cpp.i: cmake_force
@@ -98,7 +98,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/RobotSimulator/MinitaurSetup.
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp.o: /opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp.o -c /opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/ExampleBrowser/InProcessExampleBrowser.cpp.i: cmake_force
@@ -111,7 +111,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/ExampleBrowser/InProcessExamp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp.o: /opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp.o -c /opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsServerExample.cpp.i: cmake_force
@@ -124,7 +124,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsServerEx
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp.o: /opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp.o -c /opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsClientExample.cpp.i: cmake_force
@@ -137,7 +137,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/GraphicsClientEx
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp.o: /opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp.o -c /opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp.i: cmake_force
@@ -150,7 +150,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp.o: /opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp.o -c /opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExample.cpp.i: cmake_force
@@ -163,7 +163,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExa
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.o: /opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.o -c /opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.i: cmake_force
@@ -176,7 +176,7 @@ CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExa
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.o: CMakeFiles/RTIndy7_01_SIM.dir/flags.make
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.o: /opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.o"
 	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.o -c /opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp
 
 CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.i: cmake_force
@@ -236,7 +236,7 @@ RTIndy7_01_SIM: /usr/local/lib/libgwen.so
 RTIndy7_01_SIM: /usr/local/lib/libBulletWorldImporter.so
 RTIndy7_01_SIM: /usr/local/lib/libBulletFileLoader.so
 RTIndy7_01_SIM: CMakeFiles/RTIndy7_01_SIM.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable RTIndy7_01_SIM"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable RTIndy7_01_SIM"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/RTIndy7_01_SIM.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -249,6 +249,6 @@ CMakeFiles/RTIndy7_01_SIM.dir/clean:
 .PHONY : CMakeFiles/RTIndy7_01_SIM.dir/clean
 
 CMakeFiles/RTIndy7_01_SIM.dir/depend:
-	cd /home/robot/robot_ws/RTIndy7/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/robot/robot_ws/RTIndy7 /home/robot/robot_ws/RTIndy7 /home/robot/robot_ws/RTIndy7/build /home/robot/robot_ws/RTIndy7/build /home/robot/robot_ws/RTIndy7/build/CMakeFiles/RTIndy7_01_SIM.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/robot/robot_ws/temp/RTIndy7/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/robot/robot_ws/temp/RTIndy7 /home/robot/robot_ws/temp/RTIndy7 /home/robot/robot_ws/temp/RTIndy7/build /home/robot/robot_ws/temp/RTIndy7/build /home/robot/robot_ws/temp/RTIndy7/build/CMakeFiles/RTIndy7_01_SIM.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/RTIndy7_01_SIM.dir/depend
 

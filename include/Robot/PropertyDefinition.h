@@ -28,13 +28,13 @@
 #define TORQUE_ADC_100 96 // Torque ADC for Core 100 [NRMK]
 
 // Indy7
-// SN: DD11I7E0D001 [Indy7]
-#define ZERO_POS_1 20902
-#define ZERO_POS_2 28201
-#define ZERO_POS_3 292649
-#define ZERO_POS_4 61158
-#define ZERO_POS_5 2180
-#define ZERO_POS_6 31587
+// SN: DB45I7E0B008 [Indy7]
+#define ZERO_POS_1 448720
+#define ZERO_POS_2 -25000
+#define ZERO_POS_3 138722
+#define ZERO_POS_4 -713413
+#define ZERO_POS_5 -1058109
+#define ZERO_POS_6 -88968
 
 #define F_c 20.123, 12.287, 4.5622, 3.1492, 3.4757, 3.4986
 #define F_v1 111.32, 70.081, 25.337, 13.131, 8.5082, 9.9523

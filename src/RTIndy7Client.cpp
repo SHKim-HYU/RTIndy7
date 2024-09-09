@@ -798,9 +798,9 @@ int main(int argc, char *argv[])
     CPU_SET(7, &cpuset_rt2);  
 
 	cs_indy7=CS_Indy7();
-	cs_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json", period);
+	cs_indy7.CSSetup("../lib/URDF2CASADI/indy7_dualarm/indy7_dualarm.json", period);
 	cs_nom_indy7=CS_Indy7();
-	cs_nom_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json", period);
+	cs_nom_indy7.CSSetup("../lib/URDF2CASADI/indy7_dualarm/indy7_dualarm.json", period);
 
     rt_task_create(&safety_task, "safety_task", 0, 93, 0);
     rt_task_set_affinity(&safety_task, &cpuset_rt1);

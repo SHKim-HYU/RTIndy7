@@ -29,8 +29,8 @@ void *bullet_run(void *arg)
     b3sim->setTimeOut(10);
 
     b3sim->loadURDF("/opt/bullet3/data/plane.urdf");
-    int nomId = b3sim->loadURDF("/home/robot/robot_ws/RTIndy7/description/indy7.urdf");
-    int actId = b3sim->loadURDF("/home/robot/robot_ws/RTIndy7/description/indy7.urdf");
+    int nomId = b3sim->loadURDF("/home/robot/robot_ws/temp/RTIndy7/description/indy7_dualarm.urdf");
+    int actId = b3sim->loadURDF("/home/robot/robot_ws/temp/RTIndy7/description/indy7_dualarm.urdf");
 
     b3sim->setRealTimeSimulation(false);
     b3robot_nom = new Bullet_Indy7(b3sim,nomId);	

@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG   -std=c++17
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.4.239-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Robot -isystem /usr/include/eigen3 
+CXX_INCLUDES = -I/home/robot/robot_ws/temp/RTIndy7/bin/inc -I/home/robot/robot_ws/temp/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/temp/RTIndy7/include/Interpolator -I/home/robot/robot_ws/temp/RTIndy7/include/Robot -isystem /usr/include/eigen3 
 
