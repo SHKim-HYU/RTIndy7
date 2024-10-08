@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 3.8)
 # Set variables:
 #   * PROJECT_NAME
 #   * PROJECT_VERSION
-project(RTIndy7_01 VERSION 2.0.0 LANGUAGES C CXX)
+project(RTDualArm VERSION 2.0.0 LANGUAGES C CXX)
 
 # Use MACOSX_RPATH by default on OS X. This was added in CMake 2.8.12 and
 # became default in CMake 3.0. Explicitly setting this policy is necessary to
@@ -121,27 +121,45 @@ set(ROBOT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/include/Robot)
 #[ToDo] will be replaced from the installed bullet3 SDK
 # set(BULLET_HEADER_DIR ${PROJECT_SOURCE_DIR}/include/bullet3) 
 
+set(PCAN_SOURCE_FILES
+    include/CAN/PCANDevice.cpp
+    include/CAN/AnotherPCANFile.cpp  # 필요한 다른 PCAN 파일 추가
+)
+
+find_path(PCAN_INCLUDE_DIR NAMES libpcanfd.h)
+find_library(PCAN_LIBRARY NAMES pcanfd)
+
+
 include_directories(${PROJ_INSTALL_INCLUDE_DIR})
 include_directories(
     ${KERNELHEADERS_DIR}
     ${ECAT_HEADERS_DIR}
     ${INTP_HEADERS_DIR}
     ${ROBOT_HEADERS_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${HYU_LR_INCLUDE_DIRS}
+    ${CAN_HEADERS_DIR}
+    ${PCAN_INCLUDE_DIR}
 )
 
 # ECAT
 add_subdirectory(include/EcatSystem)
-
+add_subdirectory(include/CAN)
 add_subdirectory(include/Interpolator)
 add_subdirectory(include/Robot)
 
 # Source files
 set(CTRL_SOURCE_FILES
-    src/RTIndy7Client.cpp
+    src/main.cpp
 )
 set(SIM_SOURCE_FILES
     src/bullet_server.cpp
 )
+file(GLOB_RECURSE RT_TASK_SRCS 
+    ${CMAKE_SOURCE_DIR}/src/*/*.cpp
+)
+message(STATUS "Source files: ${RT_TASK_SRCS}")
+
 #bullet3
 set(BULLET_PHYSICS_SOURCE_DIR  "/opt/bullet3")
 include_directories(
@@ -176,7 +194,7 @@ SET(RobotSimulator_SRCS_GUI
 # Add a executable with the above sources
 set(CTRL_EXECUTABLE ${PROJECT_NAME}_CTRL)
 set(SIM_EXECUTABLE ${PROJECT_NAME}_SIM)
-add_executable(${CTRL_EXECUTABLE} ${CTRL_SOURCE_FILES})
+add_executable(${CTRL_EXECUTABLE} ${CTRL_SOURCE_FILES}  ${RT_TASK_SRCS})
 add_executable(${SIM_EXECUTABLE} ${SIM_SOURCE_FILES} ${RobotSimulator_SRCS_GUI})
 
 
@@ -184,15 +202,41 @@ target_link_libraries(${CTRL_EXECUTABLE}
     sub::ECAT
     sub::Interpolator
     sub::Robot
+    HYU_LR::HYU_LR
+    pinocchio::pinocchio
+    ruckig::ruckig
+    sub::CAN
+    ${PCAN_LIBRARY}
     dl
 )
 target_link_libraries(${SIM_EXECUTABLE}
     sub::Robot
+    HYU_LR::HYU_LR
+    pinocchio::pinocchio
+    ruckig::ruckig
+    sub::CAN
+    ${PCAN_LIBRARY}
     pthread
 )
+target_include_directories(${CTRL_EXECUTABLE} PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/CAN
+        ${CAN_HEADERS_DIR}
+        ${PCAN_INCLUDE_DIR}
+    )
+
 
 # jsoncpp
 find_package(jsoncpp REQUIRED)
+find_package(Eigen 3.0.0)
+
+find_package(jsoncpp REQUIRED)
+find_package(pinocchio REQUIRED)
+find_package(Xenomai 3.1.1 REQUIRED ALCHEMY)
+find_package(cxxopts REQUIRED)
+find_package(OpenMP REQUIRED)
+find_package(nlohmann_json 3.2.0 REQUIRED)
+find_package(ruckig REQUIRED)
+find_package(HYU_LR REQUIRED)
 target_link_libraries(${CTRL_EXECUTABLE} jsoncpp_lib)
 list(APPEND INCLUDE_DIRS_FOR_DYNAMIC_VIEW ${jSONCPP_INCLUDE_DIRS})
 

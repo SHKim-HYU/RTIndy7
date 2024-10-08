@@ -37,7 +37,7 @@
 #include <libpcanfd.h>
 
 // Project Includes
-#include <CANDevice.h>
+#include "CANDevice.h"
 
 void CANDevice::ReceiveTask()
 {

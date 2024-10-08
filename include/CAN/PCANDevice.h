@@ -32,7 +32,7 @@
 #include <string>
 
 // Project Includes
-#include <CANDevice.h>
+#include "CANDevice.h"
 
 class PCANDevice : public CANDevice
 {

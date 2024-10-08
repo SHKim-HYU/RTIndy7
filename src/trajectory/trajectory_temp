@@ -1,0 +1,82 @@
+
+/****************************************************************************/
+void trajectory_generation(){
+	/////////////Trajectory for Joint Space//////////////
+    if(!Axis[0].trajInitialized())
+    {
+	    switch(motion)
+	    {
+	    case 1:
+			info.q_target(0)=0.0; info.q_target(1)=0.707; info.q_target(2)=-1.5709;
+			info.q_target(3)=0.0; info.q_target(4)=-0.707; info.q_target(5)=0.0;
+			info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=-1.5709;
+			info.q_target(3)=0.0; info.q_target(4)=-1.5709; info.q_target(5)=0.0;
+			info.q_target(0)=0.0; info.q_target(1)=-0.56; info.q_target(2)=-2.14;
+			info.q_target(3)=0.0; info.q_target(4)=1.13; info.q_target(5)=0.0;
+			// info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=0.0;
+			// info.q_target(3)=0.0; info.q_target(4)=0.0; info.q_target(5)=0.0;
+	    	traj_time = 3;
+			modeControl =1;
+	    	// motion++;
+			motion=1;
+	        break;
+
+		// case 2:
+		// 	info.q_target(0)=0.0; info.q_target(1)=0.707; info.q_target(2)=-1.5709;
+		// 	info.q_target(3)=0.0; info.q_target(4)=-0.707; info.q_target(5)=0.0;
+		// 	traj_time = 3;
+		// 	modeControl =1;
+	    // 	motion++;
+		// 	// motion=1;
+	    //     break;
+
+		// case 3:
+			
+		// 	info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=0.0;
+		// 	info.q_target(3)=0.0; info.q_target(4)=0.0; info.q_target(5)=0.0;
+	    // 	traj_time = 3;
+		// 	modeControl =1;
+	    // 	motion=1;
+	    //     break;
+
+	    case 2:
+	    	traj_time = 10;
+	    	motion++;
+			modeControl = 3;
+			motioncnt=0;
+			// motion=1;
+	        break;
+		case 3:
+	    	traj_time = 10;
+	    	// motion++;
+			// modeControl = 3;
+	        break;
+
+		default:
+			info.q_target(0)=info.act.q(0); info.q_target(1)=info.act.q(1); info.q_target(2)=info.act.q(2);
+			info.q_target(3)=info.act.q(3); info.q_target(4)=info.act.q(4); info.q_target(5)=info.act.q(5);
+
+	    	motion=1;
+	    	break;
+	    }
+	}
+
+	for(int i=0;i<ROBOT_DOF;i++)
+	{
+		if(!Axis[i].trajInitialized())
+		{
+			Axis[i].setTrajInitialQuintic();
+			Axis[i].setTarPosInRad(info.q_target(i));
+			Axis[i].setTarVelInRad(0);
+			Axis[i].setTrajTargetQuintic(traj_time);
+		}
+
+		Axis[i].TrajQuintic();
+		if(modeControl==1)
+		{
+			info.des.q(i)=Axis[i].getDesPosInRad();
+			info.des.q_dot(i)=Axis[i].getDesVelInRad();
+			info.des.q_ddot(i)=Axis[i].getDesAccInRad();
+		}
+	}
+}

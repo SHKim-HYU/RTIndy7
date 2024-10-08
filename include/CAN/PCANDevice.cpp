@@ -34,7 +34,7 @@
 #include <libpcanfd.h>
 
 // Project Includes
-#include <PCANDevice.h>
+#include "PCANDevice.h"
 
 
 PCANDevice::PCANDevice() :  CANDevice(), fd_(-1)
@@ -54,7 +54,7 @@ bool PCANDevice::Open(const std::string &device_id, Config_t &config, bool bUseR
     if (config_.mode_fd == 0)
     {
         mode = config_.mode_fd;
-        fd_ = pcanfd_open(device_id.c_str(), OFD_BITRATE, config.bitrate);
+        fd_ = pcanfd_open(device_id.c_str(), OFD_BITRATE , config.bitrate);
     }
     else if (config_.mode_fd == 1)
     {
@@ -259,11 +259,11 @@ bool PCANDevice::Receive(CAN_msg_t &msg)
     //auto total_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count();
     //std::cout << "Read Duration: " << total_elapsed << "us" << std::endl;
 
-   // std::cout << "RECEIVED: TYPE: " << pcan_msg.type << std::endl;
+    //std::cout << "RECEIVED: TYPE: " << pcan_msg.type << std::endl;
     if (rx_error)
     {
         // TODO: Log Received Errors??
-        //std::cout << "FALSE: " << rx_error << std::endl;
+        std::cout << "FALSE: " << rx_error << std::endl;
         return false;
     }
 

@@ -6,16 +6,17 @@
  *  @Comm
  */
 
-
+#ifndef PropertyDefinition_H_
+#define PropertyDefinition_H_
 #pragma once
 
 #include <Eigen/Dense>
 
 #define CONTROL_FREQ 1000
-#define ROBOT_DOF 6
-#define OFFSET_NUM 5
-#define NRMK_DRIVE_NUM 6
-#define NRMK_TOOL_NUM 1
+#define ROBOT_DOF 12
+#define OFFSET_NUM 2
+#define NRMK_DRIVE_NUM 12
+#define NRMK_TOOL_NUM 4
 
 // [General Parameters]
 // 1. Motor
@@ -28,13 +29,23 @@
 #define TORQUE_ADC_100 96 // Torque ADC for Core 100 [NRMK]
 
 // Indy7
-// SN: DD11I7E0D001 [Indy7]
-#define ZERO_POS_1 20902
-#define ZERO_POS_2 28201
-#define ZERO_POS_3 292649
-#define ZERO_POS_4 61158
-#define ZERO_POS_5 2180
-#define ZERO_POS_6 31587
+    //serial Num : D11936I07004
+ //#define ZERO_POS_1 53744
+#define ZERO_POS_1 -3911184
+#define ZERO_POS_2 11697
+#define ZERO_POS_3 72308
+#define ZERO_POS_4 167172
+#define ZERO_POS_5 56088
+#define ZERO_POS_6 9866
+//serial Num : DB45I7E0B008
+#define ZERO_POS_7 448720
+#define ZERO_POS_8 -25000
+#define ZERO_POS_9 138722
+#define ZERO_POS_10 -713413
+#define ZERO_POS_11 -1058109
+#define ZERO_POS_12 -88968
+
+
 
 #define F_c 20.123, 12.287, 4.5622, 3.1492, 3.4757, 3.4986
 #define F_v1 111.32, 70.081, 25.337, 13.131, 8.5082, 9.9523
@@ -183,3 +194,5 @@ typedef struct ROBOT_INFO{
 	STATE sim;
 
 }ROBOT_INFO;
+
+#endif PropertyDefinition_H_
