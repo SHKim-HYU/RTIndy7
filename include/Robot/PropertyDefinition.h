@@ -175,6 +175,10 @@ typedef struct ROBOT_INFO{
 	JVec qdot_target;
 	JVec qddot_target;
 	JVec traj_time;
+	SE3 T_target;
+	SE3 T_init;
+	Twist V_target;
+	Twist V_init; 
 	unsigned int idx;
 
 	STATE act;

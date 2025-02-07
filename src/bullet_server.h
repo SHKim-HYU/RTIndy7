@@ -20,16 +20,18 @@
 #include "xddp_packet.h"
 #include "PropertyDefinition.h"
 
-int sockfd_nom, sockfd_act;
+int sockfd_nom, sockfd_act, sockfd_cube;
 
 pthread_t bullet_thread;
 pthread_attr_t bullet_attr;
 struct sched_param bullet_param;
 
 size_t BUFLEN_BULLET = sizeof(packet::JointState);
+size_t BUFLEN_CUBE = sizeof(packet::Pose);
 
 struct packet::JointState *bullet_nom = (packet::JointState *)malloc(BUFLEN_BULLET);
 struct packet::JointState *bullet_act = (packet::JointState *)malloc(BUFLEN_BULLET);
+struct packet::Pose *bullet_cube = (packet::Pose *)malloc(BUFLEN_CUBE);
 
 b3RobotSimulatorClientAPI* b3sim;
 Bullet_Indy7* b3robot_nom;

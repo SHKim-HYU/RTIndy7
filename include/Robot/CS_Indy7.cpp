@@ -133,21 +133,9 @@ void CS_Indy7::CSSetup(const string& _modelPath, double _period)// : loader_(_mo
 	n_dof = std::stoi(loader_.getValue("n_dof").asString());
     period = _period;
 
-    T_M << 1,0,0,0.0,
-			0,1,0,-0.1865,
-			0,0,1,1.4975,
-			0,0,0,1;
-
-	Slist << 0, 0.2995, 0.7495, -0.0035, 1.0995, -0.1865, 
-                0, 6.65024e-17, 1.66422e-16, 1.82632e-16, 4.88276e-16, 1.6398e-16, 
-                0, 2.42029e-17, 1.24123e-16, 4.07249e-32, 2.09499e-16, 1.00407e-31, 
-                0, 2.22045e-16, 2.22045e-16, 4.93038e-32, 4.44089e-16, 1.47911e-31, 
-                0, -1, -1, -2.22045e-16, -1, -4.44089e-16, 
-                1, 0, 0, 1, -2.22045e-16, 1;
-	Blist = Ad(TransInv(T_M)) * Slist;
-
     lambda_int = Twist::Zero();
     gamma_int = Twist::Zero();
+    F_eff_int = Twist::Zero();
 
     r_floor << X_com, Y_com, Z_com;
     r_ceil = VecToso3(r_floor); 
@@ -400,8 +388,10 @@ void CS_Indy7::setTaskImpedancegain(Matrix6d _A, Matrix6d _D, Matrix6d _K)
     K_ = _K;
 }
 
-void CS_Indy7::updateRobot(JVec _q, JVec _dq)
+void CS_Indy7::updateRobot(JVec _q, JVec _dq, JVec _ddq)
 {
+    q=_q; dq=_dq; ddq=_ddq;
+
     M = computeM(_q);
     Minv = computeMinv(_q);
     C = computeC(_q, _dq);
@@ -414,6 +404,7 @@ void CS_Indy7::updateRobot(JVec _q, JVec _dq)
     T_ee = computeFK(_q);
 
     V_b = J_b*_dq;
+    V_dot = J_b*_ddq + dJ_b*_dq;
 
     isUpdated=true;   
 }
@@ -550,7 +541,7 @@ Twist CS_Indy7::computeF_Threshold(Twist _F)
 			}
 			else
 			{
-				res(i)=0.1*_F(i);
+				res(i)=1*_F(i);
 				// res(i)=0.0;
 			}
 		}
@@ -854,6 +845,9 @@ Jacobian CS_Indy7::computeJ_b(JVec _q)
 
 Jacobian CS_Indy7::computeJdot_b(JVec _q, JVec _dq)
 {
+    T_M = computeFK(JVec::Zero());
+	Slist = computeJ_s(JVec::Zero());
+	Blist = Ad(TransInv(T_M)) * Slist;
     dJ_b = dJacobianBody(T_M, Blist, _q, _dq);
 
     return dJ_b;
@@ -1014,16 +1008,16 @@ double CS_Indy7::getManipulability()
     return manipulability;
 }
 
-JVec CS_Indy7::FrictionEstimation(JVec dq)
+JVec CS_Indy7::FrictionEstimation(JVec _dq)
 {
     JVec tau_fric;
     
     for (int i = 0; i<NRMK_DRIVE_NUM; i++)
 	{
-		if(dq(i)>0.0)
-			tau_fric(i) = Fc(i)+Fv1(i)*(1-exp(-fabs(dq(i)/Fv2(i))));
-		else if(dq(i)<0.0)
-			tau_fric(i) = -(Fc(i)+Fv1(i)*(1-exp(-fabs(dq(i)/Fv2(i)))));
+		if(_dq(i)>0.0)
+			tau_fric(i) = Fc(i)+Fv1(i)*(1-exp(-fabs(_dq(i)/Fv2(i))));
+		else if(_dq(i)<0.0)
+			tau_fric(i) = -(Fc(i)+Fv1(i)*(1-exp(-fabs(_dq(i)/Fv2(i)))));
 		else
 			tau_fric(i) = 0.0;
 	}
@@ -1031,34 +1025,34 @@ JVec CS_Indy7::FrictionEstimation(JVec dq)
     return tau_fric;
 }
 
-JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des)
+JVec CS_Indy7::ComputedTorqueControl( JVec _q,JVec _dq,JVec q_des,JVec dq_des,JVec ddq_des)
 {
-    JVec e = q_des-q;
-    JVec edot = dq_des-dq;
+    JVec e = q_des-_q;
+    JVec edot = dq_des-_dq;
     
     eint = eint + e*period;	
     
     if(isUpdated)
     {
         JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
-        tau = M*ddq_ref + C*dq + G;
+        tau = M*ddq_ref + C*_dq + G;
         isUpdated = false;
     }
     else
     {
-        M = computeM(q);
-        C = computeC(q, dq);
-        G = computeG(q);
+        M = computeM(_q);
+        C = computeC(_q, _dq);
+        G = computeG(_q);
         JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
-        tau = M*ddq_ref+C*dq+G;
+        tau = M*ddq_ref+C*_dq+G;
     }
     return tau;   
 }
 
-JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec ddq_des, JVec _tau_ext)
+JVec CS_Indy7::ComputedTorqueControl( JVec _q,JVec _dq,JVec q_des,JVec dq_des,JVec ddq_des, JVec _tau_ext)
 {
-    JVec e = q_des-q;
-    JVec edot = dq_des-dq;
+    JVec e = q_des-_q;
+    JVec edot = dq_des-_dq;
 
     // apperent inertia, spring, damper
     MassMat m_ = MassMat::Zero();
@@ -1075,73 +1069,73 @@ JVec CS_Indy7::ComputedTorqueControl( JVec q,JVec dq,JVec q_des,JVec dq_des,JVec
     if(isUpdated)
     {
         JVec ddq_ref = ddq_des + m_.inverse()*(d_.cwiseProduct(edot) + k_.cwiseProduct(e) + tau_ext);
-        tau = M*ddq_ref + C*dq + G + tau_ext - tau_bd;
+        tau = M*ddq_ref + C*_dq + G + tau_ext;
         isUpdated = false;
     }
     else
     {
-        M = computeM(q);
-        C = computeC(q, dq);
-        G = computeG(q);
+        M = computeM(_q);
+        C = computeC(_q, _dq);
+        G = computeG(_q);
         JVec ddq_ref = ddq_des + m_.inverse()*(d_.cwiseProduct(edot) + k_.cwiseProduct(e) + tau_ext);
-        tau = M*ddq_ref+C*dq+G + tau_ext - tau_bd;
+        tau = M*ddq_ref+C*_dq+G + tau_ext;
     }
     // tau = K.cwiseProduct(tau);
     return tau;    
 }
 
-JVec CS_Indy7::PassivityInverseDynamicControl( JVec q, JVec dq, JVec q_des, JVec dq_des, JVec ddq_des)
+JVec CS_Indy7::PassivityInverseDynamicControl( JVec _q, JVec _dq, JVec q_des, JVec dq_des, JVec ddq_des)
 {
-    JVec e = q_des-q;
-    JVec edot = dq_des-dq;
+    JVec e = q_des-_q;
+    JVec edot = dq_des-_dq;
     eint = eint + e*period;	
         
     if(isUpdated)
     {
         JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
         JVec dq_ref = dq_des + Kv*e + Kp*eint;
-        JVec tau_ref = K*(dq_ref-dq);
+        JVec tau_ref = K*(dq_ref-_dq);
 
         tau = M*ddq_ref + C*dq_ref + G + tau_ref;
         isUpdated = false;
     }
     else
     {
-        M = computeM(q);
-        C = computeC(q, dq);
-        G = computeG(q);
+        M = computeM(_q);
+        C = computeC(_q, _dq);
+        G = computeG(_q);
         JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
         JVec dq_ref = dq_des + Kv*e + Kp*eint;
-        JVec tau_ref = K*(dq_ref-dq);
+        JVec tau_ref = K*(dq_ref-_dq);
 
         tau = M*ddq_ref + C*dq_ref + G + tau_ref;
     }
     return tau;   
 }
 
-JVec CS_Indy7::PassivityInverseDynamicControl( JVec q, JVec dq, JVec q_des, JVec dq_des, JVec ddq_des, JVec _tau_ext)
+JVec CS_Indy7::PassivityInverseDynamicControl( JVec _q, JVec _dq, JVec q_des, JVec dq_des, JVec ddq_des, JVec _tau_ext)
 {
-    JVec e = q_des-q;
-    JVec edot = dq_des-dq;
+    JVec e = q_des-_q;
+    JVec edot = dq_des-_dq;
     eint = eint + e*period;	
         
     if(isUpdated)
     {
         JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
         JVec dq_ref = dq_des + Kv*e + Kp*eint;
-        JVec tau_ref = K*(dq_ref-dq);
+        JVec tau_ref = K*(dq_ref-_dq);
 
         tau = M*ddq_ref + C*dq_ref + G + tau_ref;
         isUpdated = false;
     }
     else
     {
-        M = computeM(q);
-        C = computeC(q, dq);
-        G = computeG(q);
+        M = computeM(_q);
+        C = computeC(_q, _dq);
+        G = computeG(_q);
         JVec ddq_ref = ddq_des + Kv*edot + Kp*e;
         JVec dq_ref = dq_des + Kv*e + Kp*eint;
-        JVec tau_ref = K*(dq_ref-dq);
+        JVec tau_ref = K*(dq_ref-_dq);
 
         tau = M*ddq_ref + C*dq_ref + G + tau_ref;
     }
@@ -1164,6 +1158,36 @@ JVec CS_Indy7::TaskInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist V_des, Tw
     
     pinvJacobian invJb = J_b.transpose() * (J_b * J_b.transpose()).inverse();
     JVec qddot_ref = invJb * (V_dot_ref - dJ_b * q_dot);
+    JVec torques = M * qddot_ref + C * q_dot + G;
+
+    return torques;
+}
+
+JVec CS_Indy7::TaskJTbasedInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des)
+{
+    SE3 T_err = TransInv(T_ee)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    
+    Twist V_err = V_des - Ad(invT_err) * V_b;
+    
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    Twist lambda_ddot_ref = Task_Kv * lambda_dot + Task_Kp * lambda;
+
+    Twist V_dot_ref = Ad(T_err) * (V_dot_des + (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+    
+    JMat D_scaled = JMat::Zero();
+    
+    for(int i=0; i<NRMK_DRIVE_NUM; i++)
+    {
+        JVec J_i = J_b.block<NRMK_DRIVE_NUM,1>(0,i);
+        D_scaled(i,i) = 1.0/(J_i.transpose()*J_i);
+        // printf("%lf, ", D_scaled(i,i));
+    }
+    // printf("\n");
+    
+    JVec qddot_ref = D_scaled * J_b.transpose() * (V_dot_ref - dJ_b * q_dot);
     JVec torques = M * qddot_ref + C * q_dot + G;
 
     return torques;
@@ -1232,6 +1256,58 @@ JVec CS_Indy7::TaskImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_
     
     JVec torques = M * qddot_ref + C * q_dot + G + J_b.transpose()*F_ext;
 
+    lambda_dot += lambda_ddot_ref*period;
+    lambda += lambda_dot*period;
+
+    // printf("lambda: %lf, %lf, %lf, %lf, %lf, %lf \n", lambda(0), lambda(1), lambda(2), lambda(3), lambda(4), lambda(5));
+    // printf("lambda_dot: %lf, %lf, %lf, %lf, %lf, %lf \n", lambda_dot(0), lambda_dot(1), lambda_dot(2), lambda_dot(3), lambda_dot(4), lambda_dot(5));
+    // printf("lambda_ddot_ref: %lf, %lf, %lf, %lf, %lf, %lf \n\n", lambda_ddot_ref(0), lambda_ddot_ref(1), lambda_ddot_ref(2), lambda_ddot_ref(3), lambda_ddot_ref(4), lambda_ddot_ref(5));
+    
+
+    return torques;
+}
+
+JVec CS_Indy7::TaskJTbasedImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext)
+{
+    SE3 T_err = TransInv(T_ee)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    
+    Twist V_err = V_des - Ad(invT_err) * V_b;
+    
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_int += lambda * period;
+
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    F_eff = F_des - Ad(T_err).transpose()*F_ext;
+    gamma = dexp6(-lambda).transpose()*F_eff;
+    gamma_int += gamma *period;
+
+    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+
+    Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
+    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+
+
+    Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
+
+    Twist V_dot_ref = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+    
+    JMat D_scaled = JMat::Zero();
+    
+    for(int i=0; i<NRMK_DRIVE_NUM; i++)
+    {
+        JVec J_i = J_b.block<NRMK_DRIVE_NUM,1>(0,i);
+        D_scaled(i,i) = 1.0/(J_i.transpose()*J_i);
+    }
+    
+    JVec qddot_ref = D_scaled*J_b.transpose() * (V_dot_ref - dJ_b * q_dot);
+    
+    JVec torques = M * qddot_ref + C * q_dot + G + J_b.transpose()*F_ext;
+
     return torques;
 }
 
@@ -1281,6 +1357,177 @@ JVec CS_Indy7::TaskPassivityImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des,
     JVec torques = M * qddot_ref + C * q_dot_ref + G + tau_ref;
 
     return torques;
+}
+
+JVec CS_Indy7::TaskComplianceImpedanceControl(SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext)
+{
+    SE3 T_err = TransInv(T_ee)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    
+    Twist V_err = V_des - Ad(invT_err) * V_b;
+    Twist V_dot_err = V_dot_des - Ad(invT_err)*V_dot + ad(V_err)*Ad(invT_err)*V_b;
+
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_dot = dlog6(-lambda) * V_err;
+    Twist lambda_ddot = dlog6(-lambda)*V_dot_err + ddlog6(-lambda, -lambda_dot)*V_err;
+
+    F_eff = F_des - Ad(T_err).transpose()*F_ext;
+    F_eff_int += F_eff * period;
+
+    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+
+    // JVec torques = J_b.transpose()*(dlog6(-lambda).transpose()*(A_lambda*lambda_ddot+ K_lambda*lambda + D_lambda*lambda_dot))+G;// + (F_des + 1.0 * F_eff + 0.1 * F_eff_int)) + G ;
+    JVec torques = J_b.transpose()*(D_*lambda_dot + K_*lambda)+G;
+
+    return torques;
+}
+
+JVec CS_Indy7::TaskStablePD(SE3 T_des, Twist V_des, Twist V_dot_des)
+{
+    SE3 T_err = TransInv(T_ee)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    Matrix6d AdInvT = Ad(invT_err);
+
+    Twist V_err = V_des - AdInvT * V_b;
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    pinvJacobian JT = J_b.transpose();
+    Matrix6d Kv_bar = dlog6(-lambda).transpose()*Task_Kv*period*dlog6(-lambda);
+
+    double a0=1/2.50;
+    double b0=75.0;
+    double b = b0*exp(-pow(J_b.determinant(),2)/pow(a0,2));
+    Twist Ke = Task_Kp*(lambda+lambda_dot*period);
+    double fcut = 10.0;
+    JVec qddot;
+
+    // if (Ke.norm()<fcut)
+    // {
+        qddot = (M+JT*Kv_bar*AdInvT*J_b).inverse()*(JT*dlog6(-lambda).transpose()*(Task_Kp*(lambda+lambda_dot*period)+Task_Kv*lambda_dot
+                    +Kv_bar*(V_dot_des-AdInvT*dJ_b*dq + ad(V_err)*V_des-ddexp6(-lambda,-lambda_dot)*lambda_dot)) -b*dq -C*dq);
+    // }
+    // else
+    // {
+    //     JVec err_tmp = lambda+lambda_dot*period;
+    //     qddot = (M+JT*Kv_bar*AdInvT*J_b).inverse()*(JT*(fcut*err_tmp/err_tmp.norm()+Task_Kv*lambda_dot
+    //                 +Kv_bar*(V_dot_des-AdInvT*dJ_b*dq + ad(V_err)*V_des-ddexp6(-lambda,-lambda_dot)*lambda_dot)) -b*dq -C*dq);
+    // }
+
+    return qddot;
+}
+
+JVec CS_Indy7::TaskStablePDImpedance(SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext)
+{
+    SE3 T_err = TransInv(T_ee)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    Matrix6d AdInvT = Ad(invT_err);
+
+    Twist V_err = V_des - AdInvT * V_b;
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    pinvJacobian JT = J_b.transpose();
+
+    F_eff = F_des - Ad(T_err).transpose()*F_ext;
+    gamma = dexp6(-lambda).transpose()*F_eff;
+    gamma_int += gamma *period;
+
+    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+
+    Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
+    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+
+
+    Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
+    Twist V_dot_ref = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+    Twist V_ref = V_b + V_dot_ref*period;
+    lambda_dot = dlog6(-lambda)*V_ref*period;
+    lambda += lambda_dot*period;
+    T_ref = T_ee*MatrixExp6(VecTose3(lambda));
+
+    // printf("lambda: %lf, %lf, %lf, %lf, %lf, %lf \n", lambda(0), lambda(1), lambda(2), lambda(3), lambda(4), lambda(5));
+    // printf("lambda_dot: %lf, %lf, %lf, %lf, %lf, %lf \n", lambda_dot(0), lambda_dot(1), lambda_dot(2), lambda_dot(3), lambda_dot(4), lambda_dot(5));
+    // printf("lambda_ddot_ref: %lf, %lf, %lf, %lf, %lf, %lf \n\n", lambda_ddot_ref(0), lambda_ddot_ref(1), lambda_ddot_ref(2), lambda_ddot_ref(3), lambda_ddot_ref(4), lambda_ddot_ref(5));
+    
+    T_err = TransInv(T_ee)*T_ref;
+    invT_err = TransInv(T_err);
+    AdInvT = Ad(invT_err);
+
+    V_err = V_ref - AdInvT * V_b;
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    Matrix6d Kv_bar = Task_Kv*period*dlog6(-lambda);
+    double a0=1/25.0;
+    double b0=50.0;
+    double b = b0*exp(-pow(J_b.determinant(),2)/pow(a0,2));
+    Twist Ke = Task_Kp*(lambda+lambda_dot*period);
+    double fcut = 10.0;
+    JVec qddot;
+
+    if (Ke.norm()<fcut)
+    {
+        qddot = (M+JT*Kv_bar*AdInvT*J_b).inverse()*(JT*(Task_Kp*(lambda+lambda_dot*period)+Task_Kv*lambda_dot
+                    +Kv_bar*(V_dot_des-AdInvT*dJ_b*dq + ad(V_err)*V_des-ddexp6(-lambda,-lambda_dot)*lambda_dot)) -b*dq -C*dq);
+    }
+    else
+    {
+        JVec err_tmp = lambda+lambda_dot*period;
+        qddot = (M+JT*Kv_bar*AdInvT*J_b).inverse()*(JT*(fcut*err_tmp/err_tmp.norm()+Task_Kv*lambda_dot
+                    +Kv_bar*(V_dot_des-AdInvT*dJ_b*dq + ad(V_err)*V_des-ddexp6(-lambda,-lambda_dot)*lambda_dot)) -b*dq -C*dq);
+    }    
+
+    return qddot;
+}
+
+void CS_Indy7::TaskAdmittance(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext)
+{
+    SE3 T_err = TransInv(T_ref)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    Matrix6d AdInvT = Ad(invT_err);
+
+    Twist V_err = V_des - AdInvT * V_ref;
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_dot = dlog6(-lambda) * V_err;
+
+    F_eff = F_des - Ad(T_err).transpose()*F_ext;
+    gamma = dexp6(-lambda).transpose()*F_eff;
+    gamma_int += gamma *period;
+
+    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+
+    Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
+    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+
+    Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
+    
+    printf("lambda: %lf, %lf, %lf %lf, %lf, %lf\n", lambda(0), lambda(1), lambda(2), lambda(3), lambda(4), lambda(5));
+    printf("lam_dot: %lf, %lf, %lf %lf, %lf, %lf\n", lambda_dot(0), lambda_dot(1), lambda_dot(2), lambda_dot(3), lambda_dot(4), lambda_dot(5));
+    printf("lam_ddot_ref: %lf, %lf, %lf %lf, %lf, %lf\n", lambda_ddot_ref(0), lambda_ddot_ref(1), lambda_ddot_ref(2), lambda_ddot_ref(3), lambda_ddot_ref(4), lambda_ddot_ref(5));
+    V_dot_ref = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+    V_ref += V_dot_ref*period;
+    lambda_dot = dlog6(-lambda)*V_ref*period;
+    T_ref = T_ref*MatrixExp6(VecTose3(lambda_dot));
+    printf("lam_dot_ref: %lf, %lf, %lf %lf, %lf, %lf\n", lambda_dot(0), lambda_dot(1), lambda_dot(2), lambda_dot(3), lambda_dot(4), lambda_dot(5));
+    V_dot_adm =  V_dot_ref;
+    V_adm = V_ref;
+    T_adm = T_ref;
+}
+
+void CS_Indy7::resetTaskAdmittance()
+{
+    V_dot_ref = Twist::Zero();
+    V_ref = V_b;
+    T_ref = T_ee;
 }
 
 void CS_Indy7::saturationMaxTorque(JVec &torque, JVec MAX_TORQUES)
@@ -1352,17 +1599,13 @@ JVec CS_Indy7::NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n)
     eint = eint + e*period;	
     
     tau = NRIC_K_gamma * (edot + NRIC_Kp*e + NRIC_Ki*eint);
-    computeAlpha(edot, tau);
-    tau_bd = alpha*tau;
-    tau = (1-alpha)*tau;
-
 
     return tau;
 }
 
-void CS_Indy7::computeAlpha(JVec edot, JVec tau_c)
+double CS_Indy7::computeAlpha(JVec edot, JVec tau_c, JVec tau_ext)
 {
-    double edotc, edotx;
+    double edotc, edotx, alpha;
     edotc = edot.transpose() * tau_c;
     edotx = edot.transpose() * tau_ext;
     if(edotc>0 && edotx >0)
@@ -1374,4 +1617,6 @@ void CS_Indy7::computeAlpha(JVec edot, JVec tau_c)
     }
     else
         alpha = 0;
+
+    return alpha;
 }

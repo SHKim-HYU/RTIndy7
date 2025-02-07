@@ -31,6 +31,7 @@ void *bullet_run(void *arg)
     b3sim->loadURDF("/opt/bullet3/data/plane.urdf");
     int nomId = b3sim->loadURDF("/home/robot/robot_ws/RTIndy7/description/indy7.urdf");
     int actId = b3sim->loadURDF("/home/robot/robot_ws/RTIndy7/description/indy7.urdf");
+    int cubeId = b3sim->loadURDF("/home/robot/robot_ws/RTIndy7/description/cube_small.urdf");
 
     b3sim->setRealTimeSimulation(false);
     b3robot_nom = new Bullet_Indy7(b3sim,nomId);	
@@ -52,7 +53,7 @@ void *bullet_run(void *arg)
     q_sim = JVec::Zero();
     q_act = JVec::Zero();
 
-    char *devname_nom, *devname_act;
+    char *devname_nom, *devname_act, *devname_cube;
 	int fd, ret;
 
 	if (asprintf(&devname_nom, "/dev/rtp%d", XDDP_PORT_SIM) < 0)
@@ -72,6 +73,13 @@ void *bullet_run(void *arg)
 	if (sockfd_act < 0)
 		fail("open");
 
+    if (asprintf(&devname_cube, "/dev/rtp%d", XDDP_PORT_ODOM) < 0)
+		fail("asprintf");
+
+	sockfd_cube = open(devname_cube, O_RDWR);
+	free(devname_cube);
+	if (sockfd_cube < 0)
+		fail("open");
 
 	while(true) 
     {
@@ -86,6 +94,13 @@ void *bullet_run(void *arg)
 
         ret = read(sockfd_act, bullet_act, BUFLEN_BULLET);
         Eigen::Map<JVec> q_act(bullet_act->position, ROBOT_DOF);	
+
+        ret = read(sockfd_cube, bullet_cube, BUFLEN_CUBE);
+        
+        btVector3 basePosition = btVector3(bullet_cube->position.x, bullet_cube->position.y, bullet_cube->position.z);
+	    btQuaternion baseOrientation = btQuaternion(bullet_cube->orientation.x, bullet_cube->orientation.y, bullet_cube->orientation.z, bullet_cube->orientation.w);
+
+        b3sim->resetBasePositionAndOrientation(cubeId, basePosition, baseOrientation);
 
         b3robot_nom->reset_q(q_sim);		
         b3robot_act->reset_q(q_act);

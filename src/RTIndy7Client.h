@@ -52,7 +52,7 @@ const int 	 TauADC_arm[NRMK_DRIVE_NUM] = {TORQUE_ADC_500,TORQUE_ADC_500,TORQUE_A
 const double TauK_arm[NRMK_DRIVE_NUM] = {TORQUE_CONST_500,TORQUE_CONST_500,TORQUE_CONST_200,TORQUE_CONST_100,TORQUE_CONST_100,TORQUE_CONST_100};
 const int 	 dirQ_arm[NRMK_DRIVE_NUM] = {-1,-1,1,-1,-1,-1};
 const int 	 dirTau_arm[NRMK_DRIVE_NUM] = {-1,-1,1,-1,-1,-1};
-const double qdotLimit[NRMK_DRIVE_NUM] = {2*PI, 2*PI, 2*PI, 2*PI, 2*PI, 3*PI};
+const double qdotLimit[NRMK_DRIVE_NUM] = {3*PI, 3*PI, 3*PI, 3*PI, 3*PI, 4*PI};
 
 
 // Robotous FT EtherCAT
@@ -105,7 +105,8 @@ Matrix6d A_, D_, K_;
 
 JVec des_int;
 
-
+JVec tau_bd;
+double alpha;
 double manipulability;
 
 

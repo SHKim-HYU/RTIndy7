@@ -29,7 +29,7 @@ public:
 	void setTaskgain(Twist _Kp, Twist _Kv, JVec _K);
 	void setTaskImpedancegain(Matrix6d _Kp, Matrix6d _Kv, Matrix6d _Kgamma);
 
-	void updateRobot(JVec _q, JVec _dq);
+	void updateRobot(JVec _q, JVec _dq, JVec _ddq);
 
 	JVec computeFD(JVec _q, JVec _dq, JVec _tau);
 	void computeRK45(JVec _q, JVec _dq, JVec _tau, JVec &_q_nom, JVec &_dq_nom, JVec &_ddq_nom);
@@ -78,13 +78,21 @@ public:
 	
 	// Task Space
     JVec TaskInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des);
+	JVec TaskJTbasedInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des);
 	JVec TaskPassivityInverseDynamicsControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des);
 	JVec TaskImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext);
+	JVec TaskJTbasedImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext);
 	JVec TaskPassivityImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext);
-    
+	JVec TaskComplianceImpedanceControl(SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext);
+	JVec TaskStablePD(SE3 T_des, Twist V_des, Twist V_dot_des);
+	JVec TaskStablePDImpedance(SE3 T_des, Twist V_des, Twist V_dot_des, Twist F_des, Twist F_ext);
+
+	void resetTaskAdmittance();
+	void TaskAdmittance(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext);
+
     JVec NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n);
 	
-	void computeAlpha(JVec edot, JVec tau_c);
+	double computeAlpha(JVec edot, JVec tau_c, JVec tau_ext);
 	void saturationMaxTorque(JVec &torque, JVec MAX_TORQUES);
 
 private:
@@ -101,11 +109,15 @@ private:
 	Jacobian J_b, J_s;
 	Jacobian dJ_b, dJ_s;
 
+	SE3 T_ref;
+	Twist V_ref, V_dot_ref;
+
 	Twist V_b, V_s;
 	Twist V_dot;
 	Twist lambda, lambda_dot, lambda_int;
+	Twist lambda_ref;
 	
-	Twist F_eff;
+	Twist F_eff, F_eff_int;
 	Twist gamma, gamma_int;
 
 	Matrix6d A_tool, B_tool;
@@ -176,7 +188,7 @@ private:
 	JVec Fv1;
 	JVec Fv2;
 
-	double alpha = 0.0;
+	// double alpha = 0.0;
 	double manipulability;
 
 };
