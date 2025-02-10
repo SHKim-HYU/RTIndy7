@@ -33,6 +33,7 @@ public:
 
 	JVec computeFD(JVec _q, JVec _dq, JVec _tau);
 	void computeRK45(JVec _q, JVec _dq, JVec _tau, JVec &_q_nom, JVec &_dq_nom, JVec &_ddq_nom);
+	void computeMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext);
 
 	Twist computeF_Tool(Twist _dx, Twist _ddx);
 	Twist computeF_Threshold(Twist _F);
@@ -89,6 +90,7 @@ public:
 
 	void resetTaskAdmittance();
 	void TaskAdmittance(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext);
+	Twist TaskAdmittanceMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 T_adm, Twist V_adm, Twist F_des, Twist F_ext);
 
     JVec NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n);
 	

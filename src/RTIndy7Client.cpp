@@ -86,11 +86,6 @@ void readData()
 			info.nom.tau(i) = info.act.tau(i);
 		}
 	}
-	if(!system_ready)
-	{
-		cs_nom_indy7.updateRobot(info.nom.q , info.nom.q_dot, JVec::Zero());
-		cs_nom_indy7.resetTaskAdmittance();
-	}
 
 	for(int i=0; i<NRMK_TOOL_NUM; i++)
 	{
@@ -121,11 +116,11 @@ void trajectory_generation(){
 			info.q_target(3)=0.0; info.q_target(4)=-0.707; info.q_target(5)=0.0;
 			info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=-1.5709;
 			info.q_target(3)=0.0; info.q_target(4)=-1.5709; info.q_target(5)=0.0;
-			// info.q_target(0)=0.0; info.q_target(1)=-0.56; info.q_target(2)=-2.14;
-			// info.q_target(3)=0.0; info.q_target(4)=1.13; info.q_target(5)=0.0;
-			// info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=0.0;
-			// info.q_target(3)=0.0; info.q_target(4)=0.0; info.q_target(5)=0.0;
-	    	traj_time = 3;
+			
+			// info.q_target(0)=0.090390; info.q_target(1)=-0.402861; info.q_target(2)=-0.613726;
+			// info.q_target(3)=0.003550; info.q_target(4)=-2.134188; info.q_target(5)=0.082176;
+			
+			traj_time = 3;
 			modeControl =1;
 	    	motion++;
 			motion=2;
@@ -156,30 +151,26 @@ void trajectory_generation(){
 							0.0, 1.0, 0, -0.177496,
 							-1.0, 0.0, 0.0, 0.47077,
 							0, 0, 0, 1;
-			info.T_target << 0.498840, 0.171425, 0.849572, 0.672989,
-							-0.241601, 0.968892, -0.053642, -0.177496,
-							-0.832339, -0.178499, 0.524738, 0.47077,
-							0, 0, 0, 1;
-			info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
- 							1.40484e-21, 1, 1.40483e-21, -0.1865, 
- 							-1.26536e-05, 1.40484e-21, -1, 0.502002, 
- 							0, 0, 0, 1;
+			// info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
+ 			// 				1.40484e-21, 1, 1.40483e-21, -0.1865, 
+ 			// 				-1.26536e-05, 1.40484e-21, -1, 0.502002, 
+ 			// 				0, 0, 0, 1;
 			traj_time = 10;	
 			modeControl=3;
 			motioncnt = 0;
 			// motion++;
-			motion=4;
+			motion=7;
 			break;
 		case 3:
-	    	info.T_init = info.nom.T;
+	    	info.T_init = info.T_target;
 			info.T_target << 0.0, -0, 1.0, 0.672989,
-							0.0, 1.0, 0, -0.177496,
-							-1.0, 0.0, 0.0, 0.87077,
+							0.0, 1.0, 0, -0.277496,
+							-1.0, 0.0, 0.0, 0.57077,
 							0, 0, 0, 1;
-			info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
- 							1.40484e-21, 1, 1.40483e-21, -0.1865, 
- 							-1.26536e-05, 1.40484e-21, -1, 0.502002, 
- 							0, 0, 0, 1;
+			// info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
+ 			// 				1.40484e-21, 1, 1.40483e-21, -0.1865, 
+ 			// 				-1.26536e-05, 1.40484e-21, -1, 0.502002, 
+ 			// 				0, 0, 0, 1;
 			traj_time = 10;	
 			modeControl=3;
 			motioncnt = 0;
@@ -188,7 +179,57 @@ void trajectory_generation(){
 			break;
 
 		case 4: // Hold on Task motion
-	    	
+	    	info.T_init = info.T_target;
+			info.T_target << 0.0, -0, 1.0, 0.672989,
+							0.0, 1.0, 0, -0.277496,
+							-1.0, 0.0, 0.0, 0.37077,
+							0, 0, 0, 1;
+			// info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
+ 			// 				1.40484e-21, 1, 1.40483e-21, -0.1865, 
+ 			// 				-1.26536e-05, 1.40484e-21, -1, 0.502002, 
+ 			// 				0, 0, 0, 1;
+			traj_time = 10;	
+			modeControl=3;
+			motioncnt = 0;
+			// motion=2;
+			motion++;
+			break;
+		
+		case 5:
+			info.T_init = info.T_target;
+			info.T_target << 0.0, -0, 1.0, 0.672989,
+							0.0, 1.0, 0, -0.077496,
+							-1.0, 0.0, 0.0, 0.37077,
+							0, 0, 0, 1;
+			// info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
+ 			// 				1.40484e-21, 1, 1.40483e-21, -0.1865, 
+ 			// 				-1.26536e-05, 1.40484e-21, -1, 0.502002, 
+ 			// 				0, 0, 0, 1;
+			traj_time = 10;	
+			modeControl=3;
+			motioncnt = 0;
+			// motion=2;
+			motion++;
+			break;
+
+		case 6:
+			info.T_init = info.T_target;
+			info.T_target << 0.0, -0, 1.0, 0.672989,
+							0.0, 1.0, 0, -0.077496,
+							-1.0, 0.0, 0.0, 0.5077,
+							0, 0, 0, 1;
+			// info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
+ 			// 				1.40484e-21, 1, 1.40483e-21, -0.1865, 
+ 			// 				-1.26536e-05, 1.40484e-21, -1, 0.502002, 
+ 			// 				0, 0, 0, 1;
+			traj_time = 10;	
+			modeControl=3;
+			motioncnt = 0;
+			motion=3;
+			// motion++;
+			break;
+		case 7:
+
 			break;
 
 		default:
@@ -299,10 +340,10 @@ void control()
 		{
 			info.des.F << 0, 0, 0, 0, 0, 0;
 			// info.act.F << 0, 0, 0, 0, 0, 0;
-			// Set bias
-			UINT32 FTConfigParam=FT_SET_BIAS;
-			ecat_tool[0].writeFTconfig(FTConfigParam);			
-			ecat_master.RxUpdate();
+			// // Set bias
+			// UINT32 FTConfigParam=FT_SET_BIAS;
+			// ecat_tool[0].writeFTconfig(FTConfigParam);			
+			// ecat_master.RxUpdate();
 		}
 		
 		// info.nom.tau = cs_nom_indy7.TaskInverseDynamicsControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot);
@@ -314,7 +355,8 @@ void control()
 		// info.nom.tau = cs_nom_indy7.TaskJTbasedImpedanceControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot, info.des.F, info.act.F);
 		// info.nom.tau = cs_nom_indy7.TaskPassivityImpedanceControl(info.nom.q_dot, info.des.T, info.des.x_dot, info.des.x_ddot, Twist::Zero(), info.act.F);
 		// info.nom.tau = cs_nom_indy7.TaskComplianceImpedanceControl(info.des.T, info.des.x_dot, info.des.x_ddot, Twist::Zero(), info.act.F);
-
+		cs_nom_indy7.computeMK45(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
+		// info.sim.T = info.nom.T;
 		// [Simulation]
 		cs_nom_indy7.computeRK45(info.nom.q, info.nom.q_dot, info.nom.tau, info.nom.q, info.nom.q_dot, info.nom.q_ddot);
 			
@@ -332,11 +374,14 @@ void control()
 			info.des.F << 0, 0, 0, 0, 0, 0;
 		// info.act.F << 0, 0, 0, 0, 0, 0;
 
-		cs_nom_indy7.TaskAdmittance(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
+		// cs_nom_indy7.TaskAdmittance(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
+		cs_nom_indy7.computeMK45(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
 		info.nom.q_ddot = cs_nom_indy7.TaskStablePD(info.sim.T, info.sim.x_dot, info.sim.x_ddot);
 
 		// info.nom.q_ddot = cs_nom_indy7.TaskStablePD(info.des.T, info.des.x_dot, info.des.x_ddot);
 		// info.nom.q_ddot = cs_nom_indy7.TaskStablePDImpedance(info.des.T, info.des.x_dot, info.des.x_ddot, info.des.F, info.act.F);
+		// info.sim.T = info.nom.T;
+
 		info.nom.q_dot += info.nom.q_ddot*period;
 		info.nom.q += info.nom.q_dot*period;
 
@@ -367,7 +412,7 @@ void control()
 	}
 
 	// [Gravity Compensator]
-	info.des.tau = cs_indy7.computeG(info.act.q);
+	// info.des.tau = cs_indy7.computeG(info.act.q);
 }
 
 void writeData()
@@ -440,19 +485,23 @@ void motor_run(void *arg)
 	// Task_Kp << 1, 1, 1, 1, 1, 1;
 	Task_Kp = Task_Kp * 1e6;
 	Task_Kv = Task_Kp*period*30.0;
-	// Task_Kp << 100, 100, 100, 4000, 4000, 4000;
-	// Task_Kv << 20, 20, 20, 400, 400, 400;
+	// Task_Kp << 4000, 100, 4000, 4000, 4000, 4000;
+	// Task_Kv << 400, 20, 400, 400, 400, 400;
 	
 	Task_K << 1,1,0.5,0.3,0.2,0.2;
 	cs_nom_indy7.setTaskgain(Task_Kp, Task_Kv, Task_K);
 
 	// for Impedance model
 	A_.diagonal() << 4, 4, 4, 0.4, 0.4, 0.4;
-    K_.diagonal() << 30000, 30000, 30000, 30000, 30000, 0;
+    K_.diagonal() << 30000,30000, 10, 3000, 3000, 3000;
 	for(int i=0;i<6;i++)
 		D_(i,i) = 2*1*sqrt(A_(i,i)*K_(i,i));
-	// D_(0,0) = 2; D_(1,1) = 2; D_(2,2) = 2; 
-	// D_(3,3) = 0.2; D_(4,4) = 0.2; D_(5,5) = 0.2; 
+	// D_(0,0) = 2; 
+	// D_(1,1) = 2; 
+	D_(2,2) = 0; 
+	// D_(3,3) = 4; 
+	// D_(4,4) = 0.2; 
+	// D_(5,5) = 0.2; 
 	cs_nom_indy7.setTaskImpedancegain(A_,D_,K_);
 	
 
@@ -478,7 +527,7 @@ void motor_run(void *arg)
     while (1) {
         beginCycle = rt_timer_read();
 
-		printf("Time=%0.3lfs, cycle_dt=%lius, worst_cycle=%lius, overrun=%d\n", gt, periodCycle/1000, worstLoop/1000, overruns);
+		// printf("Time=%0.3lfs, cycle_dt=%lius, worst_cycle=%lius, overrun=%d\n", gt, periodCycle/1000, worstLoop/1000, overruns);
 		// printf("modeControl: %d\n",modeControl);
 		// // /*
 		// printf("Arm Data\n");
@@ -494,28 +543,28 @@ void motor_run(void *arg)
 		// printf("readFT: %lf, %lf, %lf, %lf, %lf, %lf\n", F_tmp(0),F_tmp(1),F_tmp(2),F_tmp(3),F_tmp(4),F_tmp(5));
 		// printf("resFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
 		// printf("manipulability: %lf\n",manipulability);
-		printf("Tdes: \t%lf, %lf, %lf, %lf\n", info.des.T(0,0), info.des.T(0,1), info.des.T(0,2), info.des.T(0,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.des.T(1,0), info.des.T(1,1), info.des.T(1,2), info.des.T(1,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.des.T(2,0), info.des.T(2,1), info.des.T(2,2), info.des.T(2,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.des.T(3,0), info.des.T(3,1), info.des.T(3,2), info.des.T(3,3));
-		printf("Tnom: \t%lf, %lf, %lf, %lf\n", info.nom.T(0,0), info.nom.T(0,1), info.nom.T(0,2), info.nom.T(0,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(1,0), info.nom.T(1,1), info.nom.T(1,2), info.nom.T(1,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(2,0), info.nom.T(2,1), info.nom.T(2,2), info.nom.T(2,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(3,0), info.nom.T(3,1), info.nom.T(3,2), info.nom.T(3,3));
-		printf("Vnom: %lf, %lf, %lf, %lf, %lf, %lf\n", info.nom.x_dot(0), info.nom.x_dot(1), info.nom.x_dot(2), info.nom.x_dot(3), info.nom.x_dot(4), info.nom.x_dot(5));
-		printf("dVnom: %lf, %lf, %lf, %lf, %lf, %lf\n", info.nom.x_ddot(0), info.nom.x_ddot(1), info.nom.x_ddot(2), info.nom.x_ddot(3), info.nom.x_ddot(4), info.nom.x_ddot(5));
-		printf("Tact: \t%lf, %lf, %lf, %lf\n", info.act.T(0,0), info.act.T(0,1), info.act.T(0,2), info.act.T(0,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.act.T(1,0), info.act.T(1,1), info.act.T(1,2), info.act.T(1,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.act.T(2,0), info.act.T(2,1), info.act.T(2,2), info.act.T(2,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.act.T(3,0), info.act.T(3,1), info.act.T(3,2), info.act.T(3,3));
-		printf("Tadm: \t%lf, %lf, %lf, %lf\n", info.sim.T(0,0), info.sim.T(0,1), info.sim.T(0,2), info.sim.T(0,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(1,0), info.sim.T(1,1), info.sim.T(1,2), info.sim.T(1,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(2,0), info.sim.T(2,1), info.sim.T(2,2), info.sim.T(2,3));
-		printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(3,0), info.sim.T(3,1), info.sim.T(3,2), info.sim.T(3,3));
-		printf("Vsim: %lf, %lf, %lf, %lf, %lf, %lf\n", info.sim.x_dot(0), info.sim.x_dot(1), info.sim.x_dot(2), info.sim.x_dot(3), info.sim.x_dot(4), info.sim.x_dot(5));
-		printf("dVsim: %lf, %lf, %lf, %lf, %lf, %lf\n", info.sim.x_ddot(0), info.sim.x_ddot(1), info.sim.x_ddot(2), info.sim.x_ddot(3), info.sim.x_ddot(4), info.sim.x_ddot(5));
-		printf("\n");
-		printf("\n");
+		// printf("Tdes: \t%lf, %lf, %lf, %lf\n", info.des.T(0,0), info.des.T(0,1), info.des.T(0,2), info.des.T(0,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.des.T(1,0), info.des.T(1,1), info.des.T(1,2), info.des.T(1,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.des.T(2,0), info.des.T(2,1), info.des.T(2,2), info.des.T(2,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.des.T(3,0), info.des.T(3,1), info.des.T(3,2), info.des.T(3,3));
+		// printf("Tnom: \t%lf, %lf, %lf, %lf\n", info.nom.T(0,0), info.nom.T(0,1), info.nom.T(0,2), info.nom.T(0,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(1,0), info.nom.T(1,1), info.nom.T(1,2), info.nom.T(1,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(2,0), info.nom.T(2,1), info.nom.T(2,2), info.nom.T(2,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(3,0), info.nom.T(3,1), info.nom.T(3,2), info.nom.T(3,3));
+		// printf("Vnom: %lf, %lf, %lf, %lf, %lf, %lf\n", info.nom.x_dot(0), info.nom.x_dot(1), info.nom.x_dot(2), info.nom.x_dot(3), info.nom.x_dot(4), info.nom.x_dot(5));
+		// printf("dVnom: %lf, %lf, %lf, %lf, %lf, %lf\n", info.nom.x_ddot(0), info.nom.x_ddot(1), info.nom.x_ddot(2), info.nom.x_ddot(3), info.nom.x_ddot(4), info.nom.x_ddot(5));
+		// printf("Tact: \t%lf, %lf, %lf, %lf\n", info.act.T(0,0), info.act.T(0,1), info.act.T(0,2), info.act.T(0,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.act.T(1,0), info.act.T(1,1), info.act.T(1,2), info.act.T(1,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.act.T(2,0), info.act.T(2,1), info.act.T(2,2), info.act.T(2,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.act.T(3,0), info.act.T(3,1), info.act.T(3,2), info.act.T(3,3));
+		// printf("Tadm: \t%lf, %lf, %lf, %lf\n", info.sim.T(0,0), info.sim.T(0,1), info.sim.T(0,2), info.sim.T(0,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(1,0), info.sim.T(1,1), info.sim.T(1,2), info.sim.T(1,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(2,0), info.sim.T(2,1), info.sim.T(2,2), info.sim.T(2,3));
+		// printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(3,0), info.sim.T(3,1), info.sim.T(3,2), info.sim.T(3,3));
+		// printf("Vsim: %lf, %lf, %lf, %lf, %lf, %lf\n", info.sim.x_dot(0), info.sim.x_dot(1), info.sim.x_dot(2), info.sim.x_dot(3), info.sim.x_dot(4), info.sim.x_dot(5));
+		// printf("dVsim: %lf, %lf, %lf, %lf, %lf, %lf\n", info.sim.x_ddot(0), info.sim.x_ddot(1), info.sim.x_ddot(2), info.sim.x_ddot(3), info.sim.x_ddot(4), info.sim.x_ddot(5));
+		// printf("\n");
+		// printf("\n");
 
         // Read Joints Data
         readData();
@@ -644,7 +693,7 @@ void print_run(void *arg)
 	 *            start time,
 	 *            period (here: 100ms = 0.1s)
 	 */
-	rt_task_set_periodic(NULL, TM_NOW, cycle_ns*1);
+	rt_task_set_periodic(NULL, TM_NOW, cycle_ns*100);
 	
 	// /*
 	// Joint data log
@@ -738,16 +787,14 @@ void print_run(void *arg)
 			rt_printf("Time=%0.3lfs, cycle_dt=%lius, worst_cycle=%lius, overrun=%d\n", gt, periodCycle/1000, worstLoop/1000, overruns);
 			rt_printf("modeControl: %d\n",modeControl);
 			// /*
-            // rt_printf("Arm Data\n");
-			// for(int j=0; j<ROBOT_DOF; ++j){
-			// 	rt_printf("ID: %d", j);
-			// 	rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
-			// 	rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-			// 	rt_printf("\t NomPos: %lf, NomVel: %lf, NomAcc :%lf\n",info.nom.q(j), info.nom.q_dot(j), info.nom.q_ddot(j));
-			// 	rt_printf("\t TarTor: %lf, ActTor: %lf, NomTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j), info.act.tau_ext(j));
-			// }
-			// rt_printf("V: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.x_dot(0),info.act.x_dot(1),info.act.x_dot(2),info.act.x_dot(3),info.act.x_dot(4),info.act.x_dot(5),info.act.x_dot(6),info.act.x_dot(7),info.act.x_dot(8));
-			// rt_printf("dV: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.x_ddot(0),info.act.x_ddot(1),info.act.x_ddot(2),info.act.x_ddot(3),info.act.x_ddot(4),info.act.x_ddot(5),info.act.x_ddot(6),info.act.x_ddot(7),info.act.x_ddot(8));
+            rt_printf("Arm Data\n");
+			for(int j=0; j<ROBOT_DOF; ++j){
+				rt_printf("ID: %d", j);
+				rt_printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
+				rt_printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
+				rt_printf("\t NomPos: %lf, NomVel: %lf, NomAcc :%lf\n",info.nom.q(j), info.nom.q_dot(j), info.nom.q_ddot(j));
+				rt_printf("\t TarTor: %lf, ActTor: %lf, NomTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j), info.act.tau_ext(j));
+			}
 			rt_printf("readFT: %lf, %lf, %lf, %lf, %lf, %lf\n", F_tmp(0),F_tmp(1),F_tmp(2),F_tmp(3),F_tmp(4),F_tmp(5));
 			rt_printf("resFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
 			rt_printf("manipulability: %lf\n",manipulability);
@@ -755,6 +802,10 @@ void print_run(void *arg)
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.des.T(1,0), info.des.T(1,1), info.des.T(1,2), info.des.T(1,3));
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.des.T(2,0), info.des.T(2,1), info.des.T(2,2), info.des.T(2,3));
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.des.T(3,0), info.des.T(3,1), info.des.T(3,2), info.des.T(3,3));
+			rt_printf("Tadm: \t%lf, %lf, %lf, %lf\n", info.sim.T(0,0), info.sim.T(0,1), info.sim.T(0,2), info.sim.T(0,3));
+			rt_printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(1,0), info.sim.T(1,1), info.sim.T(1,2), info.sim.T(1,3));
+			rt_printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(2,0), info.sim.T(2,1), info.sim.T(2,2), info.sim.T(2,3));
+			rt_printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(3,0), info.sim.T(3,1), info.sim.T(3,2), info.sim.T(3,3));
 			rt_printf("Tnom: \t%lf, %lf, %lf, %lf\n", info.nom.T(0,0), info.nom.T(0,1), info.nom.T(0,2), info.nom.T(0,3));
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(1,0), info.nom.T(1,1), info.nom.T(1,2), info.nom.T(1,3));
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(2,0), info.nom.T(2,1), info.nom.T(2,2), info.nom.T(2,3));
@@ -763,10 +814,6 @@ void print_run(void *arg)
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.act.T(1,0), info.act.T(1,1), info.act.T(1,2), info.act.T(1,3));
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.act.T(2,0), info.act.T(2,1), info.act.T(2,2), info.act.T(2,3));
 			rt_printf("\t %lf, %lf, %lf, %lf\n", info.act.T(3,0), info.act.T(3,1), info.act.T(3,2), info.act.T(3,3));
-			rt_printf("Tadm: \t%lf, %lf, %lf, %lf\n", info.sim.T(0,0), info.sim.T(0,1), info.sim.T(0,2), info.sim.T(0,3));
-			rt_printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(1,0), info.sim.T(1,1), info.sim.T(1,2), info.sim.T(1,3));
-			rt_printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(2,0), info.sim.T(2,1), info.sim.T(2,2), info.sim.T(2,3));
-			rt_printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(3,0), info.sim.T(3,1), info.sim.T(3,2), info.sim.T(3,3));
 			rt_printf("\n");
 			rt_printf("\n");
 			
@@ -987,7 +1034,7 @@ int main(int argc, char *argv[])
 
     rt_task_create(&print_task, "print_task", 0, 70, 0);
     rt_task_set_affinity(&print_task, &cpuset_rt1);
-    // rt_task_start(&print_task, &print_run, NULL);
+    rt_task_start(&print_task, &print_run, NULL);
 
     // Must pause here
     pause();

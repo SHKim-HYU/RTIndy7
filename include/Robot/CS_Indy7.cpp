@@ -499,6 +499,55 @@ void CS_Indy7::computeRK45(JVec _q, JVec _dq, JVec _tau, JVec &_q_nom, JVec &_dq
     _ddq_nom = k1;
 }
 
+void CS_Indy7::computeMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext)
+{
+    Twist k1, k2, k3, k4;
+
+    // 1st stage
+    Twist _V1 = V_ref;
+    Twist _lambda1 = Twist::Zero();
+    Twist _dlambda1 = dlog6(-_lambda1)*_V1;
+    Twist _delta_lambda1 = period * _dlambda1;
+    SE3 _T1 = T_ref*MatrixExp6(VecTose3(_lambda1));
+    k1 = TaskAdmittanceMK45(T_des, V_des, V_dot_des, _T1, _V1, F_des, F_ext);
+    Twist _delta_V1 = period*k1;
+
+    // 2nd stage
+    Twist _V2 = V_ref + 0.5*_delta_V1;
+    Twist _lambda2 = 0.5*_delta_lambda1;
+    Twist _dlambda2 = dlog6(-_lambda2)*_V2;
+    Twist _delta_lambda2 = period * _dlambda2;
+    SE3 _T2 = T_ref*MatrixExp6(VecTose3(_lambda2));
+    k2 = TaskAdmittanceMK45(T_des, V_des, V_dot_des, _T2, _V2, F_des, F_ext);
+    Twist _delta_V2 = period*k2;
+
+    // 3rd stage
+    Twist _V3 = V_ref + 0.5*_delta_V2;
+    Twist _lambda3 = 0.5*_delta_lambda2;
+    Twist _dlambda3 = dlog6(-_lambda3)*_V3;
+    Twist _delta_lambda3 = period * _dlambda3;
+    SE3 _T3 = T_ref*MatrixExp6(VecTose3(_lambda3));
+    k3 = TaskAdmittanceMK45(T_des, V_des, V_dot_des, _T3, _V3, F_des, F_ext);
+    Twist _delta_V3 = period*k3;
+
+    // 4th stage
+    Twist _V4 = V_ref + _delta_V3;
+    Twist _lambda4 = _delta_lambda3;
+    Twist _dlambda4 = dlog6(-_lambda4)*_V4;
+    Twist _delta_lambda4 = period * _dlambda4;
+    SE3 _T4 = T_ref*MatrixExp6(VecTose3(_lambda4));
+    k4 = TaskAdmittanceMK45(T_des, V_des, V_dot_des, _T4, _V4, F_des, F_ext);
+    Twist _delta_V4 = period*k4;
+
+    T_ref = T_ref*MatrixExp6(VecTose3((1.0/6.0) * (_delta_lambda1 + 2.0*(_delta_lambda2 + _delta_lambda3) + _delta_lambda4)));
+    V_ref += (1.0/6.0) * (_delta_V1+2.0*(_delta_V2+_delta_V3)+_delta_V4);
+    V_dot_ref = k1;
+
+    V_dot_adm =  V_dot_ref;
+    V_adm = V_ref;
+    T_adm = T_ref;
+}
+
 Twist CS_Indy7::computeF_Tool(Twist _dx, Twist _ddx)
 {
     Twist res;
@@ -542,6 +591,7 @@ Twist CS_Indy7::computeF_Threshold(Twist _F)
 			else
 			{
 				res(i)=1*_F(i);
+                // res(i)=0.1*_F(i);
 				// res(i)=0.0;
 			}
 		}
@@ -1254,15 +1304,7 @@ JVec CS_Indy7::TaskImpedanceControl(JVec q_dot, SE3 T_des, Twist V_des, Twist V_
     pinvJacobian invJb = J_b.transpose() * (J_b * J_b.transpose()).inverse();
     JVec qddot_ref = invJb * (V_dot_ref - dJ_b * q_dot);
     
-    JVec torques = M * qddot_ref + C * q_dot + G + J_b.transpose()*F_ext;
-
-    lambda_dot += lambda_ddot_ref*period;
-    lambda += lambda_dot*period;
-
-    // printf("lambda: %lf, %lf, %lf, %lf, %lf, %lf \n", lambda(0), lambda(1), lambda(2), lambda(3), lambda(4), lambda(5));
-    // printf("lambda_dot: %lf, %lf, %lf, %lf, %lf, %lf \n", lambda_dot(0), lambda_dot(1), lambda_dot(2), lambda_dot(3), lambda_dot(4), lambda_dot(5));
-    // printf("lambda_ddot_ref: %lf, %lf, %lf, %lf, %lf, %lf \n\n", lambda_ddot_ref(0), lambda_ddot_ref(1), lambda_ddot_ref(2), lambda_ddot_ref(3), lambda_ddot_ref(4), lambda_ddot_ref(5));
-    
+    JVec torques = M * qddot_ref + C * q_dot + G;// + J_b.transpose()*F_ext;
 
     return torques;
 }
@@ -1496,6 +1538,43 @@ void CS_Indy7::TaskAdmittance(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_ad
     lambda = se3ToVec(MatrixLog6(T_err));
     lambda_dot = dlog6(-lambda) * V_err;
 
+    // F_eff = F_des - Ad(T_err).transpose()*F_ext;
+    // F_eff = F_des - F_ext;
+    F_eff = Ad(invT_err).transpose()*F_des - F_ext;
+
+    gamma = dexp6(-lambda).transpose()*F_eff;
+    gamma_int += gamma *period;
+
+    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+
+    Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
+    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+
+    Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
+    
+    V_dot_ref = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+    V_ref += V_dot_ref*period;
+    lambda_dot = dlog6(-lambda)*V_ref*period;
+    T_ref = T_ref*MatrixExp6(VecTose3(lambda_dot));
+    
+    V_dot_adm =  V_dot_ref;
+    V_adm = V_ref;
+    T_adm = T_ref;
+}
+
+Twist CS_Indy7::TaskAdmittanceMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 T_adm, Twist V_adm, Twist F_des, Twist F_ext)
+{
+    SE3 T_err = TransInv(T_adm)*T_des;
+    SE3 invT_err = TransInv(T_err);
+    Matrix6d AdInvT = Ad(invT_err);
+
+    Twist V_err = V_des - AdInvT * V_adm;
+    lambda = se3ToVec(MatrixLog6(T_err));
+    lambda_dot = dlog6(-lambda) * V_err;
+
     F_eff = F_des - Ad(T_err).transpose()*F_ext;
     gamma = dexp6(-lambda).transpose()*F_eff;
     gamma_int += gamma *period;
@@ -1510,17 +1589,9 @@ void CS_Indy7::TaskAdmittance(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_ad
 
     Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
     
-    printf("lambda: %lf, %lf, %lf %lf, %lf, %lf\n", lambda(0), lambda(1), lambda(2), lambda(3), lambda(4), lambda(5));
-    printf("lam_dot: %lf, %lf, %lf %lf, %lf, %lf\n", lambda_dot(0), lambda_dot(1), lambda_dot(2), lambda_dot(3), lambda_dot(4), lambda_dot(5));
-    printf("lam_ddot_ref: %lf, %lf, %lf %lf, %lf, %lf\n", lambda_ddot_ref(0), lambda_ddot_ref(1), lambda_ddot_ref(2), lambda_ddot_ref(3), lambda_ddot_ref(4), lambda_ddot_ref(5));
-    V_dot_ref = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
-    V_ref += V_dot_ref*period;
-    lambda_dot = dlog6(-lambda)*V_ref*period;
-    T_ref = T_ref*MatrixExp6(VecTose3(lambda_dot));
-    printf("lam_dot_ref: %lf, %lf, %lf %lf, %lf, %lf\n", lambda_dot(0), lambda_dot(1), lambda_dot(2), lambda_dot(3), lambda_dot(4), lambda_dot(5));
-    V_dot_adm =  V_dot_ref;
-    V_adm = V_ref;
-    T_adm = T_ref;
+    Twist V_dot_adm = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+
+    return V_dot_adm;
 }
 
 void CS_Indy7::resetTaskAdmittance()
