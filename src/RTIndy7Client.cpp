@@ -493,14 +493,14 @@ void motor_run(void *arg)
 
 	// for Impedance model
 	A_.diagonal() << 4, 4, 4, 0.4, 0.4, 0.4;
-    K_.diagonal() << 30000,30000, 10, 3000, 3000, 3000;
+    K_.diagonal() << 30000,30000, 30000, 3000, 0, 3000;
 	for(int i=0;i<6;i++)
 		D_(i,i) = 2*1*sqrt(A_(i,i)*K_(i,i));
 	// D_(0,0) = 2; 
 	// D_(1,1) = 2; 
-	D_(2,2) = 0; 
+	// D_(2,2) = 0; 
 	// D_(3,3) = 4; 
-	// D_(4,4) = 0.2; 
+	D_(4,4) = 0.2; 
 	// D_(5,5) = 0.2; 
 	cs_nom_indy7.setTaskImpedancegain(A_,D_,K_);
 	
