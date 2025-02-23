@@ -34,6 +34,7 @@ public:
 	JVec computeFD(JVec _q, JVec _dq, JVec _tau);
 	void computeRK45(JVec _q, JVec _dq, JVec _tau, JVec &_q_nom, JVec &_dq_nom, JVec &_ddq_nom);
 	void computeMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext);
+	void computeDecoupledMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext);
 
 	Twist computeF_Tool(Twist _dx, Twist _ddx);
 	Twist computeF_Threshold(Twist _F);
@@ -91,6 +92,7 @@ public:
 	void resetTaskAdmittance();
 	void TaskAdmittance(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext);
 	Twist TaskAdmittanceMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 T_adm, Twist V_adm, Twist F_des, Twist F_ext);
+	Twist TaskAdmittanceDecoupledMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 T_adm, Twist V_adm, Twist F_des, Twist F_ext);
 
     JVec NRIC(JVec q_r, JVec dq_r, JVec q_n, JVec dq_n);
 	
@@ -118,9 +120,19 @@ private:
 	Twist V_dot;
 	Twist lambda, lambda_dot, lambda_int;
 	Twist lambda_ref;
+
+	Vector3d p, p_dot, p_int;
+	Vector3d p_ref;
+	Vector3d ksi, ksi_dot, ksi_int;
+	Vector3d ksi_ref;
 	
 	Twist F_eff, F_eff_int;
 	Twist gamma, gamma_int;
+
+	Vector3d f_eff, f_eff_int;
+	
+	Vector3d m_eff, m_eff_int;
+	Vector3d phi, phi_int;
 
 	Matrix6d A_tool, B_tool;
 	Vector3d r_floor;
@@ -169,8 +181,15 @@ private:
 	Matrix6d Task_Kgama_imp;
 	Matrix6d Task_K_imp;
 
+	Matrix3d Task_Kp_ksi_imp;
+	Matrix3d Task_Kv_ksi_imp;
+	Matrix3d Task_Kgama_ksi_imp;
+	Matrix3d Task_K_ksi_imp;
+
 	Matrix6d A_, D_, K_;
     Matrix6d A_lambda, D_lambda, K_lambda;
+	Matrix3d A_ksi, D_ksi, K_ksi;
+	Matrix3d A_linear, D_linear, K_linear;
 
     JMat Kp;
     JMat Kv;

@@ -151,10 +151,14 @@ void trajectory_generation(){
 							0.0, 1.0, 0, -0.177496,
 							-1.0, 0.0, 0.0, 0.47077,
 							0, 0, 0, 1;
-			// info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
- 			// 				1.40484e-21, 1, 1.40483e-21, -0.1865, 
- 			// 				-1.26536e-05, 1.40484e-21, -1, 0.502002, 
- 			// 				0, 0, 0, 1;
+			info.T_target << 0.0, -0, 1.0, 0.5975,
+							0.0, 1.0, 0, -0.19,
+							-1.0, 0.0, 0.0, 0.649504,
+							0, 0, 0, 1;
+			info.T_target << -1, 1.40483e-21, 1.26536e-05, 0.350005, 
+ 							1.40484e-21, 1, 1.40483e-21, -0.1865, 
+ 							-1.26536e-05, 1.40484e-21, -1, 0.502002, 
+ 							0, 0, 0, 1;
 			traj_time = 10;	
 			modeControl=3;
 			motioncnt = 0;
@@ -178,7 +182,7 @@ void trajectory_generation(){
 			motion++;
 			break;
 
-		case 4: // Hold on Task motion
+		case 4: 
 	    	info.T_init = info.T_target;
 			info.T_target << 0.0, -0, 1.0, 0.672989,
 							0.0, 1.0, 0, -0.277496,
@@ -191,8 +195,8 @@ void trajectory_generation(){
 			traj_time = 10;	
 			modeControl=3;
 			motioncnt = 0;
-			// motion=2;
-			motion++;
+			motion=3;
+			// motion++;
 			break;
 		
 		case 5:
@@ -369,13 +373,19 @@ void control()
 	else if(modeControl==3)
 	{
 		// [Task Space Nominal Controller]
-		if(gt>5)
-			// info.des.F << 0, 0, -10, 0, 0, 0;
+		if(gt>13)
+		{
 			info.des.F << 0, 0, 0, 0, 0, 0;
-		// info.act.F << 0, 0, 0, 0, 0, 0;
+			
+			// // Set bias
+			// UINT32 FTConfigParam=FT_SET_BIAS;
+			// ecat_tool[0].writeFTconfig(FTConfigParam);			
+			// ecat_master.RxUpdate();
+		}
 
 		// cs_nom_indy7.TaskAdmittance(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
-		cs_nom_indy7.computeMK45(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
+		// cs_nom_indy7.computeMK45(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
+		cs_nom_indy7.computeDecoupledMK45(info.des.T, info.des.x_dot, info.des.x_ddot, info.sim.T, info.sim.x_dot, info.sim.x_ddot, info.des.F, info.act.F);
 		info.nom.q_ddot = cs_nom_indy7.TaskStablePD(info.sim.T, info.sim.x_dot, info.sim.x_ddot);
 
 		// info.nom.q_ddot = cs_nom_indy7.TaskStablePD(info.des.T, info.des.x_dot, info.des.x_ddot);
@@ -385,11 +395,10 @@ void control()
 		info.nom.q_dot += info.nom.q_ddot*period;
 		info.nom.q += info.nom.q_dot*period;
 
-			
 		// [NRIC]
 		info.act.tau_aux = cs_indy7.NRIC(info.act.q, info.act.q_dot, info.nom.q, info.nom.q_dot);
 		// info.des.tau = info.nom.tau - info.act.tau_aux + info.act.tau_ext;
-		info.des.tau = info.nom.tau - info.act.tau_aux;
+		info.des.tau = cs_nom_indy7.getG() - info.act.tau_aux;
 		// info.des.tau = info.act.tau_aux;
 	}
 	else if(modeControl==4)
@@ -492,15 +501,18 @@ void motor_run(void *arg)
 	cs_nom_indy7.setTaskgain(Task_Kp, Task_Kv, Task_K);
 
 	// for Impedance model
-	A_.diagonal() << 4, 4, 4, 0.4, 0.4, 0.4;
-    K_.diagonal() << 30000,30000, 30000, 3000, 0, 3000;
+	// A_.diagonal() << 400, 400, 400, 10, 10, 10;
+	A_.diagonal() << 4, 4, 4, 0.4, 0.4, 0.04;
+    // K_.diagonal() << 3000,3000, 3000, 300, 300, 0.1;
+	K_.diagonal() << 10,10, 30000, 3000, 3000, 3000;
 	for(int i=0;i<6;i++)
 		D_(i,i) = 2*1*sqrt(A_(i,i)*K_(i,i));
-	// D_(0,0) = 2; 
-	// D_(1,1) = 2; 
-	// D_(2,2) = 0; 
-	// D_(3,3) = 4; 
-	D_(4,4) = 0.2; 
+	
+	// D_(0,0) = 0.1; 
+	// D_(1,1) = 0.1; 
+	// D_(2,2) = 0.1; 
+	// D_(3,3) = 0.01; 
+	// D_(4,4) = 0.2; 
 	// D_(5,5) = 0.2; 
 	cs_nom_indy7.setTaskImpedancegain(A_,D_,K_);
 	
@@ -1034,7 +1046,7 @@ int main(int argc, char *argv[])
 
     rt_task_create(&print_task, "print_task", 0, 70, 0);
     rt_task_set_affinity(&print_task, &cpuset_rt1);
-    rt_task_start(&print_task, &print_run, NULL);
+    // rt_task_start(&print_task, &print_run, NULL);
 
     // Must pause here
     pause();

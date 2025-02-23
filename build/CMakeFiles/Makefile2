@@ -162,9 +162,9 @@ CMakeFiles/RTIndy7_01_SIM.dir/clean:
 # Target rules for target CMakeFiles/RTIndy7_01_CTRL.dir
 
 # All Build rule for target.
-CMakeFiles/RTIndy7_01_CTRL.dir/all: include/EcatSystem/CMakeFiles/EcatSystem.dir/all
-CMakeFiles/RTIndy7_01_CTRL.dir/all: include/Interpolator/CMakeFiles/Interpolator.dir/all
 CMakeFiles/RTIndy7_01_CTRL.dir/all: include/Robot/CMakeFiles/Robot.dir/all
+CMakeFiles/RTIndy7_01_CTRL.dir/all: include/Interpolator/CMakeFiles/Interpolator.dir/all
+CMakeFiles/RTIndy7_01_CTRL.dir/all: include/EcatSystem/CMakeFiles/EcatSystem.dir/all
 	$(MAKE) -f CMakeFiles/RTIndy7_01_CTRL.dir/build.make CMakeFiles/RTIndy7_01_CTRL.dir/depend
 	$(MAKE) -f CMakeFiles/RTIndy7_01_CTRL.dir/build.make CMakeFiles/RTIndy7_01_CTRL.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/robot/robot_ws/RTIndy7/build/CMakeFiles --progress-num=6,7 "Built target RTIndy7_01_CTRL"

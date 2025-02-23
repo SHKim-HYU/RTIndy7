@@ -548,6 +548,129 @@ void CS_Indy7::computeMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, 
     T_adm = T_ref;
 }
 
+void CS_Indy7::computeDecoupledMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_adm, Twist &V_adm, Twist &V_dot_adm, Twist F_des, Twist F_ext)
+{
+    /*
+    Twist k1, k2, k3, k4;
+
+    SO3 R_ref = T_ref.block<3,3>(0,0);
+    p_ref = T_ref.block<3,1>(0,3);
+    
+    // 1st stage
+    Twist _V1 = V_ref;
+    Vector3d _p1 = p_ref;
+    Vector3d _ksi1 = Vector3d::Zero();
+    Vector3d _dksi1 = dlog3(-_ksi1)*_V1.tail(3);
+    Vector3d _delta_ksi1 = period * _dksi1;
+    SO3 _R1 = R_ref*MatrixExp3(VecToso3(_ksi1));
+    SE3 _T1 = SE3::Identity(); _T1.block<3,3>(0,0) = _R1; _T1.block<3,1>(0,3) = _p1;
+    k1 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T1, _V1, F_des, F_ext);
+    Twist _delta_V1 = period*k1;
+
+    // 2nd stage
+    Twist _V2 = V_ref + 0.5*_delta_V1;
+    Vector3d _p2 = p_ref + 0.5*period*_V2.head(3);
+    Vector3d _ksi2 = 0.5*_delta_ksi1;
+    Vector3d _dksi2 = dlog3(-_ksi2)*_V2.tail(3);
+    Vector3d _delta_ksi2 = period * _dksi2;
+    SO3 _R2 = R_ref*MatrixExp3(VecToso3(_ksi2));
+    SE3 _T2 = SE3::Identity(); _T2.block<3,3>(0,0) = _R2; _T2.block<3,1>(0,3) = _p2;
+    k2 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T2, _V2, F_des, F_ext);
+    Twist _delta_V2 = period*k2;
+
+    // 3rd stage
+    Twist _V3 = V_ref + 0.5*_delta_V2;
+    Vector3d _p3 = p_ref + 0.5*period*_V3.head(3);
+    Vector3d _ksi3 = 0.5*_delta_ksi2;
+    Vector3d _dksi3 = dlog3(-_ksi3)*_V3.tail(3);
+    Vector3d _delta_ksi3 = period * _dksi3;
+    SO3 _R3 = R_ref*MatrixExp3(VecToso3(_ksi3));
+    SE3 _T3 = SE3::Identity(); _T3.block<3,3>(0,0) = _R3; _T3.block<3,1>(0,3) = _p3;
+    k3 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T3, _V3, F_des, F_ext);
+    Twist _delta_V3 = period*k3;
+
+    // 4th stage
+    Twist _V4 = V_ref + _delta_V3;
+    Vector3d _p4 = p_ref + period*_V4.head(3);
+    Vector3d _ksi4 = _delta_ksi3;
+    Vector3d _dksi4 = dlog3(-_ksi4)*_V4.tail(3);
+    Vector3d _delta_ksi4 = period * _dksi4;
+    SO3 _R4 = R_ref*MatrixExp3(VecToso3(_ksi4));
+    SE3 _T4 = SE3::Identity(); _T4.block<3,3>(0,0) = _R4; _T4.block<3,1>(0,3) = _p4;
+    k4 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T4, _V4, F_des, F_ext);
+    Twist _delta_V4 = period*k4;
+    
+    R_ref = R_ref*MatrixExp3(VecToso3((1.0/6.0) * (_delta_ksi1 + 2.0*(_delta_ksi2 + _delta_ksi3) + _delta_ksi4)));
+    p_ref += (period/6.0) * (_V1.head(3) + 2.0*(_V2.head(3)+_V3.head(3)) + _V4.head(3));
+    T_ref.block<3,3>(0,0) = R_ref; T_ref.block<3,1>(0,3) = p_ref;
+    V_ref += (1.0/6.0) * (_delta_V1+2.0*(_delta_V2+_delta_V3)+_delta_V4);
+    V_dot_ref = k1;
+    printf("p_ref: %lf, %lf, %lf\n\n", p_ref(0), p_ref(1), p_ref(2));
+
+    V_dot_adm =  V_dot_ref;
+    V_adm = V_ref;
+    T_adm = T_ref;
+    */
+
+    // /*
+    Twist k1, k2, k3, k4;
+
+    // 1st stage
+    Twist _V1 = V_ref;
+    Twist _lambda1 = Twist::Zero();
+    Twist _dlambda1 = dlog6(-_lambda1)*_V1;
+    Twist _delta_lambda1 = period * _dlambda1;
+    SE3 _T1 = T_ref*MatrixExp6(VecTose3(_lambda1));
+    k1 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T1, _V1, F_des, F_ext);
+    Twist _delta_V1 = period*k1;
+
+    // 2nd stage
+    Twist _V2 = V_ref + 0.5*_delta_V1;
+    Twist _lambda2 = 0.5*_delta_lambda1;
+    Twist _dlambda2 = dlog6(-_lambda2)*_V2;
+    Twist _delta_lambda2 = period * _dlambda2;
+    SE3 _T2 = T_ref*MatrixExp6(VecTose3(_lambda2));
+    k2 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T2, _V2, F_des, F_ext);
+    Twist _delta_V2 = period*k2;
+
+    // 3rd stage
+    Twist _V3 = V_ref + 0.5*_delta_V2;
+    Twist _lambda3 = 0.5*_delta_lambda2;
+    Twist _dlambda3 = dlog6(-_lambda3)*_V3;
+    Twist _delta_lambda3 = period * _dlambda3;
+    SE3 _T3 = T_ref*MatrixExp6(VecTose3(_lambda3));
+    k3 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T3, _V3, F_des, F_ext);
+    Twist _delta_V3 = period*k3;
+
+    // 4th stage
+    Twist _V4 = V_ref + _delta_V3;
+    Twist _lambda4 = _delta_lambda3;
+    Twist _dlambda4 = dlog6(-_lambda4)*_V4;
+    Twist _delta_lambda4 = period * _dlambda4;
+    SE3 _T4 = T_ref*MatrixExp6(VecTose3(_lambda4));
+    k4 = TaskAdmittanceDecoupledMK45(T_des, V_des, V_dot_des, _T4, _V4, F_des, F_ext);
+    Twist _delta_V4 = period*k4;
+
+    T_ref = T_ref*MatrixExp6(VecTose3((1.0/6.0) * (_delta_lambda1 + 2.0*(_delta_lambda2 + _delta_lambda3) + _delta_lambda4)));
+    V_ref += (1.0/6.0) * (_delta_V1+2.0*(_delta_V2+_delta_V3)+_delta_V4);
+    V_dot_ref = k1;
+
+    V_dot_adm =  V_dot_ref;
+    V_adm = V_ref;
+    T_adm = T_ref;
+    // */
+
+    printf("A_ksi: %lf, %lf, %lf\n", A_ksi(0,0), A_ksi(0,1), A_ksi(0,2));
+    printf("\t %lf, %lf, %lf\n", A_ksi(1,0), A_ksi(1,1), A_ksi(1,2));
+    printf("\t %lf, %lf, %lf\n", A_ksi(2,0), A_ksi(2,1), A_ksi(2,2));
+    printf("D_ksi: %lf, %lf, %lf\n", D_ksi(0,0), D_ksi(0,1), D_ksi(0,2));
+    printf("\t %lf, %lf, %lf\n", D_ksi(1,0), D_ksi(1,1), D_ksi(1,2));
+    printf("\t %lf, %lf, %lf\n", D_ksi(2,0), D_ksi(2,1), D_ksi(2,2));
+    printf("K_ksi: %lf, %lf, %lf\n", K_ksi(0,0), K_ksi(0,1), K_ksi(0,2));
+    printf("\t %lf, %lf, %lf\n", K_ksi(1,0), K_ksi(1,1), K_ksi(1,2));
+    printf("\t %lf, %lf, %lf\n\n", K_ksi(2,0), K_ksi(2,1), K_ksi(2,2));
+}
+
 Twist CS_Indy7::computeF_Tool(Twist _dx, Twist _ddx)
 {
     Twist res;
@@ -573,7 +696,7 @@ Twist CS_Indy7::computeF_Threshold(Twist _F)
     {
 		if(i<3)
 		{
-			if(0.8>abs(_F(i)))
+			if(1.8>abs(_F(i)))
 			{
 				res(i)=0.0;
 			}
@@ -1547,10 +1670,11 @@ void CS_Indy7::TaskAdmittance(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 &T_ad
 
     A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
     D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
-    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+    // K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+    K_lambda = K_;
 
     Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
-    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_;
     Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
 
     Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
@@ -1571,26 +1695,113 @@ Twist CS_Indy7::TaskAdmittanceMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 
     SE3 invT_err = TransInv(T_err);
     Matrix6d AdInvT = Ad(invT_err);
 
-    Twist V_err = V_des - AdInvT * V_adm;
+    Twist V_err = Ad(T_err) * V_des - V_adm;
     lambda = se3ToVec(MatrixLog6(T_err));
-    lambda_dot = dlog6(-lambda) * V_err;
+    lambda_dot = dlog6(lambda) * V_err;
 
-    F_eff = F_des - Ad(T_err).transpose()*F_ext;
-    gamma = dexp6(-lambda).transpose()*F_eff;
+    F_eff = AdInvT.transpose() * F_des - F_ext;
+    gamma = dexp6(lambda).transpose()*F_eff;
     gamma_int += gamma *period;
 
-    A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
-    D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
-    K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+    A_lambda = dexp6(lambda).transpose() * A_ * dexp6(lambda);
+    D_lambda = dexp6(lambda).transpose() * (D_ * dexp6(lambda) + A_*ddexp6(lambda, lambda_dot));
+    // K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+    K_lambda = K_;
 
-    Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
-    Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
-    Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+    Task_Kv_imp = dlog6(lambda)*(A_.inverse()*D_*dexp6(lambda) + ddexp6(lambda, lambda_dot));
+    Task_Kp_imp = dlog6(lambda)*A_.inverse()*dlog6(lambda).transpose()*K_;
+    Task_Kgama_imp = dlog6(lambda)*A_.inverse()*dlog6(lambda).transpose();
 
     Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
     
-    Twist V_dot_adm = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+    Twist V_dot_adm = Ad(T_err) * V_dot_des - (dexp6(lambda) * lambda_ddot_ref) + ad(V_err) * V_adm - (ddexp6(lambda, lambda_dot) * lambda_dot);
 
+
+    // Twist V_err = V_des - AdInvT * V_adm;
+    // lambda = se3ToVec(MatrixLog6(T_err));
+    // lambda_dot = dlog6(-lambda) * V_err;
+
+    // F_eff = F_des - Ad(T_err).transpose() * F_ext;
+    // gamma = dexp6(-lambda).transpose()*F_eff;
+    // gamma_int += gamma *period;
+
+    // A_lambda = dexp6(-lambda).transpose() * A_ * dexp6(-lambda);
+    // D_lambda = dexp6(-lambda).transpose() * (D_ * dexp6(-lambda) + A_*ddexp6(-lambda, -lambda_dot));
+    // K_lambda = dexp6(-lambda).transpose() * K_ * dexp6(-lambda);
+    // // K_lambda = K_;
+
+    // Task_Kv_imp = dlog6(-lambda)*(A_.inverse()*D_*dexp6(-lambda) + ddexp6(-lambda, -lambda_dot));
+    // Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_*dexp6(-lambda);
+    // // Task_Kp_imp = dlog6(-lambda)*A_.inverse()*K_;
+    // Task_Kgama_imp = dlog6(-lambda)*A_.inverse()*dlog6(-lambda).transpose();
+
+    // Twist lambda_ddot_ref = -Task_Kv_imp * lambda_dot - Task_Kp_imp * lambda + Task_Kgama_imp * gamma;
+    
+    // Twist V_dot_adm = Ad(T_err) * (V_dot_des - (dexp6(-lambda) * lambda_ddot_ref) + ad(V_err) * V_des - (ddexp6(-lambda, -lambda_dot) * lambda_dot));
+
+    return V_dot_adm;
+}
+
+Twist CS_Indy7::TaskAdmittanceDecoupledMK45(SE3 T_des, Twist V_des, Twist V_dot_des, SE3 T_adm, Twist V_adm, Twist F_des, Twist F_ext)
+{
+    // Linear
+    SE3 T_err = TransInv(T_adm)*T_des;
+    SO3 R_err = T_err.block<3,3>(0,0);
+    SO3 invR_err = R_err.transpose();
+    Vector3d p_err = T_err.block<3,1>(0,3);
+    Vector3d v_err = R_err * V_des.head(3) - V_adm.head(3);
+    
+    f_eff = R_err * F_des.head(3) - F_ext.head(3);
+
+    A_linear = A_.block<3,3>(0,0);
+    D_linear = D_.block<3,3>(0,0);
+    K_linear = K_.block<3,3>(0,0);
+
+    Vector3d v_dot_adm = R_err * V_dot_des.head(3) - A_linear.inverse()*(f_eff - D_linear*v_err - K_linear*p_err);
+
+    // Angular
+    Vector3d w_err = R_err * V_des.tail(3) - V_adm.tail(3);
+    ksi = so3ToVec(MatrixLog3(R_err));
+    ksi_dot = dlog3(ksi) * w_err;
+
+    m_eff = R_err * F_des.tail(3) - F_ext.tail(3);
+    phi = dexp3(ksi).transpose()*m_eff;
+
+    A_ksi = dexp3(ksi).transpose() * A_.block<3,3>(3,3) * dexp3(ksi);
+    D_ksi = dexp3(ksi).transpose() * (D_.block<3,3>(3,3) * dexp3(ksi) + A_.block<3,3>(3,3)*ddexp3(ksi, ksi_dot));
+    K_ksi = K_.block<3,3>(3,3);
+
+    Task_Kv_ksi_imp = dlog3(ksi)*(A_.block<3,3>(3,3).inverse()*D_.block<3,3>(3,3)*dexp3(ksi) + ddexp3(ksi, ksi_dot));
+    Task_Kp_ksi_imp = dlog3(ksi)*A_.block<3,3>(3,3).inverse()*dlog3(ksi).transpose()*K_.block<3,3>(3,3);
+    // Task_Kp_ksi_imp = dlog3(ksi)*A_.block<3,3>(3,3).inverse()*K_.block<3,3>(3,3)*dexp3(ksi);
+    Task_Kgama_ksi_imp = dlog3(ksi)*A_.block<3,3>(3,3).inverse()*dlog3(ksi).transpose();
+
+    Vector3d ksi_ddot_ref = -Task_Kv_ksi_imp * ksi_dot - Task_Kp_ksi_imp * ksi + Task_Kgama_ksi_imp * phi;
+    
+    Vector3d w_dot_adm = R_err * V_dot_des.tail(3) - (dexp3(ksi) * ksi_ddot_ref) + VecToso3(w_err) * V_des.tail(3) - (ddexp3(ksi, ksi_dot) * ksi_dot);
+
+    // Vector3d w_err = V_des.tail(3) - invR_err * V_adm.tail(3);
+    // ksi = so3ToVec(MatrixLog3(R_err));
+    // ksi_dot = dlog3(-ksi) * w_err;
+
+    // m_eff = F_des.tail(3) - invR_err * F_ext.tail(3);
+    // phi = dexp3(-ksi).transpose()*m_eff;
+
+    // A_ksi = dexp3(-ksi).transpose() * A_.block<3,3>(3,3) * dexp3(-ksi);
+    // D_ksi = dexp3(-ksi).transpose() * (D_.block<3,3>(3,3) * dexp3(-ksi) + A_.block<3,3>(3,3)*ddexp3(-ksi, -ksi_dot));
+    // K_ksi = K_.block<3,3>(3,3);
+
+    // Task_Kv_ksi_imp = dlog3(-ksi)*(A_.block<3,3>(3,3).inverse()*D_.block<3,3>(3,3)*dexp3(-ksi) + ddexp3(-ksi, -ksi_dot));
+    // Task_Kp_ksi_imp = dlog3(-ksi)*A_.block<3,3>(3,3).inverse()*dexp3(-ksi)*K_.block<3,3>(3,3);
+    // Task_Kgama_ksi_imp = dlog3(-ksi)*A_.block<3,3>(3,3).inverse()*dlog3(-ksi).transpose();
+
+    // Vector3d ksi_ddot_ref = -Task_Kv_ksi_imp * ksi_dot - Task_Kp_ksi_imp * ksi + Task_Kgama_ksi_imp * phi;
+    
+    // Vector3d w_dot_adm = R_err *(V_dot_des.tail(3) - (dexp3(-ksi) * ksi_ddot_ref) + VecToso3(w_err) * V_des.tail(3) - (ddexp3(-ksi, -ksi_dot) * ksi_dot));
+
+    Twist V_dot_adm;
+    V_dot_adm << v_dot_adm, w_dot_adm;
+    
     return V_dot_adm;
 }
 
