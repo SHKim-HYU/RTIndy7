@@ -12,9 +12,14 @@
 #include <Eigen/Dense>
 
 #define CONTROL_FREQ 1000
-#define ROBOT_DOF 6
 #define OFFSET_NUM 5
+#ifdef __RP__
+#define ROBOT_DOF 7
+#define NRMK_DRIVE_NUM 7
+#else
+#define ROBOT_DOF 6
 #define NRMK_DRIVE_NUM 6
+#endif
 #define NRMK_TOOL_NUM 1
 
 // [General Parameters]
@@ -27,6 +32,25 @@
 #define TORQUE_ADC_200 96 // Torque ADC for Core 200 [NRMK]
 #define TORQUE_ADC_100 96 // Torque ADC for Core 100 [NRMK]
 
+#ifdef __RP__
+// IndyRP2
+// SN: DB26R7P0B008 / PD33R7E0D001 [IndyRP2]
+#define ZERO_POS_1 -1625770
+#define ZERO_POS_2 -7749
+#define ZERO_POS_3 40393
+#define ZERO_POS_4 -24019
+#define ZERO_POS_5 -15000
+#define ZERO_POS_6 836049
+#define ZERO_POS_7 -1684257
+
+#define invL2sqr_1 1000
+#define invL2sqr_2 1000
+#define invL2sqr_3 800
+#define invL2sqr_4 800
+#define invL2sqr_5 600
+#define invL2sqr_6 600
+#define invL2sqr_7 600
+#else
 // Indy7
 // SN: DD11I7E0D001 [Indy7]
 #define ZERO_POS_1 20902
@@ -36,30 +60,18 @@
 #define ZERO_POS_5 2180
 #define ZERO_POS_6 31587
 
-#define F_c 20.123, 12.287, 4.5622, 3.1492, 3.4757, 3.4986
-#define F_v1 111.32, 70.081, 25.337, 13.131, 8.5082, 9.9523
-#define F_v2 0.5193, 0.4824, 0.9098, 1.0961, 0.73829, 1.1475 
-
-#define MAX_CURRENT_1 2.55
-#define MAX_CURRENT_2 2.55
-#define MAX_CURRENT_3 2.83
-#define MAX_CURRENT_4 2.83
-#define MAX_CURRENT_5 2.83
-#define MAX_CURRENT_6 2.83
-
-#define MAX_TORQUE_1 431.97
-#define MAX_TORQUE_2 431.97
-#define MAX_TORQUE_3 197.23
-#define MAX_TORQUE_4 79.79
-#define MAX_TORQUE_5 79.79
-#define MAX_TORQUE_6 79.79
-
 #define invL2sqr_1 1000
 #define invL2sqr_2 1000
 #define invL2sqr_3 800
 #define invL2sqr_4 600
 #define invL2sqr_5 600
 #define invL2sqr_6 600
+#endif
+
+#define F_c 20.123, 12.287, 4.5622, 3.1492, 3.4757, 3.4986
+#define F_v1 111.32, 70.081, 25.337, 13.131, 8.5082, 9.9523
+#define F_v2 0.5193, 0.4824, 0.9098, 1.0961, 0.73829, 1.1475 
+
 
 
 // 2. Electrical

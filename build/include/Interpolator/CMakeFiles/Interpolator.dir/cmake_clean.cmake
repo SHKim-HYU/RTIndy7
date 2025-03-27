@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Interpolator.dir/TaskTrajectory.cpp.o"
-  "libInterpolator.a"
-  "libInterpolator.pdb"
+  "libInterpolatord.a"
+  "libInterpolatord.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

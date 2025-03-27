@@ -1,0 +1,179 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						2,
+						3
+					]
+				},
+				{
+					"build" : "include/EcatSystem",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "include/EcatSystem",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "include/Interpolator",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "include/Interpolator",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "include/Robot",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "include/Robot",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "RTIndy7_01",
+					"targetIndexes" : 
+					[
+						2,
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "EcatSystem",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "Interpolator",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "Robot",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "EcatSystem::@f689c52d19d87c0c3843",
+					"jsonFile" : "target-EcatSystem-Debug-259447440c152692cd06.json",
+					"name" : "EcatSystem",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "Interpolator::@3b557d557d621394a5fb",
+					"jsonFile" : "target-Interpolator-Debug-fe6f30a4a89c17aaa2a0.json",
+					"name" : "Interpolator",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "RTIndy7_01_CTRL::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-RTIndy7_01_CTRL-Debug-dcfb9b92df8e4ba6e65d.json",
+					"name" : "RTIndy7_01_CTRL",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "RTIndy7_01_SIM::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-RTIndy7_01_SIM-Debug-1cbc63eddfd3f850774f.json",
+					"name" : "RTIndy7_01_SIM",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "Robot::@bc8f6043f00d71530807",
+					"jsonFile" : "target-Robot-Debug-58e97b3ed3692f98a3ce.json",
+					"name" : "Robot",
+					"projectIndex" : 3
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/robot/robot_ws/RTIndy7/build",
+		"source" : "/home/robot/robot_ws/RTIndy7"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

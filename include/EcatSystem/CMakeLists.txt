@@ -13,6 +13,12 @@ add_library(sub::ECAT ALIAS ${PROJECT_NAME})
 target_include_directories( ${PROJECT_NAME}
         PUBLIC ${PRJECT_SOURCE_DIR})
 
+# IndyRP Option
+if(WITH_RP)
+    add_compile_definitions(__RP__)
+endif()
+
+
 find_package(Etherlab REQUIRED)
 if(Etherlab_FOUND)
     message(STATUS "Etherlab_INC_DIRS = ${Etherlab_INCLUDE_DIR}")

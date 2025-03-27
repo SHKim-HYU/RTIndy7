@@ -112,11 +112,14 @@ void trajectory_generation(){
 	    switch(motion)
 	    {
 	    case 1:
-			info.q_target(0)=0.0; info.q_target(1)=0.707; info.q_target(2)=-1.5709;
-			info.q_target(3)=0.0; info.q_target(4)=-0.707; info.q_target(5)=0.0;
+#ifdef __RP__		
+			info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=0.0;
+			info.q_target(3)=-1.5709; info.q_target(4)=0.0; info.q_target(5)=-1.5709;
+			info.q_target(6)=0.0;
+#else
 			info.q_target(0)=0.0; info.q_target(1)=0.0; info.q_target(2)=-1.5709;
 			info.q_target(3)=0.0; info.q_target(4)=-1.5709; info.q_target(5)=0.0;
-			
+#endif	
 			// info.q_target(0)=0.090390; info.q_target(1)=-0.402861; info.q_target(2)=-0.613726;
 			// info.q_target(3)=0.003550; info.q_target(4)=-2.134188; info.q_target(5)=0.082176;
 			
@@ -239,6 +242,9 @@ void trajectory_generation(){
 		default:
 			info.q_target(0)=info.act.q(0); info.q_target(1)=info.act.q(1); info.q_target(2)=info.act.q(2);
 			info.q_target(3)=info.act.q(3); info.q_target(4)=info.act.q(4); info.q_target(5)=info.act.q(5);
+#ifdef __RP__
+			info.q_target(6)=info.act.q(6);
+#endif
 
 	    	motion=1;
 	    	break;
@@ -460,6 +466,16 @@ void motor_run(void *arg)
 	A_ = Matrix6d::Zero(); D_ = Matrix6d::Zero(); K_ = Matrix6d::Zero();
 
 	// Real
+#ifdef __RP__
+	NRIC_Kp << 20.0, 25.0, 10.0, 10.0, 3.0, 3.0, 1.5;
+	NRIC_Ki << 5.0, 5.5, 2.5, 2.5, 0.8, 0.8, 0.6;
+	// NRIC_Kp << 100.0, 100.0, 100.0, 100, 100, 100;
+	// NRIC_Ki << 20.0, 20.0, 20.0, 20.0, 20., 20.0;
+	// NRIC_K << 80.0, 80.0, 50.0, 15.0, 15.0, 15.0;
+	// NRIC_gamma << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
+	NRIC_gamma << 80.0, 80.0, 50.0, 50.0, 15.0, 15.0, 15.0;
+	NRIC_K << 550.0, 600.0, 450.0, 450.0, 250.0, 250.0, 175.0;
+#else
 	NRIC_Kp << 20.0, 25.0, 10.0, 3.0, 3.0, 1.5;
 	NRIC_Ki << 5.0, 5.5, 2.5, 0.8, 0.8, 0.6;
 	// NRIC_Kp << 100.0, 100.0, 100.0, 100, 100, 100;
@@ -468,7 +484,7 @@ void motor_run(void *arg)
 	// NRIC_gamma << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
 	NRIC_gamma << 80.0, 80.0, 50.0, 15.0, 15.0, 15.0;
 	NRIC_K << 550.0, 600.0, 450.0, 250.0, 250.0, 175.0;
-
+#endif
 	// NRIC_Kp << 10.0, 10.0, 10.0, 10, 20, 20;
 	// NRIC_Ki << 8.0, 8.0, 8.0, 8.0, 8.0, 8.0;
 	// NRIC_gamma << 80.0, 80.0, 50.0, 15.0, 15.0, 15.0;
@@ -477,9 +493,15 @@ void motor_run(void *arg)
 	
 	// nominal
 	// for IDC
+#ifdef __RP__
+	Kp_n << 50.0, 50.0, 30.0, 30.0, 20.0, 20.0, 20.0;
+	Kd_n << 5.0, 5.0, 3.0, 3.0, 2.0, 2.0, 2.0;
+	K_n << 1,1,0.5,0.5,0.3,0.2,0.2;
+#else
 	Kp_n << 50.0, 50.0, 30.0, 20.0, 20.0, 20.0;
 	Kd_n << 5.0, 5.0, 3.0, 2.0, 2.0, 2.0;
 	K_n << 1,1,0.5,0.3,0.2,0.2;
+#endif
 	cs_nom_indy7.setPIDgain(Kp_n, Kd_n, K_n);
 
 	// Task
@@ -496,8 +518,9 @@ void motor_run(void *arg)
 	Task_Kv = Task_Kp*period*30.0;
 	// Task_Kp << 4000, 100, 4000, 4000, 4000, 4000;
 	// Task_Kv << 400, 20, 400, 400, 400, 400;
-	
+#ifdef __RP__	
 	Task_K << 1,1,0.5,0.3,0.2,0.2;
+
 	cs_nom_indy7.setTaskgain(Task_Kp, Task_Kv, Task_K);
 
 	// for Impedance model
@@ -538,45 +561,6 @@ void motor_run(void *arg)
     rt_task_set_periodic(NULL, TM_NOW, cycle_ns);
     while (1) {
         beginCycle = rt_timer_read();
-
-		// printf("Time=%0.3lfs, cycle_dt=%lius, worst_cycle=%lius, overrun=%d\n", gt, periodCycle/1000, worstLoop/1000, overruns);
-		// printf("modeControl: %d\n",modeControl);
-		// // /*
-		// printf("Arm Data\n");
-		// for(int j=0; j<ROBOT_DOF; ++j){
-		// 	printf("ID: %d", j);
-		// 	printf("\t DesPos: %lf, DesVel :%lf, DesAcc :%lf\n",info.des.q[j],info.des.q_dot[j],info.des.q_ddot[j]);
-		// 	printf("\t ActPos: %lf, ActVel: %lf \n",info.act.q(j), info.act.q_dot(j));
-		// 	printf("\t NomPos: %lf, NomVel: %lf, NomAcc :%lf\n",info.nom.q(j), info.nom.q_dot(j), info.nom.q_ddot(j));
-		// 	printf("\t TarTor: %lf, ActTor: %lf, NomTor: %lf, ExtTor: %lf \n", info.des.tau(j), info.act.tau(j), info.nom.tau(j), info.act.tau_ext(j));
-		// }
-		// // printf("V: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.x_dot(0),info.act.x_dot(1),info.act.x_dot(2),info.act.x_dot(3),info.act.x_dot(4),info.act.x_dot(5),info.act.x_dot(6),info.act.x_dot(7),info.act.x_dot(8));
-		// // printf("dV: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.x_ddot(0),info.act.x_ddot(1),info.act.x_ddot(2),info.act.x_ddot(3),info.act.x_ddot(4),info.act.x_ddot(5),info.act.x_ddot(6),info.act.x_ddot(7),info.act.x_ddot(8));
-		// printf("readFT: %lf, %lf, %lf, %lf, %lf, %lf\n", F_tmp(0),F_tmp(1),F_tmp(2),F_tmp(3),F_tmp(4),F_tmp(5));
-		// printf("resFT: %lf, %lf, %lf, %lf, %lf, %lf\n", info.act.F(0),info.act.F(1),info.act.F(2),info.act.F(3),info.act.F(4),info.act.F(5));
-		// printf("manipulability: %lf\n",manipulability);
-		// printf("Tdes: \t%lf, %lf, %lf, %lf\n", info.des.T(0,0), info.des.T(0,1), info.des.T(0,2), info.des.T(0,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.des.T(1,0), info.des.T(1,1), info.des.T(1,2), info.des.T(1,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.des.T(2,0), info.des.T(2,1), info.des.T(2,2), info.des.T(2,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.des.T(3,0), info.des.T(3,1), info.des.T(3,2), info.des.T(3,3));
-		// printf("Tnom: \t%lf, %lf, %lf, %lf\n", info.nom.T(0,0), info.nom.T(0,1), info.nom.T(0,2), info.nom.T(0,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(1,0), info.nom.T(1,1), info.nom.T(1,2), info.nom.T(1,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(2,0), info.nom.T(2,1), info.nom.T(2,2), info.nom.T(2,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.nom.T(3,0), info.nom.T(3,1), info.nom.T(3,2), info.nom.T(3,3));
-		// printf("Vnom: %lf, %lf, %lf, %lf, %lf, %lf\n", info.nom.x_dot(0), info.nom.x_dot(1), info.nom.x_dot(2), info.nom.x_dot(3), info.nom.x_dot(4), info.nom.x_dot(5));
-		// printf("dVnom: %lf, %lf, %lf, %lf, %lf, %lf\n", info.nom.x_ddot(0), info.nom.x_ddot(1), info.nom.x_ddot(2), info.nom.x_ddot(3), info.nom.x_ddot(4), info.nom.x_ddot(5));
-		// printf("Tact: \t%lf, %lf, %lf, %lf\n", info.act.T(0,0), info.act.T(0,1), info.act.T(0,2), info.act.T(0,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.act.T(1,0), info.act.T(1,1), info.act.T(1,2), info.act.T(1,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.act.T(2,0), info.act.T(2,1), info.act.T(2,2), info.act.T(2,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.act.T(3,0), info.act.T(3,1), info.act.T(3,2), info.act.T(3,3));
-		// printf("Tadm: \t%lf, %lf, %lf, %lf\n", info.sim.T(0,0), info.sim.T(0,1), info.sim.T(0,2), info.sim.T(0,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(1,0), info.sim.T(1,1), info.sim.T(1,2), info.sim.T(1,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(2,0), info.sim.T(2,1), info.sim.T(2,2), info.sim.T(2,3));
-		// printf("\t %lf, %lf, %lf, %lf\n", info.sim.T(3,0), info.sim.T(3,1), info.sim.T(3,2), info.sim.T(3,3));
-		// printf("Vsim: %lf, %lf, %lf, %lf, %lf, %lf\n", info.sim.x_dot(0), info.sim.x_dot(1), info.sim.x_dot(2), info.sim.x_dot(3), info.sim.x_dot(4), info.sim.x_dot(5));
-		// printf("dVsim: %lf, %lf, %lf, %lf, %lf, %lf\n", info.sim.x_ddot(0), info.sim.x_ddot(1), info.sim.x_ddot(2), info.sim.x_ddot(3), info.sim.x_ddot(4), info.sim.x_ddot(5));
-		// printf("\n");
-		// printf("\n");
 
         // Read Joints Data
         readData();
@@ -1027,11 +1011,17 @@ int main(int argc, char *argv[])
     CPU_SET(6, &cpuset_rt1);  
     CPU_SET(7, &cpuset_rt2);  
 
+#ifdef __RP__
+	cs_indy7=CS_Indy7();
+	cs_indy7.CSSetup("../lib/URDF2CASADI/indyrp2/indyrp2.json", period);
+	cs_nom_indy7=CS_Indy7();
+	cs_nom_indy7.CSSetup("../lib/URDF2CASADI/indyrp2/indyrp2.json", period);
+#else
 	cs_indy7=CS_Indy7();
 	cs_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json", period);
 	cs_nom_indy7=CS_Indy7();
 	cs_nom_indy7.CSSetup("../lib/URDF2CASADI/indy7/indy7.json", period);
-
+#endif
     rt_task_create(&safety_task, "safety_task", 0, 93, 0);
     rt_task_set_affinity(&safety_task, &cpuset_rt1);
 	rt_task_start(&safety_task, &safety_run, NULL);

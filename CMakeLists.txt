@@ -57,6 +57,7 @@ set(BUILD_SHARED_LIBS TRUE)
 #option(BUILD_DOC "Build Documentation" off)
 option(RTIndy7_VERBOSE "Whether print detailed information in CMake process" ON)
 option(RTIndy7_SHARED_LIBS "Build shared libraries" ON)
+option(WITH_RP "with Indy RP option" OFF)
 #===============================================================================
 # Build type settings
 #===============================================================================
@@ -190,6 +191,10 @@ target_link_libraries(${SIM_EXECUTABLE}
     sub::Robot
     pthread
 )
+
+if(WITH_RP)
+    add_compile_definitions(__RP__)
+endif()
 
 # jsoncpp
 find_package(jsoncpp REQUIRED)

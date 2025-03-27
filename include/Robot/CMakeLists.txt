@@ -6,6 +6,11 @@ set(CMAKE_DEBUG_POSTFIX "d")
 
 file(GLOB SOURCE_FILES "*.cpp" "*.h" "*.c")
 
+# IndyRP Option
+if(WITH_RP)
+    add_compile_definitions(__RP__)
+endif()
+
 #bullet3
 set(BULLET_PHYSICS_SOURCE_DIR  "/opt/bullet3")
 include_directories(

@@ -214,7 +214,7 @@ RTIndy7_01_SIM: CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/
 RTIndy7_01_SIM: CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.o
 RTIndy7_01_SIM: CMakeFiles/RTIndy7_01_SIM.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.o
 RTIndy7_01_SIM: CMakeFiles/RTIndy7_01_SIM.dir/build.make
-RTIndy7_01_SIM: include/Robot/libRobot.so
+RTIndy7_01_SIM: include/Robot/libRobotd.so
 RTIndy7_01_SIM: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
 RTIndy7_01_SIM: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
 RTIndy7_01_SIM: /usr/lib/x86_64-linux-gnu/libPocoUtil.so

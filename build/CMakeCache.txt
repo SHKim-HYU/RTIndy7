@@ -72,7 +72,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //No help, variable specified on the command line.
-CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_BUILD_TYPE:STRING=Debug
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -442,7 +442,7 @@ WITH_CB:STRING=OFF
 //No help, variable specified on the command line.
 WITH_POCO:STRING=ON
 
-//No help, variable specified on the command line.
+//with Indy RP option
 WITH_RP:STRING=OFF
 
 //Xenomai base directory location (optional, used for nonstandard
