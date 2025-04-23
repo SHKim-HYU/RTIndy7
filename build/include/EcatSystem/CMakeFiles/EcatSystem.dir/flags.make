@@ -3,15 +3,15 @@
 
 # compile C with /usr/bin/gcc
 # compile CXX with /usr/bin/g++
-C_FLAGS = -g   -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__
+C_FLAGS = -O3 -DNDEBUG   -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.4.239-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Robot -I/opt/etherlab/include -I/usr/xenomai/include/cobalt -I/usr/xenomai/include -I/usr/xenomai/include/alchemy 
+C_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.15.173-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Robot -I/opt/etherlab/include -I/usr/xenomai/include/cobalt -I/usr/xenomai/include -I/usr/xenomai/include/alchemy 
 
-CXX_FLAGS =  -std=c++17 -Wall -Wextra -fPIC -g -fno-omit-frame-pointer -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls   -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__ -std=c++17
+CXX_FLAGS =  -std=c++17 -Wall -Wextra -fPIC -O2 -DNDEBUG   -D_GNU_SOURCE -D_REENTRANT -fasynchronous-unwind-tables -D__COBALT__ -std=c++17
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.4.239-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Robot -I/opt/etherlab/include -I/usr/xenomai/include/cobalt -I/usr/xenomai/include -I/usr/xenomai/include/alchemy 
+CXX_INCLUDES = -I/home/robot/robot_ws/RTIndy7/bin/inc -I/usr/src/linux-headers-5.15.173-xenomai-3.2.3+ -I/home/robot/robot_ws/RTIndy7/include/EcatSystem -I/home/robot/robot_ws/RTIndy7/include/Interpolator -I/home/robot/robot_ws/RTIndy7/include/Robot -I/opt/etherlab/include -I/usr/xenomai/include/cobalt -I/usr/xenomai/include -I/usr/xenomai/include/alchemy 
 

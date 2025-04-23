@@ -84,7 +84,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/Indy7_0.stl"/>
+        <mesh filename="meshes/stl/indy7/Indy7_0.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -99,7 +99,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/Indy7_1.stl"/>
+        <mesh filename="meshes/stl/indy7/indy7_1.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -114,7 +114,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/Indy7_2.stl"/>
+        <mesh filename="meshes/stl/indy7/indy7_2.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -129,7 +129,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/Indy7_3.stl"/>
+        <mesh filename="meshes/stl/indy7/indy7_3.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -144,7 +144,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/Indy7_4.stl"/>
+        <mesh filename="meshes/stl/indy7/indy7_4.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -159,7 +159,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/Indy7_5.stl"/>
+        <mesh filename="meshes/stl/indy7/indy7_5.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -174,7 +174,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/Indy7_6.stl"/>
+        <mesh filename="meshes/stl/indy7/indy7_6.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>

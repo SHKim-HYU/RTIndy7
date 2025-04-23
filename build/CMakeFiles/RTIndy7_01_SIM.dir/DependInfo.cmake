@@ -26,7 +26,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../bin/inc"
-  "/usr/src/linux-headers-5.4.239-xenomai-3.2.3+"
+  "/usr/src/linux-headers-5.15.173-xenomai-3.2.3+"
   "../include/EcatSystem"
   "../include/Interpolator"
   "../include/Robot"
@@ -38,8 +38,8 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/opt/bullet3/examples/ThirdPartyLibs/enet/include"
   "/opt/bullet3/examples/ThirdPartyLibs/clsocket/src"
   "/opt/bullet3/examples/CommonInterfaces"
-  "/opt/casadi/include"
-  "/opt/casadi/include/casadi"
+  "/opt/openrobots/include"
+  "/opt/openrobots/include/casadi"
   "/usr/local/include/bullet"
   "/usr/include/eigen3"
   "/usr/include/jsoncpp"

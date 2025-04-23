@@ -79,9 +79,9 @@ RTIndy7_01_CTRL_EXTERNAL_OBJECTS =
 
 RTIndy7_01_CTRL: CMakeFiles/RTIndy7_01_CTRL.dir/src/RTIndy7Client.cpp.o
 RTIndy7_01_CTRL: CMakeFiles/RTIndy7_01_CTRL.dir/build.make
-RTIndy7_01_CTRL: include/EcatSystem/libEcatSystemd.a
-RTIndy7_01_CTRL: include/Interpolator/libInterpolatord.a
-RTIndy7_01_CTRL: include/Robot/libRobotd.so
+RTIndy7_01_CTRL: include/EcatSystem/libEcatSystem.a
+RTIndy7_01_CTRL: include/Interpolator/libInterpolator.a
+RTIndy7_01_CTRL: include/Robot/libRobot.so
 RTIndy7_01_CTRL: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.7.4
 RTIndy7_01_CTRL: /usr/local/lib/libBulletDynamics.so
 RTIndy7_01_CTRL: /usr/local/lib/libBulletInverseDynamics.so
@@ -104,7 +104,7 @@ RTIndy7_01_CTRL: /usr/lib/x86_64-linux-gnu/libPocoFoundation.so
 RTIndy7_01_CTRL: /usr/lib/x86_64-linux-gnu/libPocoUtil.so
 RTIndy7_01_CTRL: /usr/lib/x86_64-linux-gnu/libPocoZip.so
 RTIndy7_01_CTRL: /usr/lib/x86_64-linux-gnu/libPocoNet.so
-RTIndy7_01_CTRL: /opt/casadi/lib/libcasadi.so
+RTIndy7_01_CTRL: /opt/openrobots/lib/libcasadi.so
 RTIndy7_01_CTRL: /usr/local/lib/libBulletDynamics.so
 RTIndy7_01_CTRL: /usr/local/lib/libBulletInverseDynamics.so
 RTIndy7_01_CTRL: /usr/local/lib/libBulletInverseDynamicsUtils.so

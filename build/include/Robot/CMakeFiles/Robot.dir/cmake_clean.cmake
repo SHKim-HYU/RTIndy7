@@ -12,8 +12,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Robot.dir/opt/bullet3/examples/SharedMemory/PhysicsServerExampleBullet2.cpp.o"
   "CMakeFiles/Robot.dir/opt/bullet3/examples/SharedMemory/RemoteGUIHelper.cpp.o"
   "CMakeFiles/Robot.dir/opt/bullet3/examples/SharedMemory/SharedMemoryInProcessPhysicsC_API.cpp.o"
-  "libRobotd.pdb"
-  "libRobotd.so"
+  "libRobot.pdb"
+  "libRobot.so"
 )
 
 # Per-language clean rules from dependency scanning.

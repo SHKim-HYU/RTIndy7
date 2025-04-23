@@ -85,11 +85,15 @@ linux/types.h
 -
 linux/time.h
 -
+linux/in.h
+-
 stdlib.h
 -
 stdint.h
 -
 sys/time.h
+-
+netinet/in.h
 -
 
 /usr/xenomai/include/boilerplate/compiler.h

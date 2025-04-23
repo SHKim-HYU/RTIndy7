@@ -42,7 +42,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_0.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_0.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -57,7 +57,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_1.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_1.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -72,7 +72,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_2.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_2.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -87,7 +87,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_3.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_3.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -102,7 +102,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_4.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_4.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -117,7 +117,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_5.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_5.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -132,7 +132,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_6.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_6.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>
@@ -147,7 +147,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/stl/IndyRP2_7.stl"/>
+        <mesh filename="meshes/stl/indyrp2/IndyRP2_7.stl"/>
       </geometry>
       <material name="metal_grey"/>
     </visual>

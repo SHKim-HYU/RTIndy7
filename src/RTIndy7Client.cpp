@@ -519,8 +519,10 @@ void motor_run(void *arg)
 	// Task_Kp << 4000, 100, 4000, 4000, 4000, 4000;
 	// Task_Kv << 400, 20, 400, 400, 400, 400;
 #ifdef __RP__	
+	Task_K << 1,1,0.5,0.5,0.3,0.2,0.2;
+#else
 	Task_K << 1,1,0.5,0.3,0.2,0.2;
-
+#endif
 	cs_nom_indy7.setTaskgain(Task_Kp, Task_Kv, Task_K);
 
 	// for Impedance model

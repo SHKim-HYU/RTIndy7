@@ -60,10 +60,10 @@ BULLET_SOFTBODY_LIBRARY:FILEPATH=/usr/local/lib/libBulletSoftBody.so
 BULLET_WORLDIMPORTER_LIBRARY:FILEPATH=/usr/local/lib/libBulletWorldImporter.so
 
 //Path to a file.
-CASADI_INCLUDE_DIR:PATH=/opt/casadi/include
+CASADI_INCLUDE_DIR:PATH=/opt/openrobots/include
 
 //Path to a library.
-CASADI_LIBRARY:FILEPATH=/opt/casadi/lib/libcasadi.so
+CASADI_LIBRARY:FILEPATH=/opt/openrobots/lib/libcasadi.so
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -72,7 +72,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //No help, variable specified on the command line.
-CMAKE_BUILD_TYPE:STRING=Debug
+CMAKE_BUILD_TYPE:STRING=Release
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -356,13 +356,13 @@ Interpolator_BINARY_DIR:STATIC=/home/robot/robot_ws/RTIndy7/build/include/Interp
 Interpolator_SOURCE_DIR:STATIC=/home/robot/robot_ws/RTIndy7/include/Interpolator
 
 //Path to a file.
-KERNELHEADERS_DIR:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+
+KERNELHEADERS_DIR:PATH=/usr/src/linux-headers-5.15.173-xenomai-3.2.3+
 
 //Set to 1 if kernel headers were found
 KERNELHEADERS_FOUND:STRING=1
 
 //Kernel headers include dirs
-KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include;/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/arch/x86/include
+KERNELHEADERS_INCLUDE_DIRS:PATH=/usr/src/linux-headers-5.15.173-xenomai-3.2.3+/include;/usr/src/linux-headers-5.15.173-xenomai-3.2.3+/arch/x86/include
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
@@ -425,7 +425,7 @@ RTIndy7_VERBOSE:BOOL=ON
 Robot_BINARY_DIR:STATIC=/home/robot/robot_ws/RTIndy7/build/include/Robot
 
 //Dependencies for the target
-Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/opt/casadi/lib/libcasadi.so;general;dl;general;/usr/local/lib/libBulletDynamics.so;general;/usr/local/lib/libBulletInverseDynamics.so;general;/usr/local/lib/libBulletInverseDynamicsUtils.so;general;/usr/local/lib/libBullet3Common.so;general;/usr/local/lib/libBulletCollision.so;general;/usr/local/lib/libLinearMath.so;general;/usr/local/lib/libBulletSoftBody.so;general;/usr/local/lib/libBulletExampleBrowserLib.so;general;/usr/local/lib/libBulletRobotics.so;general;/usr/local/lib/libBulletRoboticsGUI.so;general;/usr/local/lib/libOpenGLWindow.so;general;/usr/local/lib/libgwen.so;general;/usr/local/lib/libBulletWorldImporter.so;general;/usr/local/lib/libBulletFileLoader.so;
+Robot_LIB_DEPENDS:STATIC=general;jsoncpp_lib;optimized;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;debug;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;debug;/usr/lib/x86_64-linux-gnu/libPocoUtil.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoZip.so;debug;/usr/lib/x86_64-linux-gnu/libPocoZip.so;optimized;/usr/lib/x86_64-linux-gnu/libPocoNet.so;debug;/usr/lib/x86_64-linux-gnu/libPocoNet.so;general;/opt/openrobots/lib/libcasadi.so;general;dl;general;/usr/local/lib/libBulletDynamics.so;general;/usr/local/lib/libBulletInverseDynamics.so;general;/usr/local/lib/libBulletInverseDynamicsUtils.so;general;/usr/local/lib/libBullet3Common.so;general;/usr/local/lib/libBulletCollision.so;general;/usr/local/lib/libLinearMath.so;general;/usr/local/lib/libBulletSoftBody.so;general;/usr/local/lib/libBulletExampleBrowserLib.so;general;/usr/local/lib/libBulletRobotics.so;general;/usr/local/lib/libBulletRoboticsGUI.so;general;/usr/local/lib/libOpenGLWindow.so;general;/usr/local/lib/libgwen.so;general;/usr/local/lib/libBulletWorldImporter.so;general;/usr/local/lib/libBulletFileLoader.so;
 
 //Value Computed by CMake
 Robot_SOURCE_DIR:STATIC=/home/robot/robot_ws/RTIndy7/include/Robot
@@ -504,7 +504,7 @@ Xenomai_COBALT_LIBRARIES:STRING=cobalt;modechk;pthread;rt
 Xenomai_COBALT_LIBRARY_DIRS:STRING=-L/usr/xenomai/lib
 
 //Xenomai Kernel Headers directory 
-Xenomai_KERNEL_INCLUDE_DIR:STRING=/usr/src/linux-headers-5.4.239-xenomai-3.2.3+/include/xenomai
+Xenomai_KERNEL_INCLUDE_DIR:STRING=/usr/src/linux-headers-5.15.173-xenomai-3.2.3+/include/xenomai
 
 //Path to a library.
 Xenomai_LIBRARY_NATIVE:FILEPATH=Xenomai_LIBRARY_NATIVE-NOTFOUND
